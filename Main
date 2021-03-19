@@ -1,0 +1,584 @@
+'''
+Created on Mar 1, 2021
+
+@author: Cyrus
+'''
+
+###########################################################################
+################################# IMPORTS #################################
+###########################################################################
+
+import mmap
+import random
+import os
+import shutil
+from pip._vendor.toml import ordered
+
+#####################################################################################
+##################################### VARIABLES #####################################
+#####################################################################################
+
+#file_dir = os.getcwd() + "\\"
+tmp_folder = "EPPIIISA\\"
+
+#############################################################################################
+####################################### SETUP ID LIST #######################################
+#############################################################################################
+
+setup_ids = [
+    # Setup Location
+    # Setup Address
+        # Header
+        # Footer
+        # Lead
+        # Tail
+    # SM - Spiral Mountain
+#     ("0x9780", # 4C4680
+#         ["1F", "8B", "08", "08", "C0", "A9", "47", "60", "00", "0B", "34", "43", "34", "36", "38", "30", "2D", "41", "63", "74", "75", "61", "6C", "5F", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+#         ["F5", "0F", "4E", "05", "A0", "26", "00", "00"],
+#         ["11", "72", "00", "00", "26", "A0", "9D", "59", "09", "78", "14", "55"],
+#         ["AA", "AA", "AA"]
+#         ),
+    # MM - Mumbo's Mountain
+    ("0x9788", # 4C5A30
+        ["1F", "8B", "08", "08", "C0", "A9", "47", "60", "00", "0B", "34", "43", "35", "41", "33", "30", "2D", "41", "63", "74", "75", "61", "6C", "5F", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+        ["07", "D0", "9F", "9C", "10", "39", "00", "00"],
+        ["11", "72", "00", "00", "39", "10", "E5", "5A", "79", "78", "14", "55"],
+        []
+        ),
+    # MMM - Mad Monster Mansion
+#     ("0x9850", # 4D44D8
+#         ["1F", "8B", "08", "08", "8F", "D1", "50", "60", "00", "0B", "34", "44", "34", "34", "44", "38", "2D", "41", "63", "74", "75", "61", "6C", "5F", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+#         ["A9", "19", "C5", "C7", "51", "45", "00", "00"],
+#         ["11", "72", "00", "00", "45", "51"],
+#         ["AA", "AA", "AA", "AA"]
+#         ),
+    ]
+
+###################################################################################
+##################################### ID LIST #####################################
+###################################################################################
+
+obj_flagged_id_list = [
+    "002D", # Mumbo Token
+    "0046", # Jiggy
+    "0047", # Empty Honeycomb
+    ]
+
+obj_no_flag_id_list = [
+    "0029", # Orange
+    "0049", # 1-Up
+    "005E", # Yellow Jinjo
+    "005F", # Orange Jinjo
+    "0060", # Blue Jinjo
+    "0061", # Purple Jinjo
+    "0062", # Green Jinjo
+    # Sometimes Structs
+#     "0052", # Egg
+#     "0129", # Red Feather
+#     "0370", # Gold Feather
+    ]
+
+collectable_struct_id_list = [
+    "164000B4", # Note B4
+    "164000B5", # Note B5
+    "164000B6", # Note B6
+    "164000B7", # Note B7
+    "165000A0", # Blue Egg A0
+    "165000A2", # Blue Egg A2
+#     "00E000DC", # Red Feather DC
+#     "00E000DD", # Red Feather DD
+#     "00E000DE", # Red Feather DE
+#     "15F000DF", # Gold Feather DF
+#     "15F000DC", # Gold Feather DC
+#     "15F000DE", # Gold Feather DE
+    ]
+
+ground_enemy_id_list = [
+    "0004", # Bull
+    "0005", # Ticker
+    "0006", # Grublin
+    "0012", # Beehive
+    "0067", # Grublin
+    "00C7", # RIP Tombstone
+    "0120", # Slappa (Purple Slappa)
+    "034E", # Skeleton
+    "034F", # Mummy
+    "0350", # Sea Grublin
+    "0367", # Gruntling
+    "0375", # Grublin Hood
+    "037D", # Ice Cube
+    "03BF", # Gruntling 2
+    "03C0", # Gruntling 3
+    ]
+
+flying_enemy_id_list = [
+    "00CA", # Tee-Hee
+    "0134", # Dragon Fly
+    "036D", # Coliwobble
+    "0380", # Beetle
+    ]
+
+wall_enemy_id_list = [
+    "013B", # Floatsam
+    "01CC", # Chompa
+    "029F", # Big Clucker
+    ]
+
+jumping_enemy_id_list = [
+    "0069", # Yum Yum
+    "0133", # Ribbit
+    "030D", # TNT Box Part 2
+    "036E", # Bawl
+    "036F", # Topper
+    ]
+
+non_collect_struct_id_list = [
+    ]
+
+#####################################################################################
+##################################### FUNCTIONS #####################################
+#####################################################################################
+
+#######################
+### DEVELOPER STUFF ###
+#######################
+
+##############
+### SET UP ###
+##############
+
+def split_dir_rom(rom_dir):
+    rom_file = rom_dir.split("\\")[-1]
+    file_dir = rom_dir.replace(rom_file, "")
+    return (file_dir, rom_file)
+
+def setup_tmp_folder(file_dir):
+    """Creates temporary folder that'll be used to store bin files and the randomized ROM."""
+    print("Set Up Temporary Folder")
+    if(not os.path.isdir(file_dir + tmp_folder)):
+        os.mkdir(file_dir + tmp_folder)
+    else:
+        for filename in os.listdir(file_dir + tmp_folder):
+            file_path = os.path.join(file_dir + tmp_folder, filename)
+            try:
+                if(os.path.isfile(file_path) or os.path.islink(file_path)):
+                    os.unlink(file_path)
+                elif(os.path.isdir(file_path)):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+def seed(seed_val=None):
+    """If seed was not provided, generates a seed value."""
+    print("Generate Seed")
+    if((seed_val == None) or (seed_val == "")):
+        seed_val = random.randint(10000000, 19940303)
+    print("Seed: " + str(seed_val))
+    return seed_val
+
+def make_copy_of_rom(seed_val, file_dir, rom_file):
+    """PyDoc"""
+    print("Make Copy Of Rom")
+    randomized_rom_file = file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64"
+    shutil.copyfile(file_dir + rom_file, randomized_rom_file)
+
+#####################
+### Decompression ###
+#####################
+
+def get_file_bytes(file_dir, rom_file):
+    """PyDoc"""
+    print("Get File Bytes")
+    with open(file_dir + rom_file, "rb") as file:
+        file_bytes = file.read()
+    return file_bytes
+
+def get_address_endpoints(file_bytes, addr):
+    """PyDoc"""
+    print("Get Address Endpoints")
+    byte_list = []
+    for byte_num in range(16):
+        byte_val = str(hex(file_bytes[int(addr, 16) + byte_num])[2:])
+        if(len(str(byte_val)) < 2):
+            byte_val = "0" + byte_val
+        byte_list.append(byte_val)
+    address1 = int("0x" + byte_list[0] + byte_list[1] + byte_list[2] + byte_list[3], 16) + int("0x10CD0", 16)
+    address2 = int("0x" + byte_list[8] + byte_list[9] + byte_list[10] + byte_list[11], 16) + int("0x10CD0", 16)
+    print("Address Start: " + str(hex(address1)))
+    print("Address End: " + str(hex(address2)))
+    return (address1, address2)
+
+def verify_original_header(file_bytes, address):
+    """PyDoc"""
+    print("Verify Original Header")
+    if((file_bytes[address] != 17) or (file_bytes[address+1] != 114) or (file_bytes[address+2] != 0) or (file_bytes[address+3] != 0)):
+        print("Does Not Start With 11 72 00 00")
+        exit(0)
+
+def decompress_file(file_dir, compressed_file):
+    """PyDoc"""
+    print("Decompress File")
+    cmd = file_dir + "GZIP.EXE -dc " + file_dir + tmp_folder + compressed_file.upper() + "-Compressed.bin > " + file_dir + tmp_folder + compressed_file.upper() + "-Decompressed.bin"
+    #print(cmd)
+    os.system(cmd)
+
+def decompressor(file_dir, rom_file):
+    """PyDoc"""
+    print("Decompressor")
+    # Get File Bytes
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    address_list = []
+    for (addr, header, footer, lead, tail) in setup_ids:
+        # Get Address Endpoints
+        (address1, address2) = get_address_endpoints(file_bytes, addr)
+        verify_original_header(file_bytes, address1)
+        # Write Compressed File
+        compressed_file = str(hex(address1)[2:]).upper()
+        #dev_original_compressed(file_bytes, compressed_file, address1, address2)
+        with open(file_dir + tmp_folder + compressed_file + "-Compressed.bin", "w+b") as comp_file:
+            # Write Header
+            for hex_val in header:
+                comp_file.write(bytes.fromhex(hex_val))
+            # Grab Middle
+            for index in range(address1+6, address2-len(tail)):
+                hex_string = str(hex(file_bytes[index]))[2:]
+                if(len(hex_string) < 2):
+                    hex_string = "0" + hex_string
+                comp_file.write(bytes.fromhex(hex_string))
+            # Write Footer
+            for hex_val in footer:
+                comp_file.write(bytes.fromhex(hex_val))
+        # Decompress File
+        decompress_file(file_dir, compressed_file)
+        address_list.append(compressed_file)
+    return address_list
+
+###################
+### Compression ###
+###################
+
+def compress_file(file_dir, decompressed_file):
+    """PyDoc"""
+    print("Compress File")
+    cmd = file_dir + "GZIP.EXE -c " + file_dir + tmp_folder + decompressed_file.upper() + "-Decompressed.bin > " + file_dir + tmp_folder + decompressed_file.upper() + "-New_Compressed.bin"
+    os.system(cmd)
+
+def compressor(file_dir, decompressed_file):
+    """PyDoc"""
+    print("Compressor")
+    # Compress File
+    compress_file(file_dir, decompressed_file)
+    # Get Length Of Original Compressed File
+    with open(file_dir + tmp_folder + decompressed_file + "-New_Compressed.bin", "rb") as comp_file:
+        file_bytes = comp_file.read()
+        comp_file_len = len(file_bytes)
+    for (addr, header, footer, lead, tail) in setup_ids:
+        with open(file_dir + tmp_folder + decompressed_file + "-Randomized_Compressed.bin", "w+b") as comp_file:
+            for hex_val in lead:
+                comp_file.write(bytes.fromhex(hex_val))
+            for index in range(len(header)-1, comp_file_len-len(footer)):
+                hex_string = str(hex(file_bytes[index]))[2:]
+                if(len(hex_string) < 2):
+                    hex_string = "0" + hex_string
+                comp_file.write(bytes.fromhex(hex_string))
+            for hex_val in tail:
+                comp_file.write(bytes.fromhex(hex_val))
+
+def insert_files_into_rom(seed_val, file_dir, file_address):
+    """PyDoc"""
+    print("Insert Files Into Rom")
+    with open(file_dir + tmp_folder + file_address + "-Randomized_Compressed.bin", "rb") as setup_bin:
+        setup_content = setup_bin.read()
+    with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+        setup_count = 0
+        for index in range(int(file_address, 16), int(file_address, 16) + len(setup_content)):
+            mm = mmap.mmap(rand_rom.fileno(), 0)
+            mm[index] = setup_content[setup_count]
+            setup_count += 1
+
+def compress_files(seed_val, file_dir):
+    """PyDoc"""
+    print("Compress Files")
+    for bin_file in os.listdir(file_dir + tmp_folder):
+        if bin_file.endswith("-Decompressed.bin"):
+            file_address = bin_file.split("-Decompressed.bin")[0]
+            compressor(file_dir, file_address)
+            insert_files_into_rom(seed_val, file_dir, file_address)
+
+######################
+### GET INDEX LIST ###
+######################
+
+def get_flagged_object_index_list(mm, object_id, start=0):
+    object_index = mm.find(bytes.fromhex("190C" + object_id), start)
+    if(object_index == -1):
+        return []
+    else:
+        new_start = int(object_index) + 1
+        object_list = get_flagged_object_index_list(mm, object_id, start=new_start)
+    object_list.append(object_index)
+    return object_list
+
+def get_no_flag_object_index_list(mm, object_id, start=0):
+    object_index = mm.find(bytes.fromhex("190C" + object_id), start)
+    if(object_index == -1):
+        return []
+    else:
+        new_start = int(object_index) + 1
+        object_list = get_no_flag_object_index_list(mm, object_id, start=new_start)
+    object_list.append(object_index)
+    return object_list
+
+def get_struct_index_list(mm, struct_id, start=0):
+    struct_index = mm.find(bytes.fromhex(struct_id), start)
+    if(struct_index == -1):
+        return []
+    else:
+        new_start = int(struct_index) + 1
+        struct_list = get_struct_index_list(mm, struct_id, start=new_start)
+    struct_list.append(struct_index)
+    return struct_list
+
+def get_enemy_index_list(mm, enemy_id, start=0):
+    enemy_index = mm.find(bytes.fromhex("190C" + enemy_id), start)
+    if(enemy_index == -1):
+        return []
+    else:
+        new_start = int(enemy_index) + 1
+        enemy_list = get_enemy_index_list(mm, enemy_id, start=new_start)
+    enemy_list.append(enemy_index)
+    return enemy_list
+
+########################
+### OBTAIN LIST INFO ###
+########################
+
+def obtain_no_flag_object_list_info(mm, no_flag_obj_index_list):
+    #X-Loc  Y-Loc  Z-Loc  script   ID     --   --   --   --   rot.  size  --    --
+    #0E48   0153   1998   190C     0049   00   00   00   00   00    64    0C    10
+    object_location_list = []
+    for object_index in no_flag_obj_index_list:
+        object_dict = {}
+#         object_dict["Hex_X1"] = mm[object_index - 6]
+#         object_dict["Hex_X2"] = mm[object_index - 5]
+#         object_dict["Hex_Y1"] = mm[object_index - 4]
+#         object_dict["Hex_Y2"] = mm[object_index - 3]
+#         object_dict["Hex_Z1"] = mm[object_index - 2]
+#         object_dict["Hex_Z2"] = mm[object_index - 1]
+        object_dict["Script1"] = mm[object_index]
+        object_dict["Script2"] = mm[object_index + 1]
+        object_dict["Obj_ID1"] = mm[object_index + 2]
+        object_dict["Obj_ID2"] = mm[object_index + 3]
+#         object_dict["Rotation"] = mm[object_index + 8]
+#         object_dict["Size"] = mm[object_index + 9]
+        object_location_list.append(object_dict)
+    return object_location_list
+
+def obtain_struct_list_info(mm, struct_list_index_list):
+    #obj id  ????  x-loc  y-loc  z-loc  size  ??
+    #1640    00B6  FA12   03C4   02C2   19    80
+    struct_location_list = []
+    for struct_index in struct_list_index_list:
+        struct_dict = {}
+        struct_dict["Obj_ID1"] = mm[struct_index]
+        struct_dict["Obj_ID2"] = mm[struct_index + 1]
+        struct_dict["IDK1"] = mm[struct_index + 2]
+        struct_dict["IDK2"] = mm[struct_index + 3]
+#         struct_dict["Hex_X1"] = mm[struct_index + 4]
+#         struct_dict["Hex_X2"] = mm[struct_index + 5]
+#         struct_dict["Hex_Y1"] = mm[struct_index + 6]
+#         struct_dict["Hex_Y2"] = mm[struct_index + 7]
+#         struct_dict["Hex_Z1"] = mm[struct_index + 8]
+#         struct_dict["Hex_Z2"] = mm[struct_index + 9]
+#         struct_dict["Size"] = mm[struct_index + 10]
+#         struct_dict["IDK3"] = mm[struct_index + 11]
+        struct_location_list.append(struct_dict)
+    return struct_location_list
+
+def obtain_enemy_list_info(mm, enemy_index_list):
+    #X-Loc  Y-Loc  Z-Loc  script   ID     --   --   --   --   rot.  size  --    --
+    #0E48   0153   1998   190C     0049   00   00   00   00   00    64    0C    10
+    enemy_location_list = []
+    for enemy_index in enemy_index_list:
+        enemy_dict = {}
+#         enemy_dict["Hex_X1"] = mm[enemy_index - 6]
+#         enemy_dict["Hex_X2"] = mm[enemy_index - 5]
+#         enemy_dict["Hex_Y1"] = mm[enemy_index - 4]
+#         enemy_dict["Hex_Y2"] = mm[enemy_index - 3]
+#         enemy_dict["Hex_Z1"] = mm[enemy_index - 2]
+#         enemy_dict["Hex_Z2"] = mm[enemy_index - 1]
+#         enemy_dict["Script1"] = mm[enemy_index]
+#         enemy_dict["Script2"] = mm[enemy_index + 1]
+        enemy_dict["Obj_ID1"] = mm[enemy_index + 2]
+        enemy_dict["Obj_ID2"] = mm[enemy_index + 3]
+#         enemy_dict["Rotation"] = mm[enemy_index + 8]
+#         enemy_dict["Size"] = mm[enemy_index + 9]
+        enemy_location_list.append(enemy_dict)
+    return enemy_location_list
+
+##################
+### INDEX MAIN ###
+##################
+
+def create_mmap(file_dir, address):
+    with open(file_dir + tmp_folder + address + "-Decompressed.bin", "r+b") as f:
+        mm = mmap.mmap(f.fileno(), 0)
+    return mm
+
+def generic_get_lists(mm, seed_val, id_list):
+    index_list = []
+    for obj_id in id_list:
+        if(id_list == obj_no_flag_id_list):
+            object_list = get_no_flag_object_index_list(mm, obj_id)
+        elif(id_list == collectable_struct_id_list):
+            object_list = get_struct_index_list(mm, obj_id)
+        elif((id_list == ground_enemy_id_list) or
+             (id_list == flying_enemy_id_list) or
+             (id_list == wall_enemy_id_list) or
+             (id_list == jumping_enemy_id_list)):
+            object_list = get_enemy_index_list(mm, obj_id)
+        else:
+            print("Invalid ID List")
+            exit(0)
+        for item in object_list:
+            index_list.append(item)
+    if(id_list == obj_no_flag_id_list):
+        location_list = obtain_no_flag_object_list_info(mm, index_list)
+    elif(id_list == collectable_struct_id_list):
+        location_list = obtain_struct_list_info(mm, index_list)
+    elif((id_list == ground_enemy_id_list) or
+         (id_list == flying_enemy_id_list) or
+         (id_list == wall_enemy_id_list) or
+         (id_list == jumping_enemy_id_list)):
+        location_list = obtain_enemy_list_info(mm, index_list)
+    else:
+        print("Invalid ID List")
+        exit(0)
+    return (index_list, location_list)
+
+def get_index_main(file_dir, address_list, seed_val):
+    for address in address_list:
+        mm = create_mmap(file_dir, address)
+        # No Flag Objects
+        (no_flag_obj_index_list, object_location_list) = generic_get_lists(mm, seed_val, obj_no_flag_id_list)
+        randomize_objects(mm, seed_val, no_flag_obj_index_list, object_location_list)
+        
+        # Structs
+        (struct_index_list, struct_location_list) = generic_get_lists(mm, seed_val, collectable_struct_id_list)
+        randomize_structs(mm, seed_val, struct_index_list, struct_location_list)
+        
+        # Grounded Enemies
+        (enemy_index_list, enemy_location_list) = generic_get_lists(mm, seed_val, ground_enemy_id_list)
+        #local_randomize_enemies(mm, seed_val, enemy_index_list, enemy_location_list)
+        completely_randomize_enemies(mm, seed_val, enemy_index_list, ground_enemy_id_list)
+        
+        # Flying Enemies
+        (enemy_index_list, enemy_location_list) = generic_get_lists(mm, seed_val, flying_enemy_id_list)
+        #local_randomize_enemies(mm, seed_val, enemy_index_list, enemy_location_list)
+        completely_randomize_enemies(mm, seed_val, enemy_index_list, flying_enemy_id_list)
+        
+        # Wall Enemies
+        (enemy_index_list, enemy_location_list) = generic_get_lists(mm, seed_val, wall_enemy_id_list)
+        #local_randomize_enemies(mm, seed_val, enemy_index_list, enemy_location_list)
+        completely_randomize_enemies(mm, seed_val, enemy_index_list, wall_enemy_id_list)
+        
+        # Jumping Enemies
+        (enemy_index_list, enemy_location_list) = generic_get_lists(mm, seed_val, jumping_enemy_id_list)
+        #local_randomize_enemies(mm, seed_val, enemy_index_list, enemy_location_list)
+        completely_randomize_enemies(mm, seed_val, enemy_index_list, jumping_enemy_id_list)
+
+#################
+### RANDOMIZE ###
+#################
+
+def randomize_objects(mm, seed_val, obj_index_list, object_location_list):
+    random.seed(a=seed_val)
+    random.shuffle(object_location_list)
+    print(object_location_list)
+    obj_count = 0
+    for object_index in obj_index_list:
+        mm[object_index] = object_location_list[obj_count]["Script1"]
+        mm[object_index + 1] = object_location_list[obj_count]["Script2"]
+        mm[object_index + 2] = object_location_list[obj_count]["Obj_ID1"]
+        mm[object_index + 3] = object_location_list[obj_count]["Obj_ID2"]
+        obj_count += 1
+
+def randomize_structs(mm, seed_val, struct_index_list, struct_location_list):
+    random.seed(a=seed_val)
+    random.shuffle(struct_location_list)
+    print(struct_location_list)
+    struct_count = 0
+    for struct_index in struct_index_list:
+        mm[struct_index] = struct_location_list[struct_count]["Obj_ID1"]
+        mm[struct_index + 1] = struct_location_list[struct_count]["Obj_ID2"]
+#         mm[struct_index + 2] = struct_location_list[struct_count]["IDK1"]
+#         mm[struct_index + 3] = struct_location_list[struct_count]["IDK2"]
+        mm[struct_index + 2] = 0 #struct_location_list[struct_count]["IDK1"]
+        mm[struct_index + 3] = 160 #struct_location_list[struct_count]["IDK2"]
+        struct_count += 1
+
+def local_randomize_enemies(mm, seed_val, enemy_index_list, enemy_location_list):
+    random.seed(a=seed_val)
+    random.shuffle(enemy_location_list)
+    print(enemy_location_list)
+    enemy_count = 0
+    for enemy_index in enemy_index_list:
+#         mm[enemy_index] = enemy_location_list[enemy_count]["Script1"]
+#         mm[enemy_index + 1] = enemy_location_list[enemy_count]["Script2"]
+        mm[enemy_index + 2] = enemy_location_list[enemy_count]["Obj_ID1"]
+        mm[enemy_index + 3] = enemy_location_list[enemy_count]["Obj_ID2"]
+        enemy_count += 1
+
+def completely_randomize_enemies(mm, seed_val, enemy_index_list, enemy_id_list):
+    seed_count = 0
+    for enemy_index in enemy_index_list:
+        random.seed(a=(seed_val+seed_count))
+        enemy_obj_id = random.choice(enemy_id_list)
+        mm[enemy_index + 2] = int(enemy_obj_id[:2], 16)
+        mm[enemy_index + 3] = int(enemy_obj_id[2:], 16)
+        seed_count += 1
+
+################
+### CLEAN UP ###
+################
+
+def remove_bin_files(file_dir):
+    """PyDoc"""
+    for filename in os.listdir(file_dir + tmp_folder):
+        file_path = os.path.join(file_dir + tmp_folder, filename)
+        try:
+            if((os.path.isfile(file_path) or os.path.islink(file_path)) and file_path.endswith("ompressed.bin")):
+                os.unlink(file_path)
+            elif(os.path.isdir(file_path)):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+############
+### MAIN ###
+############
+
+def main(rom_dir, seed_val=None):
+    """PyDoc"""
+    ### Set Up ###
+    (file_dir, rom_file) = split_dir_rom(rom_dir)
+    setup_tmp_folder(file_dir)
+    seed_val = seed(seed_val)
+    make_copy_of_rom(seed_val, file_dir, rom_file)
+    ### Decompress ROM ###
+    address_list = decompressor(file_dir, rom_file)
+    ### Randomize Indexes ###
+    get_index_main(file_dir, address_list, seed_val)
+    ### Compress ROM ###
+    compress_files(seed_val, file_dir)
+    ### Clean Up ###
+    #remove_bin_files(file_dir)
+
+##########################################################################################
+####################################### TEST CASES #######################################
+##########################################################################################
+
+print("Start")
+main("C:\\Users\\Cyrus\\Desktop\\N64\\ROMs\\GEDecompressor_Files\\Banjo-Kazooie.z64")
+print("Done")
