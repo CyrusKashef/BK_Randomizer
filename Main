@@ -12,6 +12,8 @@ import mmap
 import random
 import os
 import shutil
+import tkinter.filedialog
+import tkinter as tk
 
 #####################################################################################
 ##################################### VARIABLES #####################################
@@ -163,7 +165,12 @@ non_collect_struct_id_list = [
 ##############
 
 def split_dir_rom(rom_dir):
-    rom_file = rom_dir.split("\\")[-1]
+    if("\\" in rom_dir):
+        rom_file = rom_dir.split("\\")[-1]
+    elif("/" in rom_dir):
+        rom_file = rom_dir.split("/")[-1]
+    else:
+        print("File Directory Unfamiliar Format?")
     file_dir = rom_dir.replace(rom_file, "")
     return (file_dir, rom_file)
 
@@ -196,6 +203,113 @@ def make_copy_of_rom(seed_val, file_dir, rom_file):
     print("Make Copy Of Rom")
     randomized_rom_file = file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64"
     shutil.copyfile(file_dir + rom_file, randomized_rom_file)
+
+########################
+### Parameter Window ###
+########################
+
+def verify_rom_and_gzip(rom_dir):
+    (file_dir, rom_file) = split_dir_rom(rom_dir)
+    rom_ext = rom_file.split(".")[-1]
+    if(rom_ext != "z64"):
+        print("Rom Extention is not allowed: " + rom_ext)
+        exit(0)
+    gzip_location = file_dir + "GZIP.EXE"
+    if(not os.path.exists(gzip_location)):
+        print("GZip Is Not In Folder")
+        exit(0)
+
+def verify_seed_val(seed_val):
+    if((not seed_val.isdigit()) and (seed_val != "")):
+        print("Seed value is not allowed: '" + seed_val + "'")
+        exit(0)
+
+def parameter_gui():
+    def verify_parameters():
+        verify_rom_and_gzip(rom_file_entry.get())
+        verify_seed_val(seed_var.get())
+        window.destroy()
+    
+    def UploadAction():
+        cwd = os.getcwd()
+        filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select A File", filetype =(("rom files","*.z64"),("all files","*.*")) )
+        rom_file_entry.set(filename)
+    
+    window = tk.Tk()
+    window.geometry('500x250')
+    # Title? Idk if this is even needed
+    window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    # Select Rom File
+    select_rom_button = tk.Button(window, text='Select Rom', command=UploadAction)
+    select_rom_button.grid(row=0, column=0)
+    rom_file_entry = tk.StringVar()
+    rom_file_entry.set("")
+    entry = tk.Entry(textvariable=rom_file_entry, state='readonly', width=50)
+    entry.grid(row=1, column=0)
+    # Seed Label And Entry
+    seed_label = tk.Label(window, text='Would you like to insert a seed?')
+    seed_label.grid(row=2, column=0)
+    seed_var = tk.StringVar()
+    seed_var.set("")
+    seed_entry = tk.Entry(window, textvariable=seed_var)
+    seed_entry.grid(row=3, column=0)
+    # Select Rom
+    # Radio Buttons For Non-Flag Object Options
+    nf_obj_label = tk.Label(window, text='How Would You Like The Non-Flag Objects Randomized?')
+    nf_obj_label.grid(row=4, column=0)
+    nf_obj_var = tk.StringVar(window, "2")
+    nf_obj_options = {
+        "None": "1",
+        "Local": "2",
+        #"Completely": "3"
+        }
+    for (text, value) in nf_obj_options.items():
+        nf_obj_select = tk.Radiobutton(window, text=text, variable=nf_obj_var, value=value, indicator=0)
+        nf_obj_select.grid(row=4, column=value)
+    # Radio Buttons For Flagged Objects Options
+    f_obj_label = tk.Label(window, text='How Would You Like The Flagged Objects Randomized?')
+    f_obj_label.grid(row=5, column=0)
+    f_obj_var = tk.StringVar(window, "1")
+    f_obj_options = {
+        "None": "1",
+        #"Local": "2",
+        #"Completely": "3"
+        }
+    for (text, value) in f_obj_options.items():
+        f_obj_select = tk.Radiobutton(window, text=text, variable=f_obj_var, value=value, indicator=0)
+        f_obj_select.grid(row=5, column=value)
+    # Radio Buttons For Struct Options
+    struct_label = tk.Label(window, text='How Would You Like The Notes/Eggs/Feathers Randomized?')
+    struct_label.grid(row=6, column=0)
+    struct_var = tk.StringVar(window, "2")
+    struct_options = {
+        "None": "1",
+        "Local": "2",
+        "Completely": "3"
+        }
+    for (text, value) in struct_options.items():
+        struct_select = tk.Radiobutton(window, text=text, variable=struct_var, value=value, indicator=0)
+        struct_select.grid(row=6, column=value)
+    # Radio Buttons For Enemy Options
+    enemy_label = tk.Label(window, text='How Would You Like The Enemies Randomized?')
+    enemy_label.grid(row=7, column=0)
+    enemy_var = tk.StringVar(window, "2")
+    enemy_options = {
+        "None": "1",
+        "Local": "2",
+        "Completely": "3"
+        }
+    for (text, value) in enemy_options.items():
+        enemy_select = tk.Radiobutton(window, text=text, variable=enemy_var, value=value, indicator=0)
+        enemy_select.grid(row=7, column=value)
+    # Button To Start Randomization
+    start_label = tk.Label(window, text='Once finished, click submit!')
+    start_label.grid(row=8, column=0)
+    sub_btn = tk.Button(window, text='Submit', command=verify_parameters)
+    sub_btn.grid(row=9, column=0)
+    
+    window.mainloop()
+    return (rom_file_entry.get(), int(seed_var.get()), str(nf_obj_var.get()), str(f_obj_var.get()), str(struct_var.get()), str(enemy_var.get()))
 
 #####################
 ### Decompression ###
@@ -480,7 +594,7 @@ def generic_get_lists(mm, id_list):
         exit(0)
     return (index_list, location_list)
 
-def get_index_main(file_dir, address_dict, seed_val, enemy_rand="Completely"):
+def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option):
     for location in address_dict:
         address_index_dict = {}
         address_no_flag_object_location_list = []
@@ -535,19 +649,24 @@ def get_index_main(file_dir, address_dict, seed_val, enemy_rand="Completely"):
         for address in address_dict[location]:
             mm = create_mmap(file_dir, address)
             # No Flag Objects
-            move_no_flag_objects(mm, address_index_dict[address]["No_Flag_Objects"], address_no_flag_object_location_list)
+            if(non_flag_option == "1"):
+                print("Non-Flag Objects Randomization Off")
+            elif(non_flag_option == "2"):
+                move_no_flag_objects(mm, address_index_dict[address]["No_Flag_Objects"], address_no_flag_object_location_list)
+            # Flagged Objects
+            if(flagged_option == "1"):
+                print("Flagged Objects Randomization Off")
+            elif(flagged_option == "2"):
+                print("Feature Currently Not Available")
             # Structs
-            move_structs(mm, address_index_dict[address]["Structs"], address_struct_location_list)
-            if(enemy_rand == "Completely"):
-                # Grounded Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], ground_enemy_id_list)
-                # Flying Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], flying_enemy_id_list)
-                # Wall Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], wall_enemy_id_list)
-                # Jumping Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Jumping_Enemies"], jumping_enemy_id_list)
-            elif(enemy_rand == "Local"):
+            if(struct_option == "1"):
+                print("Struct Randomization Off")
+            elif(struct_option == "2"):
+                move_structs(mm, address_index_dict[address]["Structs"], address_struct_location_list)
+            # Enemies
+            if(enemy_option == "1"):
+                print("Enemy Randomization Off")
+            elif(enemy_option == "2"):
                 # Grounded Enemies
                 address_ground_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Grounded_Enemies"], address_ground_enemy_location_list)
                 # Flying Enemies
@@ -556,8 +675,15 @@ def get_index_main(file_dir, address_dict, seed_val, enemy_rand="Completely"):
                 address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
                 # Jumping Enemies
                 address_jumping_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Jumping_Enemies"], address_jumping_enemy_location_list)
-            else:
-                print("Testing No Enemy Randomization")
+            elif(enemy_option == "3"):
+                # Grounded Enemies
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], ground_enemy_id_list)
+                # Flying Enemies
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], flying_enemy_id_list)
+                # Wall Enemies
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], wall_enemy_id_list)
+                # Jumping Enemies
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Jumping_Enemies"], jumping_enemy_id_list)
 
 #################
 ### RANDOMIZE ###
@@ -606,7 +732,7 @@ def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_id_list):
         enemy_obj_id = random.choice(enemy_id_list)
         mm[enemy_index + 2] = int(enemy_obj_id[:2], 16)
         mm[enemy_index + 3] = int(enemy_obj_id[2:], 16)
-        #seed_count += 1
+        seed_count += 1
 
 ################
 ### CLEAN UP ###
@@ -628,9 +754,10 @@ def remove_bin_files(file_dir):
 ### MAIN ###
 ############
 
-def main(rom_dir, enemy_rand, seed_val=None):
+def main():
     """PyDoc"""
     ### Set Up ###
+    (rom_dir, seed_val, non_flag_option, flagged_option, struct_option, enemy_option) = parameter_gui()
     (file_dir, rom_file) = split_dir_rom(rom_dir)
     setup_tmp_folder(file_dir)
     seed_val = seed(seed_val)
@@ -638,19 +765,16 @@ def main(rom_dir, enemy_rand, seed_val=None):
     ### Decompress ROM ###
     (address_dict, address_translator) = decompressor(file_dir, rom_file)
     ### Randomize Indexes ###
-    get_index_main(file_dir, address_dict, seed_val, enemy_rand)
+    get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option)
     ### Compress ROM ###
-#     compress_files(seed_val, file_dir)
     compress_files(seed_val, file_dir, address_translator)
     ### Clean Up ###
-    #remove_bin_files(file_dir)
+    remove_bin_files(file_dir)
 
 ##########################################################################################
 ####################################### TEST CASES #######################################
 ##########################################################################################
 
 print("Start")
-main("C:\\Users\\Cyrus\\Desktop\\N64\\ROMs\\GEDecompressor_Files\\Banjo-Kazooie.z64", enemy_rand="Local")
-#main("C:\\Users\\Cyrus\\Desktop\\N64\\ROMs\\GEDecompressor_Files\\Banjo-Kazooie.z64", enemy_rand="Completely")
-#main("C:\\Users\\Cyrus\\Desktop\\N64\\ROMs\\GEDecompressor_Files\\Banjo-Kazooie.z64", enemy_rand="")
+main()
 print("Done")
