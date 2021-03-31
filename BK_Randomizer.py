@@ -33,7 +33,6 @@ logger.addHandler(handler)
 logging.basicConfig(format=FORMAT)
 
 default_options = {
-    #"Rom": r"C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/Banjo-Kazooie.z64",
     "Rom": os.getcwd(),
     "Non-Flag": "2",
     "Flagged": "1",
@@ -1082,7 +1081,7 @@ def done_window(seed_val):
     '''Displays a window to inform the user that the randomization is complete'''
     window = tk.Tk()
     window.geometry('3000x50')
-    # Title? Idk if this is even needed
+    # Title
     window.winfo_toplevel().title("Banjo Kazooie Randomizer")
     done_label = tk.Label(window, text='The Randomizer Is Complete! Seed: ' + str(seed_val))
     done_label.config(anchor='center')
@@ -1122,7 +1121,4 @@ def main():
 
 logger.info("########## Start ##########")
 main()
-# file_dir = "C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/"
-# address = "4C5A30"
-# get_flag_index_list(file_dir, address)
 logger.info("########## Done ##########")
