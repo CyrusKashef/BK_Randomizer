@@ -30,7 +30,7 @@ Do I plan on expanding on the randomizer?
  * If the community wants some new feature and I have the time and energy to do it, sure lol.
  * Here are the features I'm planning on making in the future:
    a) Randomize flagged objects that won't cause errors
-   b) Randomizing all of the other worlds
+   b) Randomizing Gruntilda's Lair
    c) Specific enemy modes, where all of the enemies are the same, such as bulls, skeletons, mummies, ghosts
    d) Randomize the warps within the world that won't cause errors
    e) Randomizing the warps from Grunty's Lair to worlds that are progressable
@@ -53,6 +53,8 @@ Script Errors:
  * Providing a rom file that doesn't end in .z64 will cause an error that will show up in the log.
  * Providing a seed that isn't comprised of just numbers will cause an error that will show up in the log.
  * Rom file formatted differently than the tested roms may cause an error and show up in the log.
+ * Having a space in the directory path will cause a pop up.
+ * Not having GZIP or the CRC Tool in the folder with the ROM file will cause a pop up.
 
 Known ROM Errors:
  * Location where enemy normally was will be blank. This is because some enemies can't appear in that world, so they end up disappearing.
@@ -67,7 +69,7 @@ What To Do If Rom Errors:
  * If it's any other modded version of the game, please be patient with me, as I'm still trying to get the randomizer to work for the base game.
 
 Instructions
-1) Place the original rom file, the Banjo Kazooie Randomizer executable file, and GZIP in the same folder.
+1) Place the original rom file, the Banjo Kazooie Randomizer executable file, GZIP, and the CRC Tool (unzipped) in the same folder.
 2) Run the Banjo Kazooie Randomizer executable file.
 3) Input the rom file, seed, and prefered customizations.
 4) Click submit.
@@ -81,11 +83,13 @@ Taking Source Code:
 
 Contributing
 >I coded entire project on my own, but that doesn't mean I wouldn't mind a team to work with. I currently wrote this code in Python. If you'd like to continue working on the Python version or need help creating a randomizer in a different coding language, I'll try to provide comments and answer questions as to what I personally did to randomize the rom. Keep in mind that I'm learning how to randomize this rom as I go, and might not have all of the answers to your questions.
+>There's a community dedicated to Banjo-Kazooie modding called "Banjo's Backpack". There's a lot of smart people there, though most of us are still trying to learn as we go, since there was no documentation for us to work with.
 
 Special Thanks
 >Although I coded the randomizer myself, I could not have gotten this far without:
- 1) The technical knowledge of SapChap99 and Jombo.
- 2) The entire Banjo's Backpack community for their support, most notably BanjoFreak64, ThatCowGuy, and PaleKing.
- 3) The Banjo Kazooie speedrun community, whose excitement for the randomizer kept me going.
- 4) The Ocarina of Time and Super Mario 64 randomizers for serving as inspirations for this randomizer.
+ 1) The technical knowledge of SapChap99 to help me get started.
+ 2) The expertise of Jombo, who not only taught me how to compress/decompress, what tools I could use (GZIP and CRC), and guided me through pointers, but also put up with my snarky behavior and for running the Banjo's Backpack discord, along with the moderators.
+ 3) The entire Banjo's Backpack community for their support, most notably BanjoFreak64, ThatCowGuy, PaleKing, Atezian, and TheSourOG
+ 4) The Banjo Kazooie speedrun community, whose excitement for the randomizer kept me going.
+ 5) The Ocarina of Time and Super Mario 64 randomizers for serving as inspirations for this randomizer.
 >And a special shoutout to RARE for making such an impactful game to me and so many others.
