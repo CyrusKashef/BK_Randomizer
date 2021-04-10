@@ -1,7 +1,7 @@
 '''
 Created on Mar 1, 2021
 
-@author: Cyrus
+@author: Cyrus Kashef (aka GiantJigglypuff3)
 '''
 
 ### TODO ###
@@ -42,7 +42,7 @@ default_options = {
     "Non-Flag": "2",
     "Flagged": "1",
     "Struct": "2",
-    "Enemies": "1",
+    "Enemies": "2",
     }
 
 #############################################################################################
@@ -59,10 +59,10 @@ setup_ids = {
         # Footer -> GEDecompressor decompressed file's compressed characters that are different from the default compressed footer
         #           Not sure how this is generated
         # Lead -> Compressed file's original header (grab first 6 hex from rom)
-        #         Starts with "11 72 00 00" with two extra hex values
+        #         Starts with "11 72 00 00" with two extra hex values that indicate how many bytes are in the decompressed version of the file
         # Tail -> Compressed file's original footer
         #         Grab the trailing AAs from the rom
-        #         I believe these are just empty spaces that don't really matter
+        #         I believe these are just empty spaces/padding that don't really matter as long as you provide the correct lead
     "Spiral Mountain": [
         ("0x9780", # Main Area - 4C4680
             ['1F', '8B', '08', '08', '3E', 'FE', '6B', '60', '00', '0B', '39', '37', '38', '30', '2D', '44', '65', '63', '6F', '6D', '70', '72', '65', '73', '73', '65', '64', '2E', '62', '69', '6E', '00'],
@@ -742,154 +742,176 @@ collectable_struct_id_list = [
     "164000B7", # Note B7
     "165000A0", # Blue Egg A0
     "165000A2", # Blue Egg A2
-#     "00E000DC", # Red Feather DC
+#     "00E000DC", # Red Feather DC Potentially Required Feather Placements?
     "00E000DD", # Red Feather DD
     "00E000DE", # Red Feather DE
-#     "15F000DC", # Gold Feather DC
+#     "15F000DC", # Gold Feather DC Potentially Required Feather Placements?
     "15F000DE", # Gold Feather DE
     "15F000DF", # Gold Feather DF
     ]
 
-ground_enemy_id_list = [
-    "0004", # Bull
-    "0005", # Ticker
-    "0006", # Grublin
-    "0012", # Beehive
-    "0067", # Grublin
-    "00C7", # RIP Tombstone
-    #"0120", # Slappa (Purple Slappa)
-    "034E", # Skeleton
-    "034F", # Mummy
-    "0350", # Sea Grublin
-    #"0367", # Gruntling
-    #"0375", # Grublin Hood
-    "037D", # Ice Cube
-    #"03BF", # Gruntling 2
-    #"03C0", # Gruntling 3
-    ]
-
-flying_enemy_id_list = [
-    "00CA", # Tee-Hee
-    "0134", # Dragon Fly
-    #"036D", # Coliwobble
-    "0380", # Beetle
-    ]
-
-wall_enemy_id_list = [
-    "013B", # Floatsam
-    "01CC", # Chompa
-    "029F", # Big Clucker
-    ]
-
-jumping_enemy_id_list = [
-#     "0069", # Yum Yum
-#     "0133", # Ribbit
-#     "030D", # TNT Box Part 2
-    "036E", # Bawl
-    "036F", # Topper
-    ]
-
-non_collect_struct_id_list = [
-    ]
+enemy_id_dict = {
+    "Global": {
+        "Ground": [
+#             "0004", # Bull
+            "0005", # Ticker
+            "0012", # Beehive
+            "0067", # Snippet
+            "00C7", # RIP Tombstone
+            #"00F5", # Mutant Snippet
+#             "0124", # Snowman
+            "034E", # Skeleton
+            "034F", # Mummy
+            "0350", # Sea Grublin
+            "037D", # Ice Cube
+            ],
+        "Wall": [
+            "013B", # Floatsam
+            "01CC", # Chompa
+            "029F", # Big Clucker
+            ],
+        "Flying": [
+            "0380", # Beetle
+            ],
+        "Water": [
+#             "000A", # Piranha Fish
+#             "0068", # Snacker
+            ],
+        "Whipcracks": [
+#             "030F", # Whipcrack
+#             "028A", # Underwater Whipcrack
+            ],
+        "Anywhere": [
+            "0056", # Shrapnel
+            "00CA", # Tee-Hee
+            #"03C1", # Purple Tee-Hee
+            ],
+        },
+    "Gruntilda's Lair": {
+        "Ground": [
+            "0367", # Gruntling
+            "03BF", # Gruntling 2
+            "03C0", # Gruntling 3
+            ],
+        "Flying": [
+            "0134", # Dragon Fly
+            ],
+        },
+    "Spiral Mountain": {
+        "Ground": [
+            "036E", # Bawl
+            "036F", # Topper
+            ],
+        "Flying": [
+            "036D", # Coliwobble
+            ],
+        },
+    "Mumbo's Mountain": {
+        "Ground": [
+            "0067", # Grublin
+            ],
+        },
+    "Treasure Trove Cove": {
+        "Ground": [
+            "0069", # Yum Yum
+            #"00F2", # Black Snippet
+#             "0124", # Snowman
+            #"0152", # Lockup
+            ],
+        },
+    "Clanker's Cavern": {
+        "Ground": [
+            ],
+        },
+    "Bubblegloop Swamp": {
+        "Ground": [
+            "0133", # Flibbit
+            #"0137", # Gold Flibbit
+            ],
+        "Flying": [
+            "0134", # Dragon Fly
+            ],
+        },
+    "Freezeezy Peak": {
+        "Ground": [
+            ],
+        },
+    "Gobi's Valley": {
+        "Ground": [
+            "0120", # Slappa
+#             "0124", # Snowman
+            ],
+        },
+    "Mad Monster Mansion": {
+        "Wall": [
+            "0381", # Portrait Chompa
+            ],
+        "Flying": [
+            "0163", # Bat
+            ],
+        },
+    "Rusty Bucket Bay": {
+        "Ground": [
+            #"02A4", # TNT 1 (Provide 1-up)
+            "030D", # TNT 2 (Seen Out In Open)
+            ],
+        },
+    "Click Clock Wood - Lobby": {
+        "Ground": [
+#             "01E9", # Venus Flytrap
+            "0375", # Grublin Hood
+            ],
+        "Flying": [
+            "0134", # Dragon Fly
+            #"029C", # Attacking Zubba
+            ],
+        },
+    "Click Clock Wood - Spring": {
+        "Ground": [
+#             "01E9", # Venus Flytrap
+            "0375", # Grublin Hood
+            ],
+        "Flying": [
+            "0134", # Dragon Fly
+            #"029C", # Attacking Zubba
+            ],
+        },
+    "Click Clock Wood - Summer": {
+        "Ground": [
+#             "01E9", # Venus Flytrap
+            "0375", # Grublin Hood
+            ],
+        "Flying": [
+            "0134", # Dragon Fly
+            #"029C", # Attacking Zubba
+            ],
+        },
+    "Click Clock Wood - Fall": {
+        "Ground": [
+#             "01E9", # Venus Flytrap
+            "0375", # Grublin Hood
+            ],
+        "Flying": [
+            "0134", # Dragon Fly
+            #"029C", # Attacking Zubba
+            ],
+        },
+    "Click Clock Wood - Winter": {
+        "Ground": [
+#             "0124", # Snowman
+#             "01E9", # Venus Flytrap
+            "0375", # Grublin Hood
+            ],
+        "Flying": [
+            "0134", # Dragon Fly
+            #"029C", # Attacking Zubba
+            ],
+        },
+    }
 
 #####################################################################################
 ##################################### FUNCTIONS #####################################
 #####################################################################################
-
-###########################
-### DEVELOPER FUNCITONS ###
-###########################
-
-def dev_decompressor(file_dir, rom_file):
-    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
-    logger.info("Decompressor")
-    # Get File Bytes
-    file_bytes = get_file_bytes(file_dir, rom_file)
-    address_dict = {}
-    address_translator = {}
-    for location_name in setup_ids:
-        address_list = []
-        for (addr, header, footer, lead, tail) in setup_ids[location_name]:
-            # Get Address Endpoints
-            (address1, address2) = get_address_endpoints(file_bytes, addr)
-            verify_original_header(file_bytes, address1)
-            # Write Compressed File
-            compressed_file = (str(addr)[2:]).upper()
-            print(addr, compressed_file)
-            address_translator[addr] = compressed_file
-            with open(file_dir + tmp_folder + compressed_file + "-Compressed.bin", "w+b") as comp_file:
-                # Grab Middle
-                for index in range(address1, address2):
-                    hex_string = str(hex(file_bytes[index]))[2:]
-                    if(len(hex_string) < 2):
-                        hex_string = "0" + hex_string
-                    comp_file.write(bytes.fromhex(hex_string))
-            # Decompress File
-            #decompress_file(file_dir, compressed_file)
-            address_list.append(compressed_file)
-        address_dict[location_name] = address_list
-    return (address_dict, address_translator)
-
-header_table = {
-    "Spiral Mountain": ["3E", "FE"],
-    "Mumbo's Mountain": ["37", "FC"],
-    "Treasure Trove Cove": ["B5", "01"],
-    "Clanker's Cavern": ["45", "6A"],
-    "Bubblegloop Swamp": ["23", "32"],
-    "Freezeezy Peak": ["9C", "36"],
-    "Gobi's Valley": ["AF", "39"],
-    "Mad Monster Mansion": ["84", "3F"],
-    "Rusty Bucket Bay": ["42", "6C"],
-    "Click Clock Wood - Lobby": ["27", "FC"],
-    "Click Clock Wood - Spring": ["27", "FC"],
-    "Click Clock Wood - Summer": ["D6", "0D"],
-    "Click Clock Wood - Fall": ["31", "11"],
-    "Click Clock Wood - Winter": ["95", "13"]
-    }
-
-def print_header(file_dir, rom_file):
-    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
-    logger.info("Decompressor")
-    # Get File Bytes
-    file_bytes = get_file_bytes(file_dir, rom_file)
-    address_dict = {}
-    address_translator = {}
-    for location_name in setup_ids:
-        address_list = []
-        for (addr, header, footer, lead, tail) in setup_ids[location_name]:
-            # Get Address Endpoints
-            (address1, address2) = get_address_endpoints(file_bytes, addr)
-            verify_original_header(file_bytes, address1)
-            # Write Compressed File
-            compressed_file = (str(addr)[2:]).upper()
-            ascii_name = ""
-            for letter in compressed_file:
-                converted_string = str(binascii.hexlify(letter.encode()))
-                converted_string = converted_string.replace("b", "")
-                ascii_name += ", " + converted_string
-            extension_string = ""
-            for letter in "-Decompressed.bin":
-                converted_string = str(binascii.hexlify(letter.encode()))
-                converted_string = converted_string.replace("b", "")
-                extension_string += ", " + converted_string.upper()
-            val_1 = header_table[location_name][0]
-            val_2 = header_table[location_name][1]
-            new_header = "            ['1F', '8B', '08', '08', '" + val_1 + "', '" + val_2 + "', '6B', '60', '00', '0B'" + ascii_name + extension_string + ", '00'],"
-            print(addr)
-            print(new_header)
-    return []
-
-def dev_compress_folder(file_dir):
-    """Compresses the hex file that was extracted from the main ROM file"""
-    decompressed_file_list = os.listdir(file_dir + tmp_folder)
-    for decompressed_file in decompressed_file_list:
-        if(decompressed_file.endswith("-Compressed.bin")):
-            file_name = decompressed_file.split("-")[0]
-            bin_file = file_name + ".bin"
-            shutil.copyfile(file_dir + "Examples/" + bin_file, file_dir + "Test/" + file_name + "-Decompressed.bin")
-            cmd = file_dir + "GZIP.EXE -c " + file_dir + "Test/" + file_name.upper() + "-Decompressed.bin > " + file_dir + "Test/" + file_name.upper() + "-Compressed.bin"
-            logger.debug(cmd)
-            os.system(cmd)
 
 ######################
 ### MISC FUNCTIONS ###
@@ -1000,7 +1022,7 @@ def error_window(error_msg):
     '''Brings up a GUI that displays an error message'''
     window = tk.Tk()
     window.geometry('400x50')
-    # Title? Idk if this is even needed
+    # Title
     window.winfo_toplevel().title("Banjo Kazooie Randomizer")
     error_label = tk.Label(window, text=error_msg)
     error_label.config(anchor='center')
@@ -1027,7 +1049,7 @@ def parameter_gui():
     
     window = tk.Tk()
     window.geometry('575x250')
-    # Title? Idk if this is even needed
+    # Title
     window.winfo_toplevel().title("Banjo Kazooie Randomizer")
     # Select Rom File
     select_rom_button = tk.Button(window, text='Select Rom', command=UploadAction)
@@ -1185,6 +1207,49 @@ def decompressor(file_dir, rom_file):
 ### Compression ###
 ###################
 
+def verify_pointers(seed_val, file_dir, setup_dict):
+    with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+        mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+#         for file_pointer in range(24200, 68816): # 5E88 to 10CD0, which would be every pointer
+        logger.debug("Modified Pointer List")
+        for file_pointer in setup_dict:
+            pointer_start_1 = str(hex(mm_rand_rom[file_pointer]))[2:]
+            pointer_start_1 = leading_zeros(pointer_start_1, 2)
+            pointer_start_2 = str(hex(mm_rand_rom[file_pointer + 1]))[2:]
+            pointer_start_2 = leading_zeros(pointer_start_2, 2)
+            pointer_start_3 = str(hex(mm_rand_rom[file_pointer + 2]))[2:]
+            pointer_start_3 = leading_zeros(pointer_start_3, 2)
+            pointer_start_4 = str(hex(mm_rand_rom[file_pointer + 3]))[2:]
+            pointer_start_4 = leading_zeros(pointer_start_4, 2)
+            pointer_start = int(pointer_start_1 + pointer_start_2 + pointer_start_3 + pointer_start_4, 16)
+            header_start = pointer_start + 68816 # decimal 68816 -> hex 10CD0
+            if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
+                logger.error("Invalid Header At Hex Index: " + str(hex(file_pointer)))
+                error_window("Bad Seed (" + str(seed_val) + "), Try Another")
+                exit(0)
+        other_pointer_list = [
+            # SM-Banjo's House, GL-Furnace Fun, GL-Gruntilda Boss Area,
+            39896, 39912, 39928,
+            # CS-N Cube, CS-Intro, CS-Game Select
+            39024, 39016, 39936,
+            ]
+        logger.debug("Misc Pointer List")
+        for file_pointer in other_pointer_list:
+            pointer_start_1 = str(hex(mm_rand_rom[file_pointer]))[2:]
+            pointer_start_1 = leading_zeros(pointer_start_1, 2)
+            pointer_start_2 = str(hex(mm_rand_rom[file_pointer + 1]))[2:]
+            pointer_start_2 = leading_zeros(pointer_start_2, 2)
+            pointer_start_3 = str(hex(mm_rand_rom[file_pointer + 2]))[2:]
+            pointer_start_3 = leading_zeros(pointer_start_3, 2)
+            pointer_start_4 = str(hex(mm_rand_rom[file_pointer + 3]))[2:]
+            pointer_start_4 = leading_zeros(pointer_start_4, 2)
+            pointer_start = int(pointer_start_1 + pointer_start_2 + pointer_start_3 + pointer_start_4, 16)
+            header_start = pointer_start + 68816 # decimal 68816 -> hex 10CD0
+            if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
+                logger.error("Invalid Header At Decimal Index: " + str(file_pointer))
+                error_window("Bad Seed (" + str(seed_val) + "), Try Another")
+                exit(0)
+
 def compress_file(file_dir, decompressed_file):
     """Compresses the hex file that was extracted from the main ROM file"""
     logger.info("Compress File")
@@ -1207,14 +1272,19 @@ def insert_files_into_rom(seed_val, file_dir, addr):
             mm[index] = setup_content[setup_count]
             setup_count += 1
         for index in range(address1 + len(setup_content) + 1, address2):
-            mm[index] = int("AA", 16)
+            mm[index] = 170
 
 def compressor(seed_val, file_dir, location_setup):
     """Prepares the hex file that was extracted from the main ROM file for compression by providing the correct header and footer"""
     logger.info("Compressor")
     (addr, header, footer, lead, tail) = location_setup
-    # Compress File
+    # Decomp Size
     file_pointer = addr[2:]
+    with open(file_dir + tmp_folder + file_pointer + "-Decompressed.bin", "r+b") as rand_comp_file:
+        mm_decomp = mmap.mmap(rand_comp_file.fileno(), 0)
+        decomp_len = str(hex(len(mm_decomp)))[2:]
+        decomp_len = leading_zeros(decomp_len, 8)
+    # Compress File
     compress_file(file_dir, file_pointer)
     # Get Length Of Original Compressed File
     with open(file_dir + tmp_folder + file_pointer + "-New_Compressed.bin", "r+b") as comp_file:
@@ -1225,15 +1295,14 @@ def compressor(seed_val, file_dir, location_setup):
             header_end += header_val
         header_end_index = mm_comp.find(bytes.fromhex(header_end)) + 4
         with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "w+b") as new_comp_file:
-            for hex_val in lead:
-                new_comp_file.write(bytes.fromhex(hex_val))
+            new_comp_file.write(bytes.fromhex("1172"))
+            new_comp_file.write(bytes.fromhex(decomp_len))
             for index in range(header_end_index, comp_file_len-len(footer)):
                 hex_string = str(hex(mm_comp[index]))[2:]
                 hex_string = leading_zeros(hex_string, 2)
                 new_comp_file.write(bytes.fromhex(hex_string))
 #             for hex_val in tail:
 #                 new_comp_file.write(bytes.fromhex(hex_val))
-    pointer_update(seed_val, file_dir, file_pointer)
     return addr
 
 def pointer_update(seed_val, file_dir, file_pointer):
@@ -1269,7 +1338,7 @@ def pointer_update(seed_val, file_dir, file_pointer):
             logger.debug("Adding Length: " + str(len_delta))
             aa_count = 0
             for index in range(pointer_start - 1, pointer_start-10, -1):
-                if(mm_rand_rom[index] == int("AA", 16)):
+                if(mm_rand_rom[index] == 170):
                     aa_count += 1
                 else:
                     break
@@ -1288,6 +1357,10 @@ def pointer_update(seed_val, file_dir, file_pointer):
                 mm_rand_rom[int(file_pointer, 16) + 9] = int(new_pointer_end[2:4], 16)
                 mm_rand_rom[int(file_pointer, 16) + 10] = int(new_pointer_end[4:6], 16)
                 mm_rand_rom[int(file_pointer, 16) + 11] = int(new_pointer_end[6:], 16)
+        if(mm_rand_comp_len < rand_section_place):
+            logger.debug("Adding Padding: " + str(len_delta))
+            for index in range(pointer_end, pointer_start + len_delta):
+                mm_rand_rom[index] = 170
 
 def compress_files(seed_val, file_dir):
     """Main function to compress the randomized, decompressed file"""
@@ -1295,7 +1368,15 @@ def compress_files(seed_val, file_dir):
     for location in setup_ids:
         for location_setup in setup_ids[location]:
             addr = compressor(seed_val, file_dir, location_setup)
-            insert_files_into_rom(seed_val, file_dir, addr)
+    setup_dict = {}
+    for filename in os.listdir(file_dir + tmp_folder):
+        if(filename.endswith("-Randomized_Compressed.bin")):
+            file_addr = filename.split("-")[0]
+            setup_dict[int(file_addr, 16)] = file_addr
+    for int_addr in sorted(setup_dict):
+        pointer_update(seed_val, file_dir, setup_dict[int_addr])
+        insert_files_into_rom(seed_val, file_dir, "0x" + setup_dict[int_addr])
+    verify_pointers(seed_val, file_dir, setup_dict)
 
 ######################
 ### GET INDEX LIST ###
@@ -1395,6 +1476,24 @@ def get_struct_index_list(mm, struct_id, start=0):
     struct_list.append(struct_index)
     return struct_list
 
+def skip_ttc_grublin(mm, index):
+    obj_id1 = mm[index]
+    obj_id2 = mm[index + 1]
+    if((obj_id1 == 0) and (obj_id2 == 6)):
+        x_loc1 = mm[index - 8]
+        x_loc2 = mm[index - 7]
+        y_loc1 = mm[index - 6]
+        y_loc2 = mm[index - 5]
+        z_loc1 = mm[index - 4]
+        z_loc2 = mm[index - 3]
+        # TTC Grublin
+        if((x_loc1 == 4) and (x_loc2 == 238) and #04EE
+           (y_loc1 == 20) and (y_loc2 == 97) and #1461
+           (z_loc1 == 241) and (z_loc2 == 246)): #F1F6
+            print("Editing TTC OoB Blue Egg")
+            return False
+    return True
+
 def get_enemy_index_list(mm, enemy_id, start=0):
     '''Locates the enemies by index in the decompressed file'''
     logger.info("Get Enemy Index List")
@@ -1404,7 +1503,8 @@ def get_enemy_index_list(mm, enemy_id, start=0):
     else:
         new_start = int(enemy_index) + 1
         enemy_list = get_enemy_index_list(mm, enemy_id, start=new_start)
-    enemy_list.append(enemy_index)
+    if(skip_ttc_grublin(mm, enemy_index)):
+        enemy_list.append(enemy_index)
     return enemy_list
 
 ########################
@@ -1552,6 +1652,23 @@ def create_mmap(file_dir, address):
         mm = mmap.mmap(f.fileno(), 0)
     return mm
 
+def enemy_get_lists(mm, location):
+    '''For each enemy type, runs the functions that grabs the list of objects and locations'''
+    logger.info("Get Enemy Lists: " + location)
+    index_dict = {}
+    location_dict = {}
+    for enemy_type in enemy_id_dict["Global"]:
+        index_dict[enemy_type] = []
+        location_dict[enemy_type] = []
+        for enemy_id in enemy_id_dict["Global"][enemy_type]:
+            index_dict[enemy_type] = index_dict[enemy_type] + get_enemy_index_list(mm, enemy_id)
+        location_dict[enemy_type] = location_dict[enemy_type] + obtain_enemy_list_info(mm, index_dict[enemy_type])
+    for enemy_type in enemy_id_dict[location]:
+        for enemy_id in enemy_id_dict[location][enemy_type]:
+            index_dict[enemy_type] = index_dict[enemy_type] + get_enemy_index_list(mm, enemy_id)
+        location_dict[enemy_type] = location_dict[enemy_type] + obtain_enemy_list_info(mm, index_dict[enemy_type])
+    return (index_dict, location_dict)
+
 def generic_get_lists(mm, id_list):
     '''For each type of id list, runs the functions that grabs the list of objects and locations'''
     logger.info("Generic Get Lists")
@@ -1561,11 +1678,6 @@ def generic_get_lists(mm, id_list):
             object_list = get_object_index_list(mm, obj_id)
         elif(id_list == collectable_struct_id_list):
             object_list = get_struct_index_list(mm, obj_id)
-        elif((id_list == ground_enemy_id_list) or
-             (id_list == flying_enemy_id_list) or
-             (id_list == wall_enemy_id_list) or
-             (id_list == jumping_enemy_id_list)):
-            object_list = get_enemy_index_list(mm, obj_id)
         else:
             logger.error("Invalid ID List")
             error_window("Error During Randomization")
@@ -1578,11 +1690,6 @@ def generic_get_lists(mm, id_list):
         location_list = obtain_flagged_object_list_info(mm, index_list)
     elif(id_list == collectable_struct_id_list):
         location_list = obtain_struct_list_info(mm, index_list)
-    elif((id_list == ground_enemy_id_list) or
-         (id_list == flying_enemy_id_list) or
-         (id_list == wall_enemy_id_list) or
-         (id_list == jumping_enemy_id_list)):
-        location_list = obtain_enemy_list_info(mm, index_list)
     else:
         logger.error("Invalid ID List")
         error_window("Error During Randomization")
@@ -1635,14 +1742,15 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         address_struct_location_list = []
         address_ground_enemy_location_list = []
         address_flying_enemy_location_list = []
-        address_wall_enemy_location_list = []
-        address_jumping_enemy_location_list = []
         location_jiggy_dict = {}
         location_empty_honeycomb_dict = {}
         location_mumbo_token_dict = {}
         for address in address_dict[location]:
             address_index_dict[address] = {}
             flagged_obj_index_dict[address] = {}
+            address_index_dict[address]["Grounded_Enemies"] = []
+            address_index_dict[address]["Flying_Enemies"] = []
+#             address_index_dict[address]["Wall_Enemies"] = []
             mm = create_mmap(file_dir, address)
             # Flagged Objects
             if(flagged_option != "1"):
@@ -1677,31 +1785,20 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 for item in struct_location_list:
                     address_struct_location_list.append(item)
                 address_index_dict[address]["Structs"] = struct_index_list
-            # Grounded Enemies
             if(enemy_option != "1"):
+                (index_dict, location_dict) = enemy_get_lists(mm, location)
+                # Grounded Enemies
                 logger.info("Get Grounded Enemies Index")
-                (ground_enemy_index_list, ground_enemy_location_list) = generic_get_lists(mm, ground_enemy_id_list)
-                for item in ground_enemy_location_list:
-                    address_ground_enemy_location_list.append(item)
-                address_index_dict[address]["Grounded_Enemies"] = ground_enemy_index_list
+                address_index_dict[address]["Grounded_Enemies"] = address_index_dict[address]["Grounded_Enemies"] + index_dict["Ground"]
+                address_ground_enemy_location_list = address_ground_enemy_location_list + location_dict["Ground"]
                 # Flying Enemies
-                logger.info("Get Flying Enemies Index")
-                (flying_enemy_index_list, flying_enemy_location_list) = generic_get_lists(mm, flying_enemy_id_list)
-                for item in flying_enemy_location_list:
-                    address_flying_enemy_location_list.append(item)
-                address_index_dict[address]["Flying_Enemies"] = flying_enemy_index_list
+                logger.info("Get Grounded Enemies Index")
+                address_index_dict[address]["Flying_Enemies"] = address_index_dict[address]["Flying_Enemies"] + index_dict["Flying"]
+                address_flying_enemy_location_list = address_flying_enemy_location_list + location_dict["Flying"]
                 # Wall Enemies
-                logger.info("Get Wall Enemies Index")
-                (wall_enemy_index_list, wall_enemy_location_list) = generic_get_lists(mm, wall_enemy_id_list)
-                for item in wall_enemy_location_list:
-                    address_wall_enemy_location_list.append(item)
-                address_index_dict[address]["Wall_Enemies"] = wall_enemy_index_list
-                # Jumping Enemies
-                logger.info("Get Jumping Enemies Index")
-                (jumping_enemy_index_list, jumping_enemy_location_list) = generic_get_lists(mm, jumping_enemy_id_list)
-                for item in jumping_enemy_location_list:
-                    address_jumping_enemy_location_list.append(item)
-                address_index_dict[address]["Jumping_Enemies"] = jumping_enemy_index_list
+#                 logger.info("Get Wall Enemies Index")
+#                 address_index_dict[address]["Wall_Enemies"] = address_index_dict[address]["Wall_Enemies"] + index_dict["Wall"]
+#                 address_ground_enemy_location_list = address_wall_enemy_location_list + location_dict["Wall"]
 
         ### Randomize The Lists
         logger.info("Randomizing Lists Section")
@@ -1714,8 +1811,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         if(enemy_option != "1"):
             address_ground_enemy_location_list = randomize_list(seed_val, address_ground_enemy_location_list)
             address_flying_enemy_location_list = randomize_list(seed_val, address_flying_enemy_location_list)
-            address_wall_enemy_location_list = randomize_list(seed_val, address_wall_enemy_location_list)
-            address_jumping_enemy_location_list = randomize_list(seed_val, address_jumping_enemy_location_list)
+#             address_wall_enemy_location_list = randomize_list(seed_val, address_wall_enemy_location_list)
         
         ### Move Everything
         logger.info("Moving Object/Structs/Enemies Section")
@@ -1757,18 +1853,14 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 # Flying Enemies
                 address_flying_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Flying_Enemies"], address_flying_enemy_location_list)
                 # Wall Enemies
-                address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
-                # Jumping Enemies
-                address_jumping_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Jumping_Enemies"], address_jumping_enemy_location_list)
+#                 address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
             elif(enemy_option == "3"):
                 # Grounded Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], ground_enemy_id_list, address)
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address)
                 # Flying Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], flying_enemy_id_list, address)
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address)
                 # Wall Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], wall_enemy_id_list, address)
-                # Jumping Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Jumping_Enemies"], jumping_enemy_id_list, address)
+#                 move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", address)
 
 #################
 ### RANDOMIZE ###
@@ -1852,9 +1944,13 @@ def move_local_enemies(mm, enemy_index_list, enemy_location_list):
         enemy_location_list.pop(0)
     return enemy_location_list
 
-def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_id_list, address):
+def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_type, location, address):
     '''For each enemy, randomly assign it a new script and object id within the id list'''
     logger.info("Move Completely Randomized Enemies")
+    if(enemy_type in enemy_id_dict[location]):
+        enemy_id_list = enemy_id_dict["Global"][enemy_type] + enemy_id_dict[location][enemy_type]
+    else:
+        enemy_id_list = enemy_id_dict["Global"][enemy_type]
     seed_count = 0
     for enemy_index in enemy_index_list:
         random.seed(a=(seed_val+seed_count+int(address, 16)))
@@ -1890,18 +1986,45 @@ def remove_bin_files(file_dir):
         except Exception as e:
             logger.warning('Failed to delete %s. Reason: %s' % (file_path, e))
 
-def done_window(seed_val):
+def done_window(seed_val, file_dir):
     '''Displays a window to inform the user that the randomization is complete'''
+    def update(ind):
+        '''Updates The Gif Frame'''
+        frame = frames[ind]
+        ind += 1
+        if ind == frameCnt:
+            ind = 0
+        label.configure(image=frame)
+        window.after(15, update, ind)
+    window_size = '400x450'
     window = tk.Tk()
-    window.geometry('300x50')
-    # Title? Idk if this is even needed
+    # Title
     window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    # Displays Done
     done_label = tk.Label(window, text='The Randomizer Is Complete! Seed: ' + str(seed_val))
     done_label.config(anchor='center')
     done_label.pack()
+    # Final Notes
+    notes_label = tk.Label(window, text='For any questions, refer to the ReadMe file!')
+    notes_label.config(anchor='center')
+    notes_label.pack()
+    # GIF Of BK
+    try:
+        frameCnt = 92
+        frames = [tk.PhotoImage(file=(file_dir+"bk_side_taunt.gif"),format = 'gif -index %i' %(i)) for i in range(frameCnt)]
+        label = tk.Label(window)
+        label.pack()
+    except tk.TclError:
+        window_size = '300x75'
+    # Exit Out Of Window
     ok_btn = tk.Button(window, text='Guh-Huh!', command=window.destroy)
     ok_btn.config(anchor='center')
     ok_btn.pack()
+    try:
+        window.after(0, update, 0)
+    except Exception:
+        pass
+    window.geometry(window_size)
     window.mainloop()
 
 ############
@@ -1928,7 +2051,7 @@ def main():
     ### Clean Up ###
     remove_bin_files(file_dir)
     ### Done ###
-    done_window(seed_val)
+    done_window(seed_val, file_dir)
 
 ##########################################################################################
 ####################################### TEST CASES #######################################
