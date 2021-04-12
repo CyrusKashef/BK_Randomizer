@@ -1817,7 +1817,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 # Wall Enemies
                 logger.info("Get Wall Enemies Index")
                 address_index_dict[address]["Wall_Enemies"] = address_index_dict[address]["Wall_Enemies"] + index_dict["Wall"]
-                address_ground_enemy_location_list = address_wall_enemy_location_list + location_dict["Wall"]
+                address_wall_enemy_location_list = address_wall_enemy_location_list + location_dict["Wall"]
 
         ### Randomize The Lists
         logger.info("Randomizing Lists Section")
