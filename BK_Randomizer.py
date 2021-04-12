@@ -1305,6 +1305,22 @@ def compressor(seed_val, file_dir, location_setup):
 #                 new_comp_file.write(bytes.fromhex(hex_val))
     return addr
 
+def affected_pointers(mm_rand_rom, file_pointer, pointer_start, pointer_end):
+    '''Finds the pointers that are within the previous pointer range'''
+    affected_pointer_list = []
+    for index in range(pointer_start, pointer_end):
+        pointer_value = leading_zeros(str(hex(index))[2:], 8)
+        next_pointer = mm_rand_rom.find(bytes.fromhex(pointer_value), int(file_pointer, 16) + 1, 68816) # Current Pointer to 10CD0
+        if(next_pointer != -1):
+            affected_pointer_list.append(next_pointer)
+            for count in range(2,10):
+                next_pointer = mm_rand_rom.find(bytes.fromhex(pointer_value), int(file_pointer, 16) + 8*count, 68816)
+                if(next_pointer != -1):
+                    affected_pointer_list.append(next_pointer)
+                else:
+                    break
+    return affected_pointer_list
+
 def pointer_update(seed_val, file_dir, file_pointer):
     '''Checks to see if the pointer needs to be updated, and if so, updates it accordingly'''
     logger.info("Updating Pointers")
@@ -1353,10 +1369,12 @@ def pointer_update(seed_val, file_dir, file_pointer):
                 logger.debug("Not Enough Space")
                 new_pointer_end = str(hex(pointer_end + len_delta - aa_count))[2:]
                 new_pointer_end = leading_zeros(new_pointer_end, 8)
-                mm_rand_rom[int(file_pointer, 16) + 8] = int(new_pointer_end[:2], 16)
-                mm_rand_rom[int(file_pointer, 16) + 9] = int(new_pointer_end[2:4], 16)
-                mm_rand_rom[int(file_pointer, 16) + 10] = int(new_pointer_end[4:6], 16)
-                mm_rand_rom[int(file_pointer, 16) + 11] = int(new_pointer_end[6:], 16)
+                affected_pointer_list = affected_pointers(mm_rand_rom, file_pointer, pointer_start, pointer_end  + len_delta - aa_count)
+                for next_pointer in affected_pointer_list:
+                    mm_rand_rom[next_pointer] = int(new_pointer_end[:2], 16)
+                    mm_rand_rom[next_pointer + 1] = int(new_pointer_end[2:4], 16)
+                    mm_rand_rom[next_pointer + 2] = int(new_pointer_end[4:6], 16)
+                    mm_rand_rom[next_pointer + 3] = int(new_pointer_end[6:], 16)
         if(mm_rand_comp_len < rand_section_place):
             logger.debug("Adding Padding: " + str(len_delta))
             for index in range(pointer_end, pointer_start + len_delta):
@@ -1742,6 +1760,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         address_struct_location_list = []
         address_ground_enemy_location_list = []
         address_flying_enemy_location_list = []
+        address_wall_enemy_location_list = []
         location_jiggy_dict = {}
         location_empty_honeycomb_dict = {}
         location_mumbo_token_dict = {}
@@ -1750,7 +1769,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             flagged_obj_index_dict[address] = {}
             address_index_dict[address]["Grounded_Enemies"] = []
             address_index_dict[address]["Flying_Enemies"] = []
-#             address_index_dict[address]["Wall_Enemies"] = []
+            address_index_dict[address]["Wall_Enemies"] = []
             mm = create_mmap(file_dir, address)
             # Flagged Objects
             if(flagged_option != "1"):
@@ -1796,9 +1815,9 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 address_index_dict[address]["Flying_Enemies"] = address_index_dict[address]["Flying_Enemies"] + index_dict["Flying"]
                 address_flying_enemy_location_list = address_flying_enemy_location_list + location_dict["Flying"]
                 # Wall Enemies
-#                 logger.info("Get Wall Enemies Index")
-#                 address_index_dict[address]["Wall_Enemies"] = address_index_dict[address]["Wall_Enemies"] + index_dict["Wall"]
-#                 address_ground_enemy_location_list = address_wall_enemy_location_list + location_dict["Wall"]
+                logger.info("Get Wall Enemies Index")
+                address_index_dict[address]["Wall_Enemies"] = address_index_dict[address]["Wall_Enemies"] + index_dict["Wall"]
+                address_ground_enemy_location_list = address_wall_enemy_location_list + location_dict["Wall"]
 
         ### Randomize The Lists
         logger.info("Randomizing Lists Section")
@@ -1811,7 +1830,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         if(enemy_option != "1"):
             address_ground_enemy_location_list = randomize_list(seed_val, address_ground_enemy_location_list)
             address_flying_enemy_location_list = randomize_list(seed_val, address_flying_enemy_location_list)
-#             address_wall_enemy_location_list = randomize_list(seed_val, address_wall_enemy_location_list)
+            address_wall_enemy_location_list = randomize_list(seed_val, address_wall_enemy_location_list)
         
         ### Move Everything
         logger.info("Moving Object/Structs/Enemies Section")
@@ -1836,13 +1855,11 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             if(non_flag_option == "1"):
                 logger.info("Non-Flag Objects Randomization Off")
             elif(non_flag_option == "2"):
-                #move_no_flag_objects(mm, address_index_dict[address]["No_Flag_Objects"], address_no_flag_object_location_list)
                 address_no_flag_object_location_list = move_no_flag_objects(mm, address_index_dict[address]["No_Flag_Objects"], address_no_flag_object_location_list)
             # Structs
             if(struct_option == "1"):
                 logger.info("Struct Randomization Off")
             elif(struct_option == "2"):
-                #move_structs(mm, address_index_dict[address]["Structs"], address_struct_location_list)
                 address_struct_location_list = move_structs(mm, address_index_dict[address]["Structs"], address_struct_location_list)
             # Enemies
             if(enemy_option == "1"):
@@ -1853,14 +1870,14 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 # Flying Enemies
                 address_flying_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Flying_Enemies"], address_flying_enemy_location_list)
                 # Wall Enemies
-#                 address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
+                address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
             elif(enemy_option == "3"):
                 # Grounded Enemies
                 move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address)
                 # Flying Enemies
                 move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address)
                 # Wall Enemies
-#                 move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", address)
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address)
 
 #################
 ### RANDOMIZE ###
