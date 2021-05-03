@@ -6,7 +6,9 @@ Created on Mar 1, 2021
 
 ### TODO ###
 # 1) Create a "Save Rom As" to prevent creating an extra rom
-# 2) Possible option to remove unkillable enemies from completely randomized
+# 2) Possible option to remove selectable enemies from completely randomized
+# 3) Randomize Music
+# 4) Allow other format extensions (.n64, .v64, etc)
 
 ###########################################################################
 ################################# IMPORTS #################################
@@ -15,6 +17,7 @@ Created on Mar 1, 2021
 import mmap
 import random
 import os
+import subprocess
 import shutil
 import tkinter.filedialog
 import tkinter as tk
@@ -29,7 +32,8 @@ import binascii
 tmp_folder = "EPPIIISA/"
 
 logger = logging.getLogger("Rotating Log")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
+#logger.setLevel(logging.DEBUG)
 FORMAT = '[%(levelname)s] %(asctime)-15s - %(funcName)s: %(message)s'
 # USER LOGGER
 handler = RotatingFileHandler(os.getcwd() + "\Randomizer_Log_File.log", maxBytes=(512*1024), backupCount=0)
@@ -37,12 +41,19 @@ logger.addHandler(handler)
 # DEV LOGGER
 logging.basicConfig(format=FORMAT)
 
+working_rom_extentions = ["z64"]
+
 default_options = {
     "Rom": os.getcwd(),
-    "Non-Flag": "2",
-    "Flagged": "1",
-    "Struct": "2",
-    "Enemies": "2",
+    "Non-Flag": "Shuffle",
+    "Flagged": "None",
+    "Struct": "Shuffle",
+    "Enemies": "Randomize",
+    "Clanker_Rings": 1,
+    "Croctus": 1,
+    "Ancient_Ones": 1,
+    "Jinxy_Heads": 1,
+    "Note_Doors": 0,
     }
 
 #############################################################################################
@@ -706,7 +717,15 @@ setup_ids = {
 ###################################################################################
 
 jiggy_flag_list = [
-    1, 2, 5, 6, # Mumbo's Mountain
+    "0001", "0002", "0005", "0006",                         # Mumbo's Mountain
+    "000C", "000D", "0011", "0012", "000E", "000F",         # Treasure Trove Cove
+    "000B", "0017", "0018", "0019", "001C", "001D",         # Clanker's Cavern
+                                                            # Bubblegloop Swamp
+    "002A",                                                 # Freezeezy Peak
+    "0040", "0041", "0042", "003E",                         # Gobi's Valley
+    "005B", "005C", "005D", "005E", "0060", "0061", "0063", # Mad Monster Mansion
+    "0051", "0054", "0055", "0056", "0057", "0058", "0059", # Rusty Bucket Bay
+    "0047", "004A", "004B", "004D", "004E", "004F",         # Click Clock Wood
     ]
 
 obj_flagged_id_list = [
@@ -742,12 +761,45 @@ collectable_struct_id_list = [
     "164000B7", # Note B7
     "165000A0", # Blue Egg A0
     "165000A2", # Blue Egg A2
-#     "00E000DC", # Red Feather DC Potentially Required Feather Placements?
+    "00E000DC", # Red Feather DC Potentially Required Feather Placements?
     "00E000DD", # Red Feather DD
     "00E000DE", # Red Feather DE
-#     "15F000DC", # Gold Feather DC Potentially Required Feather Placements?
+    "15F000DC", # Gold Feather DC Potentially Required Feather Placements?
     "15F000DE", # Gold Feather DE
     "15F000DF", # Gold Feather DF
+    ]
+
+croctus_list = [
+    "008C01FA",
+    "010C01FA",
+    "018C01FA",
+    "020C01FA",
+    "028C01FA",
+    ]
+
+clanker_rings_list = [
+    "190C00F9",
+    "190C00FA",
+    "190C00FB",
+    "190C00FC",
+    "190C00FD",
+    "190C00FE",
+    "190C00FF",
+    "190C0100",
+    ]
+
+ancient_ones_list = [
+    "008C0147",
+    "010C0147",
+    "018C0147",
+    "020C0147",
+    "028C0147",
+    ]
+
+jinxy_head_list = [
+    "190C0285",
+    "190C0286",
+    "190C0287",
     ]
 
 enemy_id_dict = {
@@ -766,12 +818,13 @@ enemy_id_dict = {
             "037D", # Ice Cube
             ],
         "Wall": [
-            "013B", # Floatsam
+            "013B", # Flotsam
             "01CC", # Chompa
-            "029F", # Big Clucker
+            "029F", # Clucker
             ],
         "Flying": [
             "0380", # Beetle
+            "00CA", # Tee-Hee
             ],
         "Water": [
 #             "000A", # Piranha Fish
@@ -783,7 +836,6 @@ enemy_id_dict = {
             ],
         "Anywhere": [
             "0056", # Shrapnel
-            "00CA", # Tee-Hee
             #"03C1", # Purple Tee-Hee
             ],
         },
@@ -808,7 +860,7 @@ enemy_id_dict = {
         },
     "Mumbo's Mountain": {
         "Ground": [
-            "0067", # Grublin
+            "0006", # Grublin
             ],
         },
     "Treasure Trove Cove": {
@@ -909,6 +961,20 @@ enemy_id_dict = {
         },
     }
 
+other_setup_pointer_list = [
+    "9BD0", "9AC0", "9AC8", "9AD0", "9B00", "9AE8", "9AF0", "9B40",
+    "9C10", "9AD8", "9AE0", "9AF8", "9B08", "9B18", "9B20", "9B28",
+    "9B30", "9B38", "9B48", "9B78", "9BE8", "9BF8", "9870", "9868",
+    "9C00", "9B50", "9B60", "9B58", "9BA8", "9BC0", "9B80", "9BA0",
+    "9BB0", "9BB8", "9C18", "9C20", "9C28", "9C30", "9C38", "9C40",
+    "9878", "9B88", "9B90",
+    ]
+
+skip_these_setup_pointer_list = [
+    "9BF0", # Sharkfood Island
+    "9C08", # GV SNS Egg Room
+    ]
+
 #####################################################################################
 ##################################### FUNCTIONS #####################################
 #####################################################################################
@@ -978,32 +1044,37 @@ def make_copy_of_rom(seed_val, file_dir, rom_file):
 
 def verify_dir(rom_dir):
     '''Checks if ROM file ends in .z64 and is located in the folder with GZIP.EXE'''
-    if(rom_dir == ""):
+    if((rom_dir == "") or (not os.path.isfile(rom_dir))):
         error_msg = "Please provide the directory to the ROM."
         logger.error(error_msg)
         error_window(error_msg)
         return False
     (file_dir, rom_file) = split_dir_rom(rom_dir)
     if(" " in file_dir):
-        error_msg = "There's a space in the directory path. Please remove that and try again."
+        error_msg = "There's a space (' ') in the directory path. Please remove the space and try again."
+        logger.error(error_msg)
+        error_window(error_msg)
+        return False
+    if(" " in rom_file):
+        error_msg = "There's a space (' ') in the rom file name. Please remove the space and try again."
         logger.error(error_msg)
         error_window(error_msg)
         return False
     rom_ext = rom_file.split(".")[-1]
-    if(rom_ext != "z64"):
+    if(rom_ext not in working_rom_extentions):
         error_msg = "Rom Extention is not allowed: " + rom_ext
         logger.error(error_msg)
         error_window(error_msg)
         return False
     gzip_location = file_dir + "GZIP.EXE"
     if(not os.path.exists(gzip_location)):
-        error_msg = "GZIP.EXE Is Not In Folder"
+        error_msg = "GZIP.EXE is not in Folder. Please place the ROM in the BK Randomizer folder."
         logger.error(error_msg)
         error_window(error_msg)
         return False
     rcr_location = file_dir + "rn64crc2/rn64crc.exe"
     if(not os.path.exists(rcr_location)):
-        error_msg = "CRC Tool Is Not In Folder"
+        error_msg = "CRC Tool is not in rn64crc2 Folder. Please place the ROM in the BK Randomizer folder."
         logger.error(error_msg)
         error_window(error_msg)
         return False
@@ -1021,7 +1092,7 @@ def verify_seed_val(seed_val):
 def error_window(error_msg):
     '''Brings up a GUI that displays an error message'''
     window = tk.Tk()
-    window.geometry('400x50')
+    window.geometry('450x50')
     # Title
     window.winfo_toplevel().title("Banjo Kazooie Randomizer")
     error_label = tk.Label(window, text=error_msg)
@@ -1047,86 +1118,128 @@ def parameter_gui():
         filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select A File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
         rom_file_entry.set(filename)
     
+    def close_window():
+        window.destroy()
+        exit(0)
+
     window = tk.Tk()
-    window.geometry('575x250')
+    window.geometry('650x400')
     # Title
     window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    # String Input Frame
+    string_frame = tk.LabelFrame(window, text="ROM Settings", width=640, height=100, padx=5, pady=5)
+    string_frame.grid(row=0, sticky="nsew")
+    # Options Frame
+    options_frame = tk.LabelFrame(window, text="Options", width=640, height=200, padx=5, pady=5)
+    options_frame.grid(row=1, column=0, sticky="ns")
+    # Main Options Frame
+    main_options_frame = tk.LabelFrame(options_frame, text="Main Options", width=320, height=195, padx=5, pady=5)
+    main_options_frame.grid(row=0, column=0, sticky="ns")
+    # Misc Options Frame
+    misc_options_frame = tk.LabelFrame(options_frame, text="Misc Options", width=320, height=195, padx=5, pady=5)
+    misc_options_frame.grid(row=0, column=1, sticky="ns")
+    # Submit Frame
+    submit_frame = tk.LabelFrame(window, text="Submit", width=640, height=50, padx=5, pady=5)
+    submit_frame.grid(row=2, column=0, sticky="nsew")
     # Select Rom File
-    select_rom_button = tk.Button(window, text='Select Rom', command=UploadAction)
-    select_rom_button.grid(row=0, column=0)
-    rom_file_entry = tk.StringVar()
+    select_rom_button = tk.Button(string_frame, text='Select ROM File', command=UploadAction)
+    select_rom_button.place(x=10, y=10)
+    rom_file_entry = tk.StringVar(string_frame)
     rom_file_entry.set(default_options["Rom"])
-    entry = tk.Entry(textvariable=rom_file_entry, state='readonly', width=50)
-    entry.grid(row=1, column=0)
+    entry = tk.Entry(string_frame, textvariable=rom_file_entry, state='readonly', width=85)
+    entry.place(x=110, y=10)
     # Seed Label And Entry
-    seed_label = tk.Label(window, text='Would you like to insert a seed?')
-    seed_label.grid(row=2, column=0)
-    seed_var = tk.StringVar()
+    seed_label = tk.Label(string_frame, text='Seed (Optional):')
+    seed_label.place(x=10, y=50)
+    seed_var = tk.StringVar(string_frame)
     seed_var.set("")
-    seed_entry = tk.Entry(window, textvariable=seed_var)
-    seed_entry.grid(row=3, column=0)
-    # Select Rom
+    seed_entry = tk.Entry(string_frame, textvariable=seed_var)
+    seed_entry.place(x=110, y=50)
     # Radio Buttons For Non-Flag Object Options
-    nf_obj_label = tk.Label(window, text='How Would You Like The Non-Flag Objects Randomized?')
-    nf_obj_label.grid(row=4, column=0)
-    nf_obj_var = tk.StringVar(window, default_options["Non-Flag"])
+    nf_obj_var = tk.StringVar(main_options_frame)
     nf_obj_options = {
-        "None": "1",
-        "Within World": "2",
-        #"Completely": "3"
+        "None",
+        "Shuffle",
+        #"Randomize",
         }
-    for (text, value) in nf_obj_options.items():
-        nf_obj_select = tk.Radiobutton(window, text=text, variable=nf_obj_var, value=value, indicator=0)
-        nf_obj_select.grid(row=4, column=value)
+    nf_obj_var.set(default_options["Non-Flag"])
+    nf_obj_dd = tk.OptionMenu(main_options_frame, nf_obj_var, *nf_obj_options)
+    tk.Label(main_options_frame, text="Jinjos/1-Ups/Misc Objects").place(x=10, y=10)
+    nf_obj_dd.place(x=200, y=5)
     # Radio Buttons For Flagged Objects Options
-    f_obj_label = tk.Label(window, text='How Would You Like The Flagged Objects Randomized?')
-    f_obj_label.grid(row=5, column=0)
-    f_obj_var = tk.StringVar(window, default_options["Flagged"])
+    f_obj_var = tk.StringVar(main_options_frame)
     f_obj_options = {
-        "None": "1",
-        #"Within World": "2",
-        #"Completely": "3"
+        "None",
+        "Shuffle",
+        #"Randomize",
         }
-    for (text, value) in f_obj_options.items():
-        f_obj_select = tk.Radiobutton(window, text=text, variable=f_obj_var, value=value, indicator=0)
-        f_obj_select.grid(row=5, column=value)
+    f_obj_var.set(default_options["Flagged"])
+    f_obj_dd = tk.OptionMenu(main_options_frame, f_obj_var, *f_obj_options)
+    tk.Label(main_options_frame, text="Jiggies/E.Honeycombs/M.Tokens").place(x=10, y=50)
+    f_obj_dd.place(x=200, y=45)
     # Radio Buttons For Struct Options
-    struct_label = tk.Label(window, text='How Would You Like The Notes/Eggs/Feathers Randomized?')
-    struct_label.grid(row=6, column=0)
-    struct_var = tk.StringVar(window, default_options["Struct"])
+    struct_var = tk.StringVar(main_options_frame)
     struct_options = {
-        "None": "1",
-        "Within World": "2",
-        #"Completely": "3"
+        "None",
+        "Shuffle",
+        #"Randomize",
         }
-    for (text, value) in struct_options.items():
-        struct_select = tk.Radiobutton(window, text=text, variable=struct_var, value=value, indicator=0)
-        struct_select.grid(row=6, column=value)
+    struct_var.set(default_options["Struct"])
+    struct_dd = tk.OptionMenu(main_options_frame, struct_var, *struct_options)
+    tk.Label(main_options_frame, text="Notes/Eggs/Feathers").place(x=10, y=90)
+    struct_dd.place(x=200, y=85)
     # Radio Buttons For Enemy Options
-    enemy_label = tk.Label(window, text='How Would You Like The Enemies Randomized?')
-    enemy_label.grid(row=7, column=0)
-    enemy_var = tk.StringVar(window, default_options["Enemies"])
+    enemy_var = tk.StringVar(main_options_frame)
     enemy_options = {
-        "None": "1",
-        "Within World": "2",
-        "Completely (Beta)": "3"
+        "None",
+        "Shuffle",
+        "Randomize",
         }
-    for (text, value) in enemy_options.items():
-        enemy_select = tk.Radiobutton(window, text=text, variable=enemy_var, value=value, indicator=0)
-        enemy_select.grid(row=7, column=value)
+    enemy_var.set(default_options["Enemies"])
+    enemy_dd = tk.OptionMenu(main_options_frame, enemy_var, *enemy_options)
+    tk.Label(main_options_frame, text="Enemies (Beta)").place(x=10, y=130)
+    enemy_dd.place(x=200, y=125)
+    # Checkbox For Clanker's Rings
+    clanker_rings_var = tk.IntVar()
+    clanker_rings_button = tk.Checkbutton(misc_options_frame, text="Clanker Rings (Hard)", variable=clanker_rings_var)
+    clanker_rings_var.set(default_options["Clanker_Rings"])
+    clanker_rings_button.place(x=10, y=10)
+    # Checkbox For Croctus
+    croctus_var = tk.IntVar()
+    croctus_button = tk.Checkbutton(misc_options_frame, text="Croctus", variable=croctus_var)
+    croctus_var.set(default_options["Croctus"])
+    croctus_button.place(x=145, y=10)
+    # Checkbox For Ancient Ones
+    ancient_ones_var = tk.IntVar()
+    ancient_ones_button = tk.Checkbutton(misc_options_frame, text="Ancient Ones", variable=ancient_ones_var)
+    ancient_ones_var.set(default_options["Ancient_Ones"])
+    ancient_ones_button.place(x=10, y=50)
+    # Checkbox For Jinxy Heads
+    jinxy_heads_var = tk.IntVar()
+    jinxy_heads_button = tk.Checkbutton(misc_options_frame, text="Jinxy Heads (Maze)", variable=jinxy_heads_var)
+    jinxy_heads_var.set(default_options["Jinxy_Heads"])
+    jinxy_heads_button.place(x=145, y=50)
+    # Checkbox For Zero Note Note Doors
+#     note_doors_var = tk.IntVar()
+#     note_doors_button = tk.Checkbutton(misc_options_frame, text="0 Note Note Doors", variable=note_doors_var)
+#     note_doors_var.set(default_options["Note_Doors"])
+#     note_doors_button.place(x=10, y=90)
     # Button To Start Randomization
-    start_label = tk.Label(window, text='Once finished, click submit!')
-    start_label.grid(row=8, column=0)
-    sub_btn = tk.Button(window, text='Submit', command=verify_parameters)
-    sub_btn.grid(row=9, column=0)
-    
+    start_label = tk.Label(submit_frame, text='Once finished, click submit!')
+    start_label.pack()
+    sub_btn = tk.Button(submit_frame, text='Submit', command=verify_parameters)
+    sub_btn.pack()
+    window.protocol('WM_DELETE_WINDOW', close_window)
     window.mainloop()
     try:
         seed_val = int(seed_var.get())
     except ValueError:
         logger.debug("No Seed Value Was Given")
         seed_val = ""
-    return (rom_file_entry.get(), seed_val, str(nf_obj_var.get()), str(f_obj_var.get()), str(struct_var.get()), str(enemy_var.get()))
+    return (rom_file_entry.get(), seed_val,
+            str(nf_obj_var.get()), str(f_obj_var.get()), str(struct_var.get()), str(enemy_var.get()),
+            str(croctus_var.get()), str(clanker_rings_var.get()), str(ancient_ones_var.get()),
+            str(jinxy_heads_var.get()))#, str(note_doors_var.get()))
 
 #####################
 ### Decompression ###
@@ -1167,7 +1280,7 @@ def decompress_file(file_dir, compressed_file):
     logger.info("Decompress File")
     cmd = file_dir + "GZIP.EXE -dc " + file_dir + tmp_folder + compressed_file.upper() + "-Compressed.bin > " + file_dir + tmp_folder + compressed_file.upper() + "-Decompressed.bin"
 #     logger.debug(cmd)
-    os.system(cmd)
+    subprocess.Popen(cmd.split(),shell=True).communicate()
 
 def decompressor(file_dir, rom_file):
     """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
@@ -1207,46 +1320,49 @@ def decompressor(file_dir, rom_file):
 ### Compression ###
 ###################
 
-def verify_pointers(seed_val, file_dir, setup_dict):
+def verify_pointers(seed_val, file_dir):
+    logger.info("Verifying Pointer")
     with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
         mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
-#         for file_pointer in range(24200, 68816): # 5E88 to 10CD0, which would be every pointer
         logger.debug("Modified Pointer List")
-        for file_pointer in setup_dict:
-            pointer_start_1 = str(hex(mm_rand_rom[file_pointer]))[2:]
-            pointer_start_1 = leading_zeros(pointer_start_1, 2)
-            pointer_start_2 = str(hex(mm_rand_rom[file_pointer + 1]))[2:]
-            pointer_start_2 = leading_zeros(pointer_start_2, 2)
-            pointer_start_3 = str(hex(mm_rand_rom[file_pointer + 2]))[2:]
-            pointer_start_3 = leading_zeros(pointer_start_3, 2)
-            pointer_start_4 = str(hex(mm_rand_rom[file_pointer + 3]))[2:]
-            pointer_start_4 = leading_zeros(pointer_start_4, 2)
-            pointer_start = int(pointer_start_1 + pointer_start_2 + pointer_start_3 + pointer_start_4, 16)
-            header_start = pointer_start + 68816 # decimal 68816 -> hex 10CD0
-            if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
-                logger.error("Invalid Header At Hex Index: " + str(hex(file_pointer)))
-                error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                exit(0)
-        other_pointer_list = [
-            # SM-Banjo's House, GL-Furnace Fun, GL-Gruntilda Boss Area,
-            39896, 39912, 39928,
-            # CS-N Cube, CS-Intro, CS-Game Select
-            39024, 39016, 39936,
-            ]
+        for location in setup_ids:
+            for file_pointer in setup_ids[location]:
+                pointer_start_1 = str(hex(mm_rand_rom[int(file_pointer[0][2:], 16)]))[2:]
+                pointer_start_1 = leading_zeros(pointer_start_1, 2)
+                pointer_start_2 = str(hex(mm_rand_rom[int(file_pointer[0][2:], 16) + 1]))[2:]
+                pointer_start_2 = leading_zeros(pointer_start_2, 2)
+                pointer_start_3 = str(hex(mm_rand_rom[int(file_pointer[0][2:], 16) + 2]))[2:]
+                pointer_start_3 = leading_zeros(pointer_start_3, 2)
+                pointer_start_4 = str(hex(mm_rand_rom[int(file_pointer[0][2:], 16) + 3]))[2:]
+                pointer_start_4 = leading_zeros(pointer_start_4, 2)
+                pointer_start = int(pointer_start_1 + pointer_start_2 + pointer_start_3 + pointer_start_4, 16)
+                header_start = pointer_start + 68816 # decimal 68816 -> hex 10CD0
+                if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
+                    logger.error("Invalid Header At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
+                    error_window("Bad Seed (" + str(seed_val) + "), Try Another")
+                    exit(0)
+                elif(((header_start % 8) != 0)):
+                    logger.error("Invalid Index Start At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
+                    error_window("Bad Seed (" + str(seed_val) + "), Try Another")
+                    exit(0)
         logger.debug("Misc Pointer List")
-        for file_pointer in other_pointer_list:
-            pointer_start_1 = str(hex(mm_rand_rom[file_pointer]))[2:]
+        for file_pointer in other_setup_pointer_list:
+            pointer_start_1 = str(hex(mm_rand_rom[int(file_pointer, 16)]))[2:]
             pointer_start_1 = leading_zeros(pointer_start_1, 2)
-            pointer_start_2 = str(hex(mm_rand_rom[file_pointer + 1]))[2:]
+            pointer_start_2 = str(hex(mm_rand_rom[int(file_pointer, 16) + 1]))[2:]
             pointer_start_2 = leading_zeros(pointer_start_2, 2)
-            pointer_start_3 = str(hex(mm_rand_rom[file_pointer + 2]))[2:]
+            pointer_start_3 = str(hex(mm_rand_rom[int(file_pointer, 16) + 2]))[2:]
             pointer_start_3 = leading_zeros(pointer_start_3, 2)
-            pointer_start_4 = str(hex(mm_rand_rom[file_pointer + 3]))[2:]
+            pointer_start_4 = str(hex(mm_rand_rom[int(file_pointer, 16) + 3]))[2:]
             pointer_start_4 = leading_zeros(pointer_start_4, 2)
             pointer_start = int(pointer_start_1 + pointer_start_2 + pointer_start_3 + pointer_start_4, 16)
             header_start = pointer_start + 68816 # decimal 68816 -> hex 10CD0
             if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
                 logger.error("Invalid Header At Decimal Index: " + str(file_pointer))
+                error_window("Bad Seed (" + str(seed_val) + "), Try Another")
+                exit(0)
+            elif(((header_start % 8) != 0)):
+                logger.error("Invalid Index Start At Hex Index: " + str(file_pointer))
                 error_window("Bad Seed (" + str(seed_val) + "), Try Another")
                 exit(0)
 
@@ -1255,24 +1371,7 @@ def compress_file(file_dir, decompressed_file):
     logger.info("Compress File")
     cmd = file_dir + "GZIP.EXE -c " + file_dir + tmp_folder + decompressed_file.upper() + "-Decompressed.bin > " + file_dir + tmp_folder + decompressed_file.upper() + "-New_Compressed.bin"
 #     logger.debug(cmd)
-    os.system(cmd)
-
-def insert_files_into_rom(seed_val, file_dir, addr):
-    """Replaces the values of the old ROM with the randomized values"""
-    logger.info("Insert Files Into Rom")
-    file_bytes = get_file_bytes(file_dir + tmp_folder, "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64")
-    (address1, address2) = get_address_endpoints(file_bytes, addr)
-    file_pointer = addr[2:]
-    with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "rb") as setup_bin:
-        setup_content = setup_bin.read()
-    with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
-        mm = mmap.mmap(rand_rom.fileno(), 0)
-        setup_count = 0
-        for index in range(address1, address1 + len(setup_content)):
-            mm[index] = setup_content[setup_count]
-            setup_count += 1
-        for index in range(address1 + len(setup_content) + 1, address2):
-            mm[index] = 170
+    subprocess.Popen(cmd.split(),shell=True).communicate()
 
 def compressor(seed_val, file_dir, location_setup):
     """Prepares the hex file that was extracted from the main ROM file for compression by providing the correct header and footer"""
@@ -1297,122 +1396,133 @@ def compressor(seed_val, file_dir, location_setup):
         with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "w+b") as new_comp_file:
             new_comp_file.write(bytes.fromhex("1172"))
             new_comp_file.write(bytes.fromhex(decomp_len))
+            new_comp_len = 6
             for index in range(header_end_index, comp_file_len-len(footer)):
                 hex_string = str(hex(mm_comp[index]))[2:]
                 hex_string = leading_zeros(hex_string, 2)
                 new_comp_file.write(bytes.fromhex(hex_string))
-#             for hex_val in tail:
-#                 new_comp_file.write(bytes.fromhex(hex_val))
+                new_comp_len += 1
+            if((new_comp_len % 8) != 0):
+                needs_padding = 8 - (new_comp_len % 8)
+                for index in range(new_comp_len, new_comp_len + needs_padding):
+                    new_comp_file.write(bytes.fromhex("AA"))
     return addr
 
-def affected_pointers(mm_rand_rom, file_pointer, pointer_start, pointer_end):
-    '''Finds the pointers that are within the previous pointer range'''
-    affected_pointer_list = []
-    for index in range(pointer_start, pointer_end):
-        pointer_value = leading_zeros(str(hex(index))[2:], 8)
-        next_pointer = mm_rand_rom.find(bytes.fromhex(pointer_value), int(file_pointer, 16) + 1, 68816) # Current Pointer to 10CD0
-        if(next_pointer != -1):
-            affected_pointer_list.append(next_pointer)
-            for count in range(2,10):
-                next_pointer = mm_rand_rom.find(bytes.fromhex(pointer_value), int(file_pointer, 16) + 8*count, 68816)
-                if(next_pointer != -1):
-                    affected_pointer_list.append(next_pointer)
-                else:
-                    break
-    return affected_pointer_list
+def remove_unknown_object(file_dir, index_hex_str):
+    '''PyDoc'''
+    #-12-11-10 -9 -8 -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14
+    # St Cm Voxel No SO X1 X2 Y1 Y2 Z1 Z2 S1 S2 O1 O2 .. .. .. .. Ro Si .. .. .. E1 E2
+    # 00 01 03 0A 01 0B FA 47 01 6E FB E8 19 0C 02 68 00 00 00 00 00 64 11 40 00 40 08
+    with open(file_dir + tmp_folder + index_hex_str + "-Decompressed.bin", "r+b") as rand_decomp_file:
+        still_searching = True
+        start_index = 0
+        while(still_searching):
+            mm_rand_decomp = mmap.mmap(rand_decomp_file.fileno(), 0)
+            mm_rand_decomp_len = len(mm_rand_decomp)
+            search_index = mm_rand_decomp.find(bytes.fromhex("190C0268"), start_index)
+            if(search_index == -1):
+                still_searching = False
+            elif((mm_rand_decomp[search_index - 12] == 0) and (mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and
+                 (mm_rand_decomp[search_index - 9] == 10) and (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and 
+                 (mm_rand_decomp[search_index + 14] == 1)):
+                mm_rand_decomp[search_index - 12] = 1
+                for index in range(search_index, mm_rand_decomp_len-15):
+                    mm_rand_decomp[index - 11] = mm_rand_decomp[index + 15]
+                mm_rand_decomp.size(mm_rand_decomp_len - 26)
+            else:
+                start_index = search_index + 1
 
-def pointer_update(seed_val, file_dir, file_pointer):
-    '''Checks to see if the pointer needs to be updated, and if so, updates it accordingly'''
-    logger.info("Updating Pointers")
-    with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "r+b") as rand_comp_file:
-        mm_rand_comp = mmap.mmap(rand_comp_file.fileno(), 0)
-        mm_rand_comp_len = len(mm_rand_comp)
-    with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
-        mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
-        pointer_start_1 = str(hex(mm_rand_rom[int(file_pointer, 16)]))[2:]
-        pointer_start_1 = leading_zeros(pointer_start_1, 2)
-        pointer_start_2 = str(hex(mm_rand_rom[int(file_pointer, 16) + 1]))[2:]
-        pointer_start_2 = leading_zeros(pointer_start_2, 2)
-        pointer_start_3 = str(hex(mm_rand_rom[int(file_pointer, 16) + 2]))[2:]
-        pointer_start_3 = leading_zeros(pointer_start_3, 2)
-        pointer_start_4 = str(hex(mm_rand_rom[int(file_pointer, 16) + 3]))[2:]
-        pointer_start_4 = leading_zeros(pointer_start_4, 2)
-        pointer_start = int(pointer_start_1 + pointer_start_2 + pointer_start_3 + pointer_start_4, 16)
-        pointer_end_1 = str(hex(mm_rand_rom[int(file_pointer, 16) + 8]))[2:]
-        pointer_end_1 = leading_zeros(pointer_end_1, 2)
-        pointer_end_2 = str(hex(mm_rand_rom[int(file_pointer, 16) + 9]))[2:]
-        pointer_end_2 = leading_zeros(pointer_end_2, 2)
-        pointer_end_3 = str(hex(mm_rand_rom[int(file_pointer, 16) + 10]))[2:]
-        pointer_end_3 = leading_zeros(pointer_end_3, 2)
-        pointer_end_4 = str(hex(mm_rand_rom[int(file_pointer, 16) + 11]))[2:]
-        pointer_end_4 = leading_zeros(pointer_end_4, 2)
-        pointer_end = int(pointer_end_1 + pointer_end_2 + pointer_end_3 + pointer_end_4, 16)
-        rand_section_place = pointer_end - pointer_start
-        logger.debug("Pointer Starter: " + str(hex(pointer_start)))
-        len_delta = mm_rand_comp_len - rand_section_place
-        if(mm_rand_comp_len > rand_section_place):
-            logger.debug("Adding Length: " + str(len_delta))
-            aa_count = 0
-            for index in range(pointer_start - 1, pointer_start-10, -1):
-                if(mm_rand_rom[index] == 170):
-                    aa_count += 1
-                else:
-                    break
-            logger.debug("AA Count: " + str(aa_count))
-            new_pointer_start = str(hex(pointer_start - aa_count))[2:]
-            new_pointer_start = leading_zeros(new_pointer_start, 8)
-            mm_rand_rom[int(file_pointer, 16)] = int(new_pointer_start[:2], 16)
-            mm_rand_rom[int(file_pointer, 16) + 1] = int(new_pointer_start[2:4], 16)
-            mm_rand_rom[int(file_pointer, 16) + 2] = int(new_pointer_start[4:6], 16)
-            mm_rand_rom[int(file_pointer, 16) + 3] = int(new_pointer_start[6:], 16)
-            if(aa_count < len_delta):
-                logger.debug("Not Enough Space")
-                new_pointer_end = str(hex(pointer_end + len_delta - aa_count))[2:]
-                new_pointer_end = leading_zeros(new_pointer_end, 8)
-                affected_pointer_list = affected_pointers(mm_rand_rom, file_pointer, pointer_start, pointer_end  + len_delta - aa_count)
-                for next_pointer in affected_pointer_list:
-                    mm_rand_rom[next_pointer] = int(new_pointer_end[:2], 16)
-                    mm_rand_rom[next_pointer + 1] = int(new_pointer_end[2:4], 16)
-                    mm_rand_rom[next_pointer + 2] = int(new_pointer_end[4:6], 16)
-                    mm_rand_rom[next_pointer + 3] = int(new_pointer_end[6:], 16)
-        if(mm_rand_comp_len < rand_section_place):
-            logger.debug("Adding Padding: " + str(len_delta))
-            for index in range(pointer_end, pointer_start + len_delta):
-                mm_rand_rom[index] = 170
+def extract_unchanged_setup(seed_val, file_dir, addr):
+    '''PyDoc'''
+    file_bytes = get_file_bytes(file_dir + tmp_folder, "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64")
+    (address1, address2) = get_address_endpoints(file_bytes, addr)
+    with open(file_dir + tmp_folder + addr + "-Randomized_Compressed.bin", "w+b") as comp_file:
+        for index in range(address1, address2):
+            hex_string = str(hex(file_bytes[index]))[2:]
+            if(len(hex_string) < 2):
+                hex_string = "0" + hex_string
+            comp_file.write(bytes.fromhex(hex_string))
 
-def compress_files(seed_val, file_dir):
-    """Main function to compress the randomized, decompressed file"""
+def skip_this_setup(mm_rand_rom, index_dec):
+    '''PyDoc'''
+    for offset in range(4):
+        mm_rand_rom[index_dec + offset + 8] = mm_rand_rom[index_dec + offset]
+
+def insert_file_into_rom(seed_val, file_dir):
+    '''PyDoc'''
+    setup_pointer_start = 38784
+    setup_pointer_end = 40000
+    # For every compressed file in numerical order,
+    for index_dec in range(setup_pointer_start, setup_pointer_end+1, 8):
+        with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+            index_hex_str = str(hex(index_dec))[2:]
+            if(index_hex_str in skip_these_setup_pointer_list):
+                skip_this_setup(mm_rand_rom, index_dec)
+            else:
+                with open(file_dir + tmp_folder + index_hex_str + "-Randomized_Compressed.bin", "r+b") as setup_bin:
+                    setup_content = setup_bin.read()
+                    # Find The Pointer Start
+                    pointer_start = ""
+                    for offset in range(4):
+                        pointer_start += leading_zeros(str(hex(mm_rand_rom[index_dec + offset]))[2:], 2)
+                    address_start = int("0x" + pointer_start, 16) + int("0x10CD0", 16)
+                    # Place It Where The Pointer Start Points To
+                    setup_count = 0
+                    for index in range(address_start, address_start + len(setup_content)):
+                        mm_rand_rom[index] = setup_content[setup_count]
+                        setup_count += 1
+                    # Calculate Where The Pointer Ends And Put That As The Next Pointer Start
+                    if(index_dec != setup_pointer_end):
+                        address_end = address_start + len(setup_content) - int("0x10CD0", 16)
+                        address_end_hex = leading_zeros(str(hex(address_end))[2:], 8)
+                        mm_rand_rom[index_dec + 8] = int(address_end_hex[:2], 16)
+                        mm_rand_rom[index_dec + 9] = int(address_end_hex[2:4], 16)
+                        mm_rand_rom[index_dec + 10] = int(address_end_hex[4:6], 16)
+                        mm_rand_rom[index_dec + 11] = int(address_end_hex[6:], 16)
+        # After The Last File Is Placed, Replace Bytes With AA Until Next Pointer Start
+#         pointer_start = ""
+#         for offset in range(4):
+#             pointer_start += leading_zeros(str(hex(mm_rand_rom[index_dec + offset]))[2:], 2)
+#         address_next_start = int("0x" + pointer_start, 16) + int("0x10CD0", 16)
+#         for index in range(address_end, address_next_start):
+#             mm_rand_rom[index] = 170
+
+def reinsert_setup_files(seed_val, file_dir):
+    '''PyDoc'''
+    # For every set up pointer, check if it's already a compressed file
+    setup_pointer_start = 38784
+    setup_pointer_end = 40000
+    file_list = os.listdir(file_dir + tmp_folder)
+    for index_dec in range(setup_pointer_start, setup_pointer_end+1, 8):
+        index_hex_str = str(hex(index_dec))[2:]
+        if((index_hex_str + "-Decompressed.bin") in file_list):
+            remove_unknown_object(file_dir, index_hex_str)
+        else:
+            extract_unchanged_setup(seed_val, file_dir, index_hex_str)
+    # Compress every decompressed file
     logger.info("Compress Files")
     for location in setup_ids:
         for location_setup in setup_ids[location]:
-            addr = compressor(seed_val, file_dir, location_setup)
-    setup_dict = {}
-    for filename in os.listdir(file_dir + tmp_folder):
-        if(filename.endswith("-Randomized_Compressed.bin")):
-            file_addr = filename.split("-")[0]
-            setup_dict[int(file_addr, 16)] = file_addr
-    for int_addr in sorted(setup_dict):
-        pointer_update(seed_val, file_dir, setup_dict[int_addr])
-        insert_files_into_rom(seed_val, file_dir, "0x" + setup_dict[int_addr])
-    verify_pointers(seed_val, file_dir, setup_dict)
+            compressor(seed_val, file_dir, location_setup)
+    insert_file_into_rom(seed_val, file_dir)
+    verify_pointers(seed_val, file_dir)
 
 ######################
 ### GET INDEX LIST ###
 ######################
 
-def get_jiggy_flags(mm, lead, tail, start_val, end_val):
+def get_jiggy_flags(mm, lead):
     '''For Jiggy Flags specifically, grabs a list of flag indices from pre-determined list of Jiggies'''
     flag_dict = []
-    for mid_val in range(start_val, end_val): # Middle Value
-        if(mid_val in jiggy_flag_list):
-            hex_bytes = str(hex(mid_val))[2:]
-            hex_bytes = leading_zeros(hex_bytes, 4)
+    for tail in ["00", "64"]:
+        for mid_val in jiggy_flag_list: # Middle Value
+            hex_bytes = leading_zeros(mid_val, 4)
             hex_string = lead + hex_bytes + "0000000000" + tail
             flag_index = mm.find(bytes.fromhex(hex_string))
             if(flag_index != -1):
                 flag_dict.append(flag_index - 1)
             else:
-    #             logger.warning("Match Not Found For " + str(hex_string))
                 pass
     return flag_dict
 
@@ -1433,12 +1543,13 @@ def get_flags(mm, lead, tail, start_val, end_val):
 
 def get_flag_index_list(mm):
     '''Locates the flags by index in the decompressed file'''
+    logger.info("Getting Flag Index List")
     jiggy_list = []
     empty_honeycomb_list = []
     mumbo_token_list = []
     for lead in ['14', '94']:
         logger.info("Jiggy Flags")
-        jiggy_list_part = get_jiggy_flags(mm, lead, "00", 1, 80)
+        jiggy_list_part = get_jiggy_flags(mm, lead)
         for item in jiggy_list_part:
             jiggy_list.append(item)
         logger.info("Empty Honeycomb Flags")
@@ -1451,6 +1562,62 @@ def get_flag_index_list(mm):
             mumbo_token_list.append(item)
     return (jiggy_list, empty_honeycomb_list, mumbo_token_list)
 
+def skip_this_flagged_object(mm, index):
+    obj_id1 = mm[index + 2]
+    obj_id2 = mm[index + 3]
+    x_loc1 = mm[index - 8]
+    x_loc2 = mm[index - 7]
+    y_loc1 = mm[index - 6]
+    y_loc2 = mm[index - 5]
+    z_loc1 = mm[index - 4]
+    z_loc2 = mm[index - 3]
+    if((obj_id1 == 0) and (obj_id2 == 70)): # Jiggy
+        # Sandcastle
+        if((x_loc1 == 0) and (x_loc2 == 0) and # 0000
+           (y_loc1 == 1) and (y_loc2 == 94) and # 015E
+           (z_loc1 == 252) and (z_loc2 == 37)): # FC25
+            print("Skipping Sandcastle Jiggy")
+            return False
+        # Water Pyramid
+        elif((x_loc1 == 255) and (x_loc2 == 255) and # FFFF
+           (y_loc1 == 0) and (y_loc2 == 145) and # 0091
+           (z_loc1 == 255) and (z_loc2 == 233)): # FFE9
+            print("Skipping Water Pyramid Jiggy")
+            return False
+        # Tumblar
+        elif((x_loc1 == 0) and (x_loc2 == 48) and # 0030
+           (y_loc1 == 0) and (y_loc2 == 0) and # 0000
+           (z_loc1 == 255) and (z_loc2 == 198)): # FFC6
+            print("Skipping Tumblar Jiggy")
+            return False
+        # Kaboom
+        elif((x_loc1 == 1) and (x_loc2 == 120) and # 0178
+           (y_loc1 == 0) and (y_loc2 == 199) and # 00C7
+           (z_loc1 == 0) and (z_loc2 == 0)): # 0000
+            print("Skipping Kaboom Jiggy")
+        # Zubba Hive
+        elif((x_loc1 == 0) and (x_loc2 == 0) and # 0000
+           (y_loc1 == 0) and (y_loc2 == 0) and # 0000
+           (z_loc1 == 0) and (z_loc2 == 125)): # 007D
+            print("Skipping Zubba Hive Jiggy")
+            return False
+            return False
+    elif((obj_id1 == 0) and (obj_id2 == 45)): # Mumbo Token
+        # Water Pyramid
+        if((x_loc1 == 254) and (x_loc2 == 212) and # FED4
+           (y_loc1 == 5) and (y_loc2 == 159) and # 059F
+           (z_loc1 == 251) and (z_loc2 == 86)): # FB56
+            print("Skipping Water Pyramid Jiggy")
+            return False
+    elif((obj_id1 == 0) and (obj_id2 == 71)): # Empty Honeycomb
+        # Mad Monster Mansion Gold Feather Room
+        if((x_loc1 == 255) and (x_loc2 == 0) and # FFCD
+           (y_loc1 == 255) and (y_loc2 == 121) and # FF79
+           (z_loc1 == 0) and (z_loc2 == 52)): # 0034
+            print("Skipping Mad Monster Mansion Gold Feather Room Empty Honeycomb")
+            return False
+    return True
+
 def get_object_index_list(mm, object_id, start=0):
     '''Locates the flagged objects by index in the decompressed file'''
     logger.info("Get Flagged Object Index List")
@@ -1460,7 +1627,8 @@ def get_object_index_list(mm, object_id, start=0):
     else:
         new_start = int(object_index) + 1
         object_list = get_object_index_list(mm, object_id, start=new_start)
-    object_list.append(object_index)
+    if(skip_this_flagged_object(mm, object_index)):
+        object_list.append(object_index)
     return object_list
 
 def adjust_ttc_oob_egg(mm, index):
@@ -1525,6 +1693,26 @@ def get_enemy_index_list(mm, enemy_id, start=0):
         enemy_list.append(enemy_index)
     return enemy_list
 
+def skip_non_ring(mm, index):
+    # CC Non-Ring
+    if(mm[index - 1] == 119):
+        print("Skipping Non-Ring")
+        return False
+    return True
+
+def get_sequence_index_list(mm, seq_search, start=0):
+    '''Locates the sequence events by index in the decompressed file'''
+    logger.info("Get Enemy Index List")
+    seq_index = mm.find(bytes.fromhex(seq_search), start)
+    if(seq_index == -1):
+        return []
+    else:
+        new_start = int(seq_index) + 1
+        seq_list = get_enemy_index_list(mm, seq_search, start=new_start)
+    if(skip_non_ring(mm, seq_index)):
+        seq_list.append(seq_index)
+    return seq_list
+
 ########################
 ### OBTAIN LIST INFO ###
 ########################
@@ -1584,8 +1772,14 @@ def obtain_flagged_object_list_info(mm, obj_index_list):
         object_dict["Script2"] = mm[object_index + 1]
         object_dict["Obj_ID1"] = mm[object_index + 2]
         object_dict["Obj_ID2"] = mm[object_index + 3]
+        object_dict["IDK1"] = mm[object_index + 4]
+        object_dict["IDK2"] = mm[object_index + 5]
+        object_dict["IDK3"] = mm[object_index + 6]
+        object_dict["IDK4"] = mm[object_index + 7]
 #         object_dict["Rotation"] = mm[object_index + 8]
 #         object_dict["Size"] = mm[object_index + 9]
+        object_dict["IDK5"] = mm[object_index + 10]
+        object_dict["IDK6"] = mm[object_index + 11]
         object_location_list.append(object_dict)
     return object_location_list
 
@@ -1631,7 +1825,7 @@ def obtain_struct_list_info(mm, struct_list_index_list):
 #         struct_dict["Hex_Y2"] = mm[struct_index + 7]
 #         struct_dict["Hex_Z1"] = mm[struct_index + 8]
 #         struct_dict["Hex_Z2"] = mm[struct_index + 9]
-#         struct_dict["Size"] = mm[struct_index + 10]
+        struct_dict["Size"] = mm[struct_index + 10]
 #         struct_dict["IDK3"] = mm[struct_index + 11]
         struct_location_list.append(struct_dict)
     return struct_location_list
@@ -1658,6 +1852,29 @@ def obtain_enemy_list_info(mm, enemy_index_list):
 #         enemy_dict["Size"] = mm[enemy_index + 9]
         enemy_location_list.append(enemy_dict)
     return enemy_location_list
+
+def obtain_sequence_object_list_info(mm, sequence_obj_index_list):
+    '''Gathers all of the information about the non-flag object into a list'''
+    logger.info("Obtain Non-Flag Object List Info")
+    #X-Loc  Y-Loc  Z-Loc  script   ID     --   --   --   --   rot.  size  --    --
+    #0E48   0153   1998   190C     0049   00   00   00   00   00    64    0C    10
+    object_location_list = []
+    for object_index in sequence_obj_index_list:
+        object_dict = {}
+#         object_dict["Hex_X1"] = mm[object_index - 6]
+#         object_dict["Hex_X2"] = mm[object_index - 5]
+#         object_dict["Hex_Y1"] = mm[object_index - 4]
+#         object_dict["Hex_Y2"] = mm[object_index - 3]
+#         object_dict["Hex_Z1"] = mm[object_index - 2]
+#         object_dict["Hex_Z2"] = mm[object_index - 1]
+        object_dict["Script1"] = mm[object_index]
+        object_dict["Script2"] = mm[object_index + 1]
+        object_dict["Obj_ID1"] = mm[object_index + 2]
+        object_dict["Obj_ID2"] = mm[object_index + 3]
+#         object_dict["Rotation"] = mm[object_index + 4]
+#         object_dict["Size"] = mm[object_index + 5]
+        object_location_list.append(object_dict)
+    return object_location_list
 
 ##################
 ### INDEX MAIN ###
@@ -1696,9 +1913,11 @@ def generic_get_lists(mm, id_list):
             object_list = get_object_index_list(mm, obj_id)
         elif(id_list == collectable_struct_id_list):
             object_list = get_struct_index_list(mm, obj_id)
+        elif((id_list == croctus_list) or (id_list == clanker_rings_list) or (id_list == ancient_ones_list) or (id_list == jinxy_head_list)):
+            object_list = get_sequence_index_list(mm, obj_id)
         else:
             logger.error("Invalid ID List")
-            error_window("Error During Randomization")
+            error_window("Developer Error During Randomization")
             exit(0)
         for item in object_list:
             index_list.append(item)
@@ -1708,23 +1927,49 @@ def generic_get_lists(mm, id_list):
         location_list = obtain_flagged_object_list_info(mm, index_list)
     elif(id_list == collectable_struct_id_list):
         location_list = obtain_struct_list_info(mm, index_list)
+    elif((id_list == croctus_list) or (id_list == clanker_rings_list) or (id_list == ancient_ones_list) or (id_list == jinxy_head_list)):
+        location_list = obtain_sequence_object_list_info(mm, index_list)
     else:
         logger.error("Invalid ID List")
-        error_window("Error During Randomization")
+        error_window("Developer Error During Randomization")
         exit(0)
     return (index_list, location_list)
+
+def negative_hex_value(pos_dec_value):
+    '''Returns the decimal value of a hexidecimal number with an inversed sign'''
+    neg_dec_value = pos_dec_value - 65536
+    return neg_dec_value
 
 def find_closest_flag(target_hex_x, target_hex_y, target_hex_z, compiled_list):
     '''For every flagged object, tries to find the closest flag'''
     score_dict = {}
+    suspect_limit = 32768 # hex numbers turn negative as soon as you cross the midway point, which is 0x8000
+    target_dec_x = int(str(target_hex_x), 16)
+    if(target_dec_x > suspect_limit):
+        target_dec_x = negative_hex_value(target_dec_x)
+    target_dec_y = int(str(target_hex_y), 16)
+    if(target_dec_y > suspect_limit):
+        target_dec_y = negative_hex_value(target_dec_y)
+    target_dec_z = int(str(target_hex_z), 16)
+    if(target_dec_z > suspect_limit):
+        target_dec_z = negative_hex_value(target_dec_z)
     for item_dict in compiled_list:
         suspect_index = item_dict["Index"]
         suspect_hex_x = item_dict["Hex_X"]
+        suspect_dec_x = int(str(suspect_hex_x), 16)
+        if(suspect_dec_x > suspect_limit):
+            suspect_dec_x = negative_hex_value(suspect_dec_x)
         suspect_hex_y = item_dict["Hex_Y"]
+        suspect_dec_y = int(str(suspect_hex_y), 16)
+        if(suspect_dec_y > suspect_limit):
+            suspect_dec_y = negative_hex_value(suspect_dec_y)
         suspect_hex_z = item_dict["Hex_Z"]
-        x_delta = int(str(target_hex_x), 16) - int(str(suspect_hex_x), 16)
-        y_delta = int(str(target_hex_y), 16) - int(str(suspect_hex_y), 16)
-        z_delta = int(str(target_hex_z), 16) - int(str(suspect_hex_z), 16)
+        suspect_dec_z = int(str(suspect_hex_z), 16)
+        if(suspect_dec_z > suspect_limit):
+            suspect_dec_z = negative_hex_value(suspect_dec_z)
+        x_delta = target_dec_x - suspect_dec_x
+        y_delta = target_dec_y - suspect_dec_y
+        z_delta = target_dec_z - suspect_dec_z
         score = abs(x_delta) + abs(y_delta) + abs(z_delta)
         score_dict[score] = suspect_index
     best_score = min(score_dict.keys())
@@ -1749,10 +1994,15 @@ def match_obj_and_flag(flagged_object_location_list, jiggy_flag_location_list, e
         closest_flag_dict[flagged_object_dict["Index"]] = closet_flag_index
     return closest_flag_dict
 
-def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option):
+def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option):
     '''For every location, grabs all of the non-flags, flagged, struct, and enemy indices and information, randomizes the lists, and assigns the new values'''
     logger.info("Get Index Main")
+#     croctus_option = "2"
+#     clanker_rings_option = "2"
+#     ancient_ones_option = "2"
+#     jinxy_head_option = "2"
     for location in address_dict:
+        logger.debug("Location: " + str(location))
         address_index_dict = {}
         flagged_obj_index_dict = {}
         address_flagged_object_location_list = []
@@ -1761,10 +2011,15 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         address_ground_enemy_location_list = []
         address_flying_enemy_location_list = []
         address_wall_enemy_location_list = []
+        address_croctus_location_list = []
+        address_clanker_rings_location_list = []
+        address_ancient_ones_location_list = []
+        address_jinxy_head_location_list = []
         location_jiggy_dict = {}
         location_empty_honeycomb_dict = {}
         location_mumbo_token_dict = {}
         for address in address_dict[location]:
+            logger.debug("Address: " + str(address))
             address_index_dict[address] = {}
             flagged_obj_index_dict[address] = {}
             address_index_dict[address]["Grounded_Enemies"] = []
@@ -1772,7 +2027,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             address_index_dict[address]["Wall_Enemies"] = []
             mm = create_mmap(file_dir, address)
             # Flagged Objects
-            if(flagged_option != "1"):
+            if(flagged_option != "None"):
                 logger.info("Get Flagged Objects Index")
                 (flagged_obj_index_list, flagged_object_location_list) = generic_get_lists(mm, obj_flagged_id_list)
                 for item in flagged_object_location_list:
@@ -1791,20 +2046,20 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 for item in mumbo_token_flag_location_list:
                     location_mumbo_token_dict[(address, item["Index"])] = item
             # No Flag Objects
-            if(non_flag_option != "1"):
+            if(non_flag_option != "None"):
                 logger.info("Get Non-Flag Objects Index")
                 (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, obj_no_flag_id_list)
                 for item in no_flag_object_location_list:
                     address_no_flag_object_location_list.append(item)
                 address_index_dict[address]["No_Flag_Objects"] = no_flag_obj_index_list
             # Structs
-            if(struct_option != "1"):
+            if(struct_option != "None"):
                 logger.info("Get Structs Index")
                 (struct_index_list, struct_location_list) = generic_get_lists(mm, collectable_struct_id_list)
                 for item in struct_location_list:
                     address_struct_location_list.append(item)
                 address_index_dict[address]["Structs"] = struct_index_list
-            if(enemy_option != "1"):
+            if(enemy_option != "None"):
                 (index_dict, location_dict) = enemy_get_lists(mm, location)
                 # Grounded Enemies
                 logger.info("Get Grounded Enemies Index")
@@ -1818,19 +2073,51 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 logger.info("Get Wall Enemies Index")
                 address_index_dict[address]["Wall_Enemies"] = address_index_dict[address]["Wall_Enemies"] + index_dict["Wall"]
                 address_wall_enemy_location_list = address_wall_enemy_location_list + location_dict["Wall"]
-
+            if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
+                logger.info("Get Croctus Index")
+                (croctus_index_list, croctus_location_list) = generic_get_lists(mm, croctus_list)
+                for item in croctus_location_list:
+                    address_croctus_location_list.append(item)
+                address_index_dict[address]["Croctus"] = croctus_index_list
+            if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
+                logger.info("Get Clanker Rings Index")
+                (clanker_rings_index_list, clanker_rings_location_list) = generic_get_lists(mm, clanker_rings_list)
+                for item in clanker_rings_location_list:
+                    address_clanker_rings_location_list.append(item)
+                address_index_dict[address]["Clanker_Rings"] = clanker_rings_index_list
+            if((ancient_ones_option == "1") and (location == "Gobi's Valley")):
+                logger.info("Get Ancient Ones Index")
+                (ancient_ones_index_list, ancient_ones_location_list) = generic_get_lists(mm, ancient_ones_list)
+                for item in ancient_ones_location_list:
+                    address_ancient_ones_location_list.append(item)
+                address_index_dict[address]["Ancient_Ones"] = ancient_ones_index_list
+            if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
+                logger.info("Get Ancient Ones Index")
+                (jinxy_head_index_list, jinxy_head_location_list) = generic_get_lists(mm, jinxy_head_list)
+                for item in jinxy_head_location_list:
+                    address_jinxy_head_location_list.append(item)
+                address_index_dict[address]["Jinxy_Head"] = jinxy_head_index_list
+        
         ### Randomize The Lists
         logger.info("Randomizing Lists Section")
-        if(flagged_option != "1"):
+        if(flagged_option == "Shuffle"):
             address_flagged_object_location_list = randomize_list(seed_val, address_flagged_object_location_list)
-        if(non_flag_option != "1"):
+        if(non_flag_option == "Shuffle"):
             address_no_flag_object_location_list = randomize_list(seed_val, address_no_flag_object_location_list)
-        if(struct_option != "1"):
+        if(struct_option == "Shuffle"):
             address_struct_location_list = randomize_list(seed_val, address_struct_location_list)
-        if(enemy_option != "1"):
+        if(enemy_option == "Shuffle"):
             address_ground_enemy_location_list = randomize_list(seed_val, address_ground_enemy_location_list)
             address_flying_enemy_location_list = randomize_list(seed_val, address_flying_enemy_location_list)
             address_wall_enemy_location_list = randomize_list(seed_val, address_wall_enemy_location_list)
+        if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
+            address_croctus_location_list = randomize_list(seed_val, address_croctus_location_list)
+        if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
+            address_clanker_rings_location_list = randomize_list(seed_val, address_clanker_rings_location_list)
+        if((ancient_ones_option == "1") and (location == "Gobi's Valley")):
+            address_ancient_ones_location_list = randomize_list(seed_val, address_ancient_ones_location_list)
+        if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
+            address_jinxy_head_location_list = randomize_list(seed_val, address_jinxy_head_location_list)
         
         ### Move Everything
         logger.info("Moving Object/Structs/Enemies Section")
@@ -1838,9 +2125,9 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             logger.debug(address)
             mm = create_mmap(file_dir, address)
             # Flagged Objects
-            if(flagged_option == "1"):
+            if(flagged_option == "None"):
                 logger.info("Flagged Objects Randomization Off")
-            elif(flagged_option == "2"):
+            elif(flagged_option == "Shuffle"):
                 (address_flagged_object_location_list,
                  location_jiggy_dict,
                  location_empty_honeycomb_dict,
@@ -1852,32 +2139,44 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                                                                    location_empty_honeycomb_dict,
                                                                    location_mumbo_token_dict)
             # No Flag Objects
-            if(non_flag_option == "1"):
+            if(non_flag_option == "None"):
                 logger.info("Non-Flag Objects Randomization Off")
-            elif(non_flag_option == "2"):
+            elif(non_flag_option == "Shuffle"):
                 address_no_flag_object_location_list = move_no_flag_objects(mm, address_index_dict[address]["No_Flag_Objects"], address_no_flag_object_location_list)
             # Structs
-            if(struct_option == "1"):
+            if(struct_option == "None"):
                 logger.info("Struct Randomization Off")
-            elif(struct_option == "2"):
+            elif(struct_option == "Shuffle"):
                 address_struct_location_list = move_structs(mm, address_index_dict[address]["Structs"], address_struct_location_list)
             # Enemies
-            if(enemy_option == "1"):
+            if(enemy_option == "None"):
                 logger.info("Enemy Randomization Off")
-            elif(enemy_option == "2"):
+            elif(enemy_option == "Shuffle"):
                 # Grounded Enemies
                 address_ground_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Grounded_Enemies"], address_ground_enemy_location_list)
                 # Flying Enemies
                 address_flying_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Flying_Enemies"], address_flying_enemy_location_list)
                 # Wall Enemies
                 address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
-            elif(enemy_option == "3"):
+            elif(enemy_option == "Randomize"):
                 # Grounded Enemies
                 move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address)
                 # Flying Enemies
                 move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address)
                 # Wall Enemies
                 move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address)
+            # Croctus
+            if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
+                address_croctus_location_list = move_no_flag_objects(mm, address_index_dict[address]["Croctus"], address_croctus_location_list)
+            # Clanker Rings
+            if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
+                address_clanker_rings_location_list = move_no_flag_objects(mm, address_index_dict[address]["Clanker_Rings"], address_clanker_rings_location_list)
+            # Ancient Ones
+            if((ancient_ones_option == "1") and (location == "Gobi's Valley")):
+                address_ancient_ones_location_list = move_no_flag_objects(mm, address_index_dict[address]["Ancient_Ones"], address_ancient_ones_location_list)
+            # Jinxy Head
+            if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
+                address_jinxy_head_location_list = move_no_flag_objects(mm, address_index_dict[address]["Jinxy_Head"], address_jinxy_head_location_list)
 
 #################
 ### RANDOMIZE ###
@@ -1898,16 +2197,24 @@ def move_flagged_objects(mm, obj_index_list, object_location_list, flag_indices_
         mm[object_index + 1] = object_location_list[0]["Script2"]
         mm[object_index + 2] = object_location_list[0]["Obj_ID1"]
         mm[object_index + 3] = object_location_list[0]["Obj_ID2"]
+        mm[object_index + 4] = object_location_list[0]["IDK1"]
+        mm[object_index + 5] = object_location_list[0]["IDK2"]
+        mm[object_index + 6] = object_location_list[0]["IDK3"]
+        mm[object_index + 7] = object_location_list[0]["IDK4"]
+#         mm[object_index + 8] = object_location_list[0]["Rotation"]
+#         mm[object_index + 9] = object_location_list[0]["Size"]
+        mm[object_index + 10] = object_location_list[0]["IDK5"]
+        mm[object_index + 11] = object_location_list[0]["IDK6"]
         closest_index = flag_indices_dict[object_index]
-        if(object_location_list[0]["Obj_ID2"] == 45): # Mumbo Token
+        if((object_location_list[0]["Obj_ID1"] == 0) and (object_location_list[0]["Obj_ID2"] == 45)): # Mumbo Token
             use_this_flag_key = list(mumbo_token_dict.keys())[0]
             use_this_flag_value = mumbo_token_dict[use_this_flag_key]
             mumbo_token_dict.pop(use_this_flag_key, None)
-        elif(object_location_list[0]["Obj_ID2"] == 71): # Empty Honeycomb
+        elif((object_location_list[0]["Obj_ID1"] == 0) and (object_location_list[0]["Obj_ID2"] == 71)): # Empty Honeycomb
             use_this_flag_key = list(empty_honeycomb_dict.keys())[0]
             use_this_flag_value = empty_honeycomb_dict[use_this_flag_key]
             empty_honeycomb_dict.pop(use_this_flag_key, None)
-        elif(object_location_list[0]["Obj_ID2"] == 70): # Jiggy
+        elif((object_location_list[0]["Obj_ID1"] == 0) and (object_location_list[0]["Obj_ID2"] == 70)): # Jiggy
             use_this_flag_key = list(jiggy_dict.keys())[0]
             use_this_flag_value = jiggy_dict[use_this_flag_key]
             jiggy_dict.pop(use_this_flag_key, None)
@@ -1919,10 +2226,10 @@ def move_flagged_objects(mm, obj_index_list, object_location_list, flag_indices_
         mm[closest_index + 5] = use_this_flag_value["IDK2"]
         mm[closest_index + 6] = use_this_flag_value["IDK3"]
         mm[closest_index + 7] = use_this_flag_value["IDK4"]
-        mm[closest_index + 8] = use_this_flag_value["Rotation"]
-        mm[closest_index + 9] = use_this_flag_value["Size"]
-        mm[closest_index + 10] = use_this_flag_value["IDK5"]
-        mm[closest_index + 11] = use_this_flag_value["IDK6"]
+#         mm[closest_index + 8] = use_this_flag_value["Rotation"]
+#         mm[closest_index + 9] = use_this_flag_value["Size"]
+#         mm[closest_index + 10] = use_this_flag_value["IDK5"]
+#         mm[closest_index + 11] = use_this_flag_value["IDK6"]
         object_location_list.pop(0)
     return (object_location_list, jiggy_dict, empty_honeycomb_dict, mumbo_token_dict)
 
@@ -1947,6 +2254,7 @@ def move_structs(mm, struct_index_list, struct_location_list):
 #         mm[struct_index + 3] = struct_location_list[0]["IDK2"]
         mm[struct_index + 2] = 0
         mm[struct_index + 3] = 160
+        mm[struct_index + 10] = struct_location_list[0]["Size"]
         struct_location_list.pop(0)
     return struct_location_list
 
@@ -1976,6 +2284,50 @@ def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_type, location
         mm[enemy_index + 3] = int(enemy_obj_id[2:], 16)
         seed_count += 1
 
+############################
+### UNLOCKABLE OPTIONS ###
+############################
+
+def modify_note_doors_requirements(mm, first="Skip", second="Skip", third="Skip", fourth="Skip",
+                                   fifth="Skip", sixth="Skip", seventh="Skip", eigth="Skip",
+                                   nineth="Skip", tenth="Skip", eleventh="Skip", twelevth="Skip"):
+    # Find location of note doors
+    # 00 32 00 B4 01 04 01 5E 01 C2 02 80 02 FD 03 2A 03 3C 03 4E 03 60 03 72
+    # Every 2 are a note door
+    # Edit each note door with zeros
+    pass
+
+def modify_world_puzzle_requirements(mm_rom, mm="Skip", ttc="Skip", cc="Skip", bgs="Skip",
+                                    fp="Skip", gv="Skip", mmm="Skip", rbb="Skip", ccw="Skip"):
+    # Find location of world puzzles
+    # 00 00 01 01 00 5D 02 02 00 5E 05 03 00 60 07 03 00 63 08 04 00 66 09 04 00 6A 0A 04 00 6E 0C 04 00 72 0F 04 00 76 19 05 00 7A 04 03
+    # Every 4 is a note door, with the third value being the one you have to change
+    pass
+
+def modify_transformation_requirements(mm, termite="Skip", crocodile="Skip",
+                                       walrus="Skip", pumpkin="Skip", bee="Skip"):
+    pass
+
+def modify_starting_moves(mm, jump="Skip", climb="Skip", swim="Skip", beak_barge="Skip",
+                          attacks="Skip", talon_trot="Skip", beak_buster="Skip", eggs="Skip",
+                          shock_spring_jump="Skip", flight_pad="Skip", wonderwing="Skip",
+                          wading_boots="Skip", beak_bomb="Skip", running_shoes="Skip"):
+    pass
+
+def unlockable_options(file_dir, seed_val, note_door_option, world_puzzle_option):
+    # STARTS AT FCF698
+    # POTENTIALLY ENDS AT FD041F, WITH ZEROES AFTER FD0412
+    # HEADER: ["11", "72", "00", "00", "26", "A0"]
+    # Extract Note Door Section From ROM Into Compressed File
+    # Decompress Note Door Compressed File
+    if(note_door_option == "1"):
+        modify_note_doors_requirements()
+    if(world_puzzle_option == "1"):
+        modify_world_puzzle_requirements()
+    # Compress Edited Note Door Decompressed File
+    # Re-insert Compressed File Back Into ROM
+    pass
+
 ################
 ### CRC TOOL ###
 ################
@@ -1984,7 +2336,7 @@ def run_crc_tool(seed_val, file_dir):
     '''Runs the CRC Tool that allows a modified game to run'''
     logger.info("Running CRC Tool")
     cmd = file_dir + "rn64crc2/rn64crc.exe -u " + file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64"
-    os.system(cmd)
+    subprocess.Popen(cmd.split(),shell=True).communicate()
 
 ################
 ### CLEAN UP ###
@@ -2052,17 +2404,21 @@ def main():
     """Goes through the steps of asking for parameters in a gui, setting up the folder, making a copy of the rom, decompressing the addresses, randomizing, compressing the files, and cleaning up"""
     logger.info("Main")
     ### Set Up ###
-    (rom_dir, seed_val, non_flag_option, flagged_option, struct_option, enemy_option) = parameter_gui()
+    (rom_dir, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option) = parameter_gui()#, note_door_option) = parameter_gui()
     (file_dir, rom_file) = split_dir_rom(rom_dir)
     setup_tmp_folder(file_dir)
     seed_val = seed(seed_val)
     make_copy_of_rom(seed_val, file_dir, rom_file)
     ### Decompress ROM ###
     address_dict = decompressor(file_dir, rom_file)
+    ### Misc Options ###
+    # something something fuck note doors
     ### Randomize Indexes ###
-    get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option)
+    get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option)
+    ### Misc Options ###
+    # something something fuck note doors
     ### Compress ROM ###
-    compress_files(seed_val, file_dir)
+    reinsert_setup_files(seed_val, file_dir)
     ### CRC Tool ###
     run_crc_tool(seed_val, file_dir)
     ### Clean Up ###
