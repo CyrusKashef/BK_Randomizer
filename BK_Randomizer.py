@@ -24,6 +24,7 @@ import tkinter as tk
 import logging
 from logging.handlers import RotatingFileHandler
 import binascii
+import json
 
 #####################################################################################
 ##################################### VARIABLES #####################################
@@ -49,12 +50,37 @@ default_options = {
     "Flagged": "None",
     "Struct": "Shuffle",
     "Enemies": "Randomize",
+    "Warps": "None",
     "Clanker_Rings": 1,
     "Croctus": 1,
     "Ancient_Ones": 1,
     "Jinxy_Heads": 1,
-    "Note_Doors": 0,
+    "Abnormalities": 0,
+    "Final_Note_Door_Mode": 0,
+    "Note_Door_Lower": 0,
+    "Note_Door_Upper": 900,
+    "Final_Puzzle_Mode": 0,
+    "Puzzle_Lower": 0,
+    "Puzzle_Upper": 25,
     }
+
+# EVERYTHING OFF
+# default_options = {
+#     "Rom": os.getcwd(),
+#     "Non-Flag": "None",
+#     "Flagged": "None",
+#     "Struct": "None",
+#     "Enemies": "None",
+#     "Warps": "None",
+#     "Clanker_Rings": 0,
+#     "Croctus": 0,
+#     "Ancient_Ones": 0,
+#     "Jinxy_Heads": 0,
+#     "Abnormalities": 0,
+#     "Final_Note_Door_Mode": 0,
+#     "Note_Door_Lower": 0,
+#     "Note_Door_Upper": 900,
+#     }
 
 #############################################################################################
 ####################################### SETUP ID LIST #######################################
@@ -582,135 +608,189 @@ setup_ids = {
             ["AA", "AA", "AA", "AA", "AA"]
             ),
         ],
-#     "Gruntilda's Lair": [
-#         ("0x9AC0", # Floor 1 MM Puzzle And Entrance - 4ED0E8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AC8", # Floor 2 TTC and CC Puzzles - 4ED9F8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AD0", # Floor 3 CCW Puzzle - 4EDFD8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B00", # Floor 4 Giant Gruntilda Statue - 4F0EC8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AE8", # Floor 5 Giant Urn and GV Entrance - 4EF088
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AF0", # Floor 6 Grunty's Head and FP Entrance - 4EF998
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B40", # Floor 7 CCW Entrance - 4F4348
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9C10", # Floor 8 Gruntilda Puzzle And Dingpot - 4FBEB0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AD8", # Floor 3 Pipe Room - 4EE738
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AE0", # TTC Entrance - 4EEAA8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AF8", # CC Entrance - 4F0758
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B08", # BGS Entrance - 4F15A0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B18", # GV Puzzle - 4F2180
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B20", # MMM Entrance - 4F26A0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B28", # Floor 6 Water Switch Area - 4F2CE8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B30", # RBB Entrance - 4F32B0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B38", # MMM and RBB Puzzles - 4F3B10
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B48", # Coffin Room - 4F4D00
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B78", # Path To Quiz Show - 4F6700
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9BE8", # Furnace Fun - 4FA390
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9BF8", # Gruntilda Boss Fight - 4FB1C0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ]
+    "Gruntilda's Lair": [
+        ("0x9AC0", # Floor 1 MM Puzzle And Entrance - 4ED0E8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "44", "30", "45", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["2E", "FF", "47", "A7", "E0", "10", "00", "00"],
+            ["11", "72", "00", "00", "10", "E0"],
+            ["AA", "AA", "AA", "AA"]
+            ),
+        ("0x9AC8", # Floor 2 TTC and CC Puzzles - 4ED9F8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "44", "39", "46", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["8A", "3C", "1A", "84", "C3", "0A", "00", "00"],
+            ["11", "72", "00", "00", "0A", "C3"],
+            ["AA", "AA"]
+            ),
+        ("0x9AD0", # Floor 3 CCW Puzzle - 4EDFD8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "44", "46", "44", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["AD", "80", "65", "A1", "0E", "0E", "00", "00"],
+            ["11", "72", "00", "00", "0E", "0E"],
+            ["AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9B00", # Floor 4 Giant Gruntilda Statue - 4F0EC8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "30", "45", "43", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["8A", "1C", "1E", "20", "68", "0D", "00", "00"],
+            ["11", "72", "00", "00", "0D", "68"],
+            [""]
+            ),
+        ("0x9AE8", # Floor 5 Giant Urn and GV Entrance - 4EF088
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "46", "30", "38", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["63", "B2", "DE", "36", "B9", "11", "00", "00"],
+            ["11", "72", "00", "00", "11", "B9"],
+            ["AA", "AA", "AA"]
+            ),
+        ("0x9AF0", # Floor 6 Grunty's Head and FP Entrance - 4EF998
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "46", "39", "39", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["F1", "D3", "B8", "71", "EC", "1C", "00", "00"],
+            ["11", "72", "00", "00", "1C", "EC"],
+            ["AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9B40", # Floor 7 CCW Entrance - 4F4348
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "34", "33", "34", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["BD", "B3", "61", "F6", "C4", "12", "00", "00"],
+            ["11", "72", "00", "00", "12", "C4"],
+            [""]
+            ),
+        ("0x9C10", # Floor 8 Gruntilda Puzzle And Dingpot - 4FBEB0
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "42", "45", "42", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["01", "CB", "D9", "04", "09", "14", "00", "00"],
+            ["11", "72", "00", "00", "14", "09"],
+            ["AA"]
+            ),
+        ("0x9AD8", # Floor 3 Pipe Room - 4EE738
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "45", "37", "33", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["2D", "BF", "0D", "61", "DE", "05", "00", "00"],
+            ["11", "72", "00", "00", "05", "DE"],
+            ["AA"]
+            ),
+        ("0x9AE0", # TTC Entrance - 4EEAA8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "45", "41", "41", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["4E", "2A", "12", "B3", "C5", "0A", "00", "00"],
+            ["11", "72", "00", "00", "0A", "C5"],
+            ["AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9AF8", # CC Entrance - 4F0758
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "30", "37", "35", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["01", "A5", "D3", "1A", "BA", "0D", "00", "00"],
+            ["11", "72", "00", "00", "0D", "BA"],
+            ["AA"]
+            ),
+        ("0x9B08", # BGS Entrance - 4F15A0
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "31", "35", "41", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["5E", "39", "C0", "CC", "B7", "13", "00", "00"],
+            ["11", "72", "00", "00", "13", "B7"],
+            [""]
+            ),
+        ("0x9B18", # GV Puzzle - 4F2180
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "32", "31", "38", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["D8", "59", "7A", "D1", "6B", "0A", "00", "00"],
+            ["11", "72", "00", "00", "0A", "6B"],
+            [""]
+            ),
+        ("0x9B20", # MMM Entrance - 4F26A0
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "32", "36", "41", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["CE", "65", "01", "45", "4F", "11", "00", "00"],
+            ["11", "72", "00", "00", "11", "4F"],
+            ["AA", "AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9B28", # Floor 6 Water Switch Area - 4F2CE8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "32", "43", "45", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["C0", "FB", "39", "7E", "27", "0B", "00", "00"],
+            ["11", "72", "00", "00", "0B", "27"],
+            ["AA"]
+            ),
+        ("0x9B30", # RBB Entrance - 4F32B0
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "33", "32", "42", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["99", "CB", "CC", "82", "14", "10", "00", "00"],
+            ["11", "72", "00", "00", "10", "14"],
+            ["AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9B38", # MMM and RBB Puzzles - 4F3B10
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "33", "42", "31", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["EC", "51", "16", "1E", "03", "11", "00", "00"],
+            ["11", "72", "00", "00", "11", "03"],
+            [""]
+            ),
+        ("0x9B48", # Coffin Room - 4F4D00
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "34", "44", "30", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["EA", "44", "4E", "EB", "DC", "05", "00", "00"],
+            ["11", "72", "00", "00", "05", "DC"],
+            [""]
+            ),
+        ("0x9B78", # Path To Quiz Show - 4F6700
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "36", "37", "30", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["C4", "34", "E2", "21", "2A", "02", "00", "00"],
+            ["11", "72", "00", "00", "02", "2A"],
+            ["AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9BE8", # Furnace Fun - 4FA390
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "41", "33", "39", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["17", "81", "0C", "81", "BF", "13", "00", "00"],
+            ["11", "72", "00", "00", "13", "BF"],
+            ["AA", "AA", "AA", "AA"]
+            ),
+        ("0x9BF8", # Gruntilda Boss Fight - 4FB1C0
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "42", "31", "43", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["C4", "D7", "EA", "E4", "09", "0E", "00", "00"],
+            ["11", "72", "00", "00", "0E", "09"],
+            ["AA"]
+            ),
+        ]
     }
+
+misc_setup_ids = {
+    "Bottles Tutorial Confirmation": [
+        ("0xCF90", # Bottles Text Box - 5C9AF8
+            ["1F", "8B", "08", "08", "86", "23", "92", "60", "00", "0B", "35", "43", "39", "41", "46", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["79", "E9", "17", "0C", "77", "00", "00", "00"],
+            ["11", "72", "00", "00", "00", "77"],
+            ["AA", "AA", "AA"],
+            ),
+        ],
+    "Requirements": [
+        ("FCF698,FD0420", # Note Doors, World Puzzles - FCF698
+            ["1F", "8B", "08", "08", "A6", "23", "92", "60", "00", "0B", "46", "43", "46", "36", "39", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["79", "3F", "41", "6F", "A0", "26", "00", "00"],
+            ["11", "72", "00", "00", "26", "A0"],
+            ["00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00"],
+            ),
+        ]
+    }
+
+### NOTE DOOR INDICES
+# 0x3F5D57C-D is the first note door's value (50%)
+# 0x3F5D57E-F is the second note door's value (60%)
+# 0x3F5D580-1 is the third note door's value (65%)
+# 0x3F5D582-3 is the fourth note door's value (70%)
+# 0x3F5D584-5 is the fifth note door's value (75%)
+# 0x3F5D586-7 is the sixth note door's value (80%)
+# 0x3F5D588-9 is the seventh note door's value (85%)
+# 0x3F5D58A-B is the eighth note door's value (90%)
+# 0x3F5D58C-D is the ninth note door's value (92%)
+# 0x3F5D58E-F is the tenth note door's value (94%)
+# 0x3F5D590-1 is the eleventh note door's value (96%)
+# 0x3F5D592-3 is the twelfth note door's value (98%)
+
+### HAVE ALL MOVES
+# 0x2827: 25EFDD E8 -> F0 271848
+# 0x282B: 271848 28 -> 30 273948
+# 0x282F: 273948 48 -> 50 2508DD
+# 0x2833: 2508DD E8 -> F0 2529FD
+# 0x2837: 2529FD 68 -> 70 254AFD
+# 0x283B: 254AFD 68 -> 70 256B2F
+# 0x2843: 258C2F 68 -> 70 25AD86
+# 0x2847: 25AD86 78 -> 80 AC4E00
+# 0x289B: 25CE86 78 -> 80 25EFC2
+# 0x289F: 25EFC2 B8 -> C0 2718C2
+# 0x28A3: 2718C2 B8 -> C0 2739
+# 0x28A6: 2739 E2 -> E3 lots of changes...
+
+### BGS Huts
+# Script: 190C
+# Obj ID: 000C
+# The One With Notes: 16 43 06 40 EF 2E 19 0C 00 0C 00 00 01 80 00 64 01 00
+# The One With Jiggy: 16 4A 0B 54 E9 D0 19 0C 00 0C 00 00 00 00 00 64 01 40
+# The Rest Just Break
 
 ###################################################################################
 ##################################### ID LIST #####################################
@@ -748,25 +828,30 @@ obj_no_flag_id_list = [
     "01F1", # Red Present
 #     "02A2", # Caterpiller
     "02A9", # Acorn
-    # Sometimes Structs
-#     "0052", # Egg
-#     "0129", # Red Feather
-#     "0370", # Gold Feather
+    "0050", # Furnace Fun Honeycombs
+    ]
+
+abnormal_obj_no_flag_id_list = [
+    "0052", # Egg
+    "0129", # Red Feather
+    "0370", # Gold Feather
     ]
 
 collectable_struct_id_list = [
-    "164000B4", # Note B4
-    "164000B5", # Note B5
-    "164000B6", # Note B6
-    "164000B7", # Note B7
-    "165000A0", # Blue Egg A0
-    "165000A2", # Blue Egg A2
-    "00E000DC", # Red Feather DC Potentially Required Feather Placements?
-    "00E000DD", # Red Feather DD
-    "00E000DE", # Red Feather DE
-    "15F000DC", # Gold Feather DC Potentially Required Feather Placements?
-    "15F000DE", # Gold Feather DE
-    "15F000DF", # Gold Feather DF
+    "164000B4", # Note 40 B4
+    "164000B5", # Note 40 B5
+    "164000B6", # Note 40 B6
+    "164000B7", # Note 40 B7
+    "165000A0", # Blue Egg 50 A0
+    "165000A2", # Blue Egg 50 A2
+    "165700A0", # Blue Egg 57 A0
+    "00E000DC", # Red Feather E0 DC
+    "00E000DD", # Red Feather E0 DD
+    "00E000DE", # Red Feather E0 DE
+    "00E700DE", # Red Feather E7 DE
+    "15F000DC", # Gold Feather F0 DC
+    "15F000DE", # Gold Feather F0 DE
+    "15F000DF", # Gold Feather F0 DF
     ]
 
 croctus_list = [
@@ -979,6 +1064,102 @@ skip_these_setup_pointer_list = [
 ##################################### FUNCTIONS #####################################
 #####################################################################################
 
+###########################
+### DEVELOPER FUNCITONS ###
+###########################
+
+def dev_decompressor(file_dir, rom_file):
+    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
+    logger.info("Decompressor")
+    # Get File Bytes
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    address_dict = {}
+    address_translator = {}
+    for location_name in setup_ids:
+        address_list = []
+        for (addr, header, footer, lead, tail) in setup_ids[location_name]:
+            # Get Address Endpoints
+            (address1, address2) = get_address_endpoints(file_bytes, addr)
+            verify_original_header(file_bytes, address1)
+            # Write Compressed File
+            compressed_file = (str(addr)[2:]).upper()
+            print(addr, compressed_file)
+            address_translator[addr] = compressed_file
+            with open(file_dir + tmp_folder + compressed_file + "-Compressed.bin", "w+b") as comp_file:
+                # Grab Middle
+                for index in range(address1, address2):
+                    hex_string = str(hex(file_bytes[index]))[2:]
+                    if(len(hex_string) < 2):
+                        hex_string = "0" + hex_string
+                    comp_file.write(bytes.fromhex(hex_string))
+            # Decompress File
+            #decompress_file(file_dir, compressed_file)
+            address_list.append(compressed_file)
+        address_dict[location_name] = address_list
+    return (address_dict, address_translator)
+
+header_table = {
+    "Spiral Mountain": ["3E", "FE"],
+    "Mumbo's Mountain": ["37", "FC"],
+    "Treasure Trove Cove": ["B5", "01"],
+    "Clanker's Cavern": ["45", "6A"],
+    "Bubblegloop Swamp": ["23", "32"],
+    "Freezeezy Peak": ["9C", "36"],
+    "Gobi's Valley": ["AF", "39"],
+    "Mad Monster Mansion": ["84", "3F"],
+    "Rusty Bucket Bay": ["42", "6C"],
+    "Click Clock Wood - Lobby": ["27", "FC"],
+    "Click Clock Wood - Spring": ["27", "FC"],
+    "Click Clock Wood - Summer": ["D6", "0D"],
+    "Click Clock Wood - Fall": ["31", "11"],
+    "Click Clock Wood - Winter": ["95", "13"]
+    }
+
+def print_header(file_dir, rom_file):
+    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
+    logger.info("Decompressor")
+    # Get File Bytes
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    address_dict = {}
+    address_translator = {}
+    for location_name in setup_ids:
+        address_list = []
+        for (addr, header, footer, lead, tail) in setup_ids[location_name]:
+            # Get Address Endpoints
+            (address1, address2) = get_address_endpoints(file_bytes, addr)
+            verify_original_header(file_bytes, address1)
+            # Write Compressed File
+            compressed_file = (str(addr)[2:]).upper()
+            ascii_name = ""
+            for letter in compressed_file:
+                converted_string = str(binascii.hexlify(letter.encode()))
+                converted_string = converted_string.replace("b", "")
+                ascii_name += ", " + converted_string
+            extension_string = ""
+            for letter in "-Decompressed.bin":
+                converted_string = str(binascii.hexlify(letter.encode()))
+                converted_string = converted_string.replace("b", "")
+                extension_string += ", " + converted_string.upper()
+            val_1 = header_table[location_name][0]
+            val_2 = header_table[location_name][1]
+            new_header = "            ['1F', '8B', '08', '08', '" + val_1 + "', '" + val_2 + "', '6B', '60', '00', '0B'" + ascii_name + extension_string + ", '00'],"
+            print(addr)
+            print(new_header)
+    return []
+
+def dev_compress_folder(file_dir):
+    """Compresses the hex file that was extracted from the main ROM file"""
+    decompressed_file_list = os.listdir(file_dir + "Examples/")
+    for decompressed_file in decompressed_file_list:
+        if(not decompressed_file.startswith("Banjo-Kazooie")):
+            file_name = decompressed_file.split(".")[0]
+            print("File Name: " + file_name)
+            bin_file = file_name + ".bin"
+            shutil.copyfile(file_dir + "Examples/" + bin_file, file_dir + "Test/" + file_name + "-Decompressed.bin")
+            cmd = file_dir + "GZIP.EXE -c " + file_dir + "Test/" + file_name.upper() + "-Decompressed.bin > " + file_dir + "Test/" + file_name.upper() + "-Compressed.bin"
+            logger.debug(cmd)
+            subprocess.Popen(cmd.split(),shell=True).communicate()
+
 ######################
 ### MISC FUNCTIONS ###
 ######################
@@ -1089,6 +1270,19 @@ def verify_seed_val(seed_val):
         return False
     return True
 
+def verify_note_door_limits(lower_limt, upper_limit):
+    if(not lower_limt.isdigit()):
+        error_msg = "Lower Limit Must Be An Integer: '" + str(lower_limt) + "'"
+        logger.error(error_msg)
+        error_window(error_msg)
+        return False
+    if(not upper_limit.isdigit()):
+        error_msg = "Upper Limit Must Be An Integer: '" + str(upper_limit) + "'"
+        logger.error(error_msg)
+        error_window(error_msg)
+        return False
+    return True
+
 def error_window(error_msg):
     '''Brings up a GUI that displays an error message'''
     window = tk.Tk()
@@ -1109,7 +1303,8 @@ def parameter_gui():
         '''Runs verification functions for the ROM and the seed values given'''
         rom_gzip_bool = verify_dir(rom_file_entry.get())
         seed_bool = verify_seed_val(seed_var.get())
-        if(rom_gzip_bool and seed_bool):
+        note_door_limits_bool = verify_note_door_limits(note_door_lower_var.get(), note_door_upper_var.get())
+        if(rom_gzip_bool and seed_bool and note_door_limits_bool):
             window.destroy()
     
     def UploadAction():
@@ -1117,13 +1312,39 @@ def parameter_gui():
         cwd = os.getcwd()
         filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select A File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
         rom_file_entry.set(filename)
+
+    def load_last_used_config():
+        # look in eppiiisa folder
+        # read json file. if errored, show error window
+        # set parameters as those
+        try:
+            with open(os.getcwd() + "/Last_Used_Configuration.json", "r") as json_file: 
+                json_data = json.load(json_file)
+        except Exception:
+            json_data = {}
+        return json_data
+
+    def save_current_config(rom_file_entry, seed_val, nf_obj_var, f_obj_var, struct_var, enemy_var,
+                            croctus_var, clanker_rings_var, ancient_ones_var, jinxy_heads_var, allow_abnormalities_var,
+                            final_note_door_var, note_door_lower_var, note_door_upper_var,
+                            final_puzzle_var, puzzle_lower_var, puzzle_upper_var):
+        current_config = {
+            "Rom_File_Entry": rom_file_entry, "Seed_Value": seed_val,
+            "Non_Flag_Objects": nf_obj_var, "Flagged_Objects": f_obj_var, "Structs": struct_var, "Enemies": enemy_var,
+            "Croctus": croctus_var, "Clanker_Rings": clanker_rings_var, "Ancient_Ones": ancient_ones_var, "Jinxy_Heads": jinxy_heads_var, "Abnormalities": allow_abnormalities_var,
+            "Final_Note_Door": final_note_door_var, "Note_Door_Lower": note_door_lower_var, "Note_Door_Upper": note_door_upper_var,
+            "Final_Puzzle": final_puzzle_var, "Puzzle_Lower": puzzle_lower_var, "Puzzle_Upper": puzzle_upper_var,
+            }
+        with open(os.getcwd() + "/Last_Used_Configuration.json", "w") as json_file: 
+            json.dump(current_config, json_file)
     
     def close_window():
         window.destroy()
         exit(0)
-
+    
+    json_data = load_last_used_config()
     window = tk.Tk()
-    window.geometry('650x400')
+    window.geometry('650x410')
     # Title
     window.winfo_toplevel().title("Banjo Kazooie Randomizer")
     # String Input Frame
@@ -1133,10 +1354,10 @@ def parameter_gui():
     options_frame = tk.LabelFrame(window, text="Options", width=640, height=200, padx=5, pady=5)
     options_frame.grid(row=1, column=0, sticky="ns")
     # Main Options Frame
-    main_options_frame = tk.LabelFrame(options_frame, text="Main Options", width=320, height=195, padx=5, pady=5)
+    main_options_frame = tk.LabelFrame(options_frame, text="Main Options", width=320, height=205, padx=5, pady=5)
     main_options_frame.grid(row=0, column=0, sticky="ns")
     # Misc Options Frame
-    misc_options_frame = tk.LabelFrame(options_frame, text="Misc Options", width=320, height=195, padx=5, pady=5)
+    misc_options_frame = tk.LabelFrame(options_frame, text="Misc Options", width=320, height=205, padx=5, pady=5)
     misc_options_frame.grid(row=0, column=1, sticky="ns")
     # Submit Frame
     submit_frame = tk.LabelFrame(window, text="Submit", width=640, height=50, padx=5, pady=5)
@@ -1145,14 +1366,20 @@ def parameter_gui():
     select_rom_button = tk.Button(string_frame, text='Select ROM File', command=UploadAction)
     select_rom_button.place(x=10, y=10)
     rom_file_entry = tk.StringVar(string_frame)
-    rom_file_entry.set(default_options["Rom"])
+    try:
+        rom_file_entry.set(json_data["Rom_File_Entry"])
+    except KeyError:
+        rom_file_entry.set(os.getcwd())
     entry = tk.Entry(string_frame, textvariable=rom_file_entry, state='readonly', width=85)
     entry.place(x=110, y=10)
     # Seed Label And Entry
     seed_label = tk.Label(string_frame, text='Seed (Optional):')
     seed_label.place(x=10, y=50)
     seed_var = tk.StringVar(string_frame)
-    seed_var.set("")
+    try:
+        seed_var.set(json_data["Seed_Value"])
+    except KeyError:
+        seed_var.set("")
     seed_entry = tk.Entry(string_frame, textvariable=seed_var)
     seed_entry.place(x=110, y=50)
     # Radio Buttons For Non-Flag Object Options
@@ -1162,7 +1389,10 @@ def parameter_gui():
         "Shuffle",
         #"Randomize",
         }
-    nf_obj_var.set(default_options["Non-Flag"])
+    try:
+        nf_obj_var.set(json_data["Non_Flag_Objects"])
+    except KeyError:
+        nf_obj_var.set("Shuffle")
     nf_obj_dd = tk.OptionMenu(main_options_frame, nf_obj_var, *nf_obj_options)
     tk.Label(main_options_frame, text="Jinjos/1-Ups/Misc Objects").place(x=10, y=10)
     nf_obj_dd.place(x=200, y=5)
@@ -1173,21 +1403,27 @@ def parameter_gui():
         "Shuffle",
         #"Randomize",
         }
-    f_obj_var.set(default_options["Flagged"])
+    try:
+        f_obj_var.set(json_data["Flagged_Objects"])
+    except KeyError:
+        f_obj_var.set("None")
     f_obj_dd = tk.OptionMenu(main_options_frame, f_obj_var, *f_obj_options)
-    tk.Label(main_options_frame, text="Jiggies/E.Honeycombs/M.Tokens").place(x=10, y=50)
-    f_obj_dd.place(x=200, y=45)
+    tk.Label(main_options_frame, text="Jiggies/E.Honeycombs/M.Tokens").place(x=10, y=45)
+    f_obj_dd.place(x=200, y=40)
     # Radio Buttons For Struct Options
     struct_var = tk.StringVar(main_options_frame)
     struct_options = {
         "None",
-        "Shuffle",
+        #"Shuffle",
         #"Randomize",
         }
-    struct_var.set(default_options["Struct"])
+    try:
+        struct_var.set(json_data["Structs"])
+    except KeyError:
+        struct_var.set("Shuffle")
     struct_dd = tk.OptionMenu(main_options_frame, struct_var, *struct_options)
-    tk.Label(main_options_frame, text="Notes/Eggs/Feathers").place(x=10, y=90)
-    struct_dd.place(x=200, y=85)
+    tk.Label(main_options_frame, text="Notes/Eggs/Feathers").place(x=10, y=80)
+    struct_dd.place(x=200, y=75)
     # Radio Buttons For Enemy Options
     enemy_var = tk.StringVar(main_options_frame)
     enemy_options = {
@@ -1195,51 +1431,144 @@ def parameter_gui():
         "Shuffle",
         "Randomize",
         }
-    enemy_var.set(default_options["Enemies"])
+    try:
+        enemy_var.set(json_data["Enemies"])
+    except KeyError:
+        enemy_var.set("Randomize")
     enemy_dd = tk.OptionMenu(main_options_frame, enemy_var, *enemy_options)
-    tk.Label(main_options_frame, text="Enemies (Beta)").place(x=10, y=130)
-    enemy_dd.place(x=200, y=125)
+    tk.Label(main_options_frame, text="Enemies (Beta)").place(x=10, y=115)
+    enemy_dd.place(x=200, y=110)
+    # Radio Buttons For Warps Options
+    warp_var = tk.StringVar(main_options_frame)
+    warp_options = {
+        "None",
+        #"Shuffle",
+        #"Randomize",
+        }
+    try:
+        warp_var.set(json_data["Warps"])
+    except KeyError:
+        warp_var.set("None")
+    warp_dd = tk.OptionMenu(main_options_frame, warp_var, *warp_options)
+    tk.Label(main_options_frame, text="Warps (None)").place(x=10, y=150)
+    warp_dd.place(x=200, y=145)
     # Checkbox For Clanker's Rings
     clanker_rings_var = tk.IntVar()
     clanker_rings_button = tk.Checkbutton(misc_options_frame, text="Clanker Rings (Hard)", variable=clanker_rings_var)
-    clanker_rings_var.set(default_options["Clanker_Rings"])
-    clanker_rings_button.place(x=10, y=10)
+    try:
+        clanker_rings_var.set(json_data["Clanker_Rings"])
+    except KeyError:
+        clanker_rings_var.set("1")
+    clanker_rings_button.place(x=10, y=5)
     # Checkbox For Croctus
     croctus_var = tk.IntVar()
     croctus_button = tk.Checkbutton(misc_options_frame, text="Croctus", variable=croctus_var)
-    croctus_var.set(default_options["Croctus"])
-    croctus_button.place(x=145, y=10)
+    try:
+        croctus_var.set(json_data["Croctus"])
+    except KeyError:
+        croctus_var.set("1")
+    croctus_button.place(x=145, y=5)
     # Checkbox For Ancient Ones
     ancient_ones_var = tk.IntVar()
     ancient_ones_button = tk.Checkbutton(misc_options_frame, text="Ancient Ones", variable=ancient_ones_var)
-    ancient_ones_var.set(default_options["Ancient_Ones"])
-    ancient_ones_button.place(x=10, y=50)
+    try:
+        ancient_ones_var.set(json_data["Ancient_Ones"])
+    except KeyError:
+        ancient_ones_var.set("1")
+    ancient_ones_button.place(x=10, y=35)
     # Checkbox For Jinxy Heads
     jinxy_heads_var = tk.IntVar()
     jinxy_heads_button = tk.Checkbutton(misc_options_frame, text="Jinxy Heads (Maze)", variable=jinxy_heads_var)
-    jinxy_heads_var.set(default_options["Jinxy_Heads"])
-    jinxy_heads_button.place(x=145, y=50)
-    # Checkbox For Zero Note Note Doors
-#     note_doors_var = tk.IntVar()
-#     note_doors_button = tk.Checkbutton(misc_options_frame, text="0 Note Note Doors", variable=note_doors_var)
-#     note_doors_var.set(default_options["Note_Doors"])
-#     note_doors_button.place(x=10, y=90)
+    try:
+        jinxy_heads_var.set(json_data["Jinxy_Heads"])
+    except KeyError:
+        jinxy_heads_var.set("1")
+    jinxy_heads_button.place(x=145, y=35)
+    # Checkbox For Abnormalities
+    allow_abnormalities_var = tk.IntVar()
+    allow_abnormalities_button = tk.Checkbutton(misc_options_frame, text="Misc Abnormalities", variable=allow_abnormalities_var)
+    try:
+        allow_abnormalities_var.set(json_data["Abnormalities"])
+    except KeyError:
+        allow_abnormalities_var.set("0")
+    allow_abnormalities_button.place(x=10, y=65)
+    # Checkbox For Final Note Door Mode
+    note_door_var = tk.IntVar()
+    note_door_button = tk.Checkbutton(misc_options_frame, text="Final Note Door Only?", variable=note_door_var)
+    try:
+        note_door_var.set(json_data["Final_Note_Door"])
+    except KeyError:
+        note_door_var.set("0")
+    note_door_button.place(x=10, y=125)
+    note_door_lower_label = tk.Label(misc_options_frame, text='Lower:')
+    note_door_lower_label.place(x=160, y=125)
+    note_door_lower_var = tk.StringVar(misc_options_frame)
+    try:
+        note_door_lower_var.set(json_data["Note_Door_Lower"])
+    except KeyError:
+        note_door_lower_var.set("0")
+    note_door_lower_entry = tk.Entry(misc_options_frame, textvariable=note_door_lower_var, width=5)
+    note_door_lower_entry.place(x=200, y=125)
+    note_door_upper_label = tk.Label(misc_options_frame, text='Upper:')
+    note_door_upper_label.place(x=230, y=125)
+    note_door_upper_var = tk.StringVar(misc_options_frame)
+    try:
+        note_door_upper_var.set(json_data["Note_Door_Upper"])
+    except KeyError:
+        note_door_upper_var.set("900")
+    note_door_upper_entry = tk.Entry(misc_options_frame, textvariable=note_door_upper_var, width=5)
+    note_door_upper_entry.place(x=270, y=125)
+    # Checkbox For Final Puzzle Mode
+    puzzle_var = tk.IntVar()
+    puzzle_button = tk.Checkbutton(misc_options_frame, text="Final Puzzle Only?", variable=puzzle_var)
+    try:
+        puzzle_var.set(json_data["Final_Puzzle"])
+    except KeyError:
+        puzzle_var.set("0")
+    puzzle_button.place(x=10, y=155)
+    puzzle_lower_label = tk.Label(misc_options_frame, text='Lower:')
+    puzzle_lower_label.place(x=160, y=155)
+    puzzle_lower_var = tk.StringVar(misc_options_frame)
+    try:
+        puzzle_lower_var.set(json_data["Puzzle_Lower"])
+    except KeyError:
+        puzzle_lower_var.set("0")
+    puzzle_lower_entry = tk.Entry(misc_options_frame, textvariable=puzzle_lower_var, width=5)
+    puzzle_lower_entry.place(x=200, y=155)
+    puzzle_upper_label = tk.Label(misc_options_frame, text='Upper:')
+    puzzle_upper_label.place(x=230, y=155)
+    puzzle_upper_var = tk.StringVar(misc_options_frame)
+    try:
+        puzzle_upper_var.set(json_data["Puzzle_Upper"])
+    except KeyError:
+        puzzle_upper_var.set("100")
+    puzzle_upper_entry = tk.Entry(misc_options_frame, textvariable=puzzle_upper_var, width=5)
+    puzzle_upper_entry.place(x=270, y=155)
     # Button To Start Randomization
     start_label = tk.Label(submit_frame, text='Once finished, click submit!')
     start_label.pack()
     sub_btn = tk.Button(submit_frame, text='Submit', command=verify_parameters)
     sub_btn.pack()
     window.protocol('WM_DELETE_WINDOW', close_window)
+    # End Window Loop
     window.mainloop()
     try:
         seed_val = int(seed_var.get())
     except ValueError:
         logger.debug("No Seed Value Was Given")
         seed_val = ""
+    save_current_config(rom_file_entry.get(), seed_val,
+            str(nf_obj_var.get()), str(f_obj_var.get()), str(struct_var.get()), str(enemy_var.get()),
+            str(croctus_var.get()), str(clanker_rings_var.get()), str(ancient_ones_var.get()),
+            str(jinxy_heads_var.get()), str(allow_abnormalities_var.get()),
+            str(note_door_var.get()), int(note_door_lower_var.get()), int(note_door_upper_var.get()),
+            str(puzzle_var.get()), int(puzzle_lower_var.get()), int(puzzle_upper_var.get()))
     return (rom_file_entry.get(), seed_val,
             str(nf_obj_var.get()), str(f_obj_var.get()), str(struct_var.get()), str(enemy_var.get()),
             str(croctus_var.get()), str(clanker_rings_var.get()), str(ancient_ones_var.get()),
-            str(jinxy_heads_var.get()))#, str(note_doors_var.get()))
+            str(jinxy_heads_var.get()), str(allow_abnormalities_var.get()),
+            str(note_door_var.get()), int(note_door_lower_var.get()), int(note_door_upper_var.get()),
+            str(puzzle_var.get()), int(puzzle_lower_var.get()), int(puzzle_upper_var.get()))
 
 #####################
 ### Decompression ###
@@ -1373,7 +1702,7 @@ def compress_file(file_dir, decompressed_file):
 #     logger.debug(cmd)
     subprocess.Popen(cmd.split(),shell=True).communicate()
 
-def compressor(seed_val, file_dir, location_setup):
+def compressor(file_dir, location_setup):
     """Prepares the hex file that was extracted from the main ROM file for compression by providing the correct header and footer"""
     logger.info("Compressor")
     (addr, header, footer, lead, tail) = location_setup
@@ -1410,9 +1739,10 @@ def compressor(seed_val, file_dir, location_setup):
 
 def remove_unknown_object(file_dir, index_hex_str):
     '''PyDoc'''
-    #-12-11-10 -9 -8 -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14
-    # St Cm Voxel No SO X1 X2 Y1 Y2 Z1 Z2 S1 S2 O1 O2 .. .. .. .. Ro Si .. .. .. E1 E2
-    # 00 01 03 0A 01 0B FA 47 01 6E FB E8 19 0C 02 68 00 00 00 00 00 64 11 40 00 40 08
+    #-11-10 -9 -8 -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+    # Cm Voxel No SO X1 X2 Y1 Y2 Z1 Z2 S1 S2 O1 O2 .. .. .. .. Ro Si .. .. .. E1 E2 E3
+    # 01 03 0A 01 0B FA 47 01 6E FB E8 19 0C 02 68 00 00 00 00 00 64 11 40 00 40 08 00
+    unknown_object_count = 0
     with open(file_dir + tmp_folder + index_hex_str + "-Decompressed.bin", "r+b") as rand_decomp_file:
         still_searching = True
         start_index = 0
@@ -1422,15 +1752,19 @@ def remove_unknown_object(file_dir, index_hex_str):
             search_index = mm_rand_decomp.find(bytes.fromhex("190C0268"), start_index)
             if(search_index == -1):
                 still_searching = False
-            elif((mm_rand_decomp[search_index - 12] == 0) and (mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and
-                 (mm_rand_decomp[search_index - 9] == 10) and (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and 
-                 (mm_rand_decomp[search_index + 14] == 1)):
+#             elif((mm_rand_decomp[search_index - 12] == 0) and (mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and
+#                  (mm_rand_decomp[search_index - 9] == 10) and (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and 
+#                  (mm_rand_decomp[search_index + 14] == 1)):
+            elif((mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and (mm_rand_decomp[search_index - 9] == 10) and
+                 (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and (mm_rand_decomp[search_index + 14] == 1)):
                 mm_rand_decomp[search_index - 12] = 1
+                unknown_object_count += 1
                 for index in range(search_index, mm_rand_decomp_len-15):
                     mm_rand_decomp[index - 11] = mm_rand_decomp[index + 15]
                 mm_rand_decomp.size(mm_rand_decomp_len - 26)
             else:
                 start_index = search_index + 1
+    print("Unknown Object Count: " + str(unknown_object_count))
 
 def extract_unchanged_setup(seed_val, file_dir, addr):
     '''PyDoc'''
@@ -1480,13 +1814,15 @@ def insert_file_into_rom(seed_val, file_dir):
                         mm_rand_rom[index_dec + 9] = int(address_end_hex[2:4], 16)
                         mm_rand_rom[index_dec + 10] = int(address_end_hex[4:6], 16)
                         mm_rand_rom[index_dec + 11] = int(address_end_hex[6:], 16)
-        # After The Last File Is Placed, Replace Bytes With AA Until Next Pointer Start
-#         pointer_start = ""
-#         for offset in range(4):
-#             pointer_start += leading_zeros(str(hex(mm_rand_rom[index_dec + offset]))[2:], 2)
-#         address_next_start = int("0x" + pointer_start, 16) + int("0x10CD0", 16)
-#         for index in range(address_end, address_next_start):
-#             mm_rand_rom[index] = 170
+    # After The Last File Is Placed, Replace Bytes With AA Until Next Pointer Start
+    pointer_start = ""
+    for offset in range(4):
+        pointer_start += leading_zeros(str(hex(mm_rand_rom[setup_pointer_end + 8 + offset]))[2:], 2)
+    address_next_start = int("0x" + pointer_start, 16) + int("0x10CD0", 16)
+    with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+        mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+        for index in range(address_start + len(setup_content), address_next_start):
+            mm_rand_rom[index] = 170
 
 def reinsert_setup_files(seed_val, file_dir):
     '''PyDoc'''
@@ -1497,14 +1833,15 @@ def reinsert_setup_files(seed_val, file_dir):
     for index_dec in range(setup_pointer_start, setup_pointer_end+1, 8):
         index_hex_str = str(hex(index_dec))[2:]
         if((index_hex_str + "-Decompressed.bin") in file_list):
-            remove_unknown_object(file_dir, index_hex_str)
+            #remove_unknown_object(file_dir, index_hex_str)
+            pass
         else:
             extract_unchanged_setup(seed_val, file_dir, index_hex_str)
     # Compress every decompressed file
     logger.info("Compress Files")
     for location in setup_ids:
         for location_setup in setup_ids[location]:
-            compressor(seed_val, file_dir, location_setup)
+            compressor(file_dir, location_setup)
     insert_file_into_rom(seed_val, file_dir)
     verify_pointers(seed_val, file_dir)
 
@@ -1909,7 +2246,7 @@ def generic_get_lists(mm, id_list):
     logger.info("Generic Get Lists")
     index_list = []
     for obj_id in id_list:
-        if((id_list == obj_no_flag_id_list) or (id_list == obj_flagged_id_list)):
+        if((id_list == obj_no_flag_id_list) or (id_list == obj_flagged_id_list) or (id_list == (obj_no_flag_id_list + abnormal_obj_no_flag_id_list))):
             object_list = get_object_index_list(mm, obj_id)
         elif(id_list == collectable_struct_id_list):
             object_list = get_struct_index_list(mm, obj_id)
@@ -1921,7 +2258,7 @@ def generic_get_lists(mm, id_list):
             exit(0)
         for item in object_list:
             index_list.append(item)
-    if(id_list == obj_no_flag_id_list):
+    if((id_list == obj_no_flag_id_list) or (id_list == (obj_no_flag_id_list + abnormal_obj_no_flag_id_list))):
         location_list = obtain_no_flag_object_list_info(mm, index_list)
     elif(id_list == obj_flagged_id_list):
         location_list = obtain_flagged_object_list_info(mm, index_list)
@@ -1994,7 +2331,7 @@ def match_obj_and_flag(flagged_object_location_list, jiggy_flag_location_list, e
         closest_flag_dict[flagged_object_dict["Index"]] = closet_flag_index
     return closest_flag_dict
 
-def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option):
+def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option):
     '''For every location, grabs all of the non-flags, flagged, struct, and enemy indices and information, randomizes the lists, and assigns the new values'''
     logger.info("Get Index Main")
 #     croctus_option = "2"
@@ -2048,7 +2385,11 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             # No Flag Objects
             if(non_flag_option != "None"):
                 logger.info("Get Non-Flag Objects Index")
-                (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, obj_no_flag_id_list)
+                if(allow_abnormalities_option == "0"):
+                    (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, obj_no_flag_id_list)
+                else:
+                    new_obj_no_flag_id_list = obj_no_flag_id_list + abnormal_obj_no_flag_id_list
+                    (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, new_obj_no_flag_id_list)
                 for item in no_flag_object_location_list:
                     address_no_flag_object_location_list.append(item)
                 address_index_dict[address]["No_Flag_Objects"] = no_flag_obj_index_list
@@ -2284,25 +2625,78 @@ def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_type, location
         mm[enemy_index + 3] = int(enemy_obj_id[2:], 16)
         seed_count += 1
 
-############################
+##########################
 ### UNLOCKABLE OPTIONS ###
-############################
+##########################
 
-def modify_note_doors_requirements(mm, first="Skip", second="Skip", third="Skip", fourth="Skip",
-                                   fifth="Skip", sixth="Skip", seventh="Skip", eigth="Skip",
-                                   nineth="Skip", tenth="Skip", eleventh="Skip", twelevth="Skip"):
+def modify_bottles_unskipable_text(file_dir, new_bottles_text):
+    # 5) Able to modify 5C9AF8/CF90.bin (PRESS A IF YOU WANT ME TO TEACH YOU SOME BASIC MOVES, OR PRESS B IF YOU THINK YOU'RE ALREADY GOOD ENOUGH!)
+    #                                    YOU'LL NEED 900 NOTES AND 100 JIGGIES TO REACH THE FINAL BATTLE! PRESS A TO.. OH FORGET IT, JUST PRESS B!
+    #                                    YOU'LL NEED 900 NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!
+    #                                    YOU'LL NEED 100 JIGGIES FOR THE FINAL DOOR! PRESS A FOR LESSONS OR PRESS B TO GET... JIGGY WITH IT! HAHA!
+    with open(file_dir + tmp_folder + "CF90-Decompressed.bin", "r+b") as decomp_file:
+        mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+        text_index_start = mm_decomp.find(bytes.fromhex("50524553532041"))
+        count = 0
+        for char in new_bottles_text:
+            mm_decomp[text_index_start + count] = ord(char)
+            count += 1
+        remove_space = 105 - len(new_bottles_text)
+        for index in range(text_index_start + len(new_bottles_text), len(mm_decomp)):
+            mm_decomp[index - remove_space] = mm_decomp[index]
+        mm_decomp.resize(len(mm_decomp) - remove_space)
+
+def final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper):
     # Find location of note doors
     # 00 32 00 B4 01 04 01 5E 01 C2 02 80 02 FD 03 2A 03 3C 03 4E 03 60 03 72
     # Every 2 are a note door
     # Edit each note door with zeros
-    pass
+    # Max Notes Is 900
+    if((final_note_score_lower < 0) or (final_note_score_lower == "")):
+        final_note_score_lower = 0
+    if((final_note_score_upper > 900) or (final_note_score_upper == "")):
+        final_note_score_upper = 900
+    if(final_note_score_upper <= 0):
+        final_note_score = 0
+    elif(final_note_score_lower >= 900):
+        final_note_score = 900
+    else:
+        random.seed(a=seed_val)
+        final_note_score = random.randint(final_note_score_lower, final_note_score_upper)
+    with open(file_dir + tmp_folder + "FCF698-Decompressed.bin", "r+b") as decomp_file:
+        mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+        #                                                      0 1 2 3 4 5 6 7 8 91011121314151617181920212223
+        note_door_index_start = mm_decomp.find(bytes.fromhex("003200B40104015E01C2028002FD032A033C034E03600372"))
+        for offset in range(23):
+            mm_decomp[note_door_index_start + offset] = 0
+        final_note_score_hex = leading_zeros(str(hex(final_note_score))[2:], 4)
+        mm_decomp[note_door_index_start + 14] = int(final_note_score_hex[:2], 16)
+        mm_decomp[note_door_index_start + 15] = int(final_note_score_hex[2:], 16)
+    return final_note_score
 
-def modify_world_puzzle_requirements(mm_rom, mm="Skip", ttc="Skip", cc="Skip", bgs="Skip",
-                                    fp="Skip", gv="Skip", mmm="Skip", rbb="Skip", ccw="Skip"):
+def modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper):
     # Find location of world puzzles
     # 00 00 01 01 00 5D 02 02 00 5E 05 03 00 60 07 03 00 63 08 04 00 66 09 04 00 6A 0A 04 00 6E 0C 04 00 72 0F 04 00 76 19 05 00 7A 04 03
     # Every 4 is a note door, with the third value being the one you have to change
-    pass
+    if((final_puzzle_lower < 0) or (final_puzzle_lower == "")):
+        final_puzzle_lower = 0
+    if((final_puzzle_upper > 100) or (final_puzzle_upper == "")):
+        final_puzzle_upper = 100
+    if(final_puzzle_upper <= 0):
+        final_puzzle_score = 0
+    elif(final_puzzle_lower >= 100):
+        final_puzzle_score = 100
+    else:
+        random.seed(a=seed_val)
+        final_puzzle_score = random.randint(final_puzzle_lower, final_puzzle_upper)
+    with open(file_dir + tmp_folder + "FCF698-Decompressed.bin", "r+b") as decomp_file:
+        mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+        #                                                      0 1 2 3 4 5 6 7 8 910111213141516171819202122232425262728293031323334353637383940414243
+        note_door_index_start = mm_decomp.find(bytes.fromhex("00000101005D0202005E0503006007030063080400660904006A0A04006E0C0400720F0400761905007A0403"))
+        for offset in range(0, 44, 4):
+            mm_decomp[note_door_index_start + offset + 2] = 0
+        mm_decomp[note_door_index_start + 38] = final_puzzle_score
+    return final_puzzle_score
 
 def modify_transformation_requirements(mm, termite="Skip", crocodile="Skip",
                                        walrus="Skip", pumpkin="Skip", bee="Skip"):
@@ -2314,19 +2708,159 @@ def modify_starting_moves(mm, jump="Skip", climb="Skip", swim="Skip", beak_barge
                           wading_boots="Skip", beak_bomb="Skip", running_shoes="Skip"):
     pass
 
-def unlockable_options(file_dir, seed_val, note_door_option, world_puzzle_option):
-    # STARTS AT FCF698
-    # POTENTIALLY ENDS AT FD041F, WITH ZEROES AFTER FD0412
-    # HEADER: ["11", "72", "00", "00", "26", "A0"]
-    # Extract Note Door Section From ROM Into Compressed File
-    # Decompress Note Door Compressed File
-    if(note_door_option == "1"):
-        modify_note_doors_requirements()
-    if(world_puzzle_option == "1"):
-        modify_world_puzzle_requirements()
-    # Compress Edited Note Door Decompressed File
-    # Re-insert Compressed File Back Into ROM
-    pass
+def decompress_generic_individual_misc_file(file_dir, rom_file, file_type):
+    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
+    logger.info("Decompressor")
+    # Get File Bytes
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    (addr, header, footer, lead, tail) = misc_setup_ids[file_type][0]
+    if(addr.startswith("0x")):
+        # Get Address Endpoints
+        (address1, address2) = get_address_endpoints(file_bytes, addr)
+        verify_original_header(file_bytes, address1)
+        # Write Compressed File
+        file_pointer = addr[2:]
+    else:
+        # Get Address Endpoints
+        address1 = int(addr.split(",")[0], 16)
+        address2 = int(addr.split(",")[1], 16)
+        verify_original_header(file_bytes, address1)
+        file_pointer = addr.split(",")[0]
+    # Write Compressed File
+    with open(file_dir + tmp_folder + file_pointer + "-Compressed.bin", "w+b") as comp_file:
+        # Write Header
+        for hex_val in header:
+            comp_file.write(bytes.fromhex(hex_val))
+        # Grab Middle
+#         for index in range(address1+len(lead), address2-len(tail)):
+        for index in range(address1+6, address2-len(tail)):
+            hex_string = str(hex(file_bytes[index]))[2:]
+            if(len(hex_string) < 2):
+                hex_string = "0" + hex_string
+            comp_file.write(bytes.fromhex(hex_string))
+        # Write Footer
+        for hex_val in footer:
+            comp_file.write(bytes.fromhex(hex_val))
+    # Decompress File
+    decompress_file(file_dir, file_pointer)
+
+def compress_individual_misc_file(file_dir, rom_file, file_type):
+    """Prepares the hex file that was extracted from the main ROM file for compression by providing the correct header and footer"""
+    logger.info("Compressor")
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    (addr, header, footer, lead, tail) = misc_setup_ids[file_type][0]
+    if(addr.startswith("0x")):
+        # Get Address Endpoints
+        (address1, address2) = get_address_endpoints(file_bytes, addr)
+        verify_original_header(file_bytes, address1)
+        file_pointer = addr[2:]
+    else:
+        # Get Address Endpoints
+        address1 = int(addr.split(",")[0], 16)
+        file_pointer = addr.split(",")[0]
+    with open(file_dir + tmp_folder + file_pointer + "-Decompressed.bin", "r+b") as rand_comp_file:
+        mm_decomp = mmap.mmap(rand_comp_file.fileno(), 0)
+        decomp_len = str(hex(len(mm_decomp)))[2:]
+        decomp_len = leading_zeros(decomp_len, 8)
+    # Compress File
+    compress_file(file_dir, file_pointer)
+    # Get Length Of Original Compressed File
+    with open(file_dir + tmp_folder + file_pointer + "-New_Compressed.bin", "r+b") as comp_file:
+        mm_comp = mmap.mmap(comp_file.fileno(), 0)
+        comp_file_len = len(mm_comp)
+        header_end = ""
+        for header_val in header[-4:]:
+            header_end += header_val
+        header_end_index = mm_comp.find(bytes.fromhex(header_end)) + 4
+        with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "w+b") as new_comp_file:
+            new_comp_file.write(bytes.fromhex("1172"))
+            new_comp_file.write(bytes.fromhex(decomp_len))
+            new_comp_len = 6
+            for index in range(header_end_index, comp_file_len-len(footer)):
+                hex_string = str(hex(mm_comp[index]))[2:]
+                hex_string = leading_zeros(hex_string, 2)
+                new_comp_file.write(bytes.fromhex(hex_string))
+                new_comp_len += 1
+            if((new_comp_len % 8) != 0):
+                needs_padding = 8 - (new_comp_len % 8)
+                if(addr.startswith("0x")):
+                    for index in range(new_comp_len, new_comp_len + needs_padding):
+                        new_comp_file.write(bytes.fromhex("AA"))
+                else:
+                    for index in range(new_comp_len, new_comp_len + needs_padding):
+                        new_comp_file.write(bytes.fromhex("00"))
+
+def insert_misc_file_into_rom(seed_val, file_dir, rom_file, file_type):
+    '''PyDoc'''
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    # For every compressed file in numerical order,
+    with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+        mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+        (addr, header, footer, lead, tail) = misc_setup_ids[file_type][0]
+        if(addr.startswith("0x")):
+            # Get Address Endpoints
+            (address1, address2) = get_address_endpoints(file_bytes, addr)
+            verify_original_header(file_bytes, address1)
+            file_pointer = addr[2:]
+        else:
+            # Get Address Endpoints
+            address1 = int(addr.split(",")[0], 16)
+            address2 = int(addr.split(",")[1], 16)
+            file_pointer = addr.split(",")[0]
+        with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "r+b") as setup_bin:
+            setup_content = setup_bin.read()
+            # Place It Where The Pointer Start Points To
+            setup_count = 0
+            for index in range(address1, address1 + len(setup_content)):
+                mm_rand_rom[index] = setup_content[setup_count]
+                setup_count += 1
+    if(addr.startswith("0x")):
+        pointer_start = ""
+        for offset in range(4):
+            pointer_start += leading_zeros(str(hex(mm_rand_rom[int(file_pointer, 16) + 8 + offset]))[2:], 2)
+        with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+            for index in range(address1 + len(setup_content), address2):
+                mm_rand_rom[index] = 170
+    else:
+        with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+            for index in range(address1 + len(setup_content), address2):
+                mm_rand_rom[index] = 170
+
+def unlockable_options(file_dir, rom_file, seed_val,
+                       note_door_option, final_note_score_lower, final_note_score_upper,
+                       puzzle_option, final_puzzle_lower, final_puzzle_upper):
+    if((note_door_option == "1") or (puzzle_option == "1")):
+        decompress_generic_individual_misc_file(file_dir, rom_file, "Requirements")
+        decompress_generic_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
+        if(note_door_option == "1"):
+            final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+            print(final_note_score)
+        if(puzzle_option == "1"):
+            final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
+            print(final_puzzle_score)
+        if((note_door_option == "1") and (puzzle_option == "1")):
+            new_bottles_text = "YOU WILL NEED "+leading_zeros(str(final_note_score), 3)+ " NOTES AND "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO REACH THE TOP OF THE TOWER! PRESS B AND GET GOING!!!          "
+        elif(note_door_option == "1"):
+            new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
+        elif(puzzle_option == "1"):
+            new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!       "
+        modify_bottles_unskipable_text(file_dir, new_bottles_text)
+        compress_individual_misc_file(file_dir, rom_file, "Requirements")
+        compress_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
+        insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Requirements")
+        insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Bottles Tutorial Confirmation")
+
+#############
+### WARPS ###
+#############
+
+# RANDOM WORLD ORDER:
+# 3 Moves Needed To Progress The Lair: Talon Trot, Beak Buster, Spring Jump Pad
+# MM has 3 bottles mounds to learn all 3 moves
+# MMM has the pumpkin transformation and it's next to the shed, so it'd have to remain in that area
+# The warps into the levels must match the bk world entry pads
 
 ################
 ### CRC TOOL ###
@@ -2404,25 +2938,27 @@ def main():
     """Goes through the steps of asking for parameters in a gui, setting up the folder, making a copy of the rom, decompressing the addresses, randomizing, compressing the files, and cleaning up"""
     logger.info("Main")
     ### Set Up ###
-    (rom_dir, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option) = parameter_gui()#, note_door_option) = parameter_gui()
+    (rom_dir, seed_val,
+     non_flag_option, flagged_option, struct_option, enemy_option,
+     croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option,
+     final_note_door_option, note_door_lower_limit, note_door_upper_limit,
+     final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit) = parameter_gui()
     (file_dir, rom_file) = split_dir_rom(rom_dir)
     setup_tmp_folder(file_dir)
     seed_val = seed(seed_val)
     make_copy_of_rom(seed_val, file_dir, rom_file)
     ### Decompress ROM ###
     address_dict = decompressor(file_dir, rom_file)
-    ### Misc Options ###
-    # something something fuck note doors
     ### Randomize Indexes ###
-    get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option)
-    ### Misc Options ###
-    # something something fuck note doors
+    get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option)
     ### Compress ROM ###
     reinsert_setup_files(seed_val, file_dir)
+    ### Misc Options ###
+    unlockable_options(file_dir, rom_file, seed_val, final_note_door_option, note_door_lower_limit, note_door_upper_limit, final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit)
     ### CRC Tool ###
     run_crc_tool(seed_val, file_dir)
     ### Clean Up ###
-    remove_bin_files(file_dir)
+    #remove_bin_files(file_dir)
     ### Done ###
     done_window(seed_val, file_dir)
 
