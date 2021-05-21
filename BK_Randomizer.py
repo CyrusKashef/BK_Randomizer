@@ -32,7 +32,8 @@ import json
 #####################################################################################
 
 DEVELOPER_MODE = False
-BK_Rando_Version = "0.7.5"
+# New Major Feature . New Minor Feature . Bug Fixes/Negligible
+BK_Rando_Version = "0.7.6"
 
 tmp_folder = "EPPIIISA/"
 
@@ -1752,6 +1753,7 @@ enemy_id_dict = {
         "Flying": [
             "0380", # Beetle
             "00CA", # Tee-Hee
+            "034D", # Bees
             ],
         "Water": [
 #             "000A", # Piranha Fish
@@ -1768,6 +1770,7 @@ enemy_id_dict = {
         },
     "Gruntilda's Lair": {
         "Ground": [
+            "0004", # Bull
             "0367", # Gruntling
             "03BF", # Gruntling 2
             "03C0", # Gruntling 3
@@ -1778,6 +1781,7 @@ enemy_id_dict = {
         },
     "Spiral Mountain": {
         "Ground": [
+            "0004", # Bull
             "036E", # Bawl
             "036F", # Topper
             ],
@@ -1792,6 +1796,7 @@ enemy_id_dict = {
         },
     "Treasure Trove Cove": {
         "Ground": [
+            "0004", # Bull
             "0069", # Yum Yum
             #"00F2", # Black Snippet
 #             "0124", # Snowman
@@ -1892,18 +1897,48 @@ abnormal_enemy_id_list = {
     "Global": {
         "Ground": [
             "0056", # Shrapnel
-#             "0004", # Bull
 #             "0124", # Snowman
             ],
         "Wall": [
             "0289", # Vent
             ],
         },
+#     "Gruntilda's Lair": {
+#         },
+#     "Spiral Mountain": {
+#         },
+#     "Mumbo's Mountain": {
+#         },
+    "Treasure Trove Cove": {
+        "Ground": [
+            "0152", # Lockup
+            ],
+        },
+#     "Clanker's Cavern": {
+#         },
+#     "Bubblegloop Swamp": {
+#         },
+#     "Freezeezy Peak": {
+#         },
+#     "Gobi's Valley": {
+#         },
+#     "Mad Monster Mansion": {
+#         },
     "Rusty Bucket Bay": {
         "Ground": [
             "01C6", # Grimlet
             ]
         },
+#     "Click Clock Wood - Lobby": {
+#         },
+#     "Click Clock Wood - Spring": {
+#         },
+#     "Click Clock Wood - Summer": {
+#         },
+#     "Click Clock Wood - Fall": {
+#         },
+#     "Click Clock Wood - Winter": {
+#         },
     }
 
 other_setup_pointer_list = [
@@ -2911,7 +2946,10 @@ def skip_ttc_grublin(mm, index):
 def get_enemy_index_list(mm, enemy_id, start=0):
     '''Locates the enemies by index in the decompressed file'''
     logger.info("Get Enemy Index List")
-    enemy_index = mm.find(bytes.fromhex("190C" + enemy_id), start)
+    if(enemy_id == "034D"):
+        enemy_index = mm.find(bytes.fromhex("078C" + enemy_id), start)
+    else:
+        enemy_index = mm.find(bytes.fromhex("190C" + enemy_id), start)
     if(enemy_index == -1):
         return []
     else:
