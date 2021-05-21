@@ -32,6 +32,7 @@ import json
 #####################################################################################
 
 DEVELOPER_MODE = False
+BK_Rando_Version = "0.7.5"
 
 tmp_folder = "EPPIIISA/"
 
@@ -83,7 +84,7 @@ setup_ids = {
         # Footer -> GEDecompressor decompressed file's compressed characters that are different from the default compressed footer
         #           Not sure how this is generated
         # Lead -> Compressed file's original header (grab first 6 hex from rom)
-        #         Starts with "11 72 00 00" with two extra hex values that indicate how many bytes are in the decompressed version of the file
+        #         Starts with "11 72" with four extra hex values that indicate how many bytes are in the decompressed version of the file
         # Tail -> Compressed file's original footer
         #         Grab the trailing AAs from the rom
         #         I believe these are just empty spaces/padding that don't really matter as long as you provide the correct lead
@@ -2170,7 +2171,7 @@ def error_window(error_msg):
     window = tk.Tk()
     window.geometry('450x50')
     # Title
-    window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    window.winfo_toplevel().title("Banjo-Kazooie Randomizer Error")
     error_label = tk.Label(window, text=error_msg)
     error_label.config(anchor='center')
     error_label.pack()
@@ -2188,8 +2189,6 @@ def parameter_gui():
         note_door_limits_bool = verify_integer_limits(note_door_lower_var.get(), note_door_upper_var.get())
         puzzle_door_limits_bool = verify_integer_limits(puzzle_lower_var.get(), puzzle_upper_var.get())
         if(rom_gzip_bool and seed_bool and note_door_limits_bool and puzzle_door_limits_bool):
-            window.destroy()
-        else:
             confirm_bool = warning_window(rom_file_entry.get())
             if(confirm_bool):
                 window.destroy()
@@ -2221,16 +2220,16 @@ def parameter_gui():
             warning_list.append("Flagged Objects")
         if(allow_abnormalities_var.get() == 1):
             warning_list.append("Abnormalities")
-#         if(note_door_var.get() == 1):
-#             warning_list.append("Final Note Door")
-#         if(puzzle_var.get() == 1):
-#             warning_list.append("Final Puzzle")
+        if(note_door_var.get() == 1):
+            warning_list.append("Final Note Door")
+        if(puzzle_var.get() == 1):
+            warning_list.append("Final Puzzle")
         if(len(warning_list) > 0):
             warning_window = tk.Tk()
-            window_size = '400x330'
+            window_size = '470x350'
             continue_rando = tk.BooleanVar()
             continue_rando.set(False)
-            warning_window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+            warning_window.winfo_toplevel().title("Banjo-Kazooie Randomizer Warning")
             # GIF Of Bottles
             try:
                 frameCnt = 10
@@ -2238,8 +2237,8 @@ def parameter_gui():
                 label = tk.Label(warning_window)
                 label.grid(row=0, column=0, padx=10, sticky="N")
             except tk.TclError as e:
-                window_size = '400x75'
-            warning_label = tk.Label(warning_window, text="The following features may make the game unbeatable/not 100%-able:")
+                window_size = '470x100'
+            warning_label = tk.Label(warning_window, text="Hey Player! Even though a lot of effort was put into the randomizer,\nthe following features have the potential make the game unbeatable/not 100%-able:")
             warning_label.grid(row=1, column=0, padx=10, sticky="N")
             warning_str = ""
             for item in warning_list:
@@ -2297,13 +2296,13 @@ def parameter_gui():
     def close_window():
         '''Closes the window and ends the script'''
         window.destroy()
-        exit(0)
+        raise SystemExit # exit(0)
     
     json_data = load_last_used_config()
     window = tk.Tk()
     window.geometry('650x410')
     # Title
-    window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    window.winfo_toplevel().title("Banjo-Kazooie Randomizer v"+BK_Rando_Version)
     # String Input Frame
     string_frame = tk.LabelFrame(window, text="ROM Settings", width=640, height=100, padx=5, pady=5)
     string_frame.grid(row=0, sticky="nsew")
@@ -2569,7 +2568,7 @@ def verify_original_header(file_bytes, address):
     if((file_bytes[address] != 17) or (file_bytes[address+1] != 114)):# or (file_bytes[address+2] != 0) or (file_bytes[address+3] != 0)):
         logger.error("Does Not Start With 11 72")
         error_window("Error During Randomization")
-        exit(0)
+        raise SystemExit # exit(0)
 
 def decompress_file(file_dir, compressed_file):
     """Decompresses the hex file that was extracted from the main ROM file"""
@@ -2637,11 +2636,11 @@ def verify_pointers(seed_val, file_dir):
                 if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
                     logger.error("Invalid Header At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
                     error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                    exit(0)
+                    raise SystemExit # exit(0)
                 elif(((header_start % 8) != 0)):
                     logger.error("Invalid Index Start At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
                     error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                    exit(0)
+                    raise SystemExit # exit(0)
         logger.debug("Misc Pointer List")
         for file_pointer in other_setup_pointer_list:
             pointer_start_1 = str(hex(mm_rand_rom[int(file_pointer, 16)]))[2:]
@@ -2657,11 +2656,11 @@ def verify_pointers(seed_val, file_dir):
             if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
                 logger.error("Invalid Header At Decimal Index: " + str(file_pointer))
                 error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                exit(0)
+                raise SystemExit # exit(0)
             elif(((header_start % 8) != 0)):
                 logger.error("Invalid Index Start At Hex Index: " + str(file_pointer))
                 error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                exit(0)
+                raise SystemExit # exit(0)
 
 def compress_file(file_dir, decompressed_file):
     """Compresses the hex file that was extracted from the main ROM file"""
@@ -3144,7 +3143,7 @@ def generic_get_lists(mm, id_list):
         else:
             logger.error("Invalid ID List")
             error_window("Developer Error During Randomization")
-            exit(0)
+            raise SystemExit # exit(0)
         for item in object_list:
             index_list.append(item)
     if((id_list == obj_no_flag_id_list) or (id_list == (obj_no_flag_id_list + abnormal_obj_no_flag_id_list))):
@@ -3156,7 +3155,7 @@ def generic_get_lists(mm, id_list):
     else:
         logger.error("Invalid ID List")
         error_window("Developer Error During Randomization")
-        exit(0)
+        raise SystemExit # exit(0)
     return (index_list, location_list)
 
 def negative_hex_value(pos_dec_value):
@@ -3759,7 +3758,7 @@ def done_window(seed_val, file_dir):
     window_size = '400x450'
     window = tk.Tk()
     # Title
-    window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    window.winfo_toplevel().title("Banjo-Kazooie Randomizer v"+BK_Rando_Version)
     # Displays Done
     done_label = tk.Label(window, text='The Randomizer Is Complete! Seed: ' + str(seed_val))
     done_label.config(anchor='center')
