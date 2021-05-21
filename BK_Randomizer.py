@@ -42,33 +42,11 @@ if(DEVELOPER_MODE):
 else:
     logger.setLevel(logging.INFO)
 FORMAT = '[%(levelname)s] %(asctime)-15s - %(funcName)s: %(message)s'
-# USER LOGGER
-handler = RotatingFileHandler(os.getcwd() + "\Randomizer_Log_File.log", maxBytes=(512*1024), backupCount=0)
+handler = RotatingFileHandler(os.getcwd() + "\Randomizer_Log_File.log", maxBytes=(512*1024), backupCount=1)
 logger.addHandler(handler)
-# DEV LOGGER
 logging.basicConfig(format=FORMAT)
 
 working_rom_extentions = ["z64"]
-
-default_options = {
-    "Rom": os.getcwd(),
-    "Non-Flag": "Shuffle",
-    "Flagged": "Shuffle",
-    "Struct": "Shuffle",
-    "Enemies": "Randomize",
-    "Warps": "None",
-    "Clanker_Rings": 1,
-    "Croctus": 1,
-    "Ancient_Ones": 1,
-    "Jinxy_Heads": 1,
-    "Abnormalities": 0,
-    "Final_Note_Door_Mode": 0,
-    "Note_Door_Lower": 0,
-    "Note_Door_Upper": 900,
-    "Final_Puzzle_Mode": 0,
-    "Puzzle_Lower": 0,
-    "Puzzle_Upper": 99,
-    }
 
 #############################################################################################
 ####################################### SETUP ID LIST #######################################
@@ -2263,8 +2241,38 @@ def parameter_gui():
     def UploadAction():
         '''Opens a browser to select the ROM file ending in .z64'''
         cwd = os.getcwd()
-        filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select A File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
+        filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select The BK ROM File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
         rom_file_entry.set(filename)
+
+    def load_config():
+        '''Opens a chosen JSON file and sets the parameters to match those'''
+        config_default_dir = os.getcwd() + "/Configurations/"
+        try:
+            filename = tkinter.filedialog.askopenfilename(initialdir=config_default_dir, title="Select A JSON Config File", filetype =(("Json Files","*.json"),("all files","*.*")) )
+        except Exception:
+            filename = tkinter.filedialog.askopenfilename(initialdir=os.getcwd(), title="Select A JSON Config File", filetype =(("Json Files","*.json"),("all files","*.*")) )
+        try:
+            with open(filename, "r") as json_file: 
+                json_data = json.load(json_file)
+            nf_obj_var.set(json_data["Non_Flag_Objects"])
+            f_obj_var.set(json_data["Flagged_Objects"])
+            struct_var.set(json_data["Structs"])
+            enemy_var.set(json_data["Enemies"])
+#             warp_var.set(json_data["Warps"])
+            clanker_rings_var.set(json_data["Clanker_Rings"])
+            croctus_var.set(json_data["Croctus"])
+            ancient_ones_var.set(json_data["Ancient_Ones"])
+            jinxy_heads_var.set(json_data["Jinxy_Heads"])
+            allow_abnormalities_var.set(json_data["Abnormalities"])
+            note_door_var.set(json_data["Final_Note_Door"])
+            note_door_lower_var.set(json_data["Note_Door_Lower"])
+            note_door_upper_var.set(json_data["Note_Door_Upper"])
+            puzzle_var.set(json_data["Final_Puzzle"])
+            puzzle_lower_var.set(json_data["Puzzle_Lower"])
+            puzzle_upper_var.set(json_data["Puzzle_Upper"])
+        except Exception:
+            error_msg = "There was an error in reading the configuration file."
+            error_window(error_msg)
 
     def load_last_used_config():
         '''Looks for a JSON file with previous configuration. If not, returns empty dictionary'''
@@ -2272,7 +2280,8 @@ def parameter_gui():
         # read json file. if errored, show error window
         # set parameters as those
         try:
-            with open(os.getcwd() + "/Last_Used_Configuration.json", "r") as json_file: 
+            config_dir = os.getcwd() + "/Configurations/"
+            with open(config_dir + "Last_Used_Configuration.json", "r") as json_file: 
                 json_data = json.load(json_file)
         except Exception:
             json_data = {}
@@ -2283,6 +2292,9 @@ def parameter_gui():
                             final_note_door_var, note_door_lower_var, note_door_upper_var,
                             final_puzzle_var, puzzle_lower_var, puzzle_upper_var,):
         '''Writes the current configuration to a JSON file'''
+        config_dir = os.getcwd() + "/Configurations/"
+        if(not os.path.isdir(config_dir)):
+            os.mkdir(config_dir)
         current_config = {
             "Rom_File_Entry": rom_file_entry, "Seed_Value": seed_val,
             "Non_Flag_Objects": nf_obj_var, "Flagged_Objects": f_obj_var, "Structs": struct_var, "Enemies": enemy_var,
@@ -2290,7 +2302,7 @@ def parameter_gui():
             "Final_Note_Door": final_note_door_var, "Note_Door_Lower": note_door_lower_var, "Note_Door_Upper": note_door_upper_var,
             "Final_Puzzle": final_puzzle_var, "Puzzle_Lower": puzzle_lower_var, "Puzzle_Upper": puzzle_upper_var,
             }
-        with open(os.getcwd() + "/Last_Used_Configuration.json", "w") as json_file: 
+        with open(config_dir + "Last_Used_Configuration.json", "w") as json_file: 
             json.dump(current_config, json_file)
     
     def close_window():
@@ -2362,7 +2374,7 @@ def parameter_gui():
     try:
         f_obj_var.set(json_data["Flagged_Objects"])
     except KeyError:
-        f_obj_var.set("None")
+        f_obj_var.set("Shuffle")
     f_obj_dd = tk.OptionMenu(main_options_frame, f_obj_var, *f_obj_options)
     tk.Label(main_options_frame, text="Jiggies/E.Honeycombs/M.Tokens").place(x=10, y=45)
     f_obj_dd.place(x=200, y=40)
@@ -2510,11 +2522,16 @@ def parameter_gui():
     puzzle_upper_entry.place(x=270, y=155)
     # Button To Start Randomization
     start_label = tk.Label(submit_frame, text='Once finished, click submit!')
-    start_label.pack()
+    start_label.grid(row=0, column=0, padx=10, sticky="N")
     sub_btn = tk.Button(submit_frame, text='Submit', command=verify_parameters)
-    sub_btn.pack()
-    window.protocol('WM_DELETE_WINDOW', close_window)
+    sub_btn.grid(row=1, column=0, padx=10, sticky="N")
+    # Button To Load Configuration
+    load_label = tk.Label(submit_frame, text='Load A Configuration!')
+    load_label.grid(row=0, column=1, padx=10, sticky="N")
+    load_btn = tk.Button(submit_frame, text='Choose File', command=load_config)
+    load_btn.grid(row=1, column=1, padx=10, sticky="N")
     # End Window Loop
+    window.protocol('WM_DELETE_WINDOW', close_window)
     window.mainloop()
     try:
         seed_val = int(seed_var.get())
@@ -3829,9 +3846,4 @@ def main():
 
 logger.info("########## Start ##########")
 main()
-
-# dev_decompressor("C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/", "Banjo-Kazooie.z64")
-# dev_compress_folder("C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/")
-
-# print_header("C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/", "Banjo-Kazooie.z64")
 logger.info("########## Done ##########")
