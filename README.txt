@@ -64,9 +64,10 @@ Script Errors:
  * Not having GZIP or the CRC Tool in the folder with the ROM file will cause a pop up.
  * Giving a non-integer value to the note door and puzzle options.
 
-Known ROM Errors:
+Known Errors:
  * Location where enemy normally was will be blank. This is because some enemies can't appear in that world, so they end up disappearing. In Grunty's Lair, this happens because you have to enter the world first for that enemy to appear. Example, entering Gobi's Valley will allow Mummies to roam the lair.
  * When randomizing objects with flags (Jiggies, Mumbo Tokens, Empty Honeycombs), you might encounter an Empty Honeycomb that does not add to your total when collected.
+ * When running the Final Puzzle option and loading up a beaten version of the game, the second floor of Gruntilda's Lair may softlock.
  During either of these cases, that's a sign that something in the randomization has messed up. My only suggestion is to inform me of the error with the seed number and try a different seed.
 
 What To Do If Rom Errors:
