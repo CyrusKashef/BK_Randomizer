@@ -34,7 +34,7 @@ import json
 
 DEVELOPER_MODE = False
 # New Major Feature . New Minor Feature . Bug Fixes
-BK_Rando_Version = "0.7.6"
+BK_Rando_Version = "0.7.7"
 
 tmp_folder = "EPPIIISA/"
 
