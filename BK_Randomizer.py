@@ -5,10 +5,12 @@ Created on Mar 1, 2021
 '''
 
 ### TODO ###
-# 1) Create a "Save Rom As" to prevent creating an extra rom
-# 2) Possible option to remove selectable enemies from completely randomized
+# 1) Create a "Save ROM As" to prevent creating an extra ROM
+# 2) Possible option to remove select-able enemies from completely randomized
 # 3) Randomize Music
 # 4) Allow other format extensions (.n64, .v64, etc)
+# 5) Able to modify the file that lets you start with all moves and makes Mumbo transformations free
+# 6) Fix the cameras for croctus/ancient ones/jinxy heads
 
 ###########################################################################
 ################################# IMPORTS #################################
@@ -24,37 +26,29 @@ import tkinter as tk
 import logging
 from logging.handlers import RotatingFileHandler
 import binascii
+import json
 
 #####################################################################################
 ##################################### VARIABLES #####################################
 #####################################################################################
 
+DEVELOPER_MODE = False
+# New Major Feature . New Minor Feature . Bug Fixes
+BK_Rando_Version = "0.7.6"
+
 tmp_folder = "EPPIIISA/"
 
 logger = logging.getLogger("Rotating Log")
-logger.setLevel(logging.INFO)
-#logger.setLevel(logging.DEBUG)
+if(DEVELOPER_MODE):
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)
 FORMAT = '[%(levelname)s] %(asctime)-15s - %(funcName)s: %(message)s'
-# USER LOGGER
-handler = RotatingFileHandler(os.getcwd() + "\Randomizer_Log_File.log", maxBytes=(512*1024), backupCount=0)
+handler = RotatingFileHandler(os.getcwd() + "\Randomizer_Log_File.log", maxBytes=(512*1024), backupCount=1)
 logger.addHandler(handler)
-# DEV LOGGER
 logging.basicConfig(format=FORMAT)
 
 working_rom_extentions = ["z64"]
-
-default_options = {
-    "Rom": os.getcwd(),
-    "Non-Flag": "Shuffle",
-    "Flagged": "None",
-    "Struct": "Shuffle",
-    "Enemies": "Randomize",
-    "Clanker_Rings": 1,
-    "Croctus": 1,
-    "Ancient_Ones": 1,
-    "Jinxy_Heads": 1,
-    "Note_Doors": 0,
-    }
 
 #############################################################################################
 ####################################### SETUP ID LIST #######################################
@@ -70,7 +64,7 @@ setup_ids = {
         # Footer -> GEDecompressor decompressed file's compressed characters that are different from the default compressed footer
         #           Not sure how this is generated
         # Lead -> Compressed file's original header (grab first 6 hex from rom)
-        #         Starts with "11 72 00 00" with two extra hex values that indicate how many bytes are in the decompressed version of the file
+        #         Starts with "11 72" with four extra hex values that indicate how many bytes are in the decompressed version of the file
         # Tail -> Compressed file's original footer
         #         Grab the trailing AAs from the rom
         #         I believe these are just empty spaces/padding that don't really matter as long as you provide the correct lead
@@ -582,151 +576,1050 @@ setup_ids = {
             ["AA", "AA", "AA", "AA", "AA"]
             ),
         ],
-#     "Gruntilda's Lair": [
-#         ("0x9AC0", # Floor 1 MM Puzzle And Entrance - 4ED0E8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AC8", # Floor 2 TTC and CC Puzzles - 4ED9F8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AD0", # Floor 3 CCW Puzzle - 4EDFD8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B00", # Floor 4 Giant Gruntilda Statue - 4F0EC8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AE8", # Floor 5 Giant Urn and GV Entrance - 4EF088
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AF0", # Floor 6 Grunty's Head and FP Entrance - 4EF998
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B40", # Floor 7 CCW Entrance - 4F4348
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9C10", # Floor 8 Gruntilda Puzzle And Dingpot - 4FBEB0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AD8", # Floor 3 Pipe Room - 4EE738
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AE0", # TTC Entrance - 4EEAA8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9AF8", # CC Entrance - 4F0758
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B08", # BGS Entrance - 4F15A0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B18", # GV Puzzle - 4F2180
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B20", # MMM Entrance - 4F26A0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B28", # Floor 6 Water Switch Area - 4F2CE8
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B30", # RBB Entrance - 4F32B0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B38", # MMM and RBB Puzzles - 4F3B10
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B48", # Coffin Room - 4F4D00
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9B78", # Path To Quiz Show - 4F6700
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9BE8", # Furnace Fun - 4FA390
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ("0x9BF8", # Gruntilda Boss Fight - 4FB1C0
-#             [],
-#             [],
-#             [],
-#             []
-#             ),
-#         ]
+    "Gruntilda's Lair": [
+        ("0x9AC0", # Floor 1 MM Puzzle And Entrance - 4ED0E8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "44", "30", "45", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["2E", "FF", "47", "A7", "E0", "10", "00", "00"],
+            ["11", "72", "00", "00", "10", "E0"],
+            ["AA", "AA", "AA", "AA"]
+            ),
+        ("0x9AC8", # Floor 2 TTC and CC Puzzles - 4ED9F8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "44", "39", "46", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["8A", "3C", "1A", "84", "C3", "0A", "00", "00"],
+            ["11", "72", "00", "00", "0A", "C3"],
+            ["AA", "AA"]
+            ),
+        ("0x9AD0", # Floor 3 CCW Puzzle - 4EDFD8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "44", "46", "44", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["AD", "80", "65", "A1", "0E", "0E", "00", "00"],
+            ["11", "72", "00", "00", "0E", "0E"],
+            ["AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9B00", # Floor 4 Giant Gruntilda Statue - 4F0EC8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "30", "45", "43", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["8A", "1C", "1E", "20", "68", "0D", "00", "00"],
+            ["11", "72", "00", "00", "0D", "68"],
+            [""]
+            ),
+        ("0x9AE8", # Floor 5 Giant Urn and GV Entrance - 4EF088
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "46", "30", "38", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["63", "B2", "DE", "36", "B9", "11", "00", "00"],
+            ["11", "72", "00", "00", "11", "B9"],
+            ["AA", "AA", "AA"]
+            ),
+        ("0x9AF0", # Floor 6 Grunty's Head and FP Entrance - 4EF998
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "46", "39", "39", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["F1", "D3", "B8", "71", "EC", "1C", "00", "00"],
+            ["11", "72", "00", "00", "1C", "EC"],
+            ["AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9B40", # Floor 7 CCW Entrance - 4F4348
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "34", "33", "34", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["BD", "B3", "61", "F6", "C4", "12", "00", "00"],
+            ["11", "72", "00", "00", "12", "C4"],
+            [""]
+            ),
+        ("0x9C10", # Floor 8 Gruntilda Puzzle And Dingpot - 4FBEB0
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "42", "45", "42", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["01", "CB", "D9", "04", "09", "14", "00", "00"],
+            ["11", "72", "00", "00", "14", "09"],
+            ["AA"]
+            ),
+        ("0x9AD8", # Floor 3 Pipe Room - 4EE738
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "45", "37", "33", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["2D", "BF", "0D", "61", "DE", "05", "00", "00"],
+            ["11", "72", "00", "00", "05", "DE"],
+            ["AA"]
+            ),
+        ("0x9AE0", # TTC Entrance - 4EEAA8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "45", "45", "41", "41", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["4E", "2A", "12", "B3", "C5", "0A", "00", "00"],
+            ["11", "72", "00", "00", "0A", "C5"],
+            ["AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9AF8", # CC Entrance - 4F0758
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "30", "37", "35", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["01", "A5", "D3", "1A", "BA", "0D", "00", "00"],
+            ["11", "72", "00", "00", "0D", "BA"],
+            ["AA"]
+            ),
+        ("0x9B08", # BGS Entrance - 4F15A0
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "31", "35", "41", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["5E", "39", "C0", "CC", "B7", "13", "00", "00"],
+            ["11", "72", "00", "00", "13", "B7"],
+            [""]
+            ),
+        ("0x9B18", # GV Puzzle - 4F2180
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "32", "31", "38", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["D8", "59", "7A", "D1", "6B", "0A", "00", "00"],
+            ["11", "72", "00", "00", "0A", "6B"],
+            [""]
+            ),
+        ("0x9B20", # MMM Entrance - 4F26A0
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "32", "36", "41", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["CE", "65", "01", "45", "4F", "11", "00", "00"],
+            ["11", "72", "00", "00", "11", "4F"],
+            ["AA", "AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9B28", # Floor 6 Water Switch Area - 4F2CE8
+            ["1F", "8B", "08", "08", "91", "A1", "91", "60", "00", "0B", "34", "46", "32", "43", "45", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["C0", "FB", "39", "7E", "27", "0B", "00", "00"],
+            ["11", "72", "00", "00", "0B", "27"],
+            ["AA"]
+            ),
+        ("0x9B30", # RBB Entrance - 4F32B0
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "33", "32", "42", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["99", "CB", "CC", "82", "14", "10", "00", "00"],
+            ["11", "72", "00", "00", "10", "14"],
+            ["AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9B38", # MMM and RBB Puzzles - 4F3B10
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "33", "42", "31", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["EC", "51", "16", "1E", "03", "11", "00", "00"],
+            ["11", "72", "00", "00", "11", "03"],
+            [""]
+            ),
+        ("0x9B48", # Coffin Room - 4F4D00
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "34", "44", "30", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["EA", "44", "4E", "EB", "DC", "05", "00", "00"],
+            ["11", "72", "00", "00", "05", "DC"],
+            [""]
+            ),
+        ("0x9B78", # Path To Quiz Show - 4F6700
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "36", "37", "30", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["C4", "34", "E2", "21", "2A", "02", "00", "00"],
+            ["11", "72", "00", "00", "02", "2A"],
+            ["AA", "AA", "AA", "AA", "AA", "AA"]
+            ),
+        ("0x9BE8", # Furnace Fun - 4FA390
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "41", "33", "39", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["17", "81", "0C", "81", "BF", "13", "00", "00"],
+            ["11", "72", "00", "00", "13", "BF"],
+            ["AA", "AA", "AA", "AA"]
+            ),
+        ("0x9BF8", # Gruntilda Boss Fight - 4FB1C0
+            ["1F", "8B", "08", "08", "92", "A1", "91", "60", "00", "0B", "34", "46", "42", "31", "43", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["C4", "D7", "EA", "E4", "09", "0E", "00", "00"],
+            ["11", "72", "00", "00", "0E", "09"],
+            ["AA"]
+            ),
+        ]
     }
+
+misc_setup_ids = {
+    "Bottles Tutorial Confirmation": [
+        ("0xCF90", # Bottles Text Box - 5C9AF8
+            ["1F", "8B", "08", "08", "86", "23", "92", "60", "00", "0B", "35", "43", "39", "41", "46", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["79", "E9", "17", "0C", "77", "00", "00", "00"],
+            ["11", "72", "00", "00", "00", "77"],
+            ["AA", "AA", "AA"],
+            ),
+        ],
+    "Requirements": [
+        ("FCF698,FD0420", # Note Doors, World Puzzles - FCF698
+            ["1F", "8B", "08", "08", "A6", "23", "92", "60", "00", "0B", "46", "43", "46", "36", "39", "38", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+            ["79", "3F", "41", "6F", "A0", "26", "00", "00"],
+            ["11", "72", "00", "00", "26", "A0"],
+            ["00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00"],
+            ),
+        ],
+#     "Abilities": [
+#         ("F37F90,F9CAE0",
+#             ["1F", "8B", "08", "08", "71", "F0", "65", "60", "00", "0B", "46", "33", "37", "46", "39", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+#             ["48", "E3", "6A", "5F", "00", "C6", "0D", "00"],
+#             ["11", "72", "00", "01", "66", "00"],
+#             [],
+#             ),
+#         ],
+#     "Game Select Text": [
+#         ("F9CAE0,FA3FD0",
+#             ["1F", "8B", "08", "08", "71", "F0", "65", "60", "00", "0B", "46", "39", "43", "41", "45", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+#             ["64", "64", "D4", "88", "00", "66", "01", "00"],
+#             ["11", "72", "00", "01", "66", "00"],
+#             ["00", "00", "00", "00", "00", "00", "00", "00", "00", "00"],
+#             ),
+#         ],
+    }
+
+### NOTE DOOR INDICES
+# 0x3F5D57C-D is the first note door's value (50%)
+# 0x3F5D57E-F is the second note door's value (60%)
+# 0x3F5D580-1 is the third note door's value (65%)
+# 0x3F5D582-3 is the fourth note door's value (70%)
+# 0x3F5D584-5 is the fifth note door's value (75%)
+# 0x3F5D586-7 is the sixth note door's value (80%)
+# 0x3F5D588-9 is the seventh note door's value (85%)
+# 0x3F5D58A-B is the eighth note door's value (90%)
+# 0x3F5D58C-D is the ninth note door's value (92%)
+# 0x3F5D58E-F is the tenth note door's value (94%)
+# 0x3F5D590-1 is the eleventh note door's value (96%)
+# 0x3F5D592-3 is the twelfth note door's value (98%)
+
+### BGS Huts
+# Script: 190C
+# Obj ID: 000C
+# The One With Notes: 16 43 06 40 EF 2E 19 0C 00 0C 00 00 01 80 00 64 01 00
+# The One With Jiggy: 16 4A 0B 54 E9 D0 19 0C 00 0C 00 00 00 00 00 64 01 40
+# The Rest Just Break
 
 ###################################################################################
 ##################################### ID LIST #####################################
 ###################################################################################
 
-jiggy_flag_list = [
-    "0001", "0002", "0005", "0006",                         # Mumbo's Mountain
-    "000C", "000D", "0011", "0012", "000E", "000F",         # Treasure Trove Cove
-    "000B", "0017", "0018", "0019", "001C", "001D",         # Clanker's Cavern
-                                                            # Bubblegloop Swamp
-    "002A",                                                 # Freezeezy Peak
-    "0040", "0041", "0042", "003E",                         # Gobi's Valley
-    "005B", "005C", "005D", "005E", "0060", "0061", "0063", # Mad Monster Mansion
-    "0051", "0054", "0055", "0056", "0057", "0058", "0059", # Rusty Bucket Bay
-    "0047", "004A", "004B", "004D", "004E", "004F",         # Click Clock Wood
-    ]
+flagged_object_dict = {
+    "Spiral Mountain": {
+        },
+    "Mumbo's Mountain" : {
+        # Jiggies
+        "0001": {
+            "Object":"0175107DFC76190C0046", # 19 0C 00 46 00 00 24 00 00 64 05 40 00
+            "Flag":  "017D0FF1FC7C3F940001", # 3F 94 00 01 00 00 00 00 00 00 0E 00 00
+            },
+        "0002": {
+            "Object":"15CC0AC4F56C190C0046", # 19 0C 00 46 00 00 10 80 00 64 05 20 00
+            "Flag":  "15D90ADDF54150940002", # 50 94 00 02 00 00 00 00 00 00 0E 30 00
+            },
+        "0005": {
+            "Object":"F18D0986F7BF190C0046", # 19 0C 00 46 00 00 00 00 00 64 05 30 00
+            "Flag":  "F19C0981F7CA4D940005", # 4D 94 00 05 00 00 00 00 00 00 0E B0 00
+            },
+        "0006": {
+            "Object":"10EF05CD031A190C0046", # 19 0C 00 46 00 00 00 00 00 64 05 10 00
+            "Flag":  "10DD059B030246940006", # 46 94 00 06 00 00 00 00 00 00 0E 10 00
+            },
+        # Empty Honeycombs
+#         "0064": { # Alcove
+#             "Object":"03D901E40691190C0047", # 19 0C 00 47 00 00 00 00 00 64 12 50 00
+#             "Flag":  "03D2020E069445140064", # 45 14 00 64 00 00 00 00 00 64 01 B0 00
+#             },
+#         "0065": { # Juju
+#             "Object":"10CE0B54FA2E190C0047", # 19 0C 00 47 00 00 00 00 00 64 08 50 00
+#             "Flag":  "10ED0B6CFA2B1F140065", # 1F 14 00 65 00 00 00 00 00 64 03 30 00
+#             },
+        # Mumbo Tokens
+        "00C8": {
+            "Object":"EEB101DB1827190C002D", # 19 0C 00 2D 00 00 5A 00 00 64 08 80 00
+            "Flag":  "EEAF01DB1820341400C8", # 34 14 00 C8 00 00 00 00 00 64 19 20 00
+            },
+        "00C9": {
+            "Object":"ECFB08CFF636190C002D", # 19 0C 00 2D 00 00 00 00 00 64 12 60 00
+            "Flag":  "ECEE08CFF64E4D9400C9", # 4D 94 00 C9 00 00 00 00 00 64 19 30 00
+            },
+        "00CB": {
+            "Object":"16DF00000879190C002D", # 19 0C 00 2D 00 00 00 00 00 64 12 70 00
+            "Flag":  "16D6000008823F9400CB", # 3F 94 00 CB 00 00 00 00 00 64 19 50 00
+            },
+        "00CA": {
+            "Object":"141E0878F671190C002D", # 19 0C 00 2D 00 00 9E 80 00 64 03 40 00
+            "Flag":  "14200875F6803F9400CA", # 3F 94 00 CA 00 00 00 00 00 64 19 40 00
+            },
+        "00CC": {
+            "Object":"FEA90159FDFA190C002D", # 19 0C 00 2D 00 00 00 00 00 64 03 50 00
+            "Flag":  "FE960155FDFC399400CC", # 39 94 00 CC 00 00 00 00 00 64 03 A0 00
+            },
+        },
+    "Treasure Trove Cove": {
+        # Jiggies
+        "000B": {
+            "Object":"01DF2134F56B190C0046",
+            "Flag":  "01DC207DF5784314000B",
+            },
+        "000C": {
+            "Object":"0B100868F8FB190C0046",
+            "Flag":  "0B110863F8F14314000C",
+            },
+        "000D": {
+            "Object":"EC040589F0B5190C0046",
+            "Flag":  "EBCD0584F0865F94000D",
+            },
+        "000E": {
+            "Object":"F5380805ED83190C0046",
+            "Flag":  "F53B0802EDBA4E14000E",
+            },
+        "0012": {
+            "Object":"F9D90A25F63C190C0046",
+            "Flag":  "FA0B09D5F6094D140012",
+            },
+        # Empty Honeycombs
+        "0066": {
+            "Object":"EF31002E0073190C0047",
+            "Flag":  "EF4B0021006847140066",
+            },
+        "0067": {
+            "Object":"2119034CF584190C0047",
+            "Flag":  "2106036FF59638140067",
+            },
+        # Mumbo Tokens
+#         "00CE": {
+#             "Object":"F59C098FE841190C002D",
+#             "Flag":  "F59D096CE84C229400CE",
+#             },
+#         "00CF": {
+#             "Object":"F5AA098FE7B1190C002D",
+#             "Flag":  "F5AE096CE7AD261400CF",
+#             },
+        "00D0": {
+            "Object":"FF2307ED03A1190C002D",
+            "Flag":  "FEFE080603B5391400D0",
+            },
+        "00D2": {
+            "Object":"FCF102E9F0E0190C002D",
+            "Flag":  "FD0602DCF0FB4E1400D2",
+            },
+        "00D3": {
+            "Object":"19500255FEFE190C002D",
+            "Flag":  "19410265FF123C9400D3",
+            },
+        "00D4": {
+            "Object":"ECBC0462FBD9190C002D",
+            "Flag":  "ECD104ABFBCA5D9400D4",
+            },
+        "00D5": {
+            "Object":"099E08A90B8D190C002D",
+            "Flag":  "09C708BD0BA04D9400D5",
+            },
+        "00D6": {
+            "Object":"E62401FE120D190C002D",
+            "Flag":  "E626022B11FB519400D6",
+            },
+        },
+    "Clanker's Cavern": {
+        "0017": {
+            "Object":"274D13F80003190C0046",
+            "Flag":  "271D13F800072E940017",
+            },
+        "0018": {
+            "Object":"005A174AFFF4190C0046",
+            "Flag":  "0053174AFFF244940018",
+            },
+        "0019": {
+            "Object":"121508670C0A190C0046",
+            "Flag":  "121D08670BCE3F940019",
+            },
+        "001C": {
+            "Object":"000AFE79F777190C0046",
+            "Flag":  "FFE7FEA6F77B4094001C",
+            },
+        "001D": {
+            "Object":"0000FEACF9BC190C0046",
+            "Flag":  "FFF8FE59F9E23E94001D",
+            },
+        # Empty Honeycombs
+        "0068": {
+            "Object":"0E860CEF09D7190C0047",
+            "Flag":  "0E930CF909863E140068",
+            },
+        "0069": {
+            "Object":"1ECE10B007B1190C0047",
+            "Flag":  "1EC8106507AA3C140069",
+            },
+        # Mumbo Tokens
+        "00D7": {
+            "Object":"265F1081FFED190C002D",
+            "Flag":  "265C1081FFFA361400D7",
+            },
+        "00D8": {
+            "Object":"DA2214980647190C002D",
+            "Flag":  "DA1014980628559400D8",
+            },
+        "00D9": {
+            "Object":"03660862F3B4190C002D",
+            "Flag":  "036B0862F3AC3F9400D9",
+            },
+        "00DA": {
+            "Object":"07EC15500928190C002D",
+            "Flag":  "07E61550091C421400DA",
+            },
+        "00DB": {
+            "Object":"0214059019E8190C002D",
+            "Flag":  "0205059619E93F9400DB",
+            },
+        },
+    "Bubblegloop Swamp": {
+        # Jiggies
+        # Empty Honeycombs
+        "006B": {
+            "Object":"00000219FB7B190C0047",
+            "Flag":  "FFF90219FB3A3414006B",
+            },
+        "006A": {
+            "Object":"000002580000190C0047",
+            "Flag":  "FFBB028EFFFA5594006A",
+            },
+        # Mumbo Tokens
+        "00D2": {
+            "Object":"13B90000EBEA190C002D",
+            "Flag":  "13CB0000EBCE431400DC",
+            },
+        "00DD": {
+            "Object":"14E30000EC41190C002D",
+            "Flag":  "14E00000EC663F1400DD",
+            },
+        "00DE": {
+            "Object":"F067041F050F190C002D",
+            "Flag":  "F06304150505339400DE",
+            },
+        "00DF": {
+            "Object":"F8C100000B13190C002D",
+            "Flag":  "F8B900000B153C9400DF",
+            },
+        "00E0": {
+            "Object":"19920BB0EDA7190C002D",
+            "Flag":  "19830BB3EDAF369400E0",
+            },
+        "00E1": {
+            "Object":"E4E403E8E932190C002D",
+            "Flag":  "E4F703E8E94F3C9400E1",
+            },
+        "00E2": {
+            "Object":"10B60578FAEA190C002D",
+            "Flag":  "10BF0578FAE43A1400E2",
+            },
+        "00E3": {
+            "Object":"00000000F8DB190C002D",
+            "Flag":  "00100000F8DA479400E3",
+            },
+        "00E4": {
+            "Object":"0000012CF926190C002D",
+            "Flag":  "00100142F92B391400E4",
+            },
+        },
+    "Freezeezy Peak": {
+        # Jiggies
+        "002A": {
+            "Object":"FC05173007FF190C0046",
+            "Flag":  "FC05170808083494002A",
+            },
+        # Empty Honeycombs
+        "006D": { # ObjectID140C?
+            "Object":"10C701B904F4140C0047",
+            "Flag":  "10A001B9050B9F94006D",
+            },
+        "006C": {
+            "Object":"E67D008701A6190C0047",
+            "Flag":  "E679004601A14D94006C",
+            },
+        # Mumbo Tokens
+        "00E6": {
+            "Object":"027A00050301190C002D",
+            "Flag":  "0254000502D6469400E6",
+            },
+        "00E7": {
+            "Object":"F8E90004FC05190C002D",
+            "Flag":  "F8EA0005FC25391400E7",
+            },
+        "00E8": {
+            "Object":"E8F00104031A190C002D",
+            "Flag":  "E8FD00FC0331369400E8",
+            },
+        "00E9": {
+            "Object":"14B007DD0AA9190C002D",
+            "Flag":  "14A607EE0AAA3E1400E9",
+            },
+        "00EA": {
+            "Object":"058500120AF2190C002D",
+            "Flag":  "057F00120AE5699400EA",
+            },
+        "00EB": {
+            "Object":"EE5100D3FCDD190C002D",
+            "Flag":  "EE7300D2FCBB6F1400EB",
+            },
+        "00EC": {
+            "Object":"EE12015E18C8190C002D",
+            "Flag":  "EE1D015A18BB3B1400EC",
+            },
+        "00ED": {
+            "Object":"FCE70BCC1125190C002D",
+            "Flag":  "FCDE0BC3113A461400ED",
+            },
+        "00EE": {
+            "Object":"F688FF58EF75190C002D",
+            "Flag":  "F680FF58EF85669400EE",
+            },
+        "00EF": {
+            "Object":"0000000AFF29190C002D",
+            "Flag":  "00180000FF2D3F9400EF",
+            },
+        },
+    "Gobi's Valley": {
+        # Jiggies
+        "003E": {
+            "Object":"F73607B2FFCF190C0046",
+            "Flag":  "F761081CFFCB3F94003E",
+            },
+        "0040": {
+            "Object":"EC700042003E190C0046",
+            "Flag":  "EC6300A5006E3C940040",
+            },
+        "0042": {
+            "Object":"FFFD054F000F190C0046",
+            "Flag":  "FFF20559002E68140042",
+            },
+        # Empty Honeycombs
+        # "006E": {
+            # "Object":"",
+            # "Flag":  "0B790CC3F2E95994006E",
+            # },
+        # "006F": {
+            # "Object":"",
+            # "Flag":  "E50709BE05CBFA14006F",
+            # },
+        # Mumbo Tokens
+        "00F0": {
+            "Object":"F79B0D0C16EB190C002D",
+            "Flag":  "F7600CEE17434A1400F0",
+            },
+        "00F1": {
+            "Object":"EAF6058C2732190C002D",
+            "Flag":  "EB0305AE2741519400F1",
+            },
+        "00F2": {
+            "Object":"005B0217FCA4190C002D",
+            "Flag":  "007D0217FC73431400F2",
+            },
+        "00F3": {
+            "Object":"00400D9C0190190C002D",
+            "Flag":  "00430DA20190519400F3",
+            },
+        "00F4": {
+            "Object":"FF1A0B1BF3ED190C002D",
+            "Flag":  "FF1B0B1BF3DB511400F4",
+            },
+        "00F5": {
+            "Object":"02CB00F80000190C002D",
+            "Flag":  "02BF01020000559400F5",
+            },
+        "00F6": {
+            "Object":"EA760000008A190C002D",
+            "Flag":  "EA6CFFF90097339400F6",
+            },
+        "00F8": {
+            "Object":"0000006BFDA6190C002D",
+            "Flag":  "FFFD006BFD9D431400F8",
+            },
+        "00F9": {
+            "Object":"F60A0000FFCD190C002D",
+            "Flag":  "F6030000FFC8519400F9",
+            },
+        },
+    "Mad Monster Mansion": {
+        # Jiggies
+        "005B": {
+            "Object":"000100B30000190C0046",
+            "Flag":  "FFF70045FFFE4414005B",
+            },
+        "005D": {
+            "Object":"FDFC001E01DD190C0046",
+            "Flag":  "FE13001901D42E14005D",
+            },
+        "005E": {
+            "Object":"F5100C67F9BF190C0046",
+            "Flag":  "F54E0B67F99E4E14005E",
+            },
+        "0060": {
+            "Object":"00020120FFFC190C0046",
+            "Flag":  "0009013900056D940060",
+            },
+        "0063": {
+            "Object":"FDFA0127FE2C190C0046",
+            "Flag":  "FE0D0120FE5358140063",
+            },
+        # Empty Honeycombs
+        "0074": {
+            "Object":"0000142B0960190C0047",
+            "Flag":  "FFC91458095B49940074",
+            },
+#         "0075": { # Pumpkin Only
+#             "Object":"FFCDFF790034190C0047",
+#             "Flag":  "FFD9FFB800363D140075",
+#             },
+        # Mumbo Tokens
+        "00F8": {
+            "Object":"00AD015EF1E6190C002D",
+            "Flag":  "00B0015EF1FE579400FB",
+            },
+        "00FA": {
+            "Object":"0F6EFF510145190C002D",
+            "Flag":  "0F6EFF51015A4D9400FA",
+            },
+        "00FC": {
+            "Object":"F51005C3FAAD190C002D",
+            "Flag":  "F50C05C3FAA9399400FC",
+            },
+        "00FD": {
+            "Object":"F9950019FBFE190C002D",
+            "Flag":  "F9B00000FBE6559400FD",
+            },
+        "00FE": {
+            "Object":"EF6600000160190C002D",
+            "Flag":  "EF6000000177519400FE",
+            },
+        "00FF": {
+            "Object":"EDA400AFEBE3190C002D",
+            "Flag":  "EDB100AFEBE94A1400FF",
+            },
+        "0100": {
+            "Object":"170CFEED031E190C002D",
+            "Flag":  "16E7FEED032564940100",
+            },
+        "0101": {
+            "Object":"000012C60155190C002D",
+            "Flag":  "000A12C201615D940101",
+            },
+        "0102": {
+            "Object":"00000247FAEC190C002D",
+            "Flag":  "FFFD0230FAFE62140102",
+            },
+        "0103": {
+            "Object":"07040359EF6D190C002D",
+            "Flag":  "070B0367EF5836940103",
+            },
+        "0104-Loggo": {
+            "Object":"01A800AA0130190C002D",
+            "Flag":  "019A00A9012B49140104",
+            },
+        "0104-Cellar": {
+            "Object":"FE05001E00C7190C002D",
+            "Flag":  "FE16002900CF39940104",
+            },
+        "0106": {
+            "Object":"FD240000FF93190C002D",
+            "Flag":  "FD360000FF984A140106",
+            },
+        "0107": {
+            "Object":"02B80000FE73190C002D",
+            "Flag":  "02B00000FE8354940107",
+            },
+        "0108": {
+            "Object":"003400680200190C002D",
+            "Flag":  "0031009A020846140108",
+            },
+        },
+    "Rusty Bucket Bay": {
+        # Jiggies
+        "0051": {
+            "Object":"03520352FB82190C0046",
+            "Flag":  "02F404DDFB3F4D940051",
+            },
+        "0054": {
+            "Object":"F82A0A8CFFFE190C0046",
+            "Flag":  "F8340A8BFFBE46940054",
+            },
+        "0056": {
+            "Object":"1E46F8290000190C0046",
+            "Flag":  "1E09F83A00006B140056",
+            },
+        "0057": {
+            "Object":"FC1B01110163190C0046",
+            "Flag":  "FC1A00E5016436940057",
+            },
+        "0058": {
+            "Object":"ECDC00000000190C0046",
+            "Flag":  "ED130000FFF770140058",
+            },
+        "0059": {
+            "Object":"00010329F17A190C0046",
+            "Flag":  "FFCA0329F1733A940059",
+            },
+        # Empty Honeycombs
+        # "0072": { # Boat Room
+            # "Object":"",
+            # "Flag":  "002803E8FFBC5D940072",
+            # },
+        "0073": {
+            "Object":"000001680DD5190C0047",
+            "Flag":  "000501420E2256140073",
+            },
+        # Mumbo Tokens
+        "0108": {
+            "Object":"1B8DFC27F978190C002D",
+            "Flag":  "1B85FC27F9924A14010B",
+            },
+        "0109": {
+            "Object":"03E80ABE0000190C002D",
+            "Flag":  "03FA0A8BFFE646940109",
+            },
+        "010A": {
+            "Object":"E7C800960000190C002D",
+            "Flag":  "E7C7009600003F94010A",
+            },
+        "010C": {
+            "Object":"F31DFE370ED8190C002D",
+            "Flag":  "F30EFE370ED56694010C",
+            },
+        "010D": {
+            "Object":"E317FC18F29F190C002D",
+            "Flag":  "E31EFC04F2A06214010D",
+            },
+        "010E": {
+            "Object":"183801900000190C002D",
+            "Flag":  "18440190FFF45414010E",
+            },
+        "010F": {
+            "Object":"FD760232FFDD190C002D",
+            "Flag":  "FDA20296FFEF4314010F",
+            },
+        "0110": {
+            "Object":"FEEA02C6FDD3190C002D",
+            "Flag":  "FEE402C6FDCD59940110",
+            },
+        "0111": {
+            "Object":"02470143FFBA190C002D",
+            "Flag":  "02390143FFBF36940111",
+            },
+        "0112": {
+            "Object":"FD700000FF22190C002D",
+            "Flag":  "FD720000FF2C59940112",
+            },
+        "0113": { # WeirdScriptID?
+            "Object":"FCFD00EEFEDB0C8C002D",
+            "Flag":  "FCFE00EEFEB855940113",
+            },
+        "0114": { # Engine Room
+            "Object":"F66E044CFE70190C002D",
+            "Flag":  "F693044CFE8351940114",
+            },
+        "0115": { # Engine Room
+            "Object":"0992044CFE70190C002D",
+            "Flag":  "098A044CFE7E5D940115",
+            },
+        "0116": { # Engine Room
+            "Object":"FEC1000C076B190C002D",
+            "Flag":  "FEB80001078562140116",
+            },
+        "0117": {
+            "Object":"FE4D012CFE4D190C002D",
+            "Flag":  "FE58012CFE373D940117",
+            },
+        },
+    "Click Clock Wood - Lobby": {
+        # Jiggies
+        # Empty Honeycombs
+        # Mumbo Tokens
+        },
+    "Click Clock Wood - Spring": {
+        # Jiggies
+        "004E-Spring": { # Top Of The Tree
+            "Object":"00001DC90C1C190C0046",
+            "Flag":  "FFCD1DE50C5C5D14004E",
+            },
+        "004F-Spring": { # Whipcrack Room
+            "Object":"0000001100E1190C0046",
+            "Flag":  "FFC5002401034894004F",
+            },
+        # Empty Honeycombs
+        # Mumbo Tokens
+        "0122": {
+            "Object":"17F610940132190C002D",
+            "Flag":  "17FB1094014B66940122",
+            },
+        "0123": {
+            "Object":"F02B0B4E024B190C002D",
+            "Flag":  "F0230B4E024D4D940123",
+            },
+        "0124": {
+            "Object":"F54211EAFDFF190C002D",
+            "Flag":  "F54E11D9FDD35D940124",
+            },
+        "0125": {
+            "Object":"F5A70000FE75190C002D",
+            "Flag":  "F5940000FE6C59940125",
+            },
+        "0126": {
+            "Object":"07700069F56E190C002D",
+            "Flag":  "077E0069F58956140126",
+            },
+        "0127": {
+            "Object":"03E8006914B4190C002D",
+            "Flag":  "03EF006914BA6B140127",
+            },
+        "0128": {
+            "Object":"00000DB9EB88190C002D",
+            "Flag":  "000C0DD1EB8A61140128",
+            },
+        "0129": {
+            "Object":"FDC1012CFF75190C002D",
+            "Flag":  "FDCF012CFF7C43140129",
+            },
+        },
+    "Click Clock Wood - Summer": {
+        # Jiggies
+        "0047-Summer": { # Tree House
+            "Object":"17B61094FF8F190C0046",
+            "Flag":  "17781094FF8F51140047",
+            },
+        "004D-Summer": { # Side Of Tree
+            "Object":"08A70A38085E190C0046",
+            "Flag":  "08700A39088C5014004D",
+            },
+        "004F-Summer": { # Whipcrack Room
+            "Object":"0000001100E1190C0046",
+            "Flag":  "FFA1001300FA6A14004F",
+            },
+        # Empty Honeycombs
+        # Mumbo Tokens
+        "012A": {
+            "Object":"F8BB1175062F190C002D",
+            "Flag":  "F8BA117506434914012A",
+            },
+        "012B": {
+            "Object":"F2060028EF5D190C002D",
+            "Flag":  "F2090028EF614A14012B",
+            },
+        "012C": {
+            "Object":"F0F105940F00190C002D",
+            "Flag":  "F0F105940EEC5194012C",
+            },
+        "012D": {
+            "Object":"EDCB0AF0FB20190C002D",
+            "Flag":  "EDD60AF0FB2C5194012D",
+            },
+        "012E": {
+            "Object":"0A8CFDA80000190C002D",
+            "Flag":  "0A8BFDA800176F94012E",
+            },
+        "012F": {
+            "Object":"07FB0DCE0707190C002D",
+            "Flag":  "08060DCE06FC5194012F",
+            },
+        "0130": {
+            "Object":"000001A001F4190C002D",
+            "Flag":  "000D01A001E443140130",
+            },
+        },
+    "Click Clock Wood - Fall": {
+        # Jiggies
+        "0047-Fall": { # Tree House
+            "Object":"17951094FF63190C0046",
+            "Flag":  "17571094FF6D48140047",
+            },
+        "004D-Fall": { # Side Of Tree
+            "Object":"08A70A38085C190C0046",
+            "Flag":  "13E0004314F81094004D",
+            },
+        "004F-Fall": { # Whipcrack Room
+            "Object":"0000001100E1190C0046",
+            "Flag":  "FFBA0013010E6094004F",
+            },
+        # Empty Honeycombs
+        # Mumbo Tokens
+        "0131": {
+            "Object":"009907410A75190C002D",
+            "Flag":  "009207410A7F55940131",
+            },
+        "0132": {
+            "Object":"01F400A61405190C002D",
+            "Flag":  "01EC00A613ED6B140132",
+            },
+        "0133": {
+            "Object":"000016C6F303190C002D",
+            "Flag":  "FFFD16C6F2E562140133",
+            },
+        "0134": {
+            "Object":"0D4D100B03EB190C002D",
+            "Flag":  "0D40100B03EB79940134",
+            },
+        "0135": {
+            "Object":"E8D70A1A003D190C002D",
+            "Flag":  "E8D40A1A002D5D940135",
+            },
+        },
+    "Click Clock Wood - Winter": {
+        # Jiggies
+        "004E-Winter": { # Top Of The Tree
+            "Object":"00001DBA0C1C190C0046",
+            "Flag":  "00341DC90C566294004E",
+            },
+        "004F-Winter": { # Whipcrack Room
+            "Object":"0000001100E1190C0046",
+            "Flag":  "FFAD001100FD6294004F",
+            },
+        # Empty Honeycombs
+        "0070": {
+            "Object":"02B603E60278190C0047",
+            "Flag":  "026F03E602734E940070",
+            },
+        "0071": {
+            "Object":"02800201FF36190C0047",
+            "Flag":  "02460201FF2E49940071",
+            },
+        # Mumbo Tokens
+        "0136": {
+            "Object":"00000069EAE8190C002D",
+            "Flag":  "000E0069EAFB6B140136",
+            },
+        "0137": {
+            "Object":"173EFFD20000190C002D",
+            "Flag":  "1755FFD2FFE966940137",
+            },
+        "0138": {
+            "Object":"00000C42F190190C002D",
+            "Flag":  "FFFF0C42F1A76B140138",
+            },
+        "0139": {
+            "Object":"00280F811388190C002D",
+            "Flag":  "001B0F81135E67140139",
+            },
+        "013A": {
+            "Object":"F3AB012CF3B3190C002D",
+            "Flag":  "F3A9012CF3DA6B14013A",
+            },
+        },
+    "Gruntilda's Lair": {
+        # Jiggies
+        "0036": {
+            "Object":"00000000FFEC190C0046",
+            "Flag":  "FFFA0000000212940036",
+            },
+        "0039": {
+            "Object":"FAF60202FCED190C0046",
+            "Flag":  "FAF601FDFCED19140039",
+            },
+        "0037": {
+            "Object":"101E0958199F190C0046",
+            "Flag":  "103B0948199C19140037",
+            },
+        # Empty Honeycomb
+        # Mumbo Tokens
+        "0118": {
+            "Object":"00A2FD121203190C002D",
+            "Flag":  "0091FD12120246940118",
+            },
+        "0119": {
+            "Object":"1348FE22011E190C002D",
+            "Flag":  "1347FE2701114E140119",
+            },
+        "011A": {
+            "Object":"FF4C015FFD12190C002D",
+            "Flag":  "FF42015FFD154714011A",
+            },
+        "011B": {
+            "Object":"00000352F66E190C002D",
+            "Flag":  "000D0352F6806214011B",
+            },
+        "011C": {
+            "Object":"FA320000FC66190C002D",
+            "Flag":  "FA310000FC785594011C",
+            },
+        "011D": {
+            "Object":"103B05CD187E190C002D",
+            "Flag":  "104805CD186B4D94011D",
+            },
+        "011F": {
+            "Object":"04E80A160000190C002D",
+            "Flag":  "04DC0A16000E5594011F",
+            },
+        "0120": {
+            "Object":"06E4FA88FB90190C002D",
+            "Flag":  "06EFFA88FB9668140120",
+            },
+        "0121": {
+            "Object":"FB8C02C307B5190C002D",
+            "Flag":  "FB8502C3079E65140121",
+            },
+        "011E": {
+            "Object":"05D000F90000190C002D",
+            "Flag":  "05BB00FA00004114011E",
+            },
+        },
+    }
+
+abnormal_flagged_object_dict = {
+    "Spiral Mountain": {
+        },
+    "Mumbo's Mountain" : {
+        },
+    "Treasure Trove Cove": {
+        # Jiggies
+        "000F": { # Sandcastle Jiggy
+            "Object":"0000015EFC25190C0046",
+            "Flag":  "00000190FC605D94000F",
+            },
+        # Mumbo Token
+        "00D1": { # Lighthouse Mumbo Token
+            "Object":"02351B05F528190C002D",
+            "Flag":  "02671B05F50C431400D1",
+            },
+        },
+    "Clanker's Cavern": {
+        },
+    "Bubblegloop Swamp": {
+        },
+    "Freezeezy Peak": {
+        },
+    "Gobi's Valley": {
+        # Jiggies
+        "0041": { # Water Pyramid Jiggy
+            "Object":"FFFF0091FFE9190C0046",
+            "Flag":  "FFD200D1FFE14D140041",
+            },
+        # Mumbo Token
+        "00F7": { # Water Pyramid Mumbo Token
+            "Object":"FED4059FFB56190C002D",
+            "Flag":  "FEEC05C3FB5F471400F7",
+            },
+        },
+    "Mad Monster Mansion": {
+        # Jiggies
+        "005C": { # Napper
+            "Object":"000101FF0018190C0046",
+            "Flag":  "FFF701AFFF858214005C",
+            },
+        "0061": { # Tumblar
+            "Object":"00300000FFC6190C0046",
+            "Flag":  "000B0000FFF848140061",
+            },
+        # Mumbo Tokens
+        "0105": { # Dining Room
+            "Object":"FF6000BEF5D9190C002D",
+            "Flag":  "FF6A00CDF5C543140105",
+            },
+        },
+    "Rusty Bucket Bay": {
+        # Jiggies
+        "0055": { # Big Kaboomb Room
+            "Object":"017800C70000190C0046",
+            "Flag":  "011E0000000E68940055",
+            },
+        },
+    "Click Clock Wood - Lobby": {
+        },
+    "Click Clock Wood - Spring": {
+        # Jiggies
+        "004B-Spring": { # Zubba's Jiggy
+            "Object":"00000000007D190C0046",
+            "Flag":  "FF8E000000C89F14004B",
+            },
+        },
+    "Click Clock Wood - Summer": {
+        # Jiggies
+        "004B-Summer": { # Zubba's Jiggy
+            "Object":"00000000007D190C0046",
+            "Flag":  "00030000007E3894004B",
+            },
+        },
+    "Click Clock Wood - Fall": {
+        # Jiggies
+        "004A-Fall": { # Gnawty'sJiggy
+            "Object":"00F00258004B190C0046",
+            "Flag":  "0119025800424294004A",
+            },
+        },
+    "Click Clock Wood - Winter": {
+        # Jiggies
+        "004B-Winter": { # Gnawty'sJiggy
+            "Object":"00F00258004B190C0046",
+            "Flag":  "013C025B004E4F94004A",
+            },
+        },
+    "Gruntilda's Lair": {
+#         # Jiggies
+#         "0032": { # The First Jiggy
+#             "Object":"FA1F0258007B190C0046",
+#             "Flag":  "FA290258007F3F140032",
+#             },
+        },
+    }
 
 obj_flagged_id_list = [
     "002D", # Mumbo Token
@@ -748,25 +1641,70 @@ obj_no_flag_id_list = [
     "01F1", # Red Present
 #     "02A2", # Caterpiller
     "02A9", # Acorn
-    # Sometimes Structs
-#     "0052", # Egg
-#     "0129", # Red Feather
-#     "0370", # Gold Feather
+    "0050", # Furnace Fun Honeycombs
+    ]
+
+abnormal_obj_no_flag_id_list = [
+    "0052", # Egg
+    "0129", # Red Feather
+    "0370", # Gold Feather
     ]
 
 collectable_struct_id_list = [
-    "164000B4", # Note B4
-    "164000B5", # Note B5
-    "164000B6", # Note B6
-    "164000B7", # Note B7
-    "165000A0", # Blue Egg A0
-    "165000A2", # Blue Egg A2
-    "00E000DC", # Red Feather DC Potentially Required Feather Placements?
-    "00E000DD", # Red Feather DD
-    "00E000DE", # Red Feather DE
-    "15F000DC", # Gold Feather DC Potentially Required Feather Placements?
-    "15F000DE", # Gold Feather DE
-    "15F000DF", # Gold Feather DF
+    "164000B4", # Note 40 B4
+    "164000B5", # Note 40 B5
+    "164000B6", # Note 40 B6
+    "164000B7", # Note 40 B7
+    "165000A0", # Blue Egg 50 A0
+    "165000A1", # Blue Egg 50 A1
+    "165000A2", # Blue Egg 50 A2
+    "165700A0", # Blue Egg 57 A0
+    "00E000DC", # Red Feather E0 DC
+    "00E000DD", # Red Feather E0 DD
+    "00E000DE", # Red Feather E0 DE
+    "00E700DE", # Red Feather E7 DE
+    "15F000DC", # Gold Feather F0 DC
+    "15F000DE", # Gold Feather F0 DE
+    "15F000DF", # Gold Feather F0 DF
+    ]
+
+abnormal_collectable_struct_id_list = [
+    # 2D Fire
+#     "16600154", "16600156", "16601258", "16600190",
+#     "1660E154", "1660E156", "16670154", "16670156",
+#     "145002BC", "145002BE",
+    # Unknown Flowers
+#     "0460",
+    # Blue Flowers
+    "04670190F6200000096A", "04670136FF86000511C0", "0467014EFCA1003209B8",
+    "046700F00287002B0D56", "0465013CF94A000010C8",
+    # Yellow Red Flowers
+    "047040F203FF0613F7FD", "047000AC023A061203A0", "0470015804D70616FDAA",
+    "047000E6050B0617FD64", "0470413903960613F7B8", "0470412B02420614F74D",
+    "047000EC044606130309", "047000D602BB0612F909", "047000AC03EF061302DD",
+    "0470410D001E0613F6F8", "047000C0023F00000BBD", "0470012200AF00050B59",
+    "047000F2FF6000081089", "04700114FE79000411FC", "047000F4FB3700001203",
+    "0470014AFB04000011B5", "047000E0F9730000114E", "04700156F515000009C8",
+    "0470011BF65A00000A0A", "047040CE015E0613F72E", "047000BA04BB06130286",
+    "0470010201E40611038E",
+    # Red Flowers
+    "050000AC0E07086BF283", "050000A804FF06130142", "05000088FF41061303BA",
+    "050000C8000D06130435", "050000C600F606130411", "0500010001FE06160028",
+    "050000B601AB06180094", "050000900B7B00000BE2", "050000DC0B0D001514A4",
+    "050000960B66002A1503", "050000D2033B0615FF5E", "050000C0FEBF061EF5C0",
+    "050000D4FEEA0613037C", "050000940D33000209B9", "0500012CFF480628F612",
+    "050000E60C2200000BFD", "050000B00CDE00010C11", "050000CA0F1C00170FD3",
+    "050000AC0E6D00181045", "050000C00F98001E1186", "050074C60BDB00441588",
+    "050000DA0F68002F15EF", "0500009C15E700040B2A", "050000F61850001009E2",
+    "0500011C19EE000A0D0E", "050000CA16C800000AFF", "050000B6FDEE06020386",
+    "050000B8115B000109A3", "050000F6106C086BF309",
+    # Orange 2D
+#     "0D60006C", "0D600068",
+    # Underwater Plant
+    "121000D803D7FCC20C8F", "162001920505FCC8129C", "1620819208D5FD120CD6",
+    "163009A203A4FCC00AB8",
+#     "1600", # Underwater Plant
+#     "1610", # Underwater Plant
     ]
 
 croctus_list = [
@@ -825,6 +1763,7 @@ enemy_id_dict = {
         "Flying": [
             "0380", # Beetle
             "00CA", # Tee-Hee
+            "034D", # Bees
             ],
         "Water": [
 #             "000A", # Piranha Fish
@@ -841,6 +1780,7 @@ enemy_id_dict = {
         },
     "Gruntilda's Lair": {
         "Ground": [
+            "0004", # Bull
             "0367", # Gruntling
             "03BF", # Gruntling 2
             "03C0", # Gruntling 3
@@ -851,6 +1791,7 @@ enemy_id_dict = {
         },
     "Spiral Mountain": {
         "Ground": [
+            "0004", # Bull
             "036E", # Bawl
             "036F", # Topper
             ],
@@ -865,6 +1806,7 @@ enemy_id_dict = {
         },
     "Treasure Trove Cove": {
         "Ground": [
+            "0004", # Bull
             "0069", # Yum Yum
             #"00F2", # Black Snippet
 #             "0124", # Snowman
@@ -961,6 +1903,54 @@ enemy_id_dict = {
         },
     }
 
+abnormal_enemy_id_list = {
+    "Global": {
+        "Ground": [
+            "0056", # Shrapnel
+#             "0124", # Snowman
+            ],
+        "Wall": [
+            "0289", # Vent
+            ],
+        },
+#     "Gruntilda's Lair": {
+#         },
+#     "Spiral Mountain": {
+#         },
+#     "Mumbo's Mountain": {
+#         },
+    "Treasure Trove Cove": {
+        "Ground": [
+            "0152", # Lockup
+            ],
+        },
+#     "Clanker's Cavern": {
+#         },
+#     "Bubblegloop Swamp": {
+#         },
+#     "Freezeezy Peak": {
+#         },
+#     "Gobi's Valley": {
+#         },
+#     "Mad Monster Mansion": {
+#         },
+    "Rusty Bucket Bay": {
+        "Ground": [
+            "01C6", # Grimlet
+            ]
+        },
+#     "Click Clock Wood - Lobby": {
+#         },
+#     "Click Clock Wood - Spring": {
+#         },
+#     "Click Clock Wood - Summer": {
+#         },
+#     "Click Clock Wood - Fall": {
+#         },
+#     "Click Clock Wood - Winter": {
+#         },
+    }
+
 other_setup_pointer_list = [
     "9BD0", "9AC0", "9AC8", "9AD0", "9B00", "9AE8", "9AF0", "9B40",
     "9C10", "9AD8", "9AE0", "9AF8", "9B08", "9B18", "9B20", "9B28",
@@ -978,6 +1968,102 @@ skip_these_setup_pointer_list = [
 #####################################################################################
 ##################################### FUNCTIONS #####################################
 #####################################################################################
+
+###########################
+### DEVELOPER FUNCITONS ###
+###########################
+
+def dev_decompressor(file_dir, rom_file):
+    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
+    logger.info("Decompressor")
+    # Get File Bytes
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    address_dict = {}
+    address_translator = {}
+    for location_name in setup_ids:
+        address_list = []
+        for (addr, header, footer, lead, tail) in setup_ids[location_name]:
+            # Get Address Endpoints
+            (address1, address2) = get_address_endpoints(file_bytes, addr)
+            verify_original_header(file_bytes, address1)
+            # Write Compressed File
+            compressed_file = (str(addr)[2:]).upper()
+            print(addr, compressed_file)
+            address_translator[addr] = compressed_file
+            with open(file_dir + tmp_folder + compressed_file + "-Compressed.bin", "w+b") as comp_file:
+                # Grab Middle
+                for index in range(address1, address2):
+                    hex_string = str(hex(file_bytes[index]))[2:]
+                    if(len(hex_string) < 2):
+                        hex_string = "0" + hex_string
+                    comp_file.write(bytes.fromhex(hex_string))
+            # Decompress File
+            #decompress_file(file_dir, compressed_file)
+            address_list.append(compressed_file)
+        address_dict[location_name] = address_list
+    return (address_dict, address_translator)
+
+header_table = {
+    "Spiral Mountain": ["3E", "FE"],
+    "Mumbo's Mountain": ["37", "FC"],
+    "Treasure Trove Cove": ["B5", "01"],
+    "Clanker's Cavern": ["45", "6A"],
+    "Bubblegloop Swamp": ["23", "32"],
+    "Freezeezy Peak": ["9C", "36"],
+    "Gobi's Valley": ["AF", "39"],
+    "Mad Monster Mansion": ["84", "3F"],
+    "Rusty Bucket Bay": ["42", "6C"],
+    "Click Clock Wood - Lobby": ["27", "FC"],
+    "Click Clock Wood - Spring": ["27", "FC"],
+    "Click Clock Wood - Summer": ["D6", "0D"],
+    "Click Clock Wood - Fall": ["31", "11"],
+    "Click Clock Wood - Winter": ["95", "13"]
+    }
+
+def print_header(file_dir, rom_file):
+    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
+    logger.info("Decompressor")
+    # Get File Bytes
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    address_dict = {}
+    address_translator = {}
+    for location_name in setup_ids:
+        address_list = []
+        for (addr, header, footer, lead, tail) in setup_ids[location_name]:
+            # Get Address Endpoints
+            (address1, address2) = get_address_endpoints(file_bytes, addr)
+            verify_original_header(file_bytes, address1)
+            # Write Compressed File
+            compressed_file = (str(addr)[2:]).upper()
+            ascii_name = ""
+            for letter in compressed_file:
+                converted_string = str(binascii.hexlify(letter.encode()))
+                converted_string = converted_string.replace("b", "")
+                ascii_name += ", " + converted_string
+            extension_string = ""
+            for letter in "-Decompressed.bin":
+                converted_string = str(binascii.hexlify(letter.encode()))
+                converted_string = converted_string.replace("b", "")
+                extension_string += ", " + converted_string.upper()
+            val_1 = header_table[location_name][0]
+            val_2 = header_table[location_name][1]
+            new_header = "            ['1F', '8B', '08', '08', '" + val_1 + "', '" + val_2 + "', '6B', '60', '00', '0B'" + ascii_name + extension_string + ", '00'],"
+            print(addr)
+            print(new_header)
+    return []
+
+def dev_compress_folder(file_dir):
+    """Compresses the hex file that was extracted from the main ROM file"""
+    decompressed_file_list = os.listdir(file_dir + "Examples/")
+    for decompressed_file in decompressed_file_list:
+        if(not decompressed_file.startswith("Banjo-Kazooie")):
+            file_name = decompressed_file.split(".")[0]
+            print("File Name: " + file_name)
+            bin_file = file_name + ".bin"
+            shutil.copyfile(file_dir + "Examples/" + bin_file, file_dir + "Test/" + file_name + "-Decompressed.bin")
+            cmd = file_dir + "GZIP.EXE -c " + file_dir + "Test/" + file_name.upper() + "-Decompressed.bin > " + file_dir + "Test/" + file_name.upper() + "-Compressed.bin"
+            logger.debug(cmd)
+            subprocess.Popen(cmd.split(),shell=True).communicate()
 
 ######################
 ### MISC FUNCTIONS ###
@@ -1029,8 +2115,11 @@ def seed(seed_val=None):
     logger.info("Generate Seed")
     if((seed_val == None) or (seed_val == "")):
         seed_val = random.randint(10000000, 19940303)
+        seed_generated = True
+    else:
+        seed_generated = False
     logger.debug("Seed: " + str(seed_val))
-    return seed_val
+    return (seed_val, seed_generated)
 
 def make_copy_of_rom(seed_val, file_dir, rom_file):
     """Creates a copy of the rom that will be used for randomization"""
@@ -1089,12 +2178,26 @@ def verify_seed_val(seed_val):
         return False
     return True
 
+def verify_integer_limits(lower_limt, upper_limit):
+    '''Verifies the note door limits are digits'''
+    if(not lower_limt.isdigit()):
+        error_msg = "Lower Limit Must Be An Integer: '" + str(lower_limt) + "'"
+        logger.error(error_msg)
+        error_window(error_msg)
+        return False
+    if(not upper_limit.isdigit()):
+        error_msg = "Upper Limit Must Be An Integer: '" + str(upper_limit) + "'"
+        logger.error(error_msg)
+        error_window(error_msg)
+        return False
+    return True
+
 def error_window(error_msg):
     '''Brings up a GUI that displays an error message'''
     window = tk.Tk()
     window.geometry('450x50')
     # Title
-    window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    window.winfo_toplevel().title("Banjo-Kazooie Randomizer Error")
     error_label = tk.Label(window, text=error_msg)
     error_label.config(anchor='center')
     error_label.pack()
@@ -1109,23 +2212,157 @@ def parameter_gui():
         '''Runs verification functions for the ROM and the seed values given'''
         rom_gzip_bool = verify_dir(rom_file_entry.get())
         seed_bool = verify_seed_val(seed_var.get())
-        if(rom_gzip_bool and seed_bool):
-            window.destroy()
+        note_door_limits_bool = verify_integer_limits(note_door_lower_var.get(), note_door_upper_var.get())
+        puzzle_door_limits_bool = verify_integer_limits(puzzle_lower_var.get(), puzzle_upper_var.get())
+        if(rom_gzip_bool and seed_bool and note_door_limits_bool and puzzle_door_limits_bool):
+            confirm_bool = warning_window(rom_file_entry.get())
+            if(confirm_bool):
+                window.destroy()
+    
+    def warning_window(rom_dir):
+        '''Displays a warning window with all of the settings that may cause the randomizer to be unbeatable'''
+        def return_true():
+            continue_rando.set(True)
+            warning_window.quit()
+
+        def return_false():
+            warning_window.destroy()
+            
+        def close_warning_window():
+            warning_window.destroy()
+            
+        def update(ind):
+            '''Updates The Gif Frame'''
+            frame = frames[ind]
+            ind += 1
+            if ind == frameCnt:
+                ind = 0
+            label.configure(image=frame)
+            warning_label.after(60, update, ind)
+        
+        (file_dir, rom_file) = split_dir_rom(rom_dir)
+        warning_list = []
+        if(f_obj_var.get() != "None"):
+            warning_list.append("Flagged Objects")
+        if(allow_abnormalities_var.get() == 1):
+            warning_list.append("Abnormalities")
+        if(note_door_var.get() == 1):
+            warning_list.append("Final Note Door")
+        if(puzzle_var.get() == 1):
+            warning_list.append("Final Puzzle")
+        if(len(warning_list) > 0):
+            warning_window = tk.Tk()
+            window_size = '470x350'
+            continue_rando = tk.BooleanVar()
+            continue_rando.set(False)
+            warning_window.winfo_toplevel().title("Banjo-Kazooie Randomizer Warning")
+            # GIF Of Bottles
+            try:
+                frameCnt = 10
+                frames = [tk.PhotoImage(master=warning_window, file=(file_dir+"bottles.gif"),format = 'gif -index %i' %(i)) for i in range(frameCnt)]
+                label = tk.Label(warning_window)
+                label.grid(row=0, column=0, padx=10, sticky="N")
+            except tk.TclError as e:
+                window_size = '470x100'
+            warning_label = tk.Label(warning_window, text="Hey Player! Even though a lot of effort was put into the randomizer,\nthe following features have the potential make the game unbeatable/not 100%-able:")
+            warning_label.grid(row=1, column=0, padx=10, sticky="N")
+            warning_str = ""
+            for item in warning_list:
+                warning_str += "*" + item + "    "
+            warning_list_label = tk.Label(warning_window, text=warning_str[:-1])
+            warning_list_label.grid(row=2, column=0, padx=10, sticky="N")
+            confirm_btn = tk.Button(warning_window, text="I'm Willing To Risk It!", command=return_true)
+            confirm_btn.grid(row=3, column=0, padx=10, sticky="E")
+            decline_btn = tk.Button(warning_window, text='Let Me Edit That!', command=return_false)
+            decline_btn.grid(row=3, column=0, padx=10, sticky="W")
+            warning_window.protocol('WM_DELETE_WINDOW', close_warning_window)
+            try:
+                warning_window.after(0, update, 0)
+            except Exception:
+                pass
+            warning_window.geometry(window_size)
+            warning_window.mainloop()
+            warning_window.destroy()
+            return continue_rando.get()
+        return True
     
     def UploadAction():
         '''Opens a browser to select the ROM file ending in .z64'''
         cwd = os.getcwd()
-        filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select A File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
+        filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select The BK ROM File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
         rom_file_entry.set(filename)
+
+    def load_config():
+        '''Opens a chosen JSON file and sets the parameters to match those'''
+        config_default_dir = os.getcwd() + "/Configurations/"
+        try:
+            filename = tkinter.filedialog.askopenfilename(initialdir=config_default_dir, title="Select A JSON Config File", filetype =(("Json Files","*.json"),("all files","*.*")) )
+        except Exception:
+            filename = tkinter.filedialog.askopenfilename(initialdir=os.getcwd(), title="Select A JSON Config File", filetype =(("Json Files","*.json"),("all files","*.*")) )
+        try:
+            with open(filename, "r") as json_file: 
+                json_data = json.load(json_file)
+            nf_obj_var.set(json_data["Non_Flag_Objects"])
+            f_obj_var.set(json_data["Flagged_Objects"])
+            struct_var.set(json_data["Structs"])
+            enemy_var.set(json_data["Enemies"])
+#             warp_var.set(json_data["Warps"])
+            clanker_rings_var.set(json_data["Clanker_Rings"])
+            croctus_var.set(json_data["Croctus"])
+            ancient_ones_var.set(json_data["Ancient_Ones"])
+            jinxy_heads_var.set(json_data["Jinxy_Heads"])
+            allow_abnormalities_var.set(json_data["Abnormalities"])
+            note_door_var.set(json_data["Final_Note_Door"])
+            note_door_lower_var.set(json_data["Note_Door_Lower"])
+            note_door_upper_var.set(json_data["Note_Door_Upper"])
+            puzzle_var.set(json_data["Final_Puzzle"])
+            puzzle_lower_var.set(json_data["Puzzle_Lower"])
+            puzzle_upper_var.set(json_data["Puzzle_Upper"])
+        except Exception:
+            error_msg = "There was an error in reading the configuration file."
+            error_window(error_msg)
+
+    def load_last_used_config():
+        '''Looks for a JSON file with previous configuration. If not, returns empty dictionary'''
+        # look in eppiiisa folder
+        # read json file. if errored, show error window
+        # set parameters as those
+        try:
+            config_dir = os.getcwd() + "/Configurations/"
+            with open(config_dir + "Last_Used_Configuration.json", "r") as json_file: 
+                json_data = json.load(json_file)
+        except Exception:
+            json_data = {}
+        return json_data
+
+    def save_current_config(rom_file_entry, seed_val, nf_obj_var, f_obj_var, struct_var, enemy_var,
+                            croctus_var, clanker_rings_var, ancient_ones_var, jinxy_heads_var, allow_abnormalities_var,
+                            final_note_door_var, note_door_lower_var, note_door_upper_var,
+                            final_puzzle_var, puzzle_lower_var, puzzle_upper_var,):
+        '''Writes the current configuration to a JSON file'''
+        config_dir = os.getcwd() + "/Configurations/"
+        if(not os.path.isdir(config_dir)):
+            os.mkdir(config_dir)
+        current_config = {
+            "Rom_File_Entry": rom_file_entry, "Seed_Value": seed_val,
+            "Non_Flag_Objects": nf_obj_var, "Flagged_Objects": f_obj_var, "Structs": struct_var, "Enemies": enemy_var,
+            "Croctus": croctus_var, "Clanker_Rings": clanker_rings_var, "Ancient_Ones": ancient_ones_var, "Jinxy_Heads": jinxy_heads_var, "Abnormalities": allow_abnormalities_var,
+            "Final_Note_Door": final_note_door_var, "Note_Door_Lower": note_door_lower_var, "Note_Door_Upper": note_door_upper_var,
+            "Final_Puzzle": final_puzzle_var, "Puzzle_Lower": puzzle_lower_var, "Puzzle_Upper": puzzle_upper_var,
+            }
+        with open(config_dir + "Last_Used_Configuration.json", "w") as json_file: 
+            json.dump(current_config, json_file)
     
     def close_window():
+        '''Closes the window and ends the script'''
         window.destroy()
-        exit(0)
-
+        raise SystemExit # exit(0)
+    
+    json_data = load_last_used_config()
     window = tk.Tk()
-    window.geometry('650x400')
+    window.geometry('650x410')
     # Title
-    window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    window.winfo_toplevel().title("Banjo-Kazooie Randomizer v"+BK_Rando_Version)
     # String Input Frame
     string_frame = tk.LabelFrame(window, text="ROM Settings", width=640, height=100, padx=5, pady=5)
     string_frame.grid(row=0, sticky="nsew")
@@ -1133,10 +2370,10 @@ def parameter_gui():
     options_frame = tk.LabelFrame(window, text="Options", width=640, height=200, padx=5, pady=5)
     options_frame.grid(row=1, column=0, sticky="ns")
     # Main Options Frame
-    main_options_frame = tk.LabelFrame(options_frame, text="Main Options", width=320, height=195, padx=5, pady=5)
+    main_options_frame = tk.LabelFrame(options_frame, text="Main Options", width=320, height=205, padx=5, pady=5)
     main_options_frame.grid(row=0, column=0, sticky="ns")
     # Misc Options Frame
-    misc_options_frame = tk.LabelFrame(options_frame, text="Misc Options", width=320, height=195, padx=5, pady=5)
+    misc_options_frame = tk.LabelFrame(options_frame, text="Misc Options", width=320, height=205, padx=5, pady=5)
     misc_options_frame.grid(row=0, column=1, sticky="ns")
     # Submit Frame
     submit_frame = tk.LabelFrame(window, text="Submit", width=640, height=50, padx=5, pady=5)
@@ -1145,14 +2382,20 @@ def parameter_gui():
     select_rom_button = tk.Button(string_frame, text='Select ROM File', command=UploadAction)
     select_rom_button.place(x=10, y=10)
     rom_file_entry = tk.StringVar(string_frame)
-    rom_file_entry.set(default_options["Rom"])
+    try:
+        rom_file_entry.set(json_data["Rom_File_Entry"])
+    except KeyError:
+        rom_file_entry.set(os.getcwd())
     entry = tk.Entry(string_frame, textvariable=rom_file_entry, state='readonly', width=85)
     entry.place(x=110, y=10)
     # Seed Label And Entry
     seed_label = tk.Label(string_frame, text='Seed (Optional):')
     seed_label.place(x=10, y=50)
     seed_var = tk.StringVar(string_frame)
-    seed_var.set("")
+    try:
+        seed_var.set(json_data["Seed_Value"])
+    except KeyError:
+        seed_var.set("")
     seed_entry = tk.Entry(string_frame, textvariable=seed_var)
     seed_entry.place(x=110, y=50)
     # Radio Buttons For Non-Flag Object Options
@@ -1162,7 +2405,10 @@ def parameter_gui():
         "Shuffle",
         #"Randomize",
         }
-    nf_obj_var.set(default_options["Non-Flag"])
+    try:
+        nf_obj_var.set(json_data["Non_Flag_Objects"])
+    except KeyError:
+        nf_obj_var.set("Shuffle")
     nf_obj_dd = tk.OptionMenu(main_options_frame, nf_obj_var, *nf_obj_options)
     tk.Label(main_options_frame, text="Jinjos/1-Ups/Misc Objects").place(x=10, y=10)
     nf_obj_dd.place(x=200, y=5)
@@ -1173,10 +2419,13 @@ def parameter_gui():
         "Shuffle",
         #"Randomize",
         }
-    f_obj_var.set(default_options["Flagged"])
+    try:
+        f_obj_var.set(json_data["Flagged_Objects"])
+    except KeyError:
+        f_obj_var.set("Shuffle")
     f_obj_dd = tk.OptionMenu(main_options_frame, f_obj_var, *f_obj_options)
-    tk.Label(main_options_frame, text="Jiggies/E.Honeycombs/M.Tokens").place(x=10, y=50)
-    f_obj_dd.place(x=200, y=45)
+    tk.Label(main_options_frame, text="Jiggies/E.Honeycombs/M.Tokens").place(x=10, y=45)
+    f_obj_dd.place(x=200, y=40)
     # Radio Buttons For Struct Options
     struct_var = tk.StringVar(main_options_frame)
     struct_options = {
@@ -1184,10 +2433,13 @@ def parameter_gui():
         "Shuffle",
         #"Randomize",
         }
-    struct_var.set(default_options["Struct"])
+    try:
+        struct_var.set(json_data["Structs"])
+    except KeyError:
+        struct_var.set("Shuffle")
     struct_dd = tk.OptionMenu(main_options_frame, struct_var, *struct_options)
-    tk.Label(main_options_frame, text="Notes/Eggs/Feathers").place(x=10, y=90)
-    struct_dd.place(x=200, y=85)
+    tk.Label(main_options_frame, text="Notes/Eggs/Feathers").place(x=10, y=80)
+    struct_dd.place(x=200, y=75)
     # Radio Buttons For Enemy Options
     enemy_var = tk.StringVar(main_options_frame)
     enemy_options = {
@@ -1195,40 +2447,138 @@ def parameter_gui():
         "Shuffle",
         "Randomize",
         }
-    enemy_var.set(default_options["Enemies"])
+    try:
+        enemy_var.set(json_data["Enemies"])
+    except KeyError:
+        enemy_var.set("Randomize")
     enemy_dd = tk.OptionMenu(main_options_frame, enemy_var, *enemy_options)
-    tk.Label(main_options_frame, text="Enemies (Beta)").place(x=10, y=130)
-    enemy_dd.place(x=200, y=125)
+    tk.Label(main_options_frame, text="Enemies (Beta)").place(x=10, y=115)
+    enemy_dd.place(x=200, y=110)
+    # Radio Buttons For Warps Options
+    warp_var = tk.StringVar(main_options_frame)
+    warp_options = {
+        "None",
+        #"Shuffle",
+        #"Randomize",
+        }
+    try:
+        warp_var.set(json_data["Warps"])
+    except KeyError:
+        warp_var.set("None")
+    warp_dd = tk.OptionMenu(main_options_frame, warp_var, *warp_options)
+    tk.Label(main_options_frame, text="Warps (None)").place(x=10, y=150)
+    warp_dd.place(x=200, y=145)
     # Checkbox For Clanker's Rings
     clanker_rings_var = tk.IntVar()
     clanker_rings_button = tk.Checkbutton(misc_options_frame, text="Clanker Rings (Hard)", variable=clanker_rings_var)
-    clanker_rings_var.set(default_options["Clanker_Rings"])
-    clanker_rings_button.place(x=10, y=10)
+    try:
+        clanker_rings_var.set(json_data["Clanker_Rings"])
+    except KeyError:
+        clanker_rings_var.set("1")
+    clanker_rings_button.place(x=5, y=5)
     # Checkbox For Croctus
     croctus_var = tk.IntVar()
     croctus_button = tk.Checkbutton(misc_options_frame, text="Croctus", variable=croctus_var)
-    croctus_var.set(default_options["Croctus"])
-    croctus_button.place(x=145, y=10)
+    try:
+        croctus_var.set(json_data["Croctus"])
+    except KeyError:
+        croctus_var.set("1")
+    croctus_button.place(x=160, y=5)
     # Checkbox For Ancient Ones
     ancient_ones_var = tk.IntVar()
     ancient_ones_button = tk.Checkbutton(misc_options_frame, text="Ancient Ones", variable=ancient_ones_var)
-    ancient_ones_var.set(default_options["Ancient_Ones"])
-    ancient_ones_button.place(x=10, y=50)
+    try:
+        ancient_ones_var.set(json_data["Ancient_Ones"])
+    except KeyError:
+        ancient_ones_var.set("1")
+    ancient_ones_button.place(x=5, y=35)
     # Checkbox For Jinxy Heads
     jinxy_heads_var = tk.IntVar()
     jinxy_heads_button = tk.Checkbutton(misc_options_frame, text="Jinxy Heads (Maze)", variable=jinxy_heads_var)
-    jinxy_heads_var.set(default_options["Jinxy_Heads"])
-    jinxy_heads_button.place(x=145, y=50)
-    # Checkbox For Zero Note Note Doors
-#     note_doors_var = tk.IntVar()
-#     note_doors_button = tk.Checkbutton(misc_options_frame, text="0 Note Note Doors", variable=note_doors_var)
-#     note_doors_var.set(default_options["Note_Doors"])
-#     note_doors_button.place(x=10, y=90)
+    try:
+        jinxy_heads_var.set(json_data["Jinxy_Heads"])
+    except KeyError:
+        jinxy_heads_var.set("1")
+    jinxy_heads_button.place(x=160, y=35)
+    # Checkbox For Abilities
+#     abilities_var = tk.IntVar()
+#     abilities_button = tk.Checkbutton(misc_options_frame, text="Moves/Transformations", variable=abilities_var)
+#     try:
+#         abilities_var.set(json_data["Abilities"])
+#     except KeyError:
+#         abilities_var.set("0")
+#     abilities_button.place(x=5, y=65)
+    # Checkbox For Abnormalities
+    allow_abnormalities_var = tk.IntVar()
+    allow_abnormalities_button = tk.Checkbutton(misc_options_frame, text="Misc Abnormalities", variable=allow_abnormalities_var)
+    try:
+        allow_abnormalities_var.set(json_data["Abnormalities"])
+    except KeyError:
+        allow_abnormalities_var.set("0")
+    allow_abnormalities_button.place(x=160, y=65)
+    # Checkbox For Final Note Door Mode
+    note_door_var = tk.IntVar()
+    note_door_button = tk.Checkbutton(misc_options_frame, text="Final Note Door Only?", variable=note_door_var)
+    try:
+        note_door_var.set(json_data["Final_Note_Door"])
+    except KeyError:
+        note_door_var.set("0")
+    note_door_button.place(x=5, y=125)
+    note_door_lower_label = tk.Label(misc_options_frame, text='Lower:')
+    note_door_lower_label.place(x=160, y=125)
+    note_door_lower_var = tk.StringVar(misc_options_frame)
+    try:
+        note_door_lower_var.set(json_data["Note_Door_Lower"])
+    except KeyError:
+        note_door_lower_var.set("0")
+    note_door_lower_entry = tk.Entry(misc_options_frame, textvariable=note_door_lower_var, width=5)
+    note_door_lower_entry.place(x=200, y=125)
+    note_door_upper_label = tk.Label(misc_options_frame, text='Upper:')
+    note_door_upper_label.place(x=230, y=125)
+    note_door_upper_var = tk.StringVar(misc_options_frame)
+    try:
+        note_door_upper_var.set(json_data["Note_Door_Upper"])
+    except KeyError:
+        note_door_upper_var.set("900")
+    note_door_upper_entry = tk.Entry(misc_options_frame, textvariable=note_door_upper_var, width=5)
+    note_door_upper_entry.place(x=270, y=125)
+    # Checkbox For Final Puzzle Mode
+    puzzle_var = tk.IntVar()
+    puzzle_button = tk.Checkbutton(misc_options_frame, text="Final Puzzle Only?", variable=puzzle_var)
+    try:
+        puzzle_var.set(json_data["Final_Puzzle"])
+    except KeyError:
+        puzzle_var.set("0")
+    puzzle_button.place(x=5, y=155)
+    puzzle_lower_label = tk.Label(misc_options_frame, text='Lower:')
+    puzzle_lower_label.place(x=160, y=155)
+    puzzle_lower_var = tk.StringVar(misc_options_frame)
+    try:
+        puzzle_lower_var.set(json_data["Puzzle_Lower"])
+    except KeyError:
+        puzzle_lower_var.set("0")
+    puzzle_lower_entry = tk.Entry(misc_options_frame, textvariable=puzzle_lower_var, width=5)
+    puzzle_lower_entry.place(x=200, y=155)
+    puzzle_upper_label = tk.Label(misc_options_frame, text='Upper:')
+    puzzle_upper_label.place(x=230, y=155)
+    puzzle_upper_var = tk.StringVar(misc_options_frame)
+    try:
+        puzzle_upper_var.set(json_data["Puzzle_Upper"])
+    except KeyError:
+        puzzle_upper_var.set("99")
+    puzzle_upper_entry = tk.Entry(misc_options_frame, textvariable=puzzle_upper_var, width=5)
+    puzzle_upper_entry.place(x=270, y=155)
     # Button To Start Randomization
     start_label = tk.Label(submit_frame, text='Once finished, click submit!')
-    start_label.pack()
+    start_label.grid(row=0, column=0, padx=10, sticky="N")
     sub_btn = tk.Button(submit_frame, text='Submit', command=verify_parameters)
-    sub_btn.pack()
+    sub_btn.grid(row=1, column=0, padx=10, sticky="N")
+    # Button To Load Configuration
+    load_label = tk.Label(submit_frame, text='Load A Configuration!')
+    load_label.grid(row=0, column=1, padx=10, sticky="N")
+    load_btn = tk.Button(submit_frame, text='Choose File', command=load_config)
+    load_btn.grid(row=1, column=1, padx=10, sticky="N")
+    # End Window Loop
     window.protocol('WM_DELETE_WINDOW', close_window)
     window.mainloop()
     try:
@@ -1236,10 +2586,20 @@ def parameter_gui():
     except ValueError:
         logger.debug("No Seed Value Was Given")
         seed_val = ""
+    save_current_config(rom_file_entry.get(), seed_val,
+            str(nf_obj_var.get()), str(f_obj_var.get()), str(struct_var.get()), str(enemy_var.get()),
+            str(croctus_var.get()), str(clanker_rings_var.get()), str(ancient_ones_var.get()),
+            str(jinxy_heads_var.get()), str(allow_abnormalities_var.get()),
+            str(note_door_var.get()), int(note_door_lower_var.get()), int(note_door_upper_var.get()),
+            str(puzzle_var.get()), int(puzzle_lower_var.get()), int(puzzle_upper_var.get()),
+            )
     return (rom_file_entry.get(), seed_val,
             str(nf_obj_var.get()), str(f_obj_var.get()), str(struct_var.get()), str(enemy_var.get()),
             str(croctus_var.get()), str(clanker_rings_var.get()), str(ancient_ones_var.get()),
-            str(jinxy_heads_var.get()))#, str(note_doors_var.get()))
+            str(jinxy_heads_var.get()), str(allow_abnormalities_var.get()),
+            str(note_door_var.get()), int(note_door_lower_var.get()), int(note_door_upper_var.get()),
+            str(puzzle_var.get()), int(puzzle_lower_var.get()), int(puzzle_upper_var.get()),
+            )
 
 #####################
 ### Decompression ###
@@ -1268,12 +2628,12 @@ def get_address_endpoints(file_bytes, addr):
     return (address1, address2)
 
 def verify_original_header(file_bytes, address):
-    """Verifies the start of an address by looking for 11 72 00 00"""
+    """Verifies the start of an address by looking for 11 72"""
     logger.info("Verify Original Header")
-    if((file_bytes[address] != 17) or (file_bytes[address+1] != 114) or (file_bytes[address+2] != 0) or (file_bytes[address+3] != 0)):
-        logger.error("Does Not Start With 11 72 00 00")
+    if((file_bytes[address] != 17) or (file_bytes[address+1] != 114)):# or (file_bytes[address+2] != 0) or (file_bytes[address+3] != 0)):
+        logger.error("Does Not Start With 11 72")
         error_window("Error During Randomization")
-        exit(0)
+        raise SystemExit # exit(0)
 
 def decompress_file(file_dir, compressed_file):
     """Decompresses the hex file that was extracted from the main ROM file"""
@@ -1321,6 +2681,7 @@ def decompressor(file_dir, rom_file):
 ###################
 
 def verify_pointers(seed_val, file_dir):
+    '''Checks that all setup files point to a setup starting with 11 72 and is on an 8n byte'''
     logger.info("Verifying Pointer")
     with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
         mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
@@ -1340,11 +2701,11 @@ def verify_pointers(seed_val, file_dir):
                 if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
                     logger.error("Invalid Header At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
                     error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                    exit(0)
+                    raise SystemExit # exit(0)
                 elif(((header_start % 8) != 0)):
                     logger.error("Invalid Index Start At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
                     error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                    exit(0)
+                    raise SystemExit # exit(0)
         logger.debug("Misc Pointer List")
         for file_pointer in other_setup_pointer_list:
             pointer_start_1 = str(hex(mm_rand_rom[int(file_pointer, 16)]))[2:]
@@ -1360,11 +2721,11 @@ def verify_pointers(seed_val, file_dir):
             if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
                 logger.error("Invalid Header At Decimal Index: " + str(file_pointer))
                 error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                exit(0)
+                raise SystemExit # exit(0)
             elif(((header_start % 8) != 0)):
                 logger.error("Invalid Index Start At Hex Index: " + str(file_pointer))
                 error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                exit(0)
+                raise SystemExit # exit(0)
 
 def compress_file(file_dir, decompressed_file):
     """Compresses the hex file that was extracted from the main ROM file"""
@@ -1373,7 +2734,7 @@ def compress_file(file_dir, decompressed_file):
 #     logger.debug(cmd)
     subprocess.Popen(cmd.split(),shell=True).communicate()
 
-def compressor(seed_val, file_dir, location_setup):
+def compressor(file_dir, location_setup):
     """Prepares the hex file that was extracted from the main ROM file for compression by providing the correct header and footer"""
     logger.info("Compressor")
     (addr, header, footer, lead, tail) = location_setup
@@ -1409,10 +2770,11 @@ def compressor(seed_val, file_dir, location_setup):
     return addr
 
 def remove_unknown_object(file_dir, index_hex_str):
-    '''PyDoc'''
-    #-12-11-10 -9 -8 -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14
-    # St Cm Voxel No SO X1 X2 Y1 Y2 Z1 Z2 S1 S2 O1 O2 .. .. .. .. Ro Si .. .. .. E1 E2
-    # 00 01 03 0A 01 0B FA 47 01 6E FB E8 19 0C 02 68 00 00 00 00 00 64 11 40 00 40 08
+    '''THIS FUNCTION IS NOT IN USE! Removes the object with the id 0268.'''
+    #-11-10 -9 -8 -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+    # Cm Voxel No SO X1 X2 Y1 Y2 Z1 Z2 S1 S2 O1 O2 .. .. .. .. Ro Si .. .. .. E1 E2 E3
+    # 01 03 0A 01 0B FA 47 01 6E FB E8 19 0C 02 68 00 00 00 00 00 64 11 40 00 40 08 00
+    unknown_object_count = 0
     with open(file_dir + tmp_folder + index_hex_str + "-Decompressed.bin", "r+b") as rand_decomp_file:
         still_searching = True
         start_index = 0
@@ -1422,18 +2784,22 @@ def remove_unknown_object(file_dir, index_hex_str):
             search_index = mm_rand_decomp.find(bytes.fromhex("190C0268"), start_index)
             if(search_index == -1):
                 still_searching = False
-            elif((mm_rand_decomp[search_index - 12] == 0) and (mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and
-                 (mm_rand_decomp[search_index - 9] == 10) and (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and 
-                 (mm_rand_decomp[search_index + 14] == 1)):
+#             elif((mm_rand_decomp[search_index - 12] == 0) and (mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and
+#                  (mm_rand_decomp[search_index - 9] == 10) and (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and 
+#                  (mm_rand_decomp[search_index + 14] == 1)):
+            elif((mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and (mm_rand_decomp[search_index - 9] == 10) and
+                 (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and (mm_rand_decomp[search_index + 14] == 1)):
                 mm_rand_decomp[search_index - 12] = 1
+                unknown_object_count += 1
                 for index in range(search_index, mm_rand_decomp_len-15):
                     mm_rand_decomp[index - 11] = mm_rand_decomp[index + 15]
                 mm_rand_decomp.size(mm_rand_decomp_len - 26)
             else:
                 start_index = search_index + 1
+    print("Unknown Object Count: " + str(unknown_object_count))
 
 def extract_unchanged_setup(seed_val, file_dir, addr):
-    '''PyDoc'''
+    '''For every setup file not randomized, pull it out of the ROM into a compressed file.'''
     file_bytes = get_file_bytes(file_dir + tmp_folder, "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64")
     (address1, address2) = get_address_endpoints(file_bytes, addr)
     with open(file_dir + tmp_folder + addr + "-Randomized_Compressed.bin", "w+b") as comp_file:
@@ -1444,12 +2810,12 @@ def extract_unchanged_setup(seed_val, file_dir, addr):
             comp_file.write(bytes.fromhex(hex_string))
 
 def skip_this_setup(mm_rand_rom, index_dec):
-    '''PyDoc'''
+    '''Move the next pointer to the current pointer's location, making the pointer size zero.'''
     for offset in range(4):
         mm_rand_rom[index_dec + offset + 8] = mm_rand_rom[index_dec + offset]
 
 def insert_file_into_rom(seed_val, file_dir):
-    '''PyDoc'''
+    '''Inserts a compressed file back into the ROM.'''
     setup_pointer_start = 38784
     setup_pointer_end = 40000
     # For every compressed file in numerical order,
@@ -1480,16 +2846,18 @@ def insert_file_into_rom(seed_val, file_dir):
                         mm_rand_rom[index_dec + 9] = int(address_end_hex[2:4], 16)
                         mm_rand_rom[index_dec + 10] = int(address_end_hex[4:6], 16)
                         mm_rand_rom[index_dec + 11] = int(address_end_hex[6:], 16)
-        # After The Last File Is Placed, Replace Bytes With AA Until Next Pointer Start
-#         pointer_start = ""
-#         for offset in range(4):
-#             pointer_start += leading_zeros(str(hex(mm_rand_rom[index_dec + offset]))[2:], 2)
-#         address_next_start = int("0x" + pointer_start, 16) + int("0x10CD0", 16)
-#         for index in range(address_end, address_next_start):
-#             mm_rand_rom[index] = 170
+    # After The Last File Is Placed, Replace Bytes With AA Until Next Pointer Start
+    pointer_start = ""
+    for offset in range(4):
+        pointer_start += leading_zeros(str(hex(mm_rand_rom[setup_pointer_end + 8 + offset]))[2:], 2)
+    address_next_start = int("0x" + pointer_start, 16) + int("0x10CD0", 16)
+    with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+        mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+        for index in range(address_start + len(setup_content), address_next_start):
+            mm_rand_rom[index] = 170
 
 def reinsert_setup_files(seed_val, file_dir):
-    '''PyDoc'''
+    '''The entire procedure for placing all of the randomized compressed setups back into the ROM file.'''
     # For every set up pointer, check if it's already a compressed file
     setup_pointer_start = 38784
     setup_pointer_end = 40000
@@ -1497,14 +2865,15 @@ def reinsert_setup_files(seed_val, file_dir):
     for index_dec in range(setup_pointer_start, setup_pointer_end+1, 8):
         index_hex_str = str(hex(index_dec))[2:]
         if((index_hex_str + "-Decompressed.bin") in file_list):
-            remove_unknown_object(file_dir, index_hex_str)
+            #remove_unknown_object(file_dir, index_hex_str)
+            pass
         else:
             extract_unchanged_setup(seed_val, file_dir, index_hex_str)
     # Compress every decompressed file
     logger.info("Compress Files")
     for location in setup_ids:
         for location_setup in setup_ids[location]:
-            compressor(seed_val, file_dir, location_setup)
+            compressor(file_dir, location_setup)
     insert_file_into_rom(seed_val, file_dir)
     verify_pointers(seed_val, file_dir)
 
@@ -1512,111 +2881,17 @@ def reinsert_setup_files(seed_val, file_dir):
 ### GET INDEX LIST ###
 ######################
 
-def get_jiggy_flags(mm, lead):
-    '''For Jiggy Flags specifically, grabs a list of flag indices from pre-determined list of Jiggies'''
-    flag_dict = []
-    for tail in ["00", "64"]:
-        for mid_val in jiggy_flag_list: # Middle Value
-            hex_bytes = leading_zeros(mid_val, 4)
-            hex_string = lead + hex_bytes + "0000000000" + tail
-            flag_index = mm.find(bytes.fromhex(hex_string))
-            if(flag_index != -1):
-                flag_dict.append(flag_index - 1)
-            else:
-                pass
-    return flag_dict
-
-def get_flags(mm, lead, tail, start_val, end_val):
-    '''Grabs a list of flags indices'''
-    flag_dict = []
-    for mid_val in range(start_val, end_val): # Middle Value
-        hex_bytes = str(hex(mid_val))[2:]
-        hex_bytes = leading_zeros(hex_bytes, 4)
-        hex_string = lead + hex_bytes + "0000000000" + tail
-        flag_index = mm.find(bytes.fromhex(hex_string))
-        if(flag_index != -1):
-            flag_dict.append(flag_index - 1)
-        else:
-#             logger.warning("Match Not Found For " + str(hex_string))
-            pass
-    return flag_dict
-
-def get_flag_index_list(mm):
-    '''Locates the flags by index in the decompressed file'''
-    logger.info("Getting Flag Index List")
-    jiggy_list = []
-    empty_honeycomb_list = []
-    mumbo_token_list = []
-    for lead in ['14', '94']:
-        logger.info("Jiggy Flags")
-        jiggy_list_part = get_jiggy_flags(mm, lead)
-        for item in jiggy_list_part:
-            jiggy_list.append(item)
-        logger.info("Empty Honeycomb Flags")
-        empty_honeycomb_list_part = get_flags(mm, lead, "64", 100, 122)
-        for item in empty_honeycomb_list_part:
-            empty_honeycomb_list.append(item)
-        logger.info("Mumbo Token Flags")
-        mumbo_token_list_part = get_flags(mm, lead, "64", 200, 315)
-        for item in mumbo_token_list_part:
-            mumbo_token_list.append(item)
-    return (jiggy_list, empty_honeycomb_list, mumbo_token_list)
-
-def skip_this_flagged_object(mm, index):
-    obj_id1 = mm[index + 2]
-    obj_id2 = mm[index + 3]
-    x_loc1 = mm[index - 8]
-    x_loc2 = mm[index - 7]
-    y_loc1 = mm[index - 6]
-    y_loc2 = mm[index - 5]
-    z_loc1 = mm[index - 4]
-    z_loc2 = mm[index - 3]
-    if((obj_id1 == 0) and (obj_id2 == 70)): # Jiggy
-        # Sandcastle
-        if((x_loc1 == 0) and (x_loc2 == 0) and # 0000
-           (y_loc1 == 1) and (y_loc2 == 94) and # 015E
-           (z_loc1 == 252) and (z_loc2 == 37)): # FC25
-            print("Skipping Sandcastle Jiggy")
-            return False
-        # Water Pyramid
-        elif((x_loc1 == 255) and (x_loc2 == 255) and # FFFF
-           (y_loc1 == 0) and (y_loc2 == 145) and # 0091
-           (z_loc1 == 255) and (z_loc2 == 233)): # FFE9
-            print("Skipping Water Pyramid Jiggy")
-            return False
-        # Tumblar
-        elif((x_loc1 == 0) and (x_loc2 == 48) and # 0030
-           (y_loc1 == 0) and (y_loc2 == 0) and # 0000
-           (z_loc1 == 255) and (z_loc2 == 198)): # FFC6
-            print("Skipping Tumblar Jiggy")
-            return False
-        # Kaboom
-        elif((x_loc1 == 1) and (x_loc2 == 120) and # 0178
-           (y_loc1 == 0) and (y_loc2 == 199) and # 00C7
-           (z_loc1 == 0) and (z_loc2 == 0)): # 0000
-            print("Skipping Kaboom Jiggy")
-        # Zubba Hive
-        elif((x_loc1 == 0) and (x_loc2 == 0) and # 0000
-           (y_loc1 == 0) and (y_loc2 == 0) and # 0000
-           (z_loc1 == 0) and (z_loc2 == 125)): # 007D
-            print("Skipping Zubba Hive Jiggy")
-            return False
-            return False
-    elif((obj_id1 == 0) and (obj_id2 == 45)): # Mumbo Token
-        # Water Pyramid
-        if((x_loc1 == 254) and (x_loc2 == 212) and # FED4
-           (y_loc1 == 5) and (y_loc2 == 159) and # 059F
-           (z_loc1 == 251) and (z_loc2 == 86)): # FB56
-            print("Skipping Water Pyramid Jiggy")
-            return False
-    elif((obj_id1 == 0) and (obj_id2 == 71)): # Empty Honeycomb
-        # Mad Monster Mansion Gold Feather Room
-        if((x_loc1 == 255) and (x_loc2 == 0) and # FFCD
-           (y_loc1 == 255) and (y_loc2 == 121) and # FF79
-           (z_loc1 == 0) and (z_loc2 == 52)): # 0034
-            print("Skipping Mad Monster Mansion Gold Feather Room Empty Honeycomb")
-            return False
-    return True
+def get_flagged_object_index_list(mm, flagged_object, start=0):
+    '''Locates the flagged objects by index in the decompressed file'''
+    logger.info("Get Flagged Object Index List")
+    object_index = mm.find(bytes.fromhex(flagged_object), start)
+    if(object_index == -1):
+        return []
+    else:
+        new_start = int(object_index) + 1
+        object_list = get_object_index_list(mm, flagged_object, start=new_start)
+    object_list.append(object_index)
+    return object_list
 
 def get_object_index_list(mm, object_id, start=0):
     '''Locates the flagged objects by index in the decompressed file'''
@@ -1627,11 +2902,11 @@ def get_object_index_list(mm, object_id, start=0):
     else:
         new_start = int(object_index) + 1
         object_list = get_object_index_list(mm, object_id, start=new_start)
-    if(skip_this_flagged_object(mm, object_index)):
-        object_list.append(object_index)
+    object_list.append(object_index)
     return object_list
 
 def adjust_ttc_oob_egg(mm, index):
+    '''Moves the out of bounds egg in TTC slightly higher'''
     obj_id1 = mm[index]
     obj_id2 = mm[index + 1]
     if((obj_id1 == 22) and (obj_id2 == 80)):
@@ -1663,6 +2938,7 @@ def get_struct_index_list(mm, struct_id, start=0):
     return struct_list
 
 def skip_ttc_grublin(mm, index):
+    '''Skips randomizing the Grublin at the top of TTC'''
     obj_id1 = mm[index]
     obj_id2 = mm[index + 1]
     if((obj_id1 == 0) and (obj_id2 == 6)):
@@ -1683,7 +2959,10 @@ def skip_ttc_grublin(mm, index):
 def get_enemy_index_list(mm, enemy_id, start=0):
     '''Locates the enemies by index in the decompressed file'''
     logger.info("Get Enemy Index List")
-    enemy_index = mm.find(bytes.fromhex("190C" + enemy_id), start)
+    if(enemy_id == "034D"):
+        enemy_index = mm.find(bytes.fromhex("078C" + enemy_id), start)
+    else:
+        enemy_index = mm.find(bytes.fromhex("190C" + enemy_id), start)
     if(enemy_index == -1):
         return []
     else:
@@ -1694,6 +2973,7 @@ def get_enemy_index_list(mm, enemy_id, start=0):
     return enemy_list
 
 def skip_non_ring(mm, index):
+    '''Skips the first clanker's cavern ring in order to not be confused with another object'''
     # CC Non-Ring
     if(mm[index - 1] == 119):
         print("Skipping Non-Ring")
@@ -1717,71 +2997,61 @@ def get_sequence_index_list(mm, seq_search, start=0):
 ### OBTAIN LIST INFO ###
 ########################
 
-def obtain_flag_list_info(mm, flag_index_list):
-    '''Gathers all of the information about the flag into a list'''
-    logger.info("Obtain Flag List Info")
-    #X-Loc  Y-Loc  Z-Loc  script   ID     --   --   --   --   rot.  size  --    --
-    #0E48   0153   1998   190C     0049   00   00   00   00   00    64    0C    10
-    flag_location_list = []
-    for flag_index in flag_index_list:
-        flag_dict = {}
-        flag_dict["Index"] = flag_index
-        hex_x1 = leading_zeros(str(hex(mm[flag_index - 6]))[2:].upper(), 2)
-        hex_x2 = leading_zeros(str(hex(mm[flag_index - 5]))[2:].upper(), 2)
-        flag_dict["Hex_X"] = hex_x1 + hex_x2
-        hex_y1 = leading_zeros(str(hex(mm[flag_index - 4]))[2:].upper(), 2)
-        hex_y2 = leading_zeros(str(hex(mm[flag_index - 3]))[2:].upper(), 2)
-        flag_dict["Hex_Y"] = hex_y1 + hex_y2
-        hex_z1 = leading_zeros(str(hex(mm[flag_index - 2]))[2:].upper(), 2)
-        hex_z2 = leading_zeros(str(hex(mm[flag_index - 1]))[2:].upper(), 2)
-        flag_dict["Hex_Z"] = hex_z1 + hex_z2
-        flag_dict["Script1"] = mm[flag_index]
-        flag_dict["Script2"] = mm[flag_index + 1]
-        flag_dict["Obj_ID1"] = mm[flag_index + 2]
-        flag_dict["Obj_ID2"] = mm[flag_index + 3]
-        flag_dict["IDK1"] = mm[flag_index + 4]
-        flag_dict["IDK2"] = mm[flag_index + 5]
-        flag_dict["IDK3"] = mm[flag_index + 6]
-        flag_dict["IDK4"] = mm[flag_index + 7]
-        flag_dict["Rotation"] = mm[flag_index + 8]
-        flag_dict["Size"] = mm[flag_index + 9]
-        flag_dict["IDK5"] = mm[flag_index + 10]
-        flag_dict["IDK6"] = mm[flag_index + 11]
-        flag_location_list.append(flag_dict)
-    return flag_location_list
+def obtain_flagged_object_info(mm, obj_index):
+    '''Gathers all of the information about the flagged object into a dict'''
+    obj_dict = {}
+    obj_dict["Index"] = obj_index
+    hex_x1 = leading_zeros(str(hex(mm[obj_index]))[2:].upper(), 2)
+    hex_x2 = leading_zeros(str(hex(mm[obj_index + 1]))[2:].upper(), 2)
+    obj_dict["Hex_X"] = hex_x1 + hex_x2
+    hex_y1 = leading_zeros(str(hex(mm[obj_index + 2]))[2:].upper(), 2)
+    hex_y2 = leading_zeros(str(hex(mm[obj_index + 3]))[2:].upper(), 2)
+    obj_dict["Hex_Y"] = hex_y1 + hex_y2
+    hex_z1 = leading_zeros(str(hex(mm[obj_index + 4]))[2:].upper(), 2)
+    hex_z2 = leading_zeros(str(hex(mm[obj_index + 5]))[2:].upper(), 2)
+    obj_dict["Hex_Z"] = hex_z1 + hex_z2
+    obj_dict["Script1"] = mm[obj_index + 6]
+    obj_dict["Script2"] = mm[obj_index + 7]
+    obj_dict["Obj_ID1"] = mm[obj_index + 8]
+    obj_dict["Obj_ID2"] = mm[obj_index + 9]
+    obj_dict["IDK1"] = mm[obj_index + 10]
+    obj_dict["IDK2"] = mm[obj_index + 11]
+    obj_dict["IDK3"] = mm[obj_index + 12]
+    obj_dict["IDK4"] = mm[obj_index + 13]
+    obj_dict["Rotation"] = mm[obj_index + 14]
+    obj_dict["Size"] = mm[obj_index + 15]
+    obj_dict["IDK5"] = mm[obj_index + 16]
+    obj_dict["IDK6"] = mm[obj_index + 17]
+    obj_dict["IDK7"] = mm[obj_index + 18]
+    return obj_dict
 
-def obtain_flagged_object_list_info(mm, obj_index_list):
-    '''Gathers all of the information about the flagged object into a list'''
-    logger.info("Obtain Flagged Object List Info")
-    #X-Loc  Y-Loc  Z-Loc  script   ID     --   --   --   --   rot.  size  --    --
-    #0E48   0153   1998   190C     0049   00   00   00   00   00    64    0C    10
-    object_location_list = []
-    for object_index in obj_index_list:
-        object_dict = {}
-        object_dict["Index"] = object_index
-        hex_x1 = leading_zeros(str(hex(mm[object_index - 6]))[2:].upper(), 2)
-        hex_x2 = leading_zeros(str(hex(mm[object_index - 5]))[2:].upper(), 2)
-        object_dict["Hex_X"] = hex_x1 + hex_x2
-        hex_y1 = leading_zeros(str(hex(mm[object_index - 4]))[2:].upper(), 2)
-        hex_y2 = leading_zeros(str(hex(mm[object_index - 3]))[2:].upper(), 2)
-        object_dict["Hex_Y"] = hex_y1 + hex_y2
-        hex_z1 = leading_zeros(str(hex(mm[object_index - 2]))[2:].upper(), 2)
-        hex_z2 = leading_zeros(str(hex(mm[object_index - 1]))[2:].upper(), 2)
-        object_dict["Hex_Z"] = hex_z1 + hex_z2
-        object_dict["Script1"] = mm[object_index]
-        object_dict["Script2"] = mm[object_index + 1]
-        object_dict["Obj_ID1"] = mm[object_index + 2]
-        object_dict["Obj_ID2"] = mm[object_index + 3]
-        object_dict["IDK1"] = mm[object_index + 4]
-        object_dict["IDK2"] = mm[object_index + 5]
-        object_dict["IDK3"] = mm[object_index + 6]
-        object_dict["IDK4"] = mm[object_index + 7]
-#         object_dict["Rotation"] = mm[object_index + 8]
-#         object_dict["Size"] = mm[object_index + 9]
-        object_dict["IDK5"] = mm[object_index + 10]
-        object_dict["IDK6"] = mm[object_index + 11]
-        object_location_list.append(object_dict)
-    return object_location_list
+def obtain_flag_info(mm, flag_index):
+    '''Gathers all of the information about the flag into a dict'''
+    flag_dict = {}
+    flag_dict["Index"] = flag_index
+    hex_x1 = leading_zeros(str(hex(mm[flag_index]))[2:].upper(), 2)
+    hex_x2 = leading_zeros(str(hex(mm[flag_index + 1]))[2:].upper(), 2)
+    flag_dict["Hex_X"] = hex_x1 + hex_x2
+    hex_y1 = leading_zeros(str(hex(mm[flag_index + 2]))[2:].upper(), 2)
+    hex_y2 = leading_zeros(str(hex(mm[flag_index + 3]))[2:].upper(), 2)
+    flag_dict["Hex_Y"] = hex_y1 + hex_y2
+    hex_z1 = leading_zeros(str(hex(mm[flag_index + 4]))[2:].upper(), 2)
+    hex_z2 = leading_zeros(str(hex(mm[flag_index + 5]))[2:].upper(), 2)
+    flag_dict["Hex_Z"] = hex_z1 + hex_z2
+    flag_dict["Script1"] = mm[flag_index + 6]
+    flag_dict["Script2"] = mm[flag_index + 7]
+    flag_dict["Obj_ID1"] = mm[flag_index + 8]
+    flag_dict["Obj_ID2"] = mm[flag_index + 9]
+    flag_dict["IDK1"] = mm[flag_index + 10]
+    flag_dict["IDK2"] = mm[flag_index + 11]
+    flag_dict["IDK3"] = mm[flag_index + 12]
+    flag_dict["IDK4"] = mm[flag_index + 13]
+    flag_dict["Rotation"] = mm[flag_index + 14]
+    flag_dict["Size"] = mm[flag_index + 15]
+    flag_dict["IDK5"] = mm[flag_index + 16]
+    flag_dict["IDK6"] = mm[flag_index + 17]
+    flag_dict["IDK7"] = mm[flag_index + 18]
+    return flag_dict
 
 def obtain_no_flag_object_list_info(mm, no_flag_obj_index_list):
     '''Gathers all of the information about the non-flag object into a list'''
@@ -1904,35 +3174,56 @@ def enemy_get_lists(mm, location):
         location_dict[enemy_type] = location_dict[enemy_type] + obtain_enemy_list_info(mm, index_dict[enemy_type])
     return (index_dict, location_dict)
 
+def get_flagged_objects_dict(mm, flagged_object_dict, location, allow_abnormalities_option=None):
+    '''Searches the location for every flagged object with their flag and returns their index and information'''
+    flagged_object_index_list = []
+    flagged_object_location_list = []
+    for obj_id in flagged_object_dict[location]:
+        obj_search = flagged_object_dict[location][obj_id]["Object"]
+        flag_search = flagged_object_dict[location][obj_id]["Flag"]
+        obj_index = mm.find(bytes.fromhex(obj_search))
+        flag_index = mm.find(bytes.fromhex(flag_search))
+        if((obj_index != -1) and (flag_index != -1)):
+            flagged_object_index_list.append((obj_index, flag_index))
+            flagged_object_location_list.append((obtain_flagged_object_info(mm, obj_index), obtain_flag_info(mm, flag_index)))
+    if(allow_abnormalities_option != None):
+        for obj_id in abnormal_flagged_object_dict[location]:
+            obj_search = abnormal_flagged_object_dict[location][obj_id]["Object"]
+            flag_search = abnormal_flagged_object_dict[location][obj_id]["Flag"]
+            obj_index = mm.find(bytes.fromhex(obj_search))
+            flag_index = mm.find(bytes.fromhex(flag_search))
+            if((obj_index != -1) and (flag_index != -1)):
+                flagged_object_index_list.append((obj_index, flag_index))
+                flagged_object_location_list.append((obtain_flagged_object_info(mm, obj_index), obtain_flag_info(mm, flag_index)))
+    return (flagged_object_index_list, flagged_object_location_list)
+
 def generic_get_lists(mm, id_list):
     '''For each type of id list, runs the functions that grabs the list of objects and locations'''
     logger.info("Generic Get Lists")
     index_list = []
     for obj_id in id_list:
-        if((id_list == obj_no_flag_id_list) or (id_list == obj_flagged_id_list)):
+        if((id_list == obj_no_flag_id_list) or (id_list == (obj_no_flag_id_list + abnormal_obj_no_flag_id_list))):
             object_list = get_object_index_list(mm, obj_id)
-        elif(id_list == collectable_struct_id_list):
+        elif((id_list == collectable_struct_id_list) or (id_list == (collectable_struct_id_list + abnormal_collectable_struct_id_list))):
             object_list = get_struct_index_list(mm, obj_id)
         elif((id_list == croctus_list) or (id_list == clanker_rings_list) or (id_list == ancient_ones_list) or (id_list == jinxy_head_list)):
             object_list = get_sequence_index_list(mm, obj_id)
         else:
             logger.error("Invalid ID List")
             error_window("Developer Error During Randomization")
-            exit(0)
+            raise SystemExit # exit(0)
         for item in object_list:
             index_list.append(item)
-    if(id_list == obj_no_flag_id_list):
+    if((id_list == obj_no_flag_id_list) or (id_list == (obj_no_flag_id_list + abnormal_obj_no_flag_id_list))):
         location_list = obtain_no_flag_object_list_info(mm, index_list)
-    elif(id_list == obj_flagged_id_list):
-        location_list = obtain_flagged_object_list_info(mm, index_list)
-    elif(id_list == collectable_struct_id_list):
+    elif((id_list == collectable_struct_id_list) or (id_list == (collectable_struct_id_list + abnormal_collectable_struct_id_list))):
         location_list = obtain_struct_list_info(mm, index_list)
     elif((id_list == croctus_list) or (id_list == clanker_rings_list) or (id_list == ancient_ones_list) or (id_list == jinxy_head_list)):
         location_list = obtain_sequence_object_list_info(mm, index_list)
     else:
         logger.error("Invalid ID List")
         error_window("Developer Error During Randomization")
-        exit(0)
+        raise SystemExit # exit(0)
     return (index_list, location_list)
 
 def negative_hex_value(pos_dec_value):
@@ -1940,61 +3231,7 @@ def negative_hex_value(pos_dec_value):
     neg_dec_value = pos_dec_value - 65536
     return neg_dec_value
 
-def find_closest_flag(target_hex_x, target_hex_y, target_hex_z, compiled_list):
-    '''For every flagged object, tries to find the closest flag'''
-    score_dict = {}
-    suspect_limit = 32768 # hex numbers turn negative as soon as you cross the midway point, which is 0x8000
-    target_dec_x = int(str(target_hex_x), 16)
-    if(target_dec_x > suspect_limit):
-        target_dec_x = negative_hex_value(target_dec_x)
-    target_dec_y = int(str(target_hex_y), 16)
-    if(target_dec_y > suspect_limit):
-        target_dec_y = negative_hex_value(target_dec_y)
-    target_dec_z = int(str(target_hex_z), 16)
-    if(target_dec_z > suspect_limit):
-        target_dec_z = negative_hex_value(target_dec_z)
-    for item_dict in compiled_list:
-        suspect_index = item_dict["Index"]
-        suspect_hex_x = item_dict["Hex_X"]
-        suspect_dec_x = int(str(suspect_hex_x), 16)
-        if(suspect_dec_x > suspect_limit):
-            suspect_dec_x = negative_hex_value(suspect_dec_x)
-        suspect_hex_y = item_dict["Hex_Y"]
-        suspect_dec_y = int(str(suspect_hex_y), 16)
-        if(suspect_dec_y > suspect_limit):
-            suspect_dec_y = negative_hex_value(suspect_dec_y)
-        suspect_hex_z = item_dict["Hex_Z"]
-        suspect_dec_z = int(str(suspect_hex_z), 16)
-        if(suspect_dec_z > suspect_limit):
-            suspect_dec_z = negative_hex_value(suspect_dec_z)
-        x_delta = target_dec_x - suspect_dec_x
-        y_delta = target_dec_y - suspect_dec_y
-        z_delta = target_dec_z - suspect_dec_z
-        score = abs(x_delta) + abs(y_delta) + abs(z_delta)
-        score_dict[score] = suspect_index
-    best_score = min(score_dict.keys())
-    return score_dict[best_score]
-
-def match_obj_and_flag(flagged_object_location_list, jiggy_flag_location_list, empty_honeycomb_flag_location_list, mumbo_token_flag_location_list):
-    '''Main function for matching flagged objects with their flag'''
-    logger.info("Match Object And Flag")
-    compiled_list = []
-    closest_flag_dict = {}
-    for item_dict in jiggy_flag_location_list:
-        compiled_list.append(item_dict)
-    for item_dict in empty_honeycomb_flag_location_list:
-        compiled_list.append(item_dict)
-    for item_dict in mumbo_token_flag_location_list:
-        compiled_list.append(item_dict)
-    for flagged_object_dict in flagged_object_location_list:
-        target_hex_x = flagged_object_dict["Hex_X"]
-        target_hex_y = flagged_object_dict["Hex_Y"]
-        target_hex_z = flagged_object_dict["Hex_Z"]
-        closet_flag_index = find_closest_flag(target_hex_x, target_hex_y, target_hex_z, compiled_list)
-        closest_flag_dict[flagged_object_dict["Index"]] = closet_flag_index
-    return closest_flag_dict
-
-def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option):
+def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option):
     '''For every location, grabs all of the non-flags, flagged, struct, and enemy indices and information, randomizes the lists, and assigns the new values'''
     logger.info("Get Index Main")
 #     croctus_option = "2"
@@ -2004,7 +3241,6 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
     for location in address_dict:
         logger.debug("Location: " + str(location))
         address_index_dict = {}
-        flagged_obj_index_dict = {}
         address_flagged_object_location_list = []
         address_no_flag_object_location_list = []
         address_struct_location_list = []
@@ -2015,13 +3251,9 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         address_clanker_rings_location_list = []
         address_ancient_ones_location_list = []
         address_jinxy_head_location_list = []
-        location_jiggy_dict = {}
-        location_empty_honeycomb_dict = {}
-        location_mumbo_token_dict = {}
         for address in address_dict[location]:
             logger.debug("Address: " + str(address))
             address_index_dict[address] = {}
-            flagged_obj_index_dict[address] = {}
             address_index_dict[address]["Grounded_Enemies"] = []
             address_index_dict[address]["Flying_Enemies"] = []
             address_index_dict[address]["Wall_Enemies"] = []
@@ -2029,33 +3261,32 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             # Flagged Objects
             if(flagged_option != "None"):
                 logger.info("Get Flagged Objects Index")
-                (flagged_obj_index_list, flagged_object_location_list) = generic_get_lists(mm, obj_flagged_id_list)
+                if(allow_abnormalities_option == "0"):
+                    (flagged_object_index_list, flagged_object_location_list) = get_flagged_objects_dict(mm, flagged_object_dict, location)
+                else:
+                    (flagged_object_index_list, flagged_object_location_list) = get_flagged_objects_dict(mm, flagged_object_dict, location, allow_abnormalities_option=abnormal_flagged_object_dict)
                 for item in flagged_object_location_list:
                     address_flagged_object_location_list.append(item)
-                address_index_dict[address]["Flagged_Objects"] = flagged_obj_index_list
-                logger.info("Get Flag Indices")
-                (jiggy_index_list, empty_honeycomb_index_list, mumbo_token_index_list) = get_flag_index_list(mm)
-                jiggy_flag_location_list = obtain_flag_list_info(mm, jiggy_index_list)
-                empty_honeycomb_flag_location_list = obtain_flag_list_info(mm, empty_honeycomb_index_list)
-                mumbo_token_flag_location_list = obtain_flag_list_info(mm, mumbo_token_index_list)
-                flagged_obj_index_dict[address]["Closest_Flag"] = match_obj_and_flag(flagged_object_location_list, jiggy_flag_location_list, empty_honeycomb_flag_location_list, mumbo_token_flag_location_list)
-                for item in jiggy_flag_location_list:
-                    location_jiggy_dict[(address, item["Index"])] = item
-                for item in empty_honeycomb_flag_location_list:
-                    location_empty_honeycomb_dict[(address, item["Index"])] = item
-                for item in mumbo_token_flag_location_list:
-                    location_mumbo_token_dict[(address, item["Index"])] = item
+                address_index_dict[address]["Flagged_Objects"] = flagged_object_index_list
             # No Flag Objects
             if(non_flag_option != "None"):
                 logger.info("Get Non-Flag Objects Index")
-                (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, obj_no_flag_id_list)
+                if(allow_abnormalities_option == "0"):
+                    (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, obj_no_flag_id_list)
+                else:
+                    new_obj_no_flag_id_list = obj_no_flag_id_list + abnormal_obj_no_flag_id_list
+                    (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, new_obj_no_flag_id_list)
                 for item in no_flag_object_location_list:
                     address_no_flag_object_location_list.append(item)
                 address_index_dict[address]["No_Flag_Objects"] = no_flag_obj_index_list
             # Structs
             if(struct_option != "None"):
                 logger.info("Get Structs Index")
-                (struct_index_list, struct_location_list) = generic_get_lists(mm, collectable_struct_id_list)
+                if(allow_abnormalities_option == "0"):
+                    (struct_index_list, struct_location_list) = generic_get_lists(mm, collectable_struct_id_list)
+                else:
+                    new_struct_id_list = collectable_struct_id_list + abnormal_collectable_struct_id_list
+                    (struct_index_list, struct_location_list) = generic_get_lists(mm, new_struct_id_list)
                 for item in struct_location_list:
                     address_struct_location_list.append(item)
                 address_index_dict[address]["Structs"] = struct_index_list
@@ -2128,16 +3359,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             if(flagged_option == "None"):
                 logger.info("Flagged Objects Randomization Off")
             elif(flagged_option == "Shuffle"):
-                (address_flagged_object_location_list,
-                 location_jiggy_dict,
-                 location_empty_honeycomb_dict,
-                 location_mumbo_token_dict) = move_flagged_objects(mm,
-                                                                   address_index_dict[address]["Flagged_Objects"],
-                                                                   address_flagged_object_location_list,
-                                                                   flagged_obj_index_dict[address]["Closest_Flag"],
-                                                                   location_jiggy_dict,
-                                                                   location_empty_honeycomb_dict,
-                                                                   location_mumbo_token_dict)
+                address_flagged_object_location_list = move_flagged_objects(mm, address_index_dict[address]["Flagged_Objects"], address_flagged_object_location_list)
             # No Flag Objects
             if(non_flag_option == "None"):
                 logger.info("Non-Flag Objects Randomization Off")
@@ -2160,11 +3382,11 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
             elif(enemy_option == "Randomize"):
                 # Grounded Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address)
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address, allow_abnormalities_option)
                 # Flying Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address)
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address, allow_abnormalities_option)
                 # Wall Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address)
+                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address, allow_abnormalities_option)
             # Croctus
             if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
                 address_croctus_location_list = move_no_flag_objects(mm, address_index_dict[address]["Croctus"], address_croctus_location_list)
@@ -2189,49 +3411,38 @@ def randomize_list(seed_val, original_list):
     random.shuffle(original_list)
     return original_list
 
-def move_flagged_objects(mm, obj_index_list, object_location_list, flag_indices_dict, jiggy_dict, empty_honeycomb_dict, mumbo_token_dict):
+def move_flagged_objects(mm, obj_index_list, object_location_list):
     '''For each object, assign it a new script and object id based on randomized list'''
     logger.info("Move Flagged Objects")
-    for object_index in obj_index_list:
-        mm[object_index] = object_location_list[0]["Script1"]
-        mm[object_index + 1] = object_location_list[0]["Script2"]
-        mm[object_index + 2] = object_location_list[0]["Obj_ID1"]
-        mm[object_index + 3] = object_location_list[0]["Obj_ID2"]
-        mm[object_index + 4] = object_location_list[0]["IDK1"]
-        mm[object_index + 5] = object_location_list[0]["IDK2"]
-        mm[object_index + 6] = object_location_list[0]["IDK3"]
-        mm[object_index + 7] = object_location_list[0]["IDK4"]
-#         mm[object_index + 8] = object_location_list[0]["Rotation"]
-#         mm[object_index + 9] = object_location_list[0]["Size"]
-        mm[object_index + 10] = object_location_list[0]["IDK5"]
-        mm[object_index + 11] = object_location_list[0]["IDK6"]
-        closest_index = flag_indices_dict[object_index]
-        if((object_location_list[0]["Obj_ID1"] == 0) and (object_location_list[0]["Obj_ID2"] == 45)): # Mumbo Token
-            use_this_flag_key = list(mumbo_token_dict.keys())[0]
-            use_this_flag_value = mumbo_token_dict[use_this_flag_key]
-            mumbo_token_dict.pop(use_this_flag_key, None)
-        elif((object_location_list[0]["Obj_ID1"] == 0) and (object_location_list[0]["Obj_ID2"] == 71)): # Empty Honeycomb
-            use_this_flag_key = list(empty_honeycomb_dict.keys())[0]
-            use_this_flag_value = empty_honeycomb_dict[use_this_flag_key]
-            empty_honeycomb_dict.pop(use_this_flag_key, None)
-        elif((object_location_list[0]["Obj_ID1"] == 0) and (object_location_list[0]["Obj_ID2"] == 70)): # Jiggy
-            use_this_flag_key = list(jiggy_dict.keys())[0]
-            use_this_flag_value = jiggy_dict[use_this_flag_key]
-            jiggy_dict.pop(use_this_flag_key, None)
-        mm[closest_index] = use_this_flag_value["Script1"]
-        mm[closest_index + 1] = use_this_flag_value["Script2"]
-        mm[closest_index + 2] = use_this_flag_value["Obj_ID1"]
-        mm[closest_index + 3] = use_this_flag_value["Obj_ID2"]
-        mm[closest_index + 4] = use_this_flag_value["IDK1"]
-        mm[closest_index + 5] = use_this_flag_value["IDK2"]
-        mm[closest_index + 6] = use_this_flag_value["IDK3"]
-        mm[closest_index + 7] = use_this_flag_value["IDK4"]
-#         mm[closest_index + 8] = use_this_flag_value["Rotation"]
-#         mm[closest_index + 9] = use_this_flag_value["Size"]
-#         mm[closest_index + 10] = use_this_flag_value["IDK5"]
-#         mm[closest_index + 11] = use_this_flag_value["IDK6"]
+    for (object_index, flag_index) in obj_index_list:
+        mm[object_index + 6] = object_location_list[0][0]["Script1"]
+        mm[object_index + 7] = object_location_list[0][0]["Script2"]
+        mm[object_index + 8] = object_location_list[0][0]["Obj_ID1"]
+        mm[object_index + 9] = object_location_list[0][0]["Obj_ID2"]
+        mm[object_index + 10] = object_location_list[0][0]["IDK1"]
+        mm[object_index + 11] = object_location_list[0][0]["IDK2"]
+        mm[object_index + 12] = object_location_list[0][0]["IDK3"]
+        mm[object_index + 13] = object_location_list[0][0]["IDK4"]
+        mm[object_index + 14] = object_location_list[0][0]["Rotation"]
+        mm[object_index + 15] = object_location_list[0][0]["Size"]
+#         mm[object_index + 16] = object_location_list[0][0]["IDK5"]
+#         mm[object_index + 17] = object_location_list[0][0]["IDK6"]
+#         mm[object_index + 18] = object_location_list[0][0]["IDK7"]
+        mm[flag_index + 6] = object_location_list[0][1]["Script1"]
+        mm[flag_index + 7] = object_location_list[0][1]["Script2"]
+        mm[flag_index + 8] = object_location_list[0][1]["Obj_ID1"]
+        mm[flag_index + 9] = object_location_list[0][1]["Obj_ID2"]
+        mm[flag_index + 10] = object_location_list[0][1]["IDK1"]
+        mm[flag_index + 11] = object_location_list[0][1]["IDK2"]
+        mm[flag_index + 12] = object_location_list[0][1]["IDK3"]
+        mm[flag_index + 13] = object_location_list[0][1]["IDK4"]
+        mm[flag_index + 14] = object_location_list[0][1]["Rotation"]
+        mm[flag_index + 15] = object_location_list[0][1]["Size"]
+#         mm[flag_index + 16] = object_location_list[0][1]["IDK5"]
+#         mm[flag_index + 17] = object_location_list[0][1]["IDK6"]
+#         mm[flag_index + 18] = object_location_list[0][1]["IDK7"]
         object_location_list.pop(0)
-    return (object_location_list, jiggy_dict, empty_honeycomb_dict, mumbo_token_dict)
+    return object_location_list
 
 def move_no_flag_objects(mm, obj_index_list, object_location_list):
     '''For each object, assign it a new script and object id based on randomized list'''
@@ -2269,64 +3480,299 @@ def move_local_enemies(mm, enemy_index_list, enemy_location_list):
         enemy_location_list.pop(0)
     return enemy_location_list
 
-def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_type, location, address):
+def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_type, location, address, abnormal_option="0"):
     '''For each enemy, randomly assign it a new script and object id within the id list'''
     logger.info("Move Completely Randomized Enemies")
     if(enemy_type in enemy_id_dict[location]):
         enemy_id_list = enemy_id_dict["Global"][enemy_type] + enemy_id_dict[location][enemy_type]
     else:
         enemy_id_list = enemy_id_dict["Global"][enemy_type]
+    if(abnormal_option == "1"):
+        if(enemy_type in abnormal_enemy_id_list["Global"]):
+            enemy_id_list = enemy_id_list + abnormal_enemy_id_list["Global"][enemy_type]
+            if(location in abnormal_enemy_id_list):
+                if(enemy_type in abnormal_enemy_id_list[location]):
+                    enemy_id_list = enemy_id_list + abnormal_enemy_id_list[location][enemy_type]
     seed_count = 0
     for enemy_index in enemy_index_list:
         random.seed(a=(seed_val+seed_count+int(address, 16)))
         enemy_obj_id = random.choice(enemy_id_list)
         mm[enemy_index + 2] = int(enemy_obj_id[:2], 16)
         mm[enemy_index + 3] = int(enemy_obj_id[2:], 16)
+        if(enemy_obj_id == "0289"):
+            rot_val = mm[enemy_index + 6]
+            if(rot_val >= 45):
+                mm[enemy_index + 6] = rot_val - 45
+            else:
+                mm[enemy_index + 6] = rot_val + 135
         seed_count += 1
 
-############################
+##########################
 ### UNLOCKABLE OPTIONS ###
-############################
+##########################
 
-def modify_note_doors_requirements(mm, first="Skip", second="Skip", third="Skip", fourth="Skip",
-                                   fifth="Skip", sixth="Skip", seventh="Skip", eigth="Skip",
-                                   nineth="Skip", tenth="Skip", eleventh="Skip", twelevth="Skip"):
+def modify_bottles_unskipable_text(file_dir, new_bottles_text):
+    '''Modifies the Bottles text at the beginning of the game'''
+    # 5) Able to modify 5C9AF8/CF90.bin
+    # (PRESS A IF YOU WANT ME TO TEACH YOU SOME BASIC MOVES, OR PRESS B IF YOU THINK YOU'RE ALREADY GOOD ENOUGH!)
+    # "WELCOME TO BANJO KAZOOIE RANDOMIZER V. 0.7.6! THIS GENERATED SEED NEEDS 000 NOTES 000 JIGGIES" + also_add
+    # "YOU'LL NEED 000 NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
+    # "YOU'LL NEED 000 JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!"
+    # "WELCOME TO BANJO-KAZOOIE RANDOMIZER VERSION 0.7.6!!! HOPE YOU ENJOY THE GENERATED SEED!!" + also_add
+    
+    with open(file_dir + tmp_folder + "CF90-Decompressed.bin", "r+b") as decomp_file:
+        mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+        text_index_start = mm_decomp.find(bytes.fromhex("50524553532041"))
+        count = 0
+        for char in new_bottles_text:
+            mm_decomp[text_index_start + count] = ord(char)
+            count += 1
+        for index in range(text_index_start + len(new_bottles_text), len(mm_decomp)):
+            mm_decomp[index] = mm_decomp[index]
+
+def final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper):
+    '''Sets the requirements of every note door to zero except for the note door proceeding the final battle'''
     # Find location of note doors
     # 00 32 00 B4 01 04 01 5E 01 C2 02 80 02 FD 03 2A 03 3C 03 4E 03 60 03 72
     # Every 2 are a note door
     # Edit each note door with zeros
-    pass
+    # Max Notes Is 900
+    if((final_note_score_lower < 0) or (final_note_score_lower == "")):
+        final_note_score_lower = 0
+    if((final_note_score_upper > 900) or (final_note_score_upper == "")):
+        final_note_score_upper = 900
+    if(final_note_score_upper <= 0):
+        final_note_score = 0
+    elif(final_note_score_lower >= 900):
+        final_note_score = 900
+    else:
+        random.seed(a=seed_val)
+        final_note_score = random.randint(final_note_score_lower, final_note_score_upper)
+    with open(file_dir + tmp_folder + "FCF698-Decompressed.bin", "r+b") as decomp_file:
+        mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+        #                                                      0 1 2 3 4 5 6 7 8 91011121314151617181920212223
+        note_door_index_start = mm_decomp.find(bytes.fromhex("003200B40104015E01C2028002FD032A033C034E03600372"))
+        for offset in range(14):
+            mm_decomp[note_door_index_start + offset] = 0
+        for offset in range(16, 24):
+            mm_decomp[note_door_index_start + offset] = 0
+        final_note_score_hex = leading_zeros(str(hex(final_note_score))[2:], 4)
+        mm_decomp[note_door_index_start + 14] = int(final_note_score_hex[:2], 16)
+        mm_decomp[note_door_index_start + 15] = int(final_note_score_hex[2:], 16)
+    return final_note_score
 
-def modify_world_puzzle_requirements(mm_rom, mm="Skip", ttc="Skip", cc="Skip", bgs="Skip",
-                                    fp="Skip", gv="Skip", mmm="Skip", rbb="Skip", ccw="Skip"):
+def modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper):
+    '''Sets the requirements of every puzzle to zero except for the puzzle proceeding the final battle'''
     # Find location of world puzzles
     # 00 00 01 01 00 5D 02 02 00 5E 05 03 00 60 07 03 00 63 08 04 00 66 09 04 00 6A 0A 04 00 6E 0C 04 00 72 0F 04 00 76 19 05 00 7A 04 03
     # Every 4 is a note door, with the third value being the one you have to change
-    pass
+    if((final_puzzle_lower < 0) or (final_puzzle_lower == "")):
+        final_puzzle_lower = 0
+    if((final_puzzle_upper > 99) or (final_puzzle_upper == "")):
+        final_puzzle_upper = 99
+    if(final_puzzle_upper <= 0):
+        final_puzzle_score = 0
+    elif(final_puzzle_lower >= 99):
+        final_puzzle_score = 99
+    else:
+        random.seed(a=seed_val)
+        final_puzzle_score = random.randint(final_puzzle_lower, final_puzzle_upper)
+    with open(file_dir + tmp_folder + "FCF698-Decompressed.bin", "r+b") as decomp_file:
+        mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+        #                                                      0 1 2 3 4 5 6 7 8 910111213141516171819202122232425262728293031323334353637383940414243
+        note_door_index_start = mm_decomp.find(bytes.fromhex("00000101005D0202005E0503006007030063080400660904006A0A04006E0C0400720F0400761905007A0403"))
+        for offset in range(0, 37, 4):
+            mm_decomp[note_door_index_start + offset + 2] = 0
+        mm_decomp[note_door_index_start + 38] = final_puzzle_score
+        honeycomb_puzzle_count = 100 - final_puzzle_score
+        if(honeycomb_puzzle_count > 4):
+            honeycomb_puzzle_count = 4
+        mm_decomp[note_door_index_start + 42] = honeycomb_puzzle_count
+    return final_puzzle_score
 
-def modify_transformation_requirements(mm, termite="Skip", crocodile="Skip",
-                                       walrus="Skip", pumpkin="Skip", bee="Skip"):
-    pass
+def decompress_generic_individual_misc_file(file_dir, rom_file, file_type):
+    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
+    logger.info("Decompressor")
+    # Get File Bytes
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    (addr, header, footer, lead, tail) = misc_setup_ids[file_type][0]
+    if(addr.startswith("0x")):
+        # Get Address Endpoints
+        (address1, address2) = get_address_endpoints(file_bytes, addr)
+        verify_original_header(file_bytes, address1)
+        # Write Compressed File
+        file_pointer = addr[2:]
+    else:
+        # Get Address Endpoints
+        address1 = int(addr.split(",")[0], 16)
+        address2 = int(addr.split(",")[1], 16)
+        verify_original_header(file_bytes, address1)
+        file_pointer = addr.split(",")[0]
+    # Write Compressed File
+    with open(file_dir + tmp_folder + file_pointer + "-Compressed.bin", "w+b") as comp_file:
+        # Write Header
+        for hex_val in header:
+            comp_file.write(bytes.fromhex(hex_val))
+        # Grab Middle
+#         for index in range(address1+len(lead), address2-len(tail)):
+        for index in range(address1+6, address2-len(tail)):
+            hex_string = str(hex(file_bytes[index]))[2:]
+            if(len(hex_string) < 2):
+                hex_string = "0" + hex_string
+            comp_file.write(bytes.fromhex(hex_string))
+        # Write Footer
+        for hex_val in footer:
+            comp_file.write(bytes.fromhex(hex_val))
+    # Decompress File
+    decompress_file(file_dir, file_pointer)
 
-def modify_starting_moves(mm, jump="Skip", climb="Skip", swim="Skip", beak_barge="Skip",
-                          attacks="Skip", talon_trot="Skip", beak_buster="Skip", eggs="Skip",
-                          shock_spring_jump="Skip", flight_pad="Skip", wonderwing="Skip",
-                          wading_boots="Skip", beak_bomb="Skip", running_shoes="Skip"):
-    pass
+def compress_individual_misc_file(file_dir, rom_file, file_type):
+    """Prepares the hex file that was extracted from the main ROM file for compression by providing the correct header and footer"""
+    logger.info("Compressor")
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    (addr, header, footer, lead, tail) = misc_setup_ids[file_type][0]
+    if(addr.startswith("0x")):
+        # Get Address Endpoints
+        (address1, address2) = get_address_endpoints(file_bytes, addr)
+        verify_original_header(file_bytes, address1)
+        file_pointer = addr[2:]
+    else:
+        # Get Address Endpoints
+        address1 = int(addr.split(",")[0], 16)
+        file_pointer = addr.split(",")[0]
+    with open(file_dir + tmp_folder + file_pointer + "-Decompressed.bin", "r+b") as rand_comp_file:
+        mm_decomp = mmap.mmap(rand_comp_file.fileno(), 0)
+        decomp_len = str(hex(len(mm_decomp)))[2:]
+        decomp_len = leading_zeros(decomp_len, 8)
+    # Compress File
+    compress_file(file_dir, file_pointer)
+    # Get Length Of Original Compressed File
+    with open(file_dir + tmp_folder + file_pointer + "-New_Compressed.bin", "r+b") as comp_file:
+        mm_comp = mmap.mmap(comp_file.fileno(), 0)
+        comp_file_len = len(mm_comp)
+        header_end = ""
+        for header_val in header[-4:]:
+            header_end += header_val
+        header_end_index = mm_comp.find(bytes.fromhex(header_end)) + 4
+        with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "w+b") as new_comp_file:
+            new_comp_file.write(bytes.fromhex("1172"))
+            new_comp_file.write(bytes.fromhex(decomp_len))
+            new_comp_len = 6
+            for index in range(header_end_index, comp_file_len-len(footer)):
+                hex_string = str(hex(mm_comp[index]))[2:]
+                hex_string = leading_zeros(hex_string, 2)
+                new_comp_file.write(bytes.fromhex(hex_string))
+                new_comp_len += 1
+            if((new_comp_len % 8) != 0):
+                needs_padding = 8 - (new_comp_len % 8)
+                if(addr.startswith("0x")):
+                    for index in range(new_comp_len, new_comp_len + needs_padding):
+                        new_comp_file.write(bytes.fromhex("AA"))
+                else:
+                    for index in range(new_comp_len, new_comp_len + needs_padding):
+                        new_comp_file.write(bytes.fromhex("00"))
 
-def unlockable_options(file_dir, seed_val, note_door_option, world_puzzle_option):
-    # STARTS AT FCF698
-    # POTENTIALLY ENDS AT FD041F, WITH ZEROES AFTER FD0412
-    # HEADER: ["11", "72", "00", "00", "26", "A0"]
-    # Extract Note Door Section From ROM Into Compressed File
-    # Decompress Note Door Compressed File
-    if(note_door_option == "1"):
-        modify_note_doors_requirements()
-    if(world_puzzle_option == "1"):
-        modify_world_puzzle_requirements()
-    # Compress Edited Note Door Decompressed File
-    # Re-insert Compressed File Back Into ROM
-    pass
+def insert_misc_file_into_rom(seed_val, file_dir, rom_file, file_type):
+    '''For every misc file, insert it back into the ROM file'''
+    file_bytes = get_file_bytes(file_dir, rom_file)
+    # For every compressed file in numerical order,
+    with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+        mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+        (addr, header, footer, lead, tail) = misc_setup_ids[file_type][0]
+        if(addr.startswith("0x")):
+            # Get Address Endpoints
+            (address1, address2) = get_address_endpoints(file_bytes, addr)
+            verify_original_header(file_bytes, address1)
+            file_pointer = addr[2:]
+        else:
+            # Get Address Endpoints
+            address1 = int(addr.split(",")[0], 16)
+            address2 = int(addr.split(",")[1], 16)
+            file_pointer = addr.split(",")[0]
+        with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "r+b") as setup_bin:
+            setup_content = setup_bin.read()
+            # Place It Where The Pointer Start Points To
+            setup_count = 0
+            for index in range(address1, address1 + len(setup_content)):
+                mm_rand_rom[index] = setup_content[setup_count]
+                setup_count += 1
+    if(addr.startswith("0x")):
+        pointer_start = ""
+        for offset in range(4):
+            pointer_start += leading_zeros(str(hex(mm_rand_rom[int(file_pointer, 16) + 8 + offset]))[2:], 2)
+        with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+            for index in range(address1 + len(setup_content), address2):
+                mm_rand_rom[index] = 170
+    else:
+        with open(file_dir + tmp_folder + "Banjo-Kazooie_Randomized_Seed_" + str(seed_val) + ".z64", "r+b") as rand_rom:
+            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+            for index in range(address1 + len(setup_content), address2):
+                mm_rand_rom[index] = 0
+
+def unlockable_options(file_dir, rom_file, seed_val, seed_generated,
+                       note_door_option, final_note_score_lower, final_note_score_upper,
+                       puzzle_option, final_puzzle_lower, final_puzzle_upper,
+                       ):
+    '''Runs through the misc options'''
+    logger.info("Unlockable Options")
+    if(seed_generated):
+        rando_type = "GENERATED"
+    else:
+        rando_type = "SELECTED"
+    also_add = ""
+    decompress_generic_individual_misc_file(file_dir, rom_file, "Requirements")
+    decompress_generic_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
+    if((note_door_option == "1") and (puzzle_option == "1")):
+        if(seed_generated):
+            also_add = "!"
+        final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+        final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
+        if(seed_generated):
+            also_add = ""
+        else:
+            also_add = "!"
+        new_bottles_text = "WELCOME TO BANJO KAZOOIE RANDOMIZER V. " + BK_Rando_Version + "!" + " THIS " + rando_type + " SEED NEEDS "+leading_zeros(str(final_note_score), 3)+" NOTES "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES" + also_add
+    elif(note_door_option == "1"):
+        if(seed_generated):
+            also_add = ""
+        else:
+            also_add = "!"
+        final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+        new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
+#         new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER VER. " + BK_Rando_Version + "!" + also_add + " THIS " + rando_type + " SEED WILL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES!!"
+    elif(puzzle_option == "1"):
+        if(seed_generated):
+            also_add = ". "
+        else:
+            also_add = "ER. "
+        final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
+        new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!"
+#         new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER V" + also_add + BK_Rando_Version + "! THIS " + rando_type + " SEED WILL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES!"
+    else:
+        if(seed_generated):
+            also_add = "!"
+        else:
+            also_add = ""
+        new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER VERSION " + BK_Rando_Version+ "!!! HOPE YOU ENJOY THE " + rando_type + " SEED!!" + also_add
+    new_bottles_text_len = len(new_bottles_text)
+    for extra_space in range(new_bottles_text_len, 105):
+        new_bottles_text += " "
+    modify_bottles_unskipable_text(file_dir, new_bottles_text)
+    compress_individual_misc_file(file_dir, rom_file, "Requirements")
+    compress_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
+    insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Requirements")
+    insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Bottles Tutorial Confirmation")
+
+#############
+### WARPS ###
+#############
+
+# RANDOM WORLD ORDER:
+# 3 Moves Needed To Progress The Lair: Talon Trot, Beak Buster, Spring Jump Pad
+# MM has 3 bottles mounds to learn all 3 moves
+# MMM has the pumpkin transformation and it's next to the shed, so it'd have to remain in that area
+# The warps into the levels must match the bk world entry pads
 
 ################
 ### CRC TOOL ###
@@ -2368,7 +3814,7 @@ def done_window(seed_val, file_dir):
     window_size = '400x450'
     window = tk.Tk()
     # Title
-    window.winfo_toplevel().title("Banjo Kazooie Randomizer")
+    window.winfo_toplevel().title("Banjo-Kazooie Randomizer v"+BK_Rando_Version)
     # Displays Done
     done_label = tk.Label(window, text='The Randomizer Is Complete! Seed: ' + str(seed_val))
     done_label.config(anchor='center')
@@ -2404,25 +3850,32 @@ def main():
     """Goes through the steps of asking for parameters in a gui, setting up the folder, making a copy of the rom, decompressing the addresses, randomizing, compressing the files, and cleaning up"""
     logger.info("Main")
     ### Set Up ###
-    (rom_dir, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option) = parameter_gui()#, note_door_option) = parameter_gui()
+    (rom_dir, seed_val,
+     non_flag_option, flagged_option, struct_option, enemy_option,
+     croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option,
+     final_note_door_option, note_door_lower_limit, note_door_upper_limit,
+     final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit,
+     ) = parameter_gui()
     (file_dir, rom_file) = split_dir_rom(rom_dir)
     setup_tmp_folder(file_dir)
-    seed_val = seed(seed_val)
+    (seed_val, seed_generated) = seed(seed_val)
     make_copy_of_rom(seed_val, file_dir, rom_file)
     ### Decompress ROM ###
     address_dict = decompressor(file_dir, rom_file)
-    ### Misc Options ###
-    # something something fuck note doors
     ### Randomize Indexes ###
-    get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option)
-    ### Misc Options ###
-    # something something fuck note doors
+    get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option)
     ### Compress ROM ###
     reinsert_setup_files(seed_val, file_dir)
+    ### Misc Options ###
+    unlockable_options(file_dir, rom_file, seed_val, seed_generated,
+                       final_note_door_option, note_door_lower_limit, note_door_upper_limit,
+                       final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit,
+                       )
     ### CRC Tool ###
     run_crc_tool(seed_val, file_dir)
     ### Clean Up ###
-    remove_bin_files(file_dir)
+    if(not DEVELOPER_MODE):
+        remove_bin_files(file_dir)
     ### Done ###
     done_window(seed_val, file_dir)
 
