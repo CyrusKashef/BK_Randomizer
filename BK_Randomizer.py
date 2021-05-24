@@ -34,7 +34,7 @@ import json
 
 DEVELOPER_MODE = False
 # New Major Feature . New Minor Feature . Bug Fixes
-BK_Rando_Version = "0.7.7"
+BK_Rando_Version = "0.7.8"
 
 tmp_folder = "EPPIIISA/"
 
@@ -3716,45 +3716,18 @@ def unlockable_options(file_dir, rom_file, seed_val, seed_generated,
                        ):
     '''Runs through the misc options'''
     logger.info("Unlockable Options")
-    if(seed_generated):
-        rando_type = "GENERATED"
-    else:
-        rando_type = "SELECTED"
-    also_add = ""
     decompress_generic_individual_misc_file(file_dir, rom_file, "Requirements")
     decompress_generic_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
     if((note_door_option == "1") and (puzzle_option == "1")):
-        if(seed_generated):
-            also_add = "!"
         final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
         final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
-        if(seed_generated):
-            also_add = ""
-        else:
-            also_add = "!"
-        new_bottles_text = "WELCOME TO BANJO KAZOOIE RANDOMIZER V. " + BK_Rando_Version + "!" + " THIS " + rando_type + " SEED NEEDS "+leading_zeros(str(final_note_score), 3)+" NOTES "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES" + also_add
+        new_bottles_text = new_bottles_text = "YOU WILL NEED "+leading_zeros(str(final_note_score), 3)+ " NOTES AND "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO REACH THE TOP OF THE TOWER! PRESS B AND GET GOING!!!          "
     elif(note_door_option == "1"):
-        if(seed_generated):
-            also_add = ""
-        else:
-            also_add = "!"
         final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
         new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
-#         new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER VER. " + BK_Rando_Version + "!" + also_add + " THIS " + rando_type + " SEED WILL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES!!"
     elif(puzzle_option == "1"):
-        if(seed_generated):
-            also_add = ". "
-        else:
-            also_add = "ER. "
         final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
         new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!"
-#         new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER V" + also_add + BK_Rando_Version + "! THIS " + rando_type + " SEED WILL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES!"
-    else:
-        if(seed_generated):
-            also_add = "!"
-        else:
-            also_add = ""
-        new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER VERSION " + BK_Rando_Version+ "!!! HOPE YOU ENJOY THE " + rando_type + " SEED!!" + also_add
     new_bottles_text_len = len(new_bottles_text)
     for extra_space in range(new_bottles_text_len, 105):
         new_bottles_text += " "
