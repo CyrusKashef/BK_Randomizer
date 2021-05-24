@@ -10,6 +10,7 @@ Created on Mar 1, 2021
 # 3) Randomize Music
 # 4) Allow other format extensions (.n64, .v64, etc)
 # 5) Able to modify the file that lets you start with all moves and makes Mumbo transformations free
+# 6) Fix the cameras for croctus/ancient ones/jinxy heads
 
 ###########################################################################
 ################################# IMPORTS #################################
@@ -32,7 +33,7 @@ import json
 #####################################################################################
 
 DEVELOPER_MODE = False
-# New Major Feature . New Minor Feature . Bug Fixes/Negligible
+# New Major Feature . New Minor Feature . Bug Fixes
 BK_Rando_Version = "0.7.6"
 
 tmp_folder = "EPPIIISA/"
@@ -722,14 +723,22 @@ misc_setup_ids = {
             ["00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00"],
             ),
         ],
-    "Abilities": [
-        ("F37F90,F9CAE0",
-            ["1F", "8B", "08", "08", "71", "F0", "65", "60", "00", "0B", "46", "33", "37", "46", "39", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
-            ["48", "E3", "6A", "5F", "00", "C6", "0D", "00"],
-            ["11", "72", "00", "01", "66", "00"],
-            [],
-            ),
-        ]
+#     "Abilities": [
+#         ("F37F90,F9CAE0",
+#             ["1F", "8B", "08", "08", "71", "F0", "65", "60", "00", "0B", "46", "33", "37", "46", "39", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+#             ["48", "E3", "6A", "5F", "00", "C6", "0D", "00"],
+#             ["11", "72", "00", "01", "66", "00"],
+#             [],
+#             ),
+#         ],
+#     "Game Select Text": [
+#         ("F9CAE0,FA3FD0",
+#             ["1F", "8B", "08", "08", "71", "F0", "65", "60", "00", "0B", "46", "39", "43", "41", "45", "30", "2D", "44", "65", "63", "6F", "6D", "70", "72", "65", "73", "73", "65", "64", "2E", "62", "69", "6E", "00"],
+#             ["64", "64", "D4", "88", "00", "66", "01", "00"],
+#             ["11", "72", "00", "01", "66", "00"],
+#             ["00", "00", "00", "00", "00", "00", "00", "00", "00", "00"],
+#             ),
+#         ],
     }
 
 ### NOTE DOOR INDICES
@@ -1647,6 +1656,7 @@ collectable_struct_id_list = [
     "164000B6", # Note 40 B6
     "164000B7", # Note 40 B7
     "165000A0", # Blue Egg 50 A0
+    "165000A1", # Blue Egg 50 A1
     "165000A2", # Blue Egg 50 A2
     "165700A0", # Blue Egg 57 A0
     "00E000DC", # Red Feather E0 DC
@@ -2105,8 +2115,11 @@ def seed(seed_val=None):
     logger.info("Generate Seed")
     if((seed_val == None) or (seed_val == "")):
         seed_val = random.randint(10000000, 19940303)
+        seed_generated = True
+    else:
+        seed_generated = False
     logger.debug("Seed: " + str(seed_val))
-    return seed_val
+    return (seed_val, seed_generated)
 
 def make_copy_of_rom(seed_val, file_dir, rom_file):
     """Creates a copy of the rom that will be used for randomization"""
@@ -3500,10 +3513,13 @@ def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_type, location
 
 def modify_bottles_unskipable_text(file_dir, new_bottles_text):
     '''Modifies the Bottles text at the beginning of the game'''
-    # 5) Able to modify 5C9AF8/CF90.bin (PRESS A IF YOU WANT ME TO TEACH YOU SOME BASIC MOVES, OR PRESS B IF YOU THINK YOU'RE ALREADY GOOD ENOUGH!)
-    #                                    YOU'LL NEED 900 NOTES AND 100 JIGGIES TO REACH THE FINAL BATTLE! PRESS A TO.. OH FORGET IT, JUST PRESS B!
-    #                                    YOU'LL NEED 900 NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!
-    #                                    YOU'LL NEED 100 JIGGIES FOR THE FINAL DOOR! PRESS A FOR LESSONS OR PRESS B TO GET... JIGGY WITH IT! HAHA!
+    # 5) Able to modify 5C9AF8/CF90.bin
+    # (PRESS A IF YOU WANT ME TO TEACH YOU SOME BASIC MOVES, OR PRESS B IF YOU THINK YOU'RE ALREADY GOOD ENOUGH!)
+    # "WELCOME TO BANJO KAZOOIE RANDOMIZER V. 0.7.6! THIS GENERATED SEED NEEDS 000 NOTES 000 JIGGIES" + also_add
+    # "YOU'LL NEED 000 NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
+    # "YOU'LL NEED 000 JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!"
+    # "WELCOME TO BANJO-KAZOOIE RANDOMIZER VERSION 0.7.6!!! HOPE YOU ENJOY THE GENERATED SEED!!" + also_add
+    
     with open(file_dir + tmp_folder + "CF90-Decompressed.bin", "r+b") as decomp_file:
         mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
         text_index_start = mm_decomp.find(bytes.fromhex("50524553532041"))
@@ -3511,10 +3527,8 @@ def modify_bottles_unskipable_text(file_dir, new_bottles_text):
         for char in new_bottles_text:
             mm_decomp[text_index_start + count] = ord(char)
             count += 1
-        remove_space = 105 - len(new_bottles_text)
         for index in range(text_index_start + len(new_bottles_text), len(mm_decomp)):
-            mm_decomp[index - remove_space] = mm_decomp[index]
-        mm_decomp.resize(len(mm_decomp) - remove_space)
+            mm_decomp[index] = mm_decomp[index]
 
 def final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper):
     '''Sets the requirements of every note door to zero except for the note door proceeding the final battle'''
@@ -3575,33 +3589,6 @@ def modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, fin
             honeycomb_puzzle_count = 4
         mm_decomp[note_door_index_start + 42] = honeycomb_puzzle_count
     return final_puzzle_score
-
-def nullify_transformation_requirements(file_dir):
-    '''NOT IN USE! Makes all of the transformation requirements free'''
-    # F37F90 to F9CAE0
-    # 0x4A7E7 (Termite)
-    # 0x4A7EF (Crocodile)
-    # 0x4A7F7 (Walrus)
-    # 0x4A7FF (Pumpkin)
-    # 0x4A807 (Bee)
-    with open(file_dir + tmp_folder + "F37F90-Decompressed.bin", "r+b") as decomp_file:
-        mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
-        mm_decomp[305127] = 0 # Termite
-        mm_decomp[305135] = 0 # Crocodile
-        mm_decomp[305143] = 0 # Walrus
-        mm_decomp[305151] = 0 # Pumpkin
-        mm_decomp[305159] = 0 # Bee
-#         mm_decomp.resize(len(mm_decomp) + 500)
-
-def all_starting_moves(file_dir):
-    '''NOT IN USE! Allows the player to start the game with all of the moves'''
-    # F37F90 to F9CAE0
-    # E84E (59470) and E84F (59471)
-    # C3 A0 to 0F 98
-    with open(file_dir + tmp_folder + "F37F90-Decompressed.bin", "r+b") as decomp_file:
-        mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
-        mm_decomp[59470] = 15
-        mm_decomp[59471] = 152
 
 def decompress_generic_individual_misc_file(file_dir, rom_file, file_type):
     """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
@@ -3678,7 +3665,6 @@ def compress_individual_misc_file(file_dir, rom_file, file_type):
                 new_comp_len += 1
             if((new_comp_len % 8) != 0):
                 needs_padding = 8 - (new_comp_len % 8)
-#                 if((addr.startswith("0x")) or (file_pointer != "FCF698")):
                 if(addr.startswith("0x")):
                     for index in range(new_comp_len, new_comp_len + needs_padding):
                         new_comp_file.write(bytes.fromhex("AA"))
@@ -3703,14 +3689,6 @@ def insert_misc_file_into_rom(seed_val, file_dir, rom_file, file_type):
             address1 = int(addr.split(",")[0], 16)
             address2 = int(addr.split(",")[1], 16)
             file_pointer = addr.split(",")[0]
-#             if(file_type == "Abilities"):
-#                 address1 = address1 - 8
-#                 mm_rand_rom[10275] = mm_rand_rom[10275] - 8
-#         if(file_type == "Abilities"):
-#             mm_rand_rom_orig_len = len(mm_rand_rom)
-#             mm_rand_rom.resize(mm_rand_rom_orig_len + 8)
-#             for index in range(mm_rand_rom_orig_len-1, address2-1, -1):
-#                 mm_rand_rom[index + 8] = mm_rand_rom[index]
         with open(file_dir + tmp_folder + file_pointer + "-Randomized_Compressed.bin", "r+b") as setup_bin:
             setup_content = setup_bin.read()
             # Place It Where The Pointer Start Points To
@@ -3732,36 +3710,59 @@ def insert_misc_file_into_rom(seed_val, file_dir, rom_file, file_type):
             for index in range(address1 + len(setup_content), address2):
                 mm_rand_rom[index] = 0
 
-def unlockable_options(file_dir, rom_file, seed_val,
+def unlockable_options(file_dir, rom_file, seed_val, seed_generated,
                        note_door_option, final_note_score_lower, final_note_score_upper,
                        puzzle_option, final_puzzle_lower, final_puzzle_upper,
                        ):
     '''Runs through the misc options'''
     logger.info("Unlockable Options")
-    if((note_door_option == "1") or (puzzle_option == "1")):
-        decompress_generic_individual_misc_file(file_dir, rom_file, "Requirements")
-        decompress_generic_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
-        if(note_door_option == "1"):
-            final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
-        if(puzzle_option == "1"):
-            final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
-        if((note_door_option == "1") and (puzzle_option == "1")):
-            new_bottles_text = "YOU WILL NEED "+leading_zeros(str(final_note_score), 3)+ " NOTES AND "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO REACH THE TOP OF THE TOWER! PRESS B AND GET GOING!!!          "
-        elif(note_door_option == "1"):
-            new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
-        elif(puzzle_option == "1"):
-            new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!       "
-        modify_bottles_unskipable_text(file_dir, new_bottles_text)
-        compress_individual_misc_file(file_dir, rom_file, "Requirements")
-        compress_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
-        insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Requirements")
-        insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Bottles Tutorial Confirmation")
-#     if(all_moves_option == "1"):
-#         decompress_generic_individual_misc_file(file_dir, rom_file, "Abilities")
-#         nullify_transformation_requirements(file_dir)
-# #         all_starting_moves(file_dir)
-#         compress_individual_misc_file(file_dir, rom_file, "Abilities")
-#         insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Abilities")
+    if(seed_generated):
+        rando_type = "GENERATED"
+    else:
+        rando_type = "SELECTED"
+    also_add = ""
+    decompress_generic_individual_misc_file(file_dir, rom_file, "Requirements")
+    decompress_generic_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
+    if((note_door_option == "1") and (puzzle_option == "1")):
+        if(seed_generated):
+            also_add = "!"
+        final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+        final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
+        if(seed_generated):
+            also_add = ""
+        else:
+            also_add = "!"
+        new_bottles_text = "WELCOME TO BANJO KAZOOIE RANDOMIZER V. " + BK_Rando_Version + "!" + " THIS " + rando_type + " SEED NEEDS "+leading_zeros(str(final_note_score), 3)+" NOTES "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES" + also_add
+    elif(note_door_option == "1"):
+        if(seed_generated):
+            also_add = ""
+        else:
+            also_add = "!"
+        final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+        new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
+#         new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER VER. " + BK_Rando_Version + "!" + also_add + " THIS " + rando_type + " SEED WILL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES!!"
+    elif(puzzle_option == "1"):
+        if(seed_generated):
+            also_add = ". "
+        else:
+            also_add = "ER. "
+        final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
+        new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!"
+#         new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER V" + also_add + BK_Rando_Version + "! THIS " + rando_type + " SEED WILL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES!"
+    else:
+        if(seed_generated):
+            also_add = "!"
+        else:
+            also_add = ""
+        new_bottles_text = "WELCOME TO BANJO-KAZOOIE RANDOMIZER VERSION " + BK_Rando_Version+ "!!! HOPE YOU ENJOY THE " + rando_type + " SEED!!" + also_add
+    new_bottles_text_len = len(new_bottles_text)
+    for extra_space in range(new_bottles_text_len, 105):
+        new_bottles_text += " "
+    modify_bottles_unskipable_text(file_dir, new_bottles_text)
+    compress_individual_misc_file(file_dir, rom_file, "Requirements")
+    compress_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
+    insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Requirements")
+    insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Bottles Tutorial Confirmation")
 
 #############
 ### WARPS ###
@@ -3857,7 +3858,7 @@ def main():
      ) = parameter_gui()
     (file_dir, rom_file) = split_dir_rom(rom_dir)
     setup_tmp_folder(file_dir)
-    seed_val = seed(seed_val)
+    (seed_val, seed_generated) = seed(seed_val)
     make_copy_of_rom(seed_val, file_dir, rom_file)
     ### Decompress ROM ###
     address_dict = decompressor(file_dir, rom_file)
@@ -3866,7 +3867,7 @@ def main():
     ### Compress ROM ###
     reinsert_setup_files(seed_val, file_dir)
     ### Misc Options ###
-    unlockable_options(file_dir, rom_file, seed_val,
+    unlockable_options(file_dir, rom_file, seed_val, seed_generated,
                        final_note_door_option, note_door_lower_limit, note_door_upper_limit,
                        final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit,
                        )
