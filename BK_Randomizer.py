@@ -32,7 +32,7 @@ import json
 ##################################### VARIABLES #####################################
 #####################################################################################
 
-DEVELOPER_MODE = True
+DEVELOPER_MODE = False
 # New Major Feature . New Minor Feature . Bug Fixes
 BK_Rando_Version = "0.7.9"
 
@@ -1686,6 +1686,7 @@ collectable_struct_id_list = [
     "00E000DF", # Red Feather E0 DF
     "00E700DE", # Red Feather E7 DE
     "15F000DC", # Gold Feather F0 DC
+    "15F000DD", # Gold Feather F0 DD
     "15F000DE", # Gold Feather F0 DE
     "15F000DF", # Gold Feather F0 DF
     ]
@@ -1770,9 +1771,7 @@ enemy_id_dict = {
             "190C0005", # Ticker
             "190C0012", # Beehive
             "190C0067", # Snippet
-            "008C0067", # Snippet (TTC)
             "190C00C7", # RIP Tombstone
-            "190C03C2", # RIP Tombstone (MMM Entrance)
             #"190C00F5", # Mutant Snippet
 #             "190C0124", # Snowman
             "190C034E", # Skeleton
@@ -1924,6 +1923,20 @@ enemy_id_dict = {
         },
     }
 
+additional_enemy_id_dict = {
+    "Ground": [
+        "008C0067", # Snippet (TTC)
+        "190C03C2", # RIP Tombstone (MMM Entrance)
+        "010C037D", # Ice Cube
+        ],
+    "Wall": [
+        "198C0381", # Portrait Chompa
+        "1A0C0381", # Portrait Chompa
+        "1A8C0381", # Portrait Chompa
+        "1B0C0381", # Portrait Chompa
+        ],
+    }
+
 abnormal_enemy_id_list = {
     "Global": {
         "Ground": [
@@ -1974,16 +1987,27 @@ abnormal_enemy_id_list = {
 #         },
     }
 
+additional_abnormal_enemy_id_dict = {
+    "Wall": [
+        "190C0368", # Mumbo Token Sign
+        "190C0369", # Mumbo Token Sign
+        "190C036A", # Mumbo Token Sign
+        "190C036B", # Mumbo Token Sign
+        "190C0382", # Portrait
+        "190C0387", # Portrait
+        ],
+    }
+
 world_order_warps_list = {
-    "Mumbo's Mountain": {
-        "Gruntilda's Lair Address": "9AC0", # 4ED0E8
-        "Gruntilda's Lair Warps": [ # 009F
-            "0EA40000F8234B06009F",
-            "0ED70012F8634B06009F",
-            ],
-        "World Address": "9788", # 4C5A30
-        "World Pad": "008C02E4"
-        },
+#     "Mumbo's Mountain": {
+#         "Gruntilda's Lair Address": "9AC0", # 4ED0E8
+#         "Gruntilda's Lair Warps": [ # 009F
+#             "0EA40000F8234B06009F",
+#             "0ED70012F8634B06009F",
+#             ],
+#         "World Address": "9788", # 4C5A30
+#         "World Pad": "008C02E4"
+#         },
     "Treasure Trove Cove": {
         "Gruntilda's Lair Address": "9AE0", # 4EEAA8
         "Gruntilda's Lair Warps": [ # 000C
@@ -2034,14 +2058,14 @@ world_order_warps_list = {
         "World Address": "9808", # 4CFDF0
         "World Pad": "028C02E4"
         },
-    "Mad Monster Mansion": {
-        "Gruntilda's Lair Address": "9B20", # 4F26A0
-        "Gruntilda's Lair Warps": [ # 0010
-            "FFF701C3FEE67F060010",
-            ],
-        "World Address": "9850", # 4D44D8
-        "World Pad": "038C02E4"
-        },
+#     "Mad Monster Mansion": {
+#         "Gruntilda's Lair Address": "9B20", # 4F26A0
+#         "Gruntilda's Lair Warps": [ # 0010
+#             "FFF701C3FEE67F060010",
+#             ],
+#         "World Address": "9850", # 4D44D8
+#         "World Pad": "038C02E4"
+#         },
     "Rusty Bucket Bay": {
         "Gruntilda's Lair Address": "9B30", # 4F32B0
         "Gruntilda's Lair Warps": [ # 0011
@@ -2063,331 +2087,687 @@ world_order_warps_list = {
 within_world_warps_list = {
     # Location
         # XYZ + Entry Script ID + Object ID + XX + XX + Rotation + XX + XX + Size
-            # From Setup Address : To Setup Address
-#     "Spiral Mountain": {
-#         "9780": [ # Main Area - 4C4680
-#             "0F73FE161954190C010300005A000064", # Banjo's House
-#             "000006F8F2E7190C0104000000000064", # Grunty's Lair
-#             ],
-#         "9BD8": [ # Banjo's House - 4F9DE0
-#             ],
-#         },
+    "Spiral Mountain": {
+        "Warp From Main": {
+            "Banjo's House": [
+                "0F56FE571A694E860118000000002A7D",
+                ],
+            "Grunty's Lair": [
+                "00000798F13C7506012D0000001C1214",
+                ],
+            },
+#         "Warp To Main": {
+#             "Banjo's House": [
+#                 ],
+#             "Grunty's Lair": [
+#                 ],
+#             },
+        },
     "Mumbo's Mountain": {
-        "9788": [ # Main Area - 4C5A30
-#             "173E01FB13A6190C007700007B800064", # Grunty's Lair
-            "14F50933F568190C000100009F000064", # Mumbo's Skull
-            "05210612FC0A190C0002000032800064", # Main Ticker's Tower Bottom
-            "02150DE3FDDE190C0015000010000064", # Main Ticker's Tower Top
-            ],
-        "97D8": [ # Ticker's Tower - 4CCD40
-            "00AD0000FD82190C00020000AC800064", # Ticker's Tower Bottom
-            "FE00089BFDF5190C0001000016800064", # Ticker's Tower Top
-            ],
-#         "97E8": [ # Mumbo's Skull - 4CF158
-#             "00000000029A190C000100005A000064", # Main To Mumbo's Skull
-#             ],
+        "Warp From Main": {
+            "Mumbo's Skull": [
+                "1579098CF47532060016000000000000",
+                "159D098DF49232060016000000000662",
+                "15C1098CF4AE32060016000000000663",
+                "15E0098EF4CB32060016000000000000",
+                ],
+            "Ticker's Tower Lower": [
+                "03DC0663FC384E06001800000001071A",
+                ],
+            "Ticker's Tower Upper": [
+                "011F0E1AFD224586001A000000000000",
+                "01670E13FCE74886001A000000017972",
+                "01D30E10FCC73A06001A00000006815B",
+                ],
+            },
+        "Warp To Main": {
+            "Mumbo's Skull": [
+                "0000005103A94B0600170000000063A9",
+                ],
+            "Ticker's Tower Lower": [
+                "008E003CFCB83206001900000006118B",
+                "0124003CFCB93206001900000006118C",
+                ],
+            "Ticker's Tower Upper": [
+                "FDC608DCFD662586001B00000006784B",
+                "FD9C08CCFD932586001B000000067856",
+                "FD6A08DCFDC62586001B00000006784A",
+                "FD60090EFD5F2586001B000000000000",
+                ],
+            },
         },
     "Treasure Trove Cove": {
-        "97B0": [ # Main Area - 4C7FD8
-#             "FC9503631C7A190C007600005A000064", # Grunty's Lair
-            "EA3102A81026190C007C00002D000064", # Nipper
-            "088709D5F639190C0074000086000064", # Arch Alcove
-            "07AA1463F787190C0075000041000064", # Top Of Mountain
-            "02E01B05F4AE190C007E000040000064", # Lighthouse Bottom
-            "02951F78F4EA190C007A00003D800064", # Lighthouse Top
-            "006C03D903BE190C0078000080000064", # Salty Hippo Top Entrance
-#             "FD7B0194050A190C00790000AD800064", # Salty Hippo Side Entrance (Water)
-#             "09BF001A1375190C0015000000000064", # Sandcastle (Sometimes Water)
-            ],
-#         "97A0": [ # Blubber's Ship - 4C7918 (Might Be Water)
-#             "020900D2FFFF190C0077000087000064", # Top Entrance
-#             "FD78FD8C0126190C0078000059800064", # Water Entrance (Water)
-#             ],
-#         "97A8": [ # Nipper's Shell - 4C7C38
-#             ],
-#         "97C8": [ # Sandcastle - 4CAD60
-#             ],
+        "Warp From Main": {
+            "Nipper": [
+                "E89E0346109E31060047000000001B6E",
+                "E894034C100F2B060047000000001E45",
+                "E89903920F931F060047000000000000",
+                "E899032D0F9317860047000000000000",
+                ],
+            "Sandcastle": [
+                "09B5000011E45786006B000000000000",
+                ],
+            "Under Arch Alcove": [
+                "0AD20A72F6C77A86006D000000000000",
+                "0ADE0A72F5747A86006D000000000000",
+                ],
+            "Entrance To Top Of Mountain": [
+                "063E12B6F87B8686006C000000000000",
+                ],
+            "Lower Lighthouse": [
+                "020C1B4AF58F2B860071000000000000",
+                "02031B4AF56125060071000000000064",
+                "01E01B4DF54428060071000000000000",
+                ],
+            "Upper Lighthouse": [
+                "01C21E77F57639060070000000012E61",
+                ],
+            "Salty Hippo Top": [
+                "00E802B503DF3F86006E000000000000",
+                ],
+            "Salty Hippo Side": [
+                "FDC0017A03D34D86006F000000000000",
+                ],
+            },
+        "Warp To Main": {
+            "Nipper": [
+                "FCEC0045FC3D3206000B000000000000",
+                "FD0B0045FC6F3206000B000000000000",
+                "FD2E0045FC9D3206000B000000000000",
+                "FD570045FCD93206000B00000014A1C7",
+                "FD770045FD0B3206000B000000000000",
+                "FD980045FD393206000B000000000064",
+                "FDC3006FFD3F1906000B000000000000",
+                "FDE90018FD3B1906000B000000000000",
+                ],
+            "Sandcastle": [
+                "FFF9007805E25A860072000000000000",
+                ],
+            "Salty Hippo Top": [
+                "01F5015DFFFD29860075000000000000",
+                ],
+            "Salty Hippo Side": [
+                "FD73FDCD026C36860076000000000000",
+                ],
+            },
         },
     "Clanker's Cavern": {
-        "97D0": [ # Main Area - 4CB028
-#             "D8D212D30795190C0077000043800064", # Grunty's Lair
-            "077E0DD80236190C00010000A5000064", # Left Tooth
-            "07740DEBFDCE190C0002000067800064", # Right Tooth
-            "0C6C0DDB0427190C0015000000000064", # Left Gill
-            "0C6D0DC9FBF8190C007600005E000064", # Right Gill
-            ],
-        "9888": [ # Inside Clanker Mouth And Belly - 4D95E0
-            "000009EA1420190C0002000000000064", # Blowhole Mouth
-            "FFF109610B20190C000100005A000064", # Blowhole Belly
-            "0000065AF0CE190C0015000000000064", # Gold Feather Room
-            "028B05AA1A38190C0079000074000064", # Left Tooth
-            "FCAE05B118A0190C0078000033000064", # Right Tooth
-#             "10A5036A001E190C0077000087000064", # Left Gill (Water)
-#             "F5100011FFF6190C007600002D000064", # Right Gill (Water)
-            ],
-#         "9880": [ # Inside Clanker Blowhole Entrance - 4D91C8 (Unless We Add Witch Switch As Abonrmality)
-#             ],
-#         "9890": [ # Inside Clanker Gold Feather Room - 4DA1B8
-#             ],
+#         "Warp From Main": {
+#             },
+        "From Inside Clanker": {
+            "Left Gill": [
+                "12D303E00000AF06002F000000000389",
+                ],
+            "Right Gill": [
+                "F2BB00650004CA860030000000000000",
+                ],
+            "Left Tooth": [
+                "02FB05DB1B5E3E860031000000000064",
+                "032C05DB1B343E860031000000000000",
+                "035905FC1B023E86003100000001E994",
+                "037805DB1ACE3E86003100000001E990",
+                "03A805DB1A9D3E860031000000000000",
+                ],
+            "Right Tooth": [
+                "FBBE05DA18964706003200000000217D",
+                ],
+            "Gold Feather Room": [
+                "000D06E7EF427086009E000000000000",
+                ],
+            },
+        "To Inside Clanker": {
+            "Blowhole To Belly": [
+                "0000FE7EF4244806009C000000000000",
+                ],
+            "Blowhole To Mouth": [
+                "0015FE8D0BA44586009D000000000000",
+                ],
+            "From Gold Feather Room": [
+                "0008FE4609FA6406009B000000000000",
+                ],
+            },
         },
     "Bubblegloop Swamp": {
-        "97E0": [ # Main Area - 4CD1E8
-#             "079B010912E5190C0002000087000064", # Grunty's Lair
-            "E72703E8EB77190C0078000016800064", # Mumbo's Skull
-#             "FD1D0064F149190C0077000042000064", # Mr. Vile Left Nostril
-#             "FB450064F3F5190C00760000A7000064", # Mr. Vile Right Nostril
-            "0EE10095045C190C0015000070800064", # Tanktup
-            ],
-        "97F8": [ # Mr Vile - 4CF410
-            "FED7007DF7D9190C007600000F000064", # Mr. Vile Left Nostril
-            "012B007DF7CC190C00150000A5000064", # Mr. Vile Right Nostril
-            ],
-#         "9800": [ # TipTup Choir - 4CF990
-#             ],
-#         "99B0": [ # Mumbo's Skull - 4E9F00
-#             ],
+        "Warp From Main": {
+            "Tanktup": [
+                "0F6800C004E41906004600000000A21F",
+                "0F6500FF04E419060046000000000000",
+                ],
+            "Mumbo's Skull": [
+                "E62A0450EAD539860009000000000000",
+                "E64D0454EAB33986000900000009EC1C",
+                "E6660455EA963986000900000009EC1C",
+                "E6890456EA78398600090000000522DF",
+                ],
+            },
+        "Warp To Main": {
+            "Tanktup": [
+                "FFF000000764960600680000000095A1",
+                ],
+            "Mumbo's Skull": [
+                "0000005103A94B06000A00000002E875",
+                ],
+            },
         },
     "Freezeezy Peak": {
-        "98B0": [ # Main Area - 4DB118
-#             "F95C0DC024CC190C000100002D000064", # Grunty's Lair
-            "01040DB424EA190C007A000087000064", # Boggy's Igloo
-            "EE36027F17FF190C007B000044000064", # Christmas Tree
-            "E918031AF02F190C0078000037800064", # Wozza's Cave
-            "1ABF0260F3F2190C0079000096000064", # Mumbo's Skull
-            ],
-#         "9980": [ # Boggy's Igloo - 4E4820
-#             ],
-#         "99B8": [ # Mumbo's Skull - 4EA168
-#             ],
-#         "9A10": [ # Inside The Tree - 4EACA8
-#             ],
-#         "9B70": [ # Wozza's Cave - 4F6088
-#             ],
+        "Warp From Main": {
+            "Igloo": [
+                "01C20DF924EE2F86004100000000D45D",
+                ],
+            "Christmas Tree": [
+                "EE1803A718684C060042000000000000",
+                ],
+            "Wozza's Cave": [
+                "E6CB0396F0F1898600FD000000000064",
+                "E6E90396F156898600FD000000000000",
+                "E7080396F1A5898600FD000000000000",
+                "E72A0396F1EF898600FD000000000000",
+                ],
+            "Mumbo's Skull": [
+                "1B7C02BAF30E32060040000000000000",
+                "1B9C02BAF356320600400000000128B5",
+                "1BC002BAF38F32060040000000000000",
+                ],
+            },
+        "Warp To Main": {
+            "Igloo": [
+                "0007008603D25006004400000011FFB7",
+                ],
+            "Christmas Tree": [
+                "0017FDA6FFE599860045000000000F84",
+                ],
+            "Wozza's Cave": [
+                "031B0066F9F0640600FC000000000000",
+                "03590066FA0B640600FC000000000064",
+                "03970066FA33640600FC00000000F9BA",
+                "03D80066FA58640600FC000000000000",
+                ],
+            "Mumbo's Skull": [
+                "0000005103A94B060043000000000064",
+                ],
+            },
         },
     "Gobi's Valley": {
-        "9808": [ # Main Area - 4CFDF0
-#             "08FA01C12609190C007A000076800064", # Grunty's Lair
-            "F1F9057B170C190C000200002D000064", # Jinxy
-            "FF1A0B14F34E190C0077000000000064", # Water Pyramid
-            "0046099C042F190C0076000000000064", # King Sandybutt's Pyramid Front
-            "0041099CFEE7190C007900005A000064", # King Sandybutt's Pyramid Back
-#             "F08D0B10034E190C01A3000000000064", # Rupee Pyramid?
-#             "F08D0B1003E8128C0078000000000064", # Rupee Pyramid?
-#             "0ED209920146190C01A0000087000064", # Matching Pyramid?
-#             "0E29098F01450A0C0015000087000064", # Matching Pyramid?
-            "E4130944057C190C007C000029000064", # SNS Egg Room
-            ],
-#         "9810": [ # Puzzle Room - 4D2450
-#             ],
-#         "9818": [ # King Sandybutt's Tomb - 4D2778
-#             ],
-#         "9820": [ # Water Room - 4D3630
-#             ],
-#         "9828": [ # Rupee - 4D3A40
-#             ],
-#         "9848": [ # Jinxy - 4D3F38
-#             ],
+        "Warp From Main": {
+            "Jinxy": [
+                "F06D05D317103E860005000000000000",
+                ],
+            "Rupee": [
+                "F09E0B4C02A443860060000000000000",
+                ],
+            "King Sandybutt's Maze": [
+                "00460A0A028D5186005D00000000FF49",
+                ],
+            "Matching Pyramid": [
+                "0F3F09DF01432A86005C000000000000",
+                ],
+            "Water Pyramid Top": [
+                "000610A2EED56386005E000000000000",
+                ],
+            "Water Pyramid Bottom": [
+                "FF1C0BCBF20D6406005F000000029226",
+                ],
+            },
+        "Warp To Main": {
+            "Matching Pyramid": [
+                "FA91015000236406006100002B000064",
+                ],
+            "King Sandybutt's Maze Start": [
+                "1825008C015E63860062000000000064",
+                ],
+            "King Sandybutt's Maze End": [
+                "EA94006B046C460600DE000000000064",
+                "EACB006B0486460600DE000000000000",
+                "EB0B006B04A4460600DE000000000000",
+                ],
+            "Water Pyramid": [
+                "0006011406D48D060063000000000000",
+                ],
+            "Rupee Pyramid": [
+                "000F00A306417D860064000000000064",
+                ],
+            "Jinxy": [
+                "0B73004EFFCF50060006000000000000",
+                ],
+            },
         },
     "Mad Monster Mansion": {
-        "9850": [ # Main Area - 4D44D8
-#             "03E8000F0B86190C010500005A000064", # Grunty's Lair
-            "026C0133058A190C007C000000000064", # First Floor Front Room
-#             "055F0136FBFC128C007D00005A000064", # First Floor Back Room?
-            "FD2BFF51FF9D190C007B00005A000064", # Cellar
-            "0041052800FA190C007F000087000064", # Empty Honeycomb Room
-            "078A0528FF1F190C007E00002D000064", # Bathroom
-            "03E806EAFC83190C007500005A800064", # Third Floor Back Room
-            "03E806EA0563190C0074000000000064", # Third Floor Front Room
-            "14E1FE25F452190C010400009D800064", # Well Lower Entrance
-#             "16440096F3DA0E0C0015000000000064", # Well Upper Entrance?
-            "05EA015DEE94190C0076000087000064", # Tumblar Shed
-            "FE0900AFED70190C01AF00009D800064", # Mumbo's Skull
-            "F84900AFF63C190C007700002D000064", # Church
-            "F233014DF68C190C0078000000000064", # Secret Church Room
-            "F510059CFAE2190C01AE000000000064", # Lower Church Tower Entrance
-            "F510081BF969190C01AD00005A000064", # Upper Church Tower Entrance
-            ],
-#         "9BE0": [ # Septic Tank (Inside Loggo) - 4FA110
-#             ],
-#         "9858": [ # Church - 4D6988
-#             ],
-#         "9860": [ # Cellar - 4D7358
-#             ],
-#         "9898": [ # Tumblar's Shed - 4DA480
-#             ],
-        "98A0": [ # Well - 4DA8E0
-#             "0155000000FD190C0076000073000064", # Lower Entrance (Water)
-            "013A0930000B190C000100004C800064", # Upper Entrance
-            ],
-        "98A8": [ # Dining Room - 4DAC80
-            "000002B8F57E190C0002000000000064", # Chimney
-            "00000019088E190C000100005A000064", # Front Entrance
-            ],
-#         "98B8": [ # Egg Room - 4DE0E8
-#             ],
-#         "98C0": [ # Note Room - 4DE300
-#             ],
-#         "98C8": [ # Red Feather Room - 4DE4F0
-#             ],
-#         "98D0": [ # Secret Church Room - 4DE790
-#             ],
-        "98D8": [ # Bathroom - 4DEA80
-            "000000B4FE66190C0001000000000064", # Window
-            "0163005AFF10190C0076000087000064", # Loggo
-            ],
-#         "98E0": [ # Bedroom - 4DED00
-#             ],
-#         "98E8": [ # Gold Feather Room - 4DF0C0
-#             ],
-        "98F0": [ # Drain Pipe - 4DF290
-            "000000000123190C0002000059800064", # Bottom Entrance
-            "FFFF03FB0000190C0001000000000064", # Top Entrance
-            ],
-#         "98F8": [ # Mumbo's Skull - 4DF3E0
-#             ],
+        "Warp From Main": {
+            "Dining Room": [
+                "03E70148045C53860079000000000F6A",
+                ],
+            "First Floor 1": [
+                "026F015E04A734060082000000000000",
+                ],
+            "First Floor 2": [
+                "056F0156FCC838860083000000000000",
+                ],
+            "Second Floor 1": [
+                "0665053FFF224D060087000000000000",
+                ],
+            "Second Floor 2": [
+                "015C055400ED46060085000000000000",
+                ],
+            "Third Floor 1": [
+                "03D406EC04495D860084000000000000",
+                ],
+            "Third Floor 2": [
+                "03F906F2FD9A59060086000000000000",
+                ],
+            "Chimney": [
+                "03EA094F00F81D86007A000000000000",
+                ],
+            "Well Top Entrance": [
+                "1645FF45F2EE3C06007B000000000000",
+                ],
+            "Tumblar": [
+                "06C601D8EE944486007C000000019DFB",
+                ],
+            "Church Door": [
+                "F6E5014DF6336B06007D000000001951",
+                ],
+            "Church Secret Room": [
+                "F23701A1F58E5486007E000000000B8A",
+                ],
+            "Cellar": [
+                "FD2EFF1F00EF53860081000000000000",
+                ],
+#             "Church Tower Lower": [
+#                 "F51505EBFA1044060097000000000000",
+#                 ],
+            "Chuch Tower Upper": [
+                "F510084FF9872586009800000001DE34",
+                ],
+            "Mumbo's Skull": [
+                "FE0900E9ED202586009A000000007230",
+                "FE2200E4ED382586009A00000000B11C",
+                "FE3800E5ED512586009A00000000B11E",
+                "FE5600E8ED6E2586009A000000000000",
+                ],
+            },
+        "Warp To Main": {
+            "Church": [
+                "FF9000EE1A509606008C000000000000",
+                "004E00EE1A4E9606008C000000000000",
+                ],
+            "Cellar": [
+                "FD2F01ACFAB33E860090000000000378",
+                ],
+            "Tumblar": [
+                "0000009105F75506008B00000000094E",
+                ],
+            "Well Top Exit": [
+                "000008E400003986008A000000000000",
+                ],
+            "Dining Room": [
+                "0000009F0C1954860088000000000000",
+                ],
+            "Egg Room": [
+                "000B00C6FDBD4F860092000000000000",
+                ],
+            "Note Room": [
+                "000200BEFDC248860096000000000000",
+                ],
+            "Feather Room": [
+                "000000AAFD754C860091000000000000",
+                ],
+            "Church Secret Room": [
+                "FE240183FCC74306008D000000000000",
+                "FEC70185FCC64306008D000000000000",
+                "FFD0018FFCC44106008D000000000000",
+                "FFCF0092FCC44506008D000000000000",
+                "FEC50094FCC34506008D000000000000",
+                "FE210099FCC54306008D000000000000",
+                ],
+            "Bathroom": [
+                "FFFB00F0FD2161060093000000000000",
+                ],
+            "Bedroom": [
+                "000200F2FD1D66860095000000000000",
+                ],
+            "Gold Feather Room": [
+                "000800E7FD3475860094000000000000",
+                ],
+            "Mumbo's Skull": [
+                "00010051039D4B0600990000000EED9F",
+                ],
+            },
         },
     "Rusty Bucket Bay": {
-        "9900": [ # Main Area - 4DF660
-#             "03E8FCEF1450190C007300005A000064", # Grunty's Lair
-#             "EA22F5D80A89190C007F00003E800064", # Big Fish Warehouse (Water)
-#             "E059F7ED065B190C007A000000000064", # Boat Room (Water)
-#             "EB1CF9A601FA190C010400009D800064", # Anchor Room (Water)
-            "FB68FCE0F45A190C007B000098800064", # Left Blue Container
-            "FE70FF38F31D190C007C000000000064", # Middle Blue Container
-            "0162FCE0F456190C007D000016800064", # Right Blue Container
-            "ED4200AFFC7A190C0076000087000064", # Front Pipe
-            "F381007DFB50190C000100005A000064", # Front Right Window
-            "F1F0007D04B0190C0077000000000064", # Front Left Window
-            "FFAEFF1F03D0190C007800009D800064", # Middle Pipe
-            "0190FEEDFC18190C000200005A000064", # Middle Right Window
-            "05FE00000185190C007900001B800064", # Engine Room
-            "11F8FE700000190C007E00002D000064", # Big Boombox Room
-            "1B35FD8FFDDA190C001500002D000064", # Engine Control Room
-            ],
-#         "9BD0": [ # Anchor Room - 4F9A08
-#             ],
-        "9918": [ # Machine (Engine) Room - 4E13D8
-            "000009DD10BD190C0001000000000064", # Door Entrance
-            "F0AE057AF341190C0076000016800064", # Pipe Entrance
-            ],
-        "9920": [ # Big Fish Warehouse - 4E1F50
-#             "04AFFC18FF88190C0001000076800064", # Door Entrance (Water)
-            "00000578FE25190C000200005A000064", # Window Entrance
-            ],
-#         "9928": [ # Boat Room - 4E2440
-#             ],
-#         "9930": [ # First Blue Container (Chompas) - 4E26D8
-#             ],
-#         "9938": [ # Third Blue Container (Mini Kabooms) - 4E29C8
-#             ],
-#         "9940": [ # Sea-Grublin's Cabin - 4E2C48
-#             ],
-#         "9948": [ # Kaboom's Room - 4E2ED8
-#             ],
-#         "9950": [ # Mini Kaboom's Room (Pipe) - 4E3238
-#             ],
-#         "9958": [ # Kitchen - 4E35D0
-#             ],
-#         "9960": [ # Navigation Room - 4E3948
-#             ],
-#         "9968": [ # Second Blue Container (Sea-Grublins) - 4E3D30
-#             ],
-#         "9970": [ # Captain's Room - 4E4060
-#             ],
+        "Warp From Main": {
+            "Big Fish Warehouse Top": [
+                "E890FBC60DC8748600A7000000000000",
+                ],
+            "Big Fish Warehouse Side": [
+                "E911FA210DB8FA0600B9000000000000",
+                "E911F7B30DB8FA0600B9000000000000",
+                ],
+            "Boat Room": [
+                "E05BF7ED043BBC8600A80000000020AA",
+                ],
+            "Left Blue Container": [
+                "FBD2FDD5F2977F0600A9000000000000",
+                ],
+            "Middle Blue Container": [
+                "FE73FDCCF2575B8600AA000000000000",
+                ],
+            "Right Blue Container": [
+                "0102FDCBF28B7E8600AB000000000000",
+                ],
+            "Kitchen": [
+                "EE08001EFC7D190600A3000000000064",
+                ],
+            "Navigation Room": [
+                "F1F100A603B7348600A4000000000000",
+                "F1F4000003F2288600A4000000000000",
+                ],
+            "Captain's Room": [
+                "F38800A2FC4E330600A0000000000000",
+                "F38FFFE2FC25340600A0000000000000",
+                ],
+            "Middle Pipe": [
+                "002BFE6F03501A0600A5000000000000",
+                ],
+            "Bedrooms": [
+                "0199FF19FD2F3C8600A1000000000000",
+                "0185FE21FCE32F8600A1000000000000",
+                ],
+            "Main Engine Room": [
+                "056A002B00BB1C8600A6000000000064",
+                "054F003200DE1C8600A6000000000064",
+                "0530003501061C0600A6000000000064",
+                "05120032012D1C8600A6000000000000",
+                ],
+            "Big Boombox Room": [
+                "1008FB500062D00600B8000000000000",
+                "0FFEFB50FF83D00600B8000000000000",
+                ],
+            "Machine Control Room": [
+                "1A5EFCFEFDDA190600A2000000000064",
+                ],
+            "Anchor Room": [
+                "ECEEFA4A00D05006011D000000000000",
+                "EC9AFA58007F5006011D000000000000",
+                "EC48FA5800345006011D000000000000",
+                ],
+            },
+        "Warp To Main": {
+            "Anchor Room": [
+                "FC00FF42FFD99406011C000000000000",
+                ],
+            "Machine Room Main": [
+                "FFF40A270FE33B8600B200000016CD8A",
+                ],
+            "Machine Control Room": [
+                "F2AF01B0F0F2F40600AE000000000000",
+                "EF9601E0F24EFA0600AE000000000000",
+                "EFEA01B0F564FA0600AE000000000064",
+                "EFB70425F013FA0600AE000000000064",
+                "EDC504C1F382CF0600AE000000000064",
+                "F03A0640F1CE4A0600AE000000000064",
+                "EEDC06A2F2797E0600AE000000000064",
+                "F07F0655F304560600AE000000000000",
+                ],
+            "Big Fish Warehouse": [
+                "064FFD1102BCFA0600BA000000000000",
+                "0702FD860062C08600BA000000000000",
+                ],
+            "Boat Room": [
+                "F7CEFD85003D750600B3000000001882",
+                ],
+            "First Container Room": [
+                "FFEB00E50599998600B4000000000000",
+                "FE13011F0575BC8600B4000000000000",
+                ],
+            "Third Container Room": [
+                "002D005003E0578600B6000000000000",
+                "002D00E603E0578600B6000000000000",
+                "0125009F0391680600B6000000000000",
+                ],
+            "Sea Grublin Room": [
+                "014C00DBFD573C0600AD000000000000",
+                "FFFC00E3FC5E8F8600AD000000000000",
+                "FEDA00DBFD563C0600AD000000000000",
+                "008B0000FD41420600AD000000000000",
+                "FFA20000FD43420600AD000000000000",
+                ],
+            "Kaboom Boss Room": [
+                "FAD205B90000858600B7000000000000",
+                ],
+            "Mini Kaboom Room": [
+                "01FE0326FC85780600B1000000014A2C",
+                ],
+            "Kitchen": [
+                "FCC4026CFB97368600AF000000000000",
+                ],
+            "Navigation Room": [
+                "03BC016C01142D0600B0000000000000",
+                "03BC015702A92D0600B0000000000064",
+                "03BC00C601142D0600B0000000000000",
+                "03BC00C602A92D0600B0000000000000",
+                "03A10008018E3E8600B0000000000000",
+                "03A1000802363E8600B0000000000074",
+                "04CB00E501E88F0600B0000000000064",
+                ],
+            "Second Container Room": [
+                "000303C402C24D8600B5000000000000",
+                ],
+            "Captain's Room": [
+                "FDE900DFFDE1278600AC000000000000",
+                "FE070003FDF93C8600AC000000000000",
+                ],
+            },
         },
-    "Click Clock Wood - Lobby": {
-        "9978": [ # Main Area - 4E4290
-#             "000001D60000190C0079000000000064", # Grunty's Lair
-            "000000000DB6190C000200005A000064", # Spring
-            "F24A00000000190C001500002D000064", # Summer
-            "00000000F24A190C0076000000000064", # Fall
-            "0DB600720000190C0001000087000064", # Winter
-            ],
-        },
+#     "Click Clock Wood - Lobby": {
+#         "Warp From Main": {
+#             "Spring": [
+#                 "00 00 00 61 0E F1 4B 06 00 DB 00 00 00 00 00 00",
+#                 ],
+#             "Summer": [
+#                 "F1 0F 00 5E 00 00 4B 06 00 DC 00 00 00 00 00 00",
+#                 ],
+#             "Fall": [
+#                 "00 00 00 61 F1 0F 4B 06 00 DD 00 00 00 00 00 00",
+#                 ],
+#             "Winter": [
+#                 "0E F1 00 DD 00 00 4B 06 00 DA 00 00 00 00 00 00",
+#                 ],
+#             },
+#         "Warp To Main": {
+#             },
+#         },
     "Click Clock Wood - Spring": {
-        "9990": [ # Spring Main Area - 4E4AA8
-            "000000001CE8190C000100005A000064", # Lobby
-            "E68302580000190C007B00002D000064", # Mumbo's Skull
-            "000011430A41190C0079000000000064", # Nabnut Door
-            "FEB111C00ABD190C0076000000000064", # Nabnut Window
-            "00000CA7EB79190C007800005A000064", # Zubba Hive
-            "00001626F63C190C007A00005A000064", # Whipcrack Room
-            ],
-#         "99C8": [ # Mumbo Skull Spring - 4EA3A8
-#             ],
-#         "9A50": [ # Beehive Spring - 4EB538
-#             ],
-        "9A68": [ # Nabnut's House Spring - 4EBB50
-            "00000000023F190C000100005A000064", # Door
-            "FEC000960209190C0002000055000064", # Window
-            ],
-#         "9AA0": [ # Whipcrack Room Spring - 4EC748
-#             ],
+        "Warp From Main": {
+#             "Lobby": [
+#                 "00 00 00 77 1E 91 7D 06 00 D7 00 00 00 00 AB F3",
+#                 ],
+            "Mumbo's Skull": [
+                "E53402D000004B0600E30000000E1592",
+                ],
+            "Nabnut's Door": [
+                "FFFC11B10894640600E7000000000000",
+                ],
+            "Nabnut's Window": [
+                "FEB111DF09AB32060123000000000000",
+                ],
+            "Whipcrack Room": [
+                "000016B1F81757860012000000000000",
+                ],
+            },
+        "Warp To Main": {
+#             "Lobby": [
+#                 "00 00 00 61 0E F1 4B 06 00 DB 00 00 00 00 00 00",
+#                 ],
+            "Mumbo's Skull": [
+                "0000005103A94B0600DF000000063B96",
+                ],
+            "Nabnut's Door": [
+                "00000064036B5A0600EB0000000F5A7B",
+                ],
+            "Nabnut's Window": [
+                "FEA300D503524B060127000000000000",
+                ],
+            "Whipcrack Room": [
+                "00000070FB356B860058000000003DB3",
+                ],
+            },
         },
     "Click Clock Wood - Summer": {
-        "9998": [ # Summer Main Area - 4E5B98
-            "000000001CE8190C000100005A000064", # Lobby
-            "E6B502580000190C007B00002D000064", # Mumbo's Skull
-            "000011430A41190C0079000000000064", # Nabnut Door
-            "FEB111C00ABE190C0076000000000064", # Nabnut Window
-            "00000F33EF98190C0078000000000064", # Zubba Hive
-            "00001626F63C190C007A00005A000064", # Whipcrack Room
-            ],
-#         "99D0": [ # Mumbo Skull Summer - 4EA5E8
-#             ],
-#         "9A48": [ # Beehive Summer - 4EB258
-#             ],
-        "9A70": [ # Nabnut's House Summer - 4EBD18
-            "00000000023F190C000100005A000064", # Door
-            "FEC000960208190C0002000055000064", # Window
-            ],
-#         "9AA8": [ # Whipcrack Room Summer - 4EC9D8
-#             ],
+        "Warp From Main": {
+#             "Lobby": [
+#                 "",
+#                 ],
+            "Mumbo's Skull": [
+                "E57F02D000004B0600E4000000040EC9",
+                ],
+            "Beehive": [
+                "0E2AEED53386010E00000000000001B0",
+                ],
+            "Nabnut's Door": [
+                "FFDA11B10886640600E8000000000000",
+                ],
+            "Nabnut's Window": [
+                "FEB111DF09AB32060124000000000000",
+                ],
+            "Whipcrack Room": [
+                "000016B1F81757860013000000000064",
+                ],
+            },
+        "Warp To Main": {
+#             "Lobby": [
+#                 "F1 0F 00 5E 00 00 4B 06 00 DC 00 00 00 00 00 00",
+#                 ],
+            "Mumbo's Skull": [
+                "0000005103A94B0600E0000000004FEE",
+                ],
+            "Beehive": [
+                "FF2A05D6FBE84F860111000000000000",
+                ],
+            "Nabnut's Door": [
+                "00000064036B5A0600EC00000000918F",
+                ],
+            "Nabnut's Window": [
+                "FEA200D503524B060128000000000000",
+                ],
+            "Whipcrack Room": [
+                "00000070FB356B860059000000000000",
+                ],
+            },
         },
     "Click Clock Wood - Fall": {
-        "99A0": [ # Fall Main Area - 4E73B0
-            "000000001CE8190C000100005A000064", # Lobby
-            "E68302580000190C007B00002D000064", # Mumbo's Skull
-            "000011430A41190C0079000000000064", # Nabnut Door
-            "FEB111C00ABE190C0076000000000064", # Nabnut Window
-            "05A01394094D190C0078000009000064", # Nabnut Attic 1
-            "00000F33EF98190C0077000000000064", # Zubba Hive
-            "00001626F63C190C007A00005A000064", # Whipcrack Room
-            ],
-#         "99D8": [ # Mumbo Skull Fall - 4EA7D8
-#             ],
-#         "9A58": [ # Beehive Fall - 4EB880
-#             ],
-        "9A78": [ # Nabnut's House Fall - 4EBEF0
-            "00000000023F190C000100005A000064", # Door
-            "FEC000960209190C0002000055000064", # Window
-            ],
-#         "9A90": [ # Nabnut's Attic Fall - 4EC480
-#             ],
-#         "9AB0": [ # Whipcrack Room Fall - 4ECC50
-#             ],
+        "Warp From Main": {
+#             "Lobby": [
+#                 "",
+#                 ],
+            "Mumbo's Skull": [
+                "E54802D000004B0600E500000004276B",
+                ],
+            "Beehive": [
+                "00000E2AEEC93386010F000000000000",
+                ],
+            "Nabnut's Door": [
+                "000011B10894640600E9000000000000",
+                ],
+            "Nabnut's Window": [
+                "FEB211DF09AC32060125000000000000",
+                ],
+            "Nabnut's Attic 1": [
+                "04E113E3084B3206002A000000000000",
+                "051E13E3082A3206002A000000000000",
+                ],
+            "Whipcrack Room": [
+                "000016B1F81757860014000000000000",
+                ],
+            },
+        "Warp To Main": {
+#             "Lobby": [
+#                 "00 00 00 61 F1 0F 4B 06 00 DD 00 00 00 00 00 00",
+#                 ],
+            "Mumbo's Skull": [
+                "0000005103A94B0600E1000000000064",
+                ],
+            "Beehive": [
+                "FF2A05D6FBE84F860112000000000000",
+                ],
+            "Nabnut's Door": [
+                "00000064036B5A0600ED000000000000",
+                ],
+            "Nabnut's Window": [
+                "FEA200D503524B060129000000000000",
+                ],
+            "Nabnut's Attic 1": [
+                "000000C0FB693A86002D000000000000",
+                ],
+            "Whipcrack Room": [
+                "00000070FB356B86005A00000000C75E",
+                ],
+            },
         },
     "Click Clock Wood - Winter": {
-        "99A8": [ # Winter Main Area - 4E8C88
-            "000000001CE8190C000100005A000064", # Lobby
-            "E68302580000190C007B00002D000064", # Mumbo's Skull
-            "FEB111C00ABD190C0076000000000064", # Nabnut Window
-            "05A01397094C190C0077000009000064", # Nabnut Attic 1
-            "FF2913930B55190C0078000000000064", # Nabnut Attic 2
-            "00001626F63C190C007A00005A000064", # Whipcrack Room
-            ],
-#         "99E0": [ # Mumbo Skull Winter - 4EAA18
-#             ],
-#         "9A80": [ # Nabnut's House Winter - 4EC0A8
-#             ],
-#         "9A88": [ # Nabnut's Attic Winter 1 (Nuts) - 4EC278
-#             ],
-#         "9A98": [ # Nabnut's Attic Winter 2 (Water) - 4EC5A8
-#             ],
-#         "9AB8": [ # Whipcrack Room Winter - 4ECEA0
-#             ],
+        "Warp From Main": {
+#             "Lobby": [
+#                 "",
+#                 ],
+            "Mumbo's Skull": [
+                "E53402D000004B0600E6000000095742",
+                ],
+            "Nabnut's Window": [
+                "FEB111DB09AB31860126000000000000",
+                ],
+            "Nabnut's Attic 1": [
+                "04E713E308523206002B000000000000",
+                "051B13E308343206002B000000000000",
+                ],
+            "Nabnut's Attic 2": [
+                "FF2E13DB0AAA2C060029000000143FF2",
+                ],
+            "Whipcrack Room": [
+                "FFFF16B1F8174B060015000000000000",
+                ],
+            },
+        "Warp To Main": {
+#             "Lobby": [
+#                 "0E F1 00 DD 00 00 4B 06 00 DA 00 00 00 00 00 00",
+#                 ],
+            "Mumbo's Skull": [
+                "0000005103A94B0600E2000000000064",
+                ],
+            "Nabnut's Window": [
+                "FEA200D503534B06012A000000000000",
+                ],
+            "Nabnut's Attic 1": [
+                "000001F0FAB55786002C000000000000",
+                ],
+            "Nabnut's Attic 2": [
+                "000000C0FB693A86002E000000000000",
+                ],
+            "Whipcrack Room": [
+                "00000070FB356B86005B000000000000",
+                ],
+            },
         },
     }
+
+progression_bottles_moves_mounds = [
+    "058C037A", # Beak Buster
+    "060C037A", # Talon Trot
+    "068C037A", # Shock Jump Pad
+    ]
+
+non_progression_bottles_moves_mounds = [
+    "050C037A", # Eggs
+    "070C037A", # Fly Pad
+    "078C037A", # Wonderwing
+    "080C037A", # Wading Boots
+    "048C037A", # Beak Bomb
+    "088C037A", # Running Shoes
+    ]
+
+combined_bottles_list = []
+for item in progression_bottles_moves_mounds:
+    combined_bottles_list.append(item)
+for item in non_progression_bottles_moves_mounds:
+    combined_bottles_list.append(item)
 
 other_setup_pointer_list = [
     "9BD0", "9AC0", "9AC8", "9AD0", "9B00", "9AE8", "9AF0", "9B40",
@@ -2897,7 +3277,8 @@ def parameter_gui():
     warp_options = {
         "None",
         "In-World",
-        #"Lair Warps",
+        "World Order",
+        "Max Warps",
         }
     try:
         warp_var.set(json_data["Warps"])
@@ -3069,7 +3450,7 @@ def verify_original_header(file_bytes, address):
     """Verifies the start of an address by looking for 11 72"""
     logger.info("Verify Original Header")
     if((file_bytes[address] != 17) or (file_bytes[address+1] != 114)):# or (file_bytes[address+2] != 0) or (file_bytes[address+3] != 0)):
-        logger.error("Does Not Start With 11 72")
+        logger.error("Error: Please verify ROM is v1.0")
         error_window("Error During Randomization")
         raise SystemExit # exit(0)
 
@@ -3592,7 +3973,7 @@ def create_mmap(file_dir, address):
         mm = mmap.mmap(f.fileno(), 0)
     return mm
 
-def enemy_get_lists(mm, location):
+def enemy_get_lists(mm, location, allow_abnormalities_option=False):
     '''For each enemy type, runs the functions that grabs the list of objects and locations'''
     logger.info("Get Enemy Lists: " + location)
     index_dict = {}
@@ -3607,6 +3988,15 @@ def enemy_get_lists(mm, location):
         for enemy_id in enemy_id_dict[location][enemy_type]:
             index_dict[enemy_type] = index_dict[enemy_type] + get_enemy_index_list(mm, enemy_id)
         location_dict[enemy_type] = location_dict[enemy_type] + obtain_enemy_list_info(mm, index_dict[enemy_type])
+    for enemy_type in additional_enemy_id_dict:
+        for enemy_id in additional_enemy_id_dict[enemy_type]:
+            index_dict[enemy_type] = index_dict[enemy_type] + get_enemy_index_list(mm, enemy_id)
+        location_dict[enemy_type] = location_dict[enemy_type] + obtain_enemy_list_info(mm, index_dict[enemy_type])
+    if(allow_abnormalities_option):
+        for enemy_type in additional_abnormal_enemy_id_dict:
+            for enemy_id in additional_abnormal_enemy_id_dict[enemy_type]:
+                index_dict[enemy_type] = index_dict[enemy_type] + get_enemy_index_list(mm, enemy_id)
+            location_dict[enemy_type] = location_dict[enemy_type] + obtain_enemy_list_info(mm, index_dict[enemy_type])
     return (index_dict, location_dict)
 
 def get_flagged_objects_dict(mm, flagged_object_dict, location, allow_abnormalities_option=None):
@@ -3641,7 +4031,9 @@ def generic_get_lists(mm, id_list):
             object_list = get_object_index_list(mm, obj_id)
         elif((id_list == collectable_struct_id_list) or (id_list == (collectable_struct_id_list + abnormal_collectable_struct_id_list))):
             object_list = get_struct_index_list(mm, obj_id)
-        elif((id_list == croctus_list) or (id_list == clanker_rings_list) or (id_list == ancient_ones_list) or (id_list == jinxy_head_list) or (id_list == brentilda_list)):
+        elif((id_list == croctus_list) or (id_list == clanker_rings_list) or
+             (id_list == ancient_ones_list) or (id_list == jinxy_head_list) or
+             (id_list == brentilda_list) or (id_list == combined_bottles_list)):
             object_list = get_sequence_index_list(mm, obj_id)
         else:
             logger.error("Invalid ID List")
@@ -3653,7 +4045,9 @@ def generic_get_lists(mm, id_list):
         location_list = obtain_no_flag_object_list_info(mm, index_list)
     elif((id_list == collectable_struct_id_list) or (id_list == (collectable_struct_id_list + abnormal_collectable_struct_id_list))):
         location_list = obtain_struct_list_info(mm, index_list)
-    elif((id_list == croctus_list) or (id_list == clanker_rings_list) or (id_list == ancient_ones_list) or (id_list == jinxy_head_list) or (id_list == brentilda_list)):
+    elif((id_list == croctus_list) or (id_list == clanker_rings_list) or
+         (id_list == ancient_ones_list) or (id_list == jinxy_head_list) or
+         (id_list == brentilda_list) or (id_list == combined_bottles_list)):
         location_list = obtain_sequence_object_list_info(mm, index_list)
     else:
         logger.error("Invalid ID List")
@@ -3669,10 +4063,7 @@ def negative_hex_value(pos_dec_value):
 def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, warp_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option):
     '''For every location, grabs all of the non-flags, flagged, struct, and enemy indices and information, randomizes the lists, and assigns the new values'''
     logger.info("Get Index Main")
-#     croctus_option = "2"
-#     clanker_rings_option = "2"
-#     ancient_ones_option = "2"
-#     jinxy_head_option = "2"
+    warp_seed_addition = 0
     for location in address_dict:
         logger.debug("Location: " + str(location))
         address_index_dict = {}
@@ -3680,10 +4071,13 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         address_no_flag_object_location_list = []
         address_struct_location_list = []
         address_brentilda_location_list = []
+        address_bottles_location_list = []
         address_ground_enemy_location_list = []
         address_flying_enemy_location_list = []
         address_wall_enemy_location_list = []
         address_misc_enemy_location_list = []
+        address_warp_entry_index_dict = {}
+        address_warp_entry_location_dict = {}
         address_croctus_location_list = []
         address_clanker_rings_location_list = []
         address_ancient_ones_location_list = []
@@ -3735,7 +4129,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                     address_index_dict[address]["Brentilda"] = brentilda_index_list
             # Enemies
             if(enemy_option != "None"):
-                (index_dict, location_dict) = enemy_get_lists(mm, location)
+                (index_dict, location_dict) = enemy_get_lists(mm, location, allow_abnormalities_option)
                 # Grounded Enemies
                 logger.info("Get Grounded Enemies Index")
                 address_index_dict[address]["Grounded_Enemies"] = address_index_dict[address]["Grounded_Enemies"] + index_dict["Ground"]
@@ -3752,6 +4146,18 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                     logger.info("Get Misc Enemies Index")
                     address_index_dict[address]["Misc_Enemies"] = address_index_dict[address]["Misc_Enemies"] + index_dict["Misc_Enemies"]
                     address_misc_enemy_location_list = address_misc_enemy_location_list + location_dict["Misc_Enemies"]
+            # Warps
+            if((warp_option == "In-World") or (warp_option == "Max Warps")):
+                logger.info("In-World Warps")
+                if(location in within_world_warps_list):
+                    (address_warp_entry_index_dict, address_warp_entry_location_dict) = get_warp_lists(mm, within_world_warps_list[location], address, address_warp_entry_index_dict, address_warp_entry_location_dict)
+            if((warp_option == "World Order") or (warp_option == "Max Warps")):
+                logger.info("Lair Warps")
+                (bottles_index_list, bottles_location_list) = generic_get_lists(mm, combined_bottles_list)
+                for item in bottles_location_list:
+                    address_bottles_location_list.append(item)
+                address_index_dict[address]["Bottles"] = bottles_index_list
+            # Misc Options
             if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
                 logger.info("Get Croctus Index")
                 (croctus_index_list, croctus_location_list) = generic_get_lists(mm, croctus_list)
@@ -3789,6 +4195,9 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             address_ground_enemy_location_list = randomize_list(seed_val, address_ground_enemy_location_list)
             address_flying_enemy_location_list = randomize_list(seed_val, address_flying_enemy_location_list)
             address_wall_enemy_location_list = randomize_list(seed_val, address_wall_enemy_location_list)
+        if((warp_option == "In-World") or (warp_option == "Max Warps")):
+            address_warp_entry_location_dict = shuffle_within_world_warp_entry_order(seed_val, warp_seed_addition, address_warp_entry_location_dict)
+            warp_seed_addition += len("If you're reading this, please check up on your friends <3")
         if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
             address_croctus_location_list = randomize_list(seed_val, address_croctus_location_list)
         if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
@@ -3797,7 +4206,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             address_ancient_ones_location_list = randomize_list(seed_val, address_ancient_ones_location_list)
         if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
             address_jinxy_head_location_list = randomize_list(seed_val, address_jinxy_head_location_list)
-        
+
         ### Move Everything
         logger.info("Moving Object/Structs/Enemies Section")
         for address in address_dict[location]:
@@ -3844,16 +4253,12 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address, allow_abnormalities_option)
                 oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Misc_Enemies"], "Misc", location, address, allow_abnormalities_option)
             # Warps
-            if(warp_option == "In-World"):
-                if(location in within_world_warps_list):
-                    if(address in within_world_warps_list[location]):
-                        logger.info("In-World Warps")
-                        shuffle_warps_within_world(mm, seed_val, location, address)
-            elif(warp_option == "World Order"):
+            if((warp_option == "In-World") or (warp_option == "Max Warps")):
+                logger.info("In-World Warps")
+                move_within_world_warps_entries(mm, address, address_warp_entry_index_dict, address_warp_entry_location_dict)
+            if((warp_option == "World Order") or (warp_option == "Max Warps")):
                 logger.info("Lair Warps")
-            elif(warp_option == "All Warps"):
-                logger.info("In-World")
-                logger.info("Lair Warps")
+                address_bottles_location_list = move_bottles_mounds(mm, seed_val, address_index_dict[address]["Bottles"], address_bottles_location_list, progression_bottles_moves_mounds, non_progression_bottles_moves_mounds)
             # Croctus
             if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
                 address_croctus_location_list = move_no_flag_objects(mm, address_index_dict[address]["Croctus"], address_croctus_location_list)
@@ -3866,6 +4271,8 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             # Jinxy Head
             if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
                 address_jinxy_head_location_list = move_no_flag_objects(mm, address_index_dict[address]["Jinxy_Head"], address_jinxy_head_location_list)
+    if((warp_option == "World Order") or (warp_option == "Max Warps")):
+        shuffle_world_order_warps(file_dir, seed_val)
 
 #################
 ### RANDOMIZE ###
@@ -3958,7 +4365,7 @@ def turn_brentildas_into_refills(mm, seed_val, address, brentilda_index_list, br
         mm[brentilda_index + 2] = int(refill_choice[4:6], 16)
         mm[brentilda_index + 3] = int(refill_choice[6:], 16)
         brentilda_location_list.pop(0)
-        seed_count += 1
+        seed_count += len("I wonder if people will even care about me after I release the randomizer...")
     return brentilda_location_list
 
 def move_local_enemies(mm, enemy_index_list, enemy_location_list):
@@ -3989,97 +4396,186 @@ def move_randomized_enemies(mm, seed_val, enemy_index_list, enemy_type, location
     for enemy_index in enemy_index_list:
         random.seed(a=(seed_val+seed_count+int(address, 16)))
         enemy_obj_id = random.choice(enemy_id_list)
-        mm[enemy_index + 2] = int(enemy_obj_id[:2], 16)
-        mm[enemy_index + 3] = int(enemy_obj_id[2:], 16)
-        if(enemy_obj_id == "0289"):
+        mm[enemy_index + 2] = int(enemy_obj_id[4:6], 16)
+        mm[enemy_index + 3] = int(enemy_obj_id[6:], 16)
+        if(enemy_obj_id == "190C0289"):
             rot_val = mm[enemy_index + 6]
             if(rot_val >= 45):
                 mm[enemy_index + 6] = rot_val - 45
             else:
                 mm[enemy_index + 6] = rot_val + 135
-        seed_count += 1
+        seed_count += len("Everyone talks to me about what features should be in the randomizer without understanding the effort I put into coding this...")
 
 def oh_whoops_all_enemies(mm, seed_val, enemy_index_list, enemy_type, location, address, abnormal_option="0"):
     '''For each enemy, randomly assign it a new script and object id within the id list'''
     logger.info("Move Completely Randomized Enemies")
     seed_count = 0
     for enemy_index in enemy_index_list:
-        random.seed(a=(seed_val+seed_count+int(address, 16)))
         if(enemy_type == "Ground"):
             if((abnormal_option == "1") and (location == "Rusty Bucket Bay")):
-                enemy_obj_id = random.choice(["0004", "01C6", "02A4", "030D"])
+                random.seed(a=(seed_val+seed_count+int(address, 16)))
+                enemy_obj_id = random.choice(["190C0004", "190C01C6", "190C02A4", "190C030D"])
             else:
-                enemy_obj_id = "0004"
+                enemy_obj_id = "190C0004"
         elif(enemy_type == "Wall"):
             if(abnormal_option == "1"):
-                enemy_obj_id = random.choice(["013B", "0289"])
+                random.seed(a=(seed_val+seed_count+int(address, 16)))
+                enemy_obj_id = random.choice(["190C013B", "190C0289"])
             else:
-                enemy_obj_id = "013B"
+                enemy_obj_id = "190C013B"
         elif((enemy_type == "Flying") or (enemy_type == "Misc")):
-            enemy_obj_id = "034D"
-        mm[enemy_index + 2] = int(enemy_obj_id[:2], 16)
-        mm[enemy_index + 3] = int(enemy_obj_id[2:], 16)
-        if(enemy_obj_id == "0289"):
+            enemy_obj_id = "078C034D"
+        mm[enemy_index] = int(enemy_obj_id[:2], 16)
+        mm[enemy_index + 1] = int(enemy_obj_id[2:4], 16)
+        mm[enemy_index + 2] = int(enemy_obj_id[4:6], 16)
+        mm[enemy_index + 3] = int(enemy_obj_id[6:8], 16)
+        if(enemy_obj_id == "190C0289"):
             rot_val = mm[enemy_index + 6]
             if(rot_val >= 45):
                 mm[enemy_index + 6] = rot_val - 45
             else:
                 mm[enemy_index + 6] = rot_val + 135
-        seed_count += 1
+        seed_count += len("I waNt iT tOo bE chAlLenGinG :P")
 
 #############
 ### WARPS ###
 #############
 
-def get_entry_index_list(mm, location, address):
-    entry_index_list = []
-    for entry in within_world_warps_list[location][address]:
-        entry_index = mm.find(bytes.fromhex(entry))
-        entry_index_list.append(entry_index)
-    return entry_index_list
+def get_warp_lists(mm, location_warps_entry_dict, address, warp_entry_index_dict, warp_entry_location_dict):
+    for shuffle_group in location_warps_entry_dict:
+        if(shuffle_group not in warp_entry_index_dict):
+            warp_entry_index_dict[shuffle_group] = {}
+        if(shuffle_group not in warp_entry_location_dict):
+            warp_entry_location_dict[shuffle_group] = {}
+        for warp_id in location_warps_entry_dict[shuffle_group]:
+            if(warp_id not in warp_entry_index_dict[shuffle_group]):
+                warp_entry_index_dict[shuffle_group][warp_id] = {}
+                warp_entry_index_dict[shuffle_group][warp_id]["Warps"] = []
+            if(warp_id not in warp_entry_location_dict[shuffle_group]):
+                warp_entry_location_dict[shuffle_group][warp_id] = {}
+                warp_entry_location_dict[shuffle_group][warp_id]["Warps"] = []
+            if(warp_entry_index_dict[shuffle_group][warp_id]["Warps"] == []):
+                for warp_search in location_warps_entry_dict[shuffle_group][warp_id]:
+                    warp_index = mm.find(bytes.fromhex(warp_search))
+                    if(warp_index >= 0):
+                        warp_entry_index_dict[shuffle_group][warp_id]["Warp_Address"] = address
+                        (warp_entry_index_dict[shuffle_group][warp_id]["Warps"]).append(warp_index)
+                        warp_dict = {
+                            "Index": warp_index,
+                            "Obj_ID1": mm[warp_index + 8],
+                            "Obj_ID2": mm[warp_index + 9],
+                            }
+                        (warp_entry_location_dict[shuffle_group][warp_id]["Warps"]).append(warp_dict)
+    return (warp_entry_index_dict, warp_entry_location_dict)
 
-def get_entry_info(mm, entry_index_list):
-    entry_info_list = []
-    for entry_index in entry_index_list:
-        entry_dict = {}
-#         entry_dict["Hex_X1"] = mm[entry_index]
-#         entry_dict["Hex_X2"] = mm[entry_index + 1]
-#         entry_dict["Hex_Y1"] = mm[entry_index + 2]
-#         entry_dict["Hex_Y2"] = mm[entry_index + 3]
-#         entry_dict["Hex_Z1"] = mm[entry_index + 4]
-#         entry_dict["Hex_Z2"] = mm[entry_index + 5]
-        entry_dict["Script1"] = mm[entry_index + 6]
-        entry_dict["Script2"] = mm[entry_index + 7]
-        entry_dict["Obj_ID1"] = mm[entry_index + 8]
-        entry_dict["Obj_ID2"] = mm[entry_index + 9]
-        entry_dict["IDK1"] = mm[entry_index + 10]
-        entry_dict["IDK2"] = mm[entry_index + 11]
-        entry_dict["Rotation"] = mm[entry_index + 12]
-        entry_dict["IDK3"] = mm[entry_index + 13]
-        entry_dict["IDK4"] = mm[entry_index + 14]
-        entry_dict["Size"] = mm[entry_index + 15]
-        entry_info_list.append(entry_dict)
-    return entry_info_list
+def shuffle_within_world_warp_entry_order(seed_val, warp_seed_addition, warp_entry_location_dict):
+    shuffled_warp_entry_location_dict = {}
+    for shuffle_group in warp_entry_location_dict:
+        warp_ids = sorted(list((warp_entry_location_dict[shuffle_group]).keys()))
+        random.seed(a=(seed_val + warp_seed_addition))
+        random.shuffle(warp_ids)
+        shuffled_warp_entry_location_dict[shuffle_group] = {}
+        for key in sorted(list((warp_entry_location_dict[shuffle_group]).keys())):
+            shuffled_warp_entry_location_dict[shuffle_group][warp_ids[0]] = warp_entry_location_dict[shuffle_group][key]
+            warp_ids.pop(0)
+    return shuffled_warp_entry_location_dict
 
-def move_warps_within_world(mm, entry_index_list, randomized_entry_info_list):
-    for entry_index in entry_index_list:
-        mm[entry_index + 6] = randomized_entry_info_list[0]["Script1"]
-        mm[entry_index + 7] = randomized_entry_info_list[0]["Script2"]
-        mm[entry_index + 8] = randomized_entry_info_list[0]["Obj_ID1"]
-        mm[entry_index + 9] = randomized_entry_info_list[0]["Obj_ID2"]
-        mm[entry_index + 10] = randomized_entry_info_list[0]["IDK1"]
-        mm[entry_index + 11] = randomized_entry_info_list[0]["IDK2"]
-        mm[entry_index + 12] = randomized_entry_info_list[0]["Rotation"]
-        mm[entry_index + 13] = randomized_entry_info_list[0]["IDK3"]
-        mm[entry_index + 14] = randomized_entry_info_list[0]["IDK4"]
-        mm[entry_index + 15] = randomized_entry_info_list[0]["Size"]
-        randomized_entry_info_list.pop(0)
+def move_within_world_warps_entries(mm, address, address_warp_entry_index_dict, address_warp_entry_location_dict):
+    for shuffle_group in address_warp_entry_index_dict:
+        for warp_id in address_warp_entry_index_dict[shuffle_group]:
+            if(address == address_warp_entry_index_dict[shuffle_group][warp_id]["Warp_Address"]):
+                for warp_index in address_warp_entry_index_dict[shuffle_group][warp_id]["Warps"]:
+                    mm[warp_index + 8] = address_warp_entry_location_dict[shuffle_group][warp_id]["Warps"][0]['Obj_ID1']
+                    mm[warp_index + 9] = address_warp_entry_location_dict[shuffle_group][warp_id]["Warps"][0]['Obj_ID2']
 
-def shuffle_warps_within_world(mm, seed_val, location, address):
-    entry_index_list = get_entry_index_list(mm, location, address)
-    entry_info_list = get_entry_info(mm, entry_index_list)
-    randomized_entry_info_list = randomize_list(seed_val, entry_info_list, int(address, 16))
-    move_warps_within_world(mm, entry_index_list, randomized_entry_info_list)
+def determine_world_order(seed_val):
+    original_world_order = ["Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Rusty Bucket Bay", "Click Clock Wood - Lobby"]
+    new_world_order = ["Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Rusty Bucket Bay", "Click Clock Wood - Lobby"]
+    random.seed(a=seed_val)
+    random.shuffle(new_world_order)
+#     new_world_order.insert(0, "Mumbo's Mountain")
+#     new_world_order.insert(5, "Mad Monster Mansion")
+    return (original_world_order, new_world_order)
+
+def get_grunty_lair_warp_index_list(file_dir, original_world):
+    warp_index_list = []
+    with open(file_dir + tmp_folder + world_order_warps_list[original_world]["Gruntilda's Lair Address"] + "-Decompressed.bin", "r+b") as decomp_file:
+        mm_find = mmap.mmap(decomp_file.fileno(), 0)
+        for warp_search in world_order_warps_list[original_world]["Gruntilda's Lair Warps"]:
+            warp_index = mm_find.find(bytes.fromhex(warp_search))
+            if(warp_index >= 0):
+                warp_index_list.append(warp_index)
+            else:
+                logger.error("Error: Lair Warp Not Found")
+                error_window("Error During Randomization")
+                raise SystemExit
+    return warp_index_list
+
+def edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world):
+    # Replace it/them with new world warp
+    mm_replace = create_mmap(file_dir, world_order_warps_list[original_world]["Gruntilda's Lair Address"])
+    for warp_index in warp_index_list:
+        first_new_warp = world_order_warps_list[new_world]["Gruntilda's Lair Warps"][0]
+        mm_replace[warp_index + 8] = int(first_new_warp[16:18], 16)
+        mm_replace[warp_index + 9] = int(first_new_warp[18:], 16)
+
+def get_original_warp_pad(file_dir, original_world):
+    with open(file_dir + tmp_folder + world_order_warps_list[original_world]["World Address"] + "-Decompressed.bin", "r+b") as decomp_file:
+        mm_find = mmap.mmap(decomp_file.fileno(), 0)
+        warp_pad_search = world_order_warps_list[original_world]["World Pad"]
+        warp_pad_index = mm_find.find(bytes.fromhex(warp_pad_search))
+    if(warp_pad_index < 0):
+        logger.error("Error: Couldn't Find Warp Pad")
+        error_window("Error During Randomization")
+        raise SystemExit
+    return warp_pad_index
+
+def edit_warp_pad(file_dir, warp_pad_index, original_world, new_world):
+    mm_replace = create_mmap(file_dir, world_order_warps_list[original_world]["World Address"])
+    new_warp_pad = world_order_warps_list[new_world]["World Pad"]
+    mm_replace[warp_pad_index] = int(new_warp_pad[:2], 16)
+    mm_replace[warp_pad_index + 1] = int(new_warp_pad[2:4], 16)
+    mm_replace[warp_pad_index + 2] = int(new_warp_pad[4:6], 16)
+    mm_replace[warp_pad_index + 3] = int(new_warp_pad[6:], 16)
+
+def move_bottles_mounds(mm, seed_val, bottles_index_list, bottles_location_list, progression_bottles_moves_choices, non_progression_bottles_moves_choices):
+    '''For each object, assign it a new script and object id based on randomized list'''
+    logger.info("Move Non-Flag Objects")
+    seed_count = 0
+    for bottles_index in bottles_index_list:
+        bottles_script_obj_id = (leading_zeros(str(hex(mm[bottles_index]))[2:], 2) +
+                                 leading_zeros(str(hex(mm[bottles_index + 1]))[2:], 2) + 
+                                 leading_zeros(str(hex(mm[bottles_index + 2]))[2:], 2) + 
+                                 leading_zeros(str(hex(mm[bottles_index + 3]))[2:], 2)).upper()
+        if(bottles_script_obj_id in ["050C037A", "058C037A", "060C037A"]):
+            random.seed(a=(seed_val + seed_count))
+            new_bottles_script_obj_id = random.choice(progression_bottles_moves_choices)
+            progression_bottles_moves_choices.remove(new_bottles_script_obj_id)
+        elif(bottles_script_obj_id in ["048C037A", "068C037A", "070C037A", "078C037A", "080C037A", "088C037A"]):
+            random.seed(a=(seed_val + seed_count))
+            new_bottles_script_obj_id = random.choice(non_progression_bottles_moves_choices)
+            non_progression_bottles_moves_choices.remove(new_bottles_script_obj_id)
+        else:
+            logger.error("Error: Non-Bottles Mound Found")
+            error_window("Error During Randomization")
+            raise SystemExit
+        mm[bottles_index] = int(new_bottles_script_obj_id[:2], 16)
+        mm[bottles_index + 1] = int(new_bottles_script_obj_id[2:4], 16)
+        mm[bottles_index + 2] = int(new_bottles_script_obj_id[4:6], 16)
+        mm[bottles_index + 3] = int(new_bottles_script_obj_id[6:], 16)
+        bottles_location_list.pop(0)
+        seed_count += len("They ask you how you are, and you just have to say you're fine when you're not really fine, but you just can't get into it, because they would never understand.")
+    return bottles_location_list
+
+def shuffle_world_order_warps(file_dir, seed_val):
+    (original_world_order, new_world_order) = determine_world_order(seed_val)
+    for world_index in range(len(original_world_order)):
+        original_world = original_world_order[world_index]
+        new_world = new_world_order[world_index]
+        warp_index_list = get_grunty_lair_warp_index_list(file_dir, original_world)
+        edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world)
+        #warp_pad_index = get_original_warp_pad(file_dir, original_world)
+        #edit_warp_pad(file_dir, warp_pad_index, original_world, new_world)
 
 ##########################
 ### UNLOCKABLE OPTIONS ###
