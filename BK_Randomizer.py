@@ -771,47 +771,47 @@ flagged_object_dict = {
         },
     "Mumbo's Mountain" : {
         # Jiggies
-        "0001": {
-            "Object":"0175107DFC76190C0046", # 19 0C 00 46 00 00 24 00 00 64 05 40 00
-            "Flag":  "017D0FF1FC7C3F940001", # 3F 94 00 01 00 00 00 00 00 00 0E 00 00
+        "0001": {                            #  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18
+            "Object":"0175107DFC76190C0046", # 01 75 10 7D FC 76 19 0C 00 46 00 00 24 00 00 64 05 40
+            "Flag":  "017D0FF1FC7C3F940001", # 01 7D 0F F1 FC 7C 3F 94 00 01 00 00 00 00 00 00 0E 00
             },
         "0002": {
-            "Object":"15CC0AC4F56C190C0046", # 19 0C 00 46 00 00 10 80 00 64 05 20 00
-            "Flag":  "15D90ADDF54150940002", # 50 94 00 02 00 00 00 00 00 00 0E 30 00
+            "Object":"15CC0AC4F56C190C0046", # 15 CC 0A C4 F5 6C 19 0C 00 46 00 00 10 80 00 64 05 20
+            "Flag":  "15D90ADDF54150940002", # 15 D9 0A DD F5 41 50 94 00 02 00 00 00 00 00 00 0E 30
             },
         "0005": {
-            "Object":"F18D0986F7BF190C0046", # 19 0C 00 46 00 00 00 00 00 64 05 30 00
-            "Flag":  "F19C0981F7CA4D940005", # 4D 94 00 05 00 00 00 00 00 00 0E B0 00
+            "Object":"F18D0986F7BF190C0046", # F1 8D 09 86 F7 BF 19 0C 00 46 00 00 00 00 00 64 05 30
+            "Flag":  "F19C0981F7CA4D940005", # F1 9C 09 81 F7 CA 4D 94 00 05 00 00 00 00 00 00 0E B0
             },
         "0006": {
-            "Object":"10EF05CD031A190C0046", # 19 0C 00 46 00 00 00 00 00 64 05 10 00
-            "Flag":  "10DD059B030246940006", # 46 94 00 06 00 00 00 00 00 00 0E 10 00
+            "Object":"10EF05CD031A190C0046", # 10 EF 05 CD 03 1A 19 0C 00 46 00 00 00 00 00 64 05 10
+            "Flag":  "10DD059B030246940006", # 10 DD 05 9B 03 02 46 94 00 06 00 00 00 00 00 00 0E 10
             },
         # Empty Honeycombs
-#         "0064": { # Alcove
-#             "Object":"03D901E40691190C0047", # 19 0C 00 47 00 00 00 00 00 64 12 50 00
-#             "Flag":  "03D2020E069445140064", # 45 14 00 64 00 00 00 00 00 64 01 B0 00
-#             },
-#         "0065": { # Juju
-#             "Object":"10CE0B54FA2E190C0047", # 19 0C 00 47 00 00 00 00 00 64 08 50 00
-#             "Flag":  "10ED0B6CFA2B1F140065", # 1F 14 00 65 00 00 00 00 00 64 03 30 00
-#             },
+        "0064": { # Alcove
+            "Object":"03D901E40691190C0047", # 03 D9 01 E4 06 91 19 0C 00 47 00 00 00 00 00 64 12 50
+            "Flag":  "03D2020E069445140064", # 03 D2 02 0E 06 94 45 14 00 64 00 00 00 00 00 64 01 B0
+            },
+        "0065": { # Juju
+            "Object":"10CE0B54FA2E190C0047", # 10 CE 0B 54 FA 2E 19 0C 00 47 00 00 00 00 00 64 08 50
+            "Flag":  "10ED0B6CFA2B1F140065", # 10 ED 0B 6C FA 2B 1F 14 00 65 00 00 00 00 00 64 03 30
+            },
         # Mumbo Tokens
         "00C8": {
-            "Object":"EEB101DB1827190C002D", # 19 0C 00 2D 00 00 5A 00 00 64 08 80 00
-            "Flag":  "EEAF01DB1820341400C8", # 34 14 00 C8 00 00 00 00 00 64 19 20 00
+            "Object":"EEB101DB1827190C002D", # EE B1 01 DB 18 27 19 0C 00 2D 00 00 5A 00 00 64 08 80
+            "Flag":  "EEAF01DB1820341400C8", # EE AF 01 DB 18 20 34 14 00 C8 00 00 00 00 00 64 19 20
             },
         "00C9": {
-            "Object":"ECFB08CFF636190C002D", # 19 0C 00 2D 00 00 00 00 00 64 12 60 00
-            "Flag":  "ECEE08CFF64E4D9400C9", # 4D 94 00 C9 00 00 00 00 00 64 19 30 00
+            "Object":"ECFB08CFF636190C002D", # EC FB 08 CF F6 36 19 0C 00 2D 00 00 00 00 00 64 12 60
+            "Flag":  "ECEE08CFF64E4D9400C9", # EC EE 08 CF F6 4E 4D 94 00 C9 00 00 00 00 00 64 19 30
             },
         "00CB": {
-            "Object":"16DF00000879190C002D", # 19 0C 00 2D 00 00 00 00 00 64 12 70 00
-            "Flag":  "16D6000008823F9400CB", # 3F 94 00 CB 00 00 00 00 00 64 19 50 00
+            "Object":"16DF00000879190C002D", # 16 DF 00 00 08 79 19 0C 00 2D 00 00 00 00 00 64 12 70
+            "Flag":  "16D6000008823F9400CB", # 16 D6 00 00 08 82 3F 94 00 CB 00 00 00 00 00 64 19 50
             },
         "00CA": {
-            "Object":"141E0878F671190C002D", # 19 0C 00 2D 00 00 9E 80 00 64 03 40 00
-            "Flag":  "14200875F6803F9400CA", # 3F 94 00 CA 00 00 00 00 00 64 19 40 00
+            "Object":"141E0878F671190C002D", # 14 1E 08 78 F6 71 19 0C 00 2D 00 00 9E 80 00 64 03 40
+            "Flag":  "14200875F6803F9400CA", # 14 20 08 75 F6 80 3F 94 00 CA 00 00 00 00 00 64 19 40
             },
         "00CC": {
             "Object":"FEA90159FDFA190C002D", # 19 0C 00 2D 00 00 00 00 00 64 03 50 00
@@ -842,12 +842,12 @@ flagged_object_dict = {
             },
         # Empty Honeycombs
         "0066": {
-            "Object":"EF31002E0073190C0047",
-            "Flag":  "EF4B0021006847140066",
+            "Object":"EF31002E0073190C0047", # EF 31 00 2E 00 73 19 0C 00 47 00 00 00 00 00 64 0C 10
+            "Flag":  "EF4B0021006847140066", # EF 4B 00 21 00 68 47 14 00 66 00 00 00 00 00 64 00 A0
             },
         "0067": {
-            "Object":"2119034CF584190C0047",
-            "Flag":  "2106036FF59638140067",
+            "Object":"2119034CF584190C0047", # 21 19 03 4C F5 84 19 0C 00 47 00 00 00 00 00 64 0D F0
+            "Flag":  "2106036FF59638140067", # 21 06 03 6F F5 96 38 14 00 67 00 00 00 00 00 64 0E 00
             },
         # Mumbo Tokens
 #         "00CE": {
@@ -2508,10 +2508,10 @@ within_world_warps_list = {
                 "EEDC06A2F2797E0600AE000000000064",
                 "F07F0655F304560600AE000000000000",
                 ],
-            "Big Fish Warehouse": [
-                "064FFD1102BCFA0600BA000000000000",
-                "0702FD860062C08600BA000000000000",
-                ],
+#             "Big Fish Warehouse": [ # Kept softlocking, but also don't have destination on BB?
+#                 "064FFD1102BCFA0600BA000000000000",
+#                 "0702FD860062C08600BA000000000000",
+#                 ],
             "Boat Room": [
                 "F7CEFD85003D750600B3000000001882",
                 ],
@@ -3973,7 +3973,7 @@ def create_mmap(file_dir, address):
         mm = mmap.mmap(f.fileno(), 0)
     return mm
 
-def enemy_get_lists(mm, location, allow_abnormalities_option=False):
+def enemy_get_lists(mm, location, allow_abnormalities_option=False, enemy_option=None):
     '''For each enemy type, runs the functions that grabs the list of objects and locations'''
     logger.info("Get Enemy Lists: " + location)
     index_dict = {}
@@ -3992,7 +3992,7 @@ def enemy_get_lists(mm, location, allow_abnormalities_option=False):
         for enemy_id in additional_enemy_id_dict[enemy_type]:
             index_dict[enemy_type] = index_dict[enemy_type] + get_enemy_index_list(mm, enemy_id)
         location_dict[enemy_type] = location_dict[enemy_type] + obtain_enemy_list_info(mm, index_dict[enemy_type])
-    if(allow_abnormalities_option):
+    if((allow_abnormalities_option) and (enemy_option == "Oh Whoops")):
         for enemy_type in additional_abnormal_enemy_id_dict:
             for enemy_id in additional_abnormal_enemy_id_dict[enemy_type]:
                 index_dict[enemy_type] = index_dict[enemy_type] + get_enemy_index_list(mm, enemy_id)
@@ -4129,7 +4129,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                     address_index_dict[address]["Brentilda"] = brentilda_index_list
             # Enemies
             if(enemy_option != "None"):
-                (index_dict, location_dict) = enemy_get_lists(mm, location, allow_abnormalities_option)
+                (index_dict, location_dict) = enemy_get_lists(mm, location, allow_abnormalities_option, enemy_option)
                 # Grounded Enemies
                 logger.info("Get Grounded Enemies Index")
                 address_index_dict[address]["Grounded_Enemies"] = address_index_dict[address]["Grounded_Enemies"] + index_dict["Ground"]
