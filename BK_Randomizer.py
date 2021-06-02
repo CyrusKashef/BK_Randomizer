@@ -2342,12 +2342,12 @@ within_world_warps_list = {
             "First Floor 2": [
                 "056F0156FCC838860083000000000000",
                 ],
-            "Second Floor 1": [
-                "0665053FFF224D060087000000000000",
-                ],
-            "Second Floor 2": [
-                "015C055400ED46060085000000000000",
-                ],
+#             "Second Floor 1": [ # Pumpkin Transformation Required
+#                 "0665053FFF224D060087000000000000",
+#                 ],
+#             "Second Floor 2": [ # Pumpkin Transformation Required
+#                 "015C055400ED46060085000000000000",
+#                 ],
             "Third Floor 1": [
                 "03D406EC04495D860084000000000000",
                 ],
@@ -2786,102 +2786,6 @@ skip_these_setup_pointer_list = [
 #####################################################################################
 ##################################### FUNCTIONS #####################################
 #####################################################################################
-
-###########################
-### DEVELOPER FUNCITONS ###
-###########################
-
-def dev_decompressor(file_dir, rom_file):
-    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
-    logger.info("Decompressor")
-    # Get File Bytes
-    file_bytes = get_file_bytes(file_dir, rom_file)
-    address_dict = {}
-    address_translator = {}
-    for location_name in setup_ids:
-        address_list = []
-        for (addr, header, footer, lead, tail) in setup_ids[location_name]:
-            # Get Address Endpoints
-            (address1, address2) = get_address_endpoints(file_bytes, addr)
-            verify_original_header(file_bytes, address1)
-            # Write Compressed File
-            compressed_file = (str(addr)[2:]).upper()
-            print(addr, compressed_file)
-            address_translator[addr] = compressed_file
-            with open(file_dir + tmp_folder + compressed_file + "-Compressed.bin", "w+b") as comp_file:
-                # Grab Middle
-                for index in range(address1, address2):
-                    hex_string = str(hex(file_bytes[index]))[2:]
-                    if(len(hex_string) < 2):
-                        hex_string = "0" + hex_string
-                    comp_file.write(bytes.fromhex(hex_string))
-            # Decompress File
-            #decompress_file(file_dir, compressed_file)
-            address_list.append(compressed_file)
-        address_dict[location_name] = address_list
-    return (address_dict, address_translator)
-
-header_table = {
-    "Spiral Mountain": ["3E", "FE"],
-    "Mumbo's Mountain": ["37", "FC"],
-    "Treasure Trove Cove": ["B5", "01"],
-    "Clanker's Cavern": ["45", "6A"],
-    "Bubblegloop Swamp": ["23", "32"],
-    "Freezeezy Peak": ["9C", "36"],
-    "Gobi's Valley": ["AF", "39"],
-    "Mad Monster Mansion": ["84", "3F"],
-    "Rusty Bucket Bay": ["42", "6C"],
-    "Click Clock Wood - Lobby": ["27", "FC"],
-    "Click Clock Wood - Spring": ["27", "FC"],
-    "Click Clock Wood - Summer": ["D6", "0D"],
-    "Click Clock Wood - Fall": ["31", "11"],
-    "Click Clock Wood - Winter": ["95", "13"]
-    }
-
-def print_header(file_dir, rom_file):
-    """Extracts a chunk of hex values from the main ROM file into a new file and prepares the new file for decompression by providing the correct header and footer"""
-    logger.info("Decompressor")
-    # Get File Bytes
-    file_bytes = get_file_bytes(file_dir, rom_file)
-    address_dict = {}
-    address_translator = {}
-    for location_name in setup_ids:
-        address_list = []
-        for (addr, header, footer, lead, tail) in setup_ids[location_name]:
-            # Get Address Endpoints
-            (address1, address2) = get_address_endpoints(file_bytes, addr)
-            verify_original_header(file_bytes, address1)
-            # Write Compressed File
-            compressed_file = (str(addr)[2:]).upper()
-            ascii_name = ""
-            for letter in compressed_file:
-                converted_string = str(binascii.hexlify(letter.encode()))
-                converted_string = converted_string.replace("b", "")
-                ascii_name += ", " + converted_string
-            extension_string = ""
-            for letter in "-Decompressed.bin":
-                converted_string = str(binascii.hexlify(letter.encode()))
-                converted_string = converted_string.replace("b", "")
-                extension_string += ", " + converted_string.upper()
-            val_1 = header_table[location_name][0]
-            val_2 = header_table[location_name][1]
-            new_header = "            ['1F', '8B', '08', '08', '" + val_1 + "', '" + val_2 + "', '6B', '60', '00', '0B'" + ascii_name + extension_string + ", '00'],"
-            print(addr)
-            print(new_header)
-    return []
-
-def dev_compress_folder(file_dir):
-    """Compresses the hex file that was extracted from the main ROM file"""
-    decompressed_file_list = os.listdir(file_dir + "Examples/")
-    for decompressed_file in decompressed_file_list:
-        if(not decompressed_file.startswith("Banjo-Kazooie")):
-            file_name = decompressed_file.split(".")[0]
-            print("File Name: " + file_name)
-            bin_file = file_name + ".bin"
-            shutil.copyfile(file_dir + "Examples/" + bin_file, file_dir + "Test/" + file_name + "-Decompressed.bin")
-            cmd = file_dir + "GZIP.EXE -c " + file_dir + "Test/" + file_name.upper() + "-Decompressed.bin > " + file_dir + "Test/" + file_name.upper() + "-Compressed.bin"
-            logger.debug(cmd)
-            subprocess.Popen(cmd.split(),shell=True).communicate()
 
 ######################
 ### MISC FUNCTIONS ###
@@ -4567,6 +4471,9 @@ def move_bottles_mounds(mm, seed_val, bottles_index_list, bottles_location_list,
         seed_count += len("They ask you how you are, and you just have to say you're fine when you're not really fine, but you just can't get into it, because they would never understand.")
     return bottles_location_list
 
+def upgrade_water_level_button():
+    pass
+
 def shuffle_world_order_warps(file_dir, seed_val):
     (original_world_order, new_world_order) = determine_world_order(seed_val)
     for world_index in range(len(original_world_order)):
@@ -4576,6 +4483,7 @@ def shuffle_world_order_warps(file_dir, seed_val):
         edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world)
         #warp_pad_index = get_original_warp_pad(file_dir, original_world)
         #edit_warp_pad(file_dir, warp_pad_index, original_world, new_world)
+        #upgrade_water_level_button()
 
 ##########################
 ### UNLOCKABLE OPTIONS ###
