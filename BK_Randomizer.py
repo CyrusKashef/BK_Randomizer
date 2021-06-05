@@ -25,7 +25,6 @@ import tkinter.filedialog
 import tkinter as tk
 import logging
 from logging.handlers import RotatingFileHandler
-import binascii
 import json
 
 #####################################################################################
@@ -34,7 +33,7 @@ import json
 
 DEVELOPER_MODE = False
 # New Major Feature . New Minor Feature . Bug Fixes
-BK_Rando_Version = "0.7.9"
+BK_Rando_Version = "0.8.2"
 
 tmp_folder = "EPPIIISA/"
 
@@ -770,52 +769,52 @@ flagged_object_dict = {
     "Spiral Mountain": {
         },
     "Mumbo's Mountain" : {
-        # Jiggies
-        "0001": {                            #  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18
-            "Object":"0175107DFC76190C0046", # 01 75 10 7D FC 76 19 0C 00 46 00 00 24 00 00 64 05 40
-            "Flag":  "017D0FF1FC7C3F940001", # 01 7D 0F F1 FC 7C 3F 94 00 01 00 00 00 00 00 00 0E 00
+        # Jiggies                                            # X1 X2 Y1 Y2 Z1 Z2 Ra -- Ob_ID -- -- -- -- -- -- -- --
+        "0001": {                                            #  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18
+            "Object":"0175107DFC76190C00460000240000640540", # 01 75 10 7D FC 76 19 0C 00 46 00 00 24 00 00 64 05 40
+            "Flag":  "017D0FF1FC7C3F9400010000000000000E00", # 01 7D 0F F1 FC 7C 3F 94 00 01 00 00 00 00 00 00 0E 00
             },
         "0002": {
-            "Object":"15CC0AC4F56C190C0046", # 15 CC 0A C4 F5 6C 19 0C 00 46 00 00 10 80 00 64 05 20
-            "Flag":  "15D90ADDF54150940002", # 15 D9 0A DD F5 41 50 94 00 02 00 00 00 00 00 00 0E 30
+            "Object":"15CC0AC4F56C190C00460000108000640520", # 15 CC 0A C4 F5 6C 19 0C 00 46 00 00 10 80 00 64 05 20
+            "Flag":  "15D90ADDF541509400020000000000000E30", # 15 D9 0A DD F5 41 50 94 00 02 00 00 00 00 00 00 0E 30
             },
         "0005": {
-            "Object":"F18D0986F7BF190C0046", # F1 8D 09 86 F7 BF 19 0C 00 46 00 00 00 00 00 64 05 30
-            "Flag":  "F19C0981F7CA4D940005", # F1 9C 09 81 F7 CA 4D 94 00 05 00 00 00 00 00 00 0E B0
+            "Object":"F18D0986F7BF190C00460000000000640530", # F1 8D 09 86 F7 BF 19 0C 00 46 00 00 00 00 00 64 05 30
+            "Flag":  "F19C0981F7CA4D9400050000000000000EB0", # F1 9C 09 81 F7 CA 4D 94 00 05 00 00 00 00 00 00 0E B0
             },
         "0006": {
-            "Object":"10EF05CD031A190C0046", # 10 EF 05 CD 03 1A 19 0C 00 46 00 00 00 00 00 64 05 10
-            "Flag":  "10DD059B030246940006", # 10 DD 05 9B 03 02 46 94 00 06 00 00 00 00 00 00 0E 10
+            "Object":"10EF05CD031A190C00460000000000640510", # 10 EF 05 CD 03 1A 19 0C 00 46 00 00 00 00 00 64 05 10
+            "Flag":  "10DD059B0302469400060000000000000E10", # 10 DD 05 9B 03 02 46 94 00 06 00 00 00 00 00 00 0E 10
             },
         # Empty Honeycombs
-        "0064": { # Alcove
-            "Object":"03D901E40691190C0047", # 03 D9 01 E4 06 91 19 0C 00 47 00 00 00 00 00 64 12 50
-            "Flag":  "03D2020E069445140064", # 03 D2 02 0E 06 94 45 14 00 64 00 00 00 00 00 64 01 B0
-            },
-        "0065": { # Juju
-            "Object":"10CE0B54FA2E190C0047", # 10 CE 0B 54 FA 2E 19 0C 00 47 00 00 00 00 00 64 08 50
-            "Flag":  "10ED0B6CFA2B1F140065", # 10 ED 0B 6C FA 2B 1F 14 00 65 00 00 00 00 00 64 03 30
-            },
+#         "0064": { # Alcove
+#             "Object":"03D901E40691190C00470000000000641250", # 03 D9 01 E4 06 91 19 0C 00 47 00 00 00 00 00 64 12 50
+#             "Flag":  "03D2020E06944514006400000000006401B0", # 03 D2 02 0E 06 94 45 14 00 64 00 00 00 00 00 64 01 B0
+#             },
+#         "0065": { # Juju
+#             "Object":"10CE0B54FA2E190C00470000000000640850", # 10 CE 0B 54 FA 2E 19 0C 00 47 00 00 00 00 00 64 08 50
+#             "Flag":  "10ED0B6CFA2B1F1400650000000000640330", # 10 ED 0B 6C FA 2B 1F 14 00 65 00 00 00 00 00 64 03 30
+#             },
         # Mumbo Tokens
         "00C8": {
-            "Object":"EEB101DB1827190C002D", # EE B1 01 DB 18 27 19 0C 00 2D 00 00 5A 00 00 64 08 80
-            "Flag":  "EEAF01DB1820341400C8", # EE AF 01 DB 18 20 34 14 00 C8 00 00 00 00 00 64 19 20
+            "Object":"EEB101DB1827190C002D00005A0000640880", # EE B1 01 DB 18 27 19 0C 00 2D 00 00 5A 00 00 64 08 80
+            "Flag":  "EEAF01DB1820341400C80000000000641920", # EE AF 01 DB 18 20 34 14 00 C8 00 00 00 00 00 64 19 20
             },
         "00C9": {
-            "Object":"ECFB08CFF636190C002D", # EC FB 08 CF F6 36 19 0C 00 2D 00 00 00 00 00 64 12 60
-            "Flag":  "ECEE08CFF64E4D9400C9", # EC EE 08 CF F6 4E 4D 94 00 C9 00 00 00 00 00 64 19 30
+            "Object":"ECFB08CFF636190C002D0000000000641260", # EC FB 08 CF F6 36 19 0C 00 2D 00 00 00 00 00 64 12 60
+            "Flag":  "ECEE08CFF64E4D9400C90000000000641930", # EC EE 08 CF F6 4E 4D 94 00 C9 00 00 00 00 00 64 19 30
             },
         "00CB": {
-            "Object":"16DF00000879190C002D", # 16 DF 00 00 08 79 19 0C 00 2D 00 00 00 00 00 64 12 70
-            "Flag":  "16D6000008823F9400CB", # 16 D6 00 00 08 82 3F 94 00 CB 00 00 00 00 00 64 19 50
+            "Object":"16DF00000879190C002D0000000000641270", # 16 DF 00 00 08 79 19 0C 00 2D 00 00 00 00 00 64 12 70
+            "Flag":  "16D6000008823F9400CB0000000000641950", # 16 D6 00 00 08 82 3F 94 00 CB 00 00 00 00 00 64 19 50
             },
         "00CA": {
-            "Object":"141E0878F671190C002D", # 14 1E 08 78 F6 71 19 0C 00 2D 00 00 9E 80 00 64 03 40
-            "Flag":  "14200875F6803F9400CA", # 14 20 08 75 F6 80 3F 94 00 CA 00 00 00 00 00 64 19 40
+            "Object":"141E0878F671190C002D00009E8000640340", # 14 1E 08 78 F6 71 19 0C 00 2D 00 00 9E 80 00 64 03 40
+            "Flag":  "14200875F6803F9400CA0000000000641940", # 14 20 08 75 F6 80 3F 94 00 CA 00 00 00 00 00 64 19 40
             },
         "00CC": {
-            "Object":"FEA90159FDFA190C002D", # 19 0C 00 2D 00 00 00 00 00 64 03 50 00
-            "Flag":  "FE960155FDFC399400CC", # 39 94 00 CC 00 00 00 00 00 64 03 A0 00
+            "Object":"FEA90159FDFA190C002D0000000000640350", # 19 0C 00 2D 00 00 00 00 00 64 03 50 00
+            "Flag":  "FE960155FDFC399400CC00000000006403A0", # 39 94 00 CC 00 00 00 00 00 64 03 A0 00
             },
         },
     "Treasure Trove Cove": {
@@ -906,12 +905,12 @@ flagged_object_dict = {
             },
         # Empty Honeycombs
         "0068": {
-            "Object":"0E860CEF09D7190C0047",
-            "Flag":  "0E930CF909863E140068",
+            "Object":"0E860CEF09D7190C0047", # 0E 86 0C EF 09 D7 19 0C 00 47 00 00 00 00 00 64 00 10
+            "Flag":  "0E930CF909863E140068", # 0E 93 0C F9 09 86 3E 14 00 68 00 00 00 00 00 64 15 20
             },
         "0069": {
-            "Object":"1ECE10B007B1190C0047",
-            "Flag":  "1EC8106507AA3C140069",
+            "Object":"1ECE10B007B1190C0047", # 1E CE 10 B0 07 B1 19 0C 00 47 00 00 00 00 00 64 13 30
+            "Flag":  "1EC8106507AA3C140069", # 1E C8 10 65 07 AA 3C 14 00 69 00 00 00 00 00 64 17 00
             },
         # Mumbo Tokens
         "00D7": {
@@ -1953,11 +1952,11 @@ abnormal_enemy_id_list = {
 #         },
 #     "Mumbo's Mountain": {
 #         },
-    "Treasure Trove Cove": {
-        "Ground": [
-            "190C0152", # Lockup
-            ],
-        },
+#     "Treasure Trove Cove": {
+#         "Ground": [
+#             "190C0152", # Lockup
+#             ],
+#         },
 #     "Clanker's Cavern": {
 #         },
 #     "Bubblegloop Swamp": {
@@ -2058,14 +2057,14 @@ world_order_warps_list = {
         "World Address": "9808", # 4CFDF0
         "World Pad": "028C02E4"
         },
-#     "Mad Monster Mansion": {
-#         "Gruntilda's Lair Address": "9B20", # 4F26A0
-#         "Gruntilda's Lair Warps": [ # 0010
-#             "FFF701C3FEE67F060010",
-#             ],
-#         "World Address": "9850", # 4D44D8
-#         "World Pad": "038C02E4"
-#         },
+    "Mad Monster Mansion": {
+        "Gruntilda's Lair Address": "9B20", # 4F26A0
+        "Gruntilda's Lair Warps": [ # 0010
+            "FFF701C3FEE67F060010",
+            ],
+        "World Address": "9850", # 4D44D8
+        "World Pad": "038C02E4"
+        },
     "Rusty Bucket Bay": {
         "Gruntilda's Lair Address": "9B30", # 4F32B0
         "Gruntilda's Lair Warps": [ # 0011
@@ -3076,7 +3075,7 @@ def parameter_gui():
     def close_window():
         '''Closes the window and ends the script'''
         window.destroy()
-        raise SystemExit # exit(0)
+        raise SystemExit
     
     json_data = load_last_used_config()
     window = tk.Tk()
@@ -3187,7 +3186,7 @@ def parameter_gui():
     try:
         warp_var.set(json_data["Warps"])
     except KeyError:
-        warp_var.set("None")
+        warp_var.set("In-World")
     warp_dd = tk.OptionMenu(main_options_frame, warp_var, *warp_options)
     tk.Label(main_options_frame, text="Warps (None)").place(x=10, y=150)
     warp_dd.place(x=200, y=145)
@@ -3356,7 +3355,7 @@ def verify_original_header(file_bytes, address):
     if((file_bytes[address] != 17) or (file_bytes[address+1] != 114)):# or (file_bytes[address+2] != 0) or (file_bytes[address+3] != 0)):
         logger.error("Error: Please verify ROM is v1.0")
         error_window("Error During Randomization")
-        raise SystemExit # exit(0)
+        raise SystemExit
 
 def decompress_file(file_dir, compressed_file):
     """Decompresses the hex file that was extracted from the main ROM file"""
@@ -3424,11 +3423,11 @@ def verify_pointers(seed_val, file_dir):
                 if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
                     logger.error("Invalid Header At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
                     error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                    raise SystemExit # exit(0)
+                    raise SystemExit
                 elif(((header_start % 8) != 0)):
                     logger.error("Invalid Index Start At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
                     error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                    raise SystemExit # exit(0)
+                    raise SystemExit
         logger.debug("Misc Pointer List")
         for file_pointer in other_setup_pointer_list:
             pointer_start_1 = str(hex(mm_rand_rom[int(file_pointer, 16)]))[2:]
@@ -3444,11 +3443,11 @@ def verify_pointers(seed_val, file_dir):
             if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
                 logger.error("Invalid Header At Decimal Index: " + str(file_pointer))
                 error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                raise SystemExit # exit(0)
+                raise SystemExit
             elif(((header_start % 8) != 0)):
                 logger.error("Invalid Index Start At Hex Index: " + str(file_pointer))
                 error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                raise SystemExit # exit(0)
+                raise SystemExit
 
 def compress_file(file_dir, decompressed_file):
     """Compresses the hex file that was extracted from the main ROM file"""
@@ -3734,15 +3733,15 @@ def obtain_flagged_object_info(mm, obj_index):
     obj_dict["Script2"] = mm[obj_index + 7]
     obj_dict["Obj_ID1"] = mm[obj_index + 8]
     obj_dict["Obj_ID2"] = mm[obj_index + 9]
-    obj_dict["IDK1"] = mm[obj_index + 10]
-    obj_dict["IDK2"] = mm[obj_index + 11]
-    obj_dict["IDK3"] = mm[obj_index + 12]
-    obj_dict["IDK4"] = mm[obj_index + 13]
-    obj_dict["Rotation"] = mm[obj_index + 14]
-    obj_dict["Size"] = mm[obj_index + 15]
-    obj_dict["IDK5"] = mm[obj_index + 16]
-    obj_dict["IDK6"] = mm[obj_index + 17]
-    obj_dict["IDK7"] = mm[obj_index + 18]
+    obj_dict["IDK11"] = mm[obj_index + 10]
+    obj_dict["IDK12"] = mm[obj_index + 11]
+    obj_dict["IDK13"] = mm[obj_index + 12]
+    obj_dict["Rotation"] = mm[obj_index + 13]
+    obj_dict["Size1"] = mm[obj_index + 14]
+    obj_dict["Size2"] = mm[obj_index + 15]
+    obj_dict["IDK17"] = mm[obj_index + 16]
+    obj_dict["IDK18"] = mm[obj_index + 17]
+    obj_dict["IDK19"] = mm[obj_index + 18]
     return obj_dict
 
 def obtain_flag_info(mm, flag_index):
@@ -3758,19 +3757,19 @@ def obtain_flag_info(mm, flag_index):
     hex_z1 = leading_zeros(str(hex(mm[flag_index + 4]))[2:].upper(), 2)
     hex_z2 = leading_zeros(str(hex(mm[flag_index + 5]))[2:].upper(), 2)
     flag_dict["Hex_Z"] = hex_z1 + hex_z2
-    flag_dict["Script1"] = mm[flag_index + 6]
-    flag_dict["Script2"] = mm[flag_index + 7]
+    flag_dict["Radius"] = mm[flag_index + 6]
+    flag_dict["IDK8"] = mm[flag_index + 7]
     flag_dict["Obj_ID1"] = mm[flag_index + 8]
     flag_dict["Obj_ID2"] = mm[flag_index + 9]
-    flag_dict["IDK1"] = mm[flag_index + 10]
-    flag_dict["IDK2"] = mm[flag_index + 11]
-    flag_dict["IDK3"] = mm[flag_index + 12]
-    flag_dict["IDK4"] = mm[flag_index + 13]
-    flag_dict["Rotation"] = mm[flag_index + 14]
-    flag_dict["Size"] = mm[flag_index + 15]
-    flag_dict["IDK5"] = mm[flag_index + 16]
-    flag_dict["IDK6"] = mm[flag_index + 17]
-    flag_dict["IDK7"] = mm[flag_index + 18]
+    flag_dict["IDK11"] = mm[flag_index + 10]
+    flag_dict["IDK12"] = mm[flag_index + 11]
+    flag_dict["IDK13"] = mm[flag_index + 12]
+    flag_dict["IDK14"] = mm[flag_index + 13]
+    flag_dict["IDK15"] = mm[flag_index + 14]
+    flag_dict["IDK16"] = mm[flag_index + 15]
+    flag_dict["IDK17"] = mm[flag_index + 16]
+    flag_dict["IDK18"] = mm[flag_index + 17]
+    flag_dict["IDK19"] = mm[flag_index + 18]
     return flag_dict
 
 def obtain_no_flag_object_list_info(mm, no_flag_obj_index_list):
@@ -3942,7 +3941,7 @@ def generic_get_lists(mm, id_list):
         else:
             logger.error("Invalid ID List")
             error_window("Developer Error During Randomization")
-            raise SystemExit # exit(0)
+            raise SystemExit
         for item in object_list:
             index_list.append(item)
     if((id_list == obj_no_flag_id_list) or (id_list == (obj_no_flag_id_list + abnormal_obj_no_flag_id_list))):
@@ -3956,7 +3955,7 @@ def generic_get_lists(mm, id_list):
     else:
         logger.error("Invalid ID List")
         error_window("Developer Error During Randomization")
-        raise SystemExit # exit(0)
+        raise SystemExit
     return (index_list, location_list)
 
 def negative_hex_value(pos_dec_value):
@@ -3994,98 +3993,103 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
             address_index_dict[address]["Wall_Enemies"] = []
             address_index_dict[address]["Misc_Enemies"] = []
             mm = create_mmap(file_dir, address)
-            # Flagged Objects
-            if(flagged_option != "None"):
-                logger.info("Get Flagged Objects Index")
-                if(allow_abnormalities_option == "0"):
-                    (flagged_object_index_list, flagged_object_location_list) = get_flagged_objects_dict(mm, flagged_object_dict, location)
-                else:
-                    (flagged_object_index_list, flagged_object_location_list) = get_flagged_objects_dict(mm, flagged_object_dict, location, allow_abnormalities_option=abnormal_flagged_object_dict)
-                for item in flagged_object_location_list:
-                    address_flagged_object_location_list.append(item)
-                address_index_dict[address]["Flagged_Objects"] = flagged_object_index_list
-            # No Flag Objects
-            if(non_flag_option != "None"):
-                logger.info("Get Non-Flag Objects Index")
-                if(allow_abnormalities_option == "0"):
-                    (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, obj_no_flag_id_list)
-                else:
-                    new_obj_no_flag_id_list = obj_no_flag_id_list + abnormal_obj_no_flag_id_list
-                    (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, new_obj_no_flag_id_list)
-                for item in no_flag_object_location_list:
-                    address_no_flag_object_location_list.append(item)
-                address_index_dict[address]["No_Flag_Objects"] = no_flag_obj_index_list
-            # Structs
-            if(struct_option != "None"):
-                logger.info("Get Structs Index")
-                if(allow_abnormalities_option == "0"):
-                    (struct_index_list, struct_location_list) = generic_get_lists(mm, collectable_struct_id_list)
-                else:
-                    new_struct_id_list = collectable_struct_id_list + abnormal_collectable_struct_id_list
-                    (struct_index_list, struct_location_list) = generic_get_lists(mm, new_struct_id_list)
-                for item in struct_location_list:
-                    address_struct_location_list.append(item)
-                address_index_dict[address]["Structs"] = struct_index_list
-                if(struct_option == "Oh Whoops"):
-                    (brentilda_index_list, brentilda_location_list) = generic_get_lists(mm, brentilda_list)
-                    for item in brentilda_location_list:
-                        address_brentilda_location_list.append(item)
-                    address_index_dict[address]["Brentilda"] = brentilda_index_list
-            # Enemies
-            if(enemy_option != "None"):
-                (index_dict, location_dict) = enemy_get_lists(mm, location, allow_abnormalities_option, enemy_option)
-                # Grounded Enemies
-                logger.info("Get Grounded Enemies Index")
-                address_index_dict[address]["Grounded_Enemies"] = address_index_dict[address]["Grounded_Enemies"] + index_dict["Ground"]
-                address_ground_enemy_location_list = address_ground_enemy_location_list + location_dict["Ground"]
-                # Flying Enemies
-                logger.info("Get Grounded Enemies Index")
-                address_index_dict[address]["Flying_Enemies"] = address_index_dict[address]["Flying_Enemies"] + index_dict["Flying"]
-                address_flying_enemy_location_list = address_flying_enemy_location_list + location_dict["Flying"]
-                # Wall Enemies
-                logger.info("Get Wall Enemies Index")
-                address_index_dict[address]["Wall_Enemies"] = address_index_dict[address]["Wall_Enemies"] + index_dict["Wall"]
-                address_wall_enemy_location_list = address_wall_enemy_location_list + location_dict["Wall"]
-                if(enemy_option == "Oh Whoops"):
-                    logger.info("Get Misc Enemies Index")
-                    address_index_dict[address]["Misc_Enemies"] = address_index_dict[address]["Misc_Enemies"] + index_dict["Misc_Enemies"]
-                    address_misc_enemy_location_list = address_misc_enemy_location_list + location_dict["Misc_Enemies"]
-            # Warps
-            if((warp_option == "In-World") or (warp_option == "Max Warps")):
-                logger.info("In-World Warps")
-                if(location in within_world_warps_list):
-                    (address_warp_entry_index_dict, address_warp_entry_location_dict) = get_warp_lists(mm, within_world_warps_list[location], address, address_warp_entry_index_dict, address_warp_entry_location_dict)
-            if((warp_option == "World Order") or (warp_option == "Max Warps")):
-                logger.info("Lair Warps")
-                (bottles_index_list, bottles_location_list) = generic_get_lists(mm, combined_bottles_list)
-                for item in bottles_location_list:
-                    address_bottles_location_list.append(item)
-                address_index_dict[address]["Bottles"] = bottles_index_list
-            # Misc Options
-            if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
-                logger.info("Get Croctus Index")
-                (croctus_index_list, croctus_location_list) = generic_get_lists(mm, croctus_list)
-                for item in croctus_location_list:
-                    address_croctus_location_list.append(item)
-                address_index_dict[address]["Croctus"] = croctus_index_list
-            if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
-                logger.info("Get Clanker Rings Index")
-                (clanker_rings_index_list, clanker_rings_location_list) = generic_get_lists(mm, clanker_rings_list)
-                for item in clanker_rings_location_list:
-                    address_clanker_rings_location_list.append(item)
-                address_index_dict[address]["Clanker_Rings"] = clanker_rings_index_list
-            if((ancient_ones_option == "1") and (location == "Gobi's Valley")):
-                logger.info("Get Ancient Ones Index")
-                (ancient_ones_index_list, ancient_ones_location_list) = generic_get_lists(mm, ancient_ones_list)
-                for item in ancient_ones_location_list:
-                    address_ancient_ones_location_list.append(item)
-                address_index_dict[address]["Ancient_Ones"] = ancient_ones_index_list
-            if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
-                logger.info("Get Ancient Ones Index")
-                (jinxy_head_index_list, jinxy_head_location_list) = generic_get_lists(mm, jinxy_head_list)
-                for item in jinxy_head_location_list:
-                    address_jinxy_head_location_list.append(item)
-                address_index_dict[address]["Jinxy_Head"] = jinxy_head_index_list
+            try:
+                # Flagged Objects
+                if(flagged_option != "None"):
+                    logger.info("Get Flagged Objects Index")
+                    if(allow_abnormalities_option == "0"):
+                        (flagged_object_index_list, flagged_object_location_list) = get_flagged_objects_dict(mm, flagged_object_dict, location)
+                    else:
+                        (flagged_object_index_list, flagged_object_location_list) = get_flagged_objects_dict(mm, flagged_object_dict, location, allow_abnormalities_option=abnormal_flagged_object_dict)
+                    for item in flagged_object_location_list:
+                        address_flagged_object_location_list.append(item)
+                    address_index_dict[address]["Flagged_Objects"] = flagged_object_index_list
+                # No Flag Objects
+                if(non_flag_option != "None"):
+                    logger.info("Get Non-Flag Objects Index")
+                    if(allow_abnormalities_option == "0"):
+                        (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, obj_no_flag_id_list)
+                    else:
+                        new_obj_no_flag_id_list = obj_no_flag_id_list + abnormal_obj_no_flag_id_list
+                        (no_flag_obj_index_list, no_flag_object_location_list) = generic_get_lists(mm, new_obj_no_flag_id_list)
+                    for item in no_flag_object_location_list:
+                        address_no_flag_object_location_list.append(item)
+                    address_index_dict[address]["No_Flag_Objects"] = no_flag_obj_index_list
+                # Structs
+                if(struct_option != "None"):
+                    logger.info("Get Structs Index")
+                    if(allow_abnormalities_option == "0"):
+                        (struct_index_list, struct_location_list) = generic_get_lists(mm, collectable_struct_id_list)
+                    else:
+                        new_struct_id_list = collectable_struct_id_list + abnormal_collectable_struct_id_list
+                        (struct_index_list, struct_location_list) = generic_get_lists(mm, new_struct_id_list)
+                    for item in struct_location_list:
+                        address_struct_location_list.append(item)
+                    address_index_dict[address]["Structs"] = struct_index_list
+                    if(struct_option == "Oh Whoops"):
+                        (brentilda_index_list, brentilda_location_list) = generic_get_lists(mm, brentilda_list)
+                        for item in brentilda_location_list:
+                            address_brentilda_location_list.append(item)
+                        address_index_dict[address]["Brentilda"] = brentilda_index_list
+                # Enemies
+                if(enemy_option != "None"):
+                    (index_dict, location_dict) = enemy_get_lists(mm, location, allow_abnormalities_option, enemy_option)
+                    # Grounded Enemies
+                    logger.info("Get Grounded Enemies Index")
+                    address_index_dict[address]["Grounded_Enemies"] = address_index_dict[address]["Grounded_Enemies"] + index_dict["Ground"]
+                    address_ground_enemy_location_list = address_ground_enemy_location_list + location_dict["Ground"]
+                    # Flying Enemies
+                    logger.info("Get Grounded Enemies Index")
+                    address_index_dict[address]["Flying_Enemies"] = address_index_dict[address]["Flying_Enemies"] + index_dict["Flying"]
+                    address_flying_enemy_location_list = address_flying_enemy_location_list + location_dict["Flying"]
+                    # Wall Enemies
+                    logger.info("Get Wall Enemies Index")
+                    address_index_dict[address]["Wall_Enemies"] = address_index_dict[address]["Wall_Enemies"] + index_dict["Wall"]
+                    address_wall_enemy_location_list = address_wall_enemy_location_list + location_dict["Wall"]
+                    if(enemy_option == "Oh Whoops"):
+                        logger.info("Get Misc Enemies Index")
+                        address_index_dict[address]["Misc_Enemies"] = address_index_dict[address]["Misc_Enemies"] + index_dict["Misc_Enemies"]
+                        address_misc_enemy_location_list = address_misc_enemy_location_list + location_dict["Misc_Enemies"]
+                # Warps
+                if((warp_option == "In-World") or (warp_option == "Max Warps")):
+                    logger.info("In-World Warps")
+                    if(location in within_world_warps_list):
+                        (address_warp_entry_index_dict, address_warp_entry_location_dict) = get_warp_lists(mm, within_world_warps_list[location], address, address_warp_entry_index_dict, address_warp_entry_location_dict)
+                if((warp_option == "World Order") or (warp_option == "Max Warps")):
+                    logger.info("Lair Warps")
+                    (bottles_index_list, bottles_location_list) = generic_get_lists(mm, combined_bottles_list)
+                    for item in bottles_location_list:
+                        address_bottles_location_list.append(item)
+                    address_index_dict[address]["Bottles"] = bottles_index_list
+                # Misc Options
+                if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
+                    logger.info("Get Croctus Index")
+                    (croctus_index_list, croctus_location_list) = generic_get_lists(mm, croctus_list)
+                    for item in croctus_location_list:
+                        address_croctus_location_list.append(item)
+                    address_index_dict[address]["Croctus"] = croctus_index_list
+                if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
+                    logger.info("Get Clanker Rings Index")
+                    (clanker_rings_index_list, clanker_rings_location_list) = generic_get_lists(mm, clanker_rings_list)
+                    for item in clanker_rings_location_list:
+                        address_clanker_rings_location_list.append(item)
+                    address_index_dict[address]["Clanker_Rings"] = clanker_rings_index_list
+                if((ancient_ones_option == "1") and (location == "Gobi's Valley")):
+                    logger.info("Get Ancient Ones Index")
+                    (ancient_ones_index_list, ancient_ones_location_list) = generic_get_lists(mm, ancient_ones_list)
+                    for item in ancient_ones_location_list:
+                        address_ancient_ones_location_list.append(item)
+                    address_index_dict[address]["Ancient_Ones"] = ancient_ones_index_list
+                if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
+                    logger.info("Get Ancient Ones Index")
+                    (jinxy_head_index_list, jinxy_head_location_list) = generic_get_lists(mm, jinxy_head_list)
+                    for item in jinxy_head_location_list:
+                        address_jinxy_head_location_list.append(item)
+                    address_index_dict[address]["Jinxy_Head"] = jinxy_head_index_list
+            except Exception:
+                logger.error("Find Index Stuff Errored")
+            finally:
+                mm.close()
         
         ### Randomize The Lists
         logger.info("Randomizing Lists Section")
@@ -4116,65 +4120,70 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         for address in address_dict[location]:
             logger.debug(address)
             mm = create_mmap(file_dir, address)
-            # Flagged Objects
-            if(flagged_option == "None"):
-                logger.info("Flagged Objects Randomization Off")
-            elif(flagged_option == "Shuffle"):
-                address_flagged_object_location_list = move_flagged_objects(mm, address_index_dict[address]["Flagged_Objects"], address_flagged_object_location_list)
-            # No Flag Objects
-            if(non_flag_option == "None"):
-                logger.info("Non-Flag Objects Randomization Off")
-            elif(non_flag_option == "Shuffle"):
-                address_no_flag_object_location_list = move_no_flag_objects(mm, address_index_dict[address]["No_Flag_Objects"], address_no_flag_object_location_list)
-            # Structs
-            if(struct_option == "None"):
-                logger.info("Struct Randomization Off")
-            elif(struct_option == "Shuffle"):
-                address_struct_location_list = move_structs(mm, address_index_dict[address]["Structs"], address_struct_location_list)
-            elif(struct_option == "Oh Whoops"):
-                oh_whoops_all_notes(mm, address_index_dict[address]["Structs"])
-                address_brentilda_location_list = turn_brentildas_into_refills(mm, seed_val, address, address_index_dict[address]["Brentilda"], address_brentilda_location_list)
-            # Enemies
-            if(enemy_option == "None"):
-                logger.info("Enemy Randomization Off")
-            elif(enemy_option == "Shuffle"):
-                # Grounded Enemies
-                address_ground_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Grounded_Enemies"], address_ground_enemy_location_list)
-                # Flying Enemies
-                address_flying_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Flying_Enemies"], address_flying_enemy_location_list)
-                # Wall Enemies
-                address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
-            elif(enemy_option == "Randomize"):
-                # Grounded Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address, allow_abnormalities_option)
-                # Flying Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address, allow_abnormalities_option)
-                # Wall Enemies
-                move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address, allow_abnormalities_option)
-            elif(enemy_option == "Oh Whoops"):
-                oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address, allow_abnormalities_option)
-                oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address, allow_abnormalities_option)
-                oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address, allow_abnormalities_option)
-                oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Misc_Enemies"], "Misc", location, address, allow_abnormalities_option)
-            # Warps
-            if((warp_option == "In-World") or (warp_option == "Max Warps")):
-                logger.info("In-World Warps")
-                move_within_world_warps_entries(mm, address, address_warp_entry_index_dict, address_warp_entry_location_dict)
-            if((warp_option == "World Order") or (warp_option == "Max Warps")):
-                logger.info("Lair Warps")
-                address_bottles_location_list = move_bottles_mounds(mm, seed_val, address_index_dict[address]["Bottles"], address_bottles_location_list, progression_bottles_moves_mounds, non_progression_bottles_moves_mounds)
-            # Croctus
-            if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
-                address_croctus_location_list = move_no_flag_objects(mm, address_index_dict[address]["Croctus"], address_croctus_location_list)
-            # Clanker Rings
-            if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
-                address_clanker_rings_location_list = move_no_flag_objects(mm, address_index_dict[address]["Clanker_Rings"], address_clanker_rings_location_list)
-            # Ancient Ones
-            if((ancient_ones_option == "1") and (location == "Gobi's Valley")):
-                address_ancient_ones_location_list = move_no_flag_objects(mm, address_index_dict[address]["Ancient_Ones"], address_ancient_ones_location_list)
-            # Jinxy Head
-            if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
-                address_jinxy_head_location_list = move_no_flag_objects(mm, address_index_dict[address]["Jinxy_Head"], address_jinxy_head_location_list)
+            try:
+                # Flagged Objects
+                if(flagged_option == "None"):
+                    logger.info("Flagged Objects Randomization Off")
+                elif(flagged_option == "Shuffle"):
+                    address_flagged_object_location_list = move_flagged_objects(mm, address_index_dict[address]["Flagged_Objects"], address_flagged_object_location_list)
+                # No Flag Objects
+                if(non_flag_option == "None"):
+                    logger.info("Non-Flag Objects Randomization Off")
+                elif(non_flag_option == "Shuffle"):
+                    address_no_flag_object_location_list = move_no_flag_objects(mm, address_index_dict[address]["No_Flag_Objects"], address_no_flag_object_location_list)
+                # Structs
+                if(struct_option == "None"):
+                    logger.info("Struct Randomization Off")
+                elif(struct_option == "Shuffle"):
+                    address_struct_location_list = move_structs(mm, address_index_dict[address]["Structs"], address_struct_location_list)
+                elif(struct_option == "Oh Whoops"):
+                    oh_whoops_all_notes(mm, address_index_dict[address]["Structs"])
+                    address_brentilda_location_list = turn_brentildas_into_refills(mm, seed_val, address, address_index_dict[address]["Brentilda"], address_brentilda_location_list)
+                # Enemies
+                if(enemy_option == "None"):
+                    logger.info("Enemy Randomization Off")
+                elif(enemy_option == "Shuffle"):
+                    # Grounded Enemies
+                    address_ground_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Grounded_Enemies"], address_ground_enemy_location_list)
+                    # Flying Enemies
+                    address_flying_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Flying_Enemies"], address_flying_enemy_location_list)
+                    # Wall Enemies
+                    address_wall_enemy_location_list = move_local_enemies(mm, address_index_dict[address]["Wall_Enemies"], address_wall_enemy_location_list)
+                elif(enemy_option == "Randomize"):
+                    # Grounded Enemies
+                    move_randomized_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address, allow_abnormalities_option)
+                    # Flying Enemies
+                    move_randomized_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address, allow_abnormalities_option)
+                    # Wall Enemies
+                    move_randomized_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address, allow_abnormalities_option)
+                elif(enemy_option == "Oh Whoops"):
+                    oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Grounded_Enemies"], "Ground", location, address, allow_abnormalities_option)
+                    oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Flying_Enemies"], "Flying", location, address, allow_abnormalities_option)
+                    oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Wall_Enemies"], "Wall", location, address, allow_abnormalities_option)
+                    oh_whoops_all_enemies(mm, seed_val, address_index_dict[address]["Misc_Enemies"], "Misc", location, address, allow_abnormalities_option)
+                # Warps
+                if((warp_option == "In-World") or (warp_option == "Max Warps")):
+                    logger.info("In-World Warps")
+                    move_within_world_warps_entries(mm, address, address_warp_entry_index_dict, address_warp_entry_location_dict)
+                if((warp_option == "World Order") or (warp_option == "Max Warps")):
+                    logger.info("Lair Warps")
+                    address_bottles_location_list = move_bottles_mounds(mm, seed_val, address_index_dict[address]["Bottles"], address_bottles_location_list, progression_bottles_moves_mounds, non_progression_bottles_moves_mounds)
+                # Croctus
+                if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
+                    address_croctus_location_list = move_no_flag_objects(mm, address_index_dict[address]["Croctus"], address_croctus_location_list)
+                # Clanker Rings
+                if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
+                    address_clanker_rings_location_list = move_no_flag_objects(mm, address_index_dict[address]["Clanker_Rings"], address_clanker_rings_location_list)
+                # Ancient Ones
+                if((ancient_ones_option == "1") and (location == "Gobi's Valley")):
+                    address_ancient_ones_location_list = move_no_flag_objects(mm, address_index_dict[address]["Ancient_Ones"], address_ancient_ones_location_list)
+                # Jinxy Head
+                if((jinxy_head_option == "1") and (location == "Gobi's Valley")):
+                    address_jinxy_head_location_list = move_no_flag_objects(mm, address_index_dict[address]["Jinxy_Head"], address_jinxy_head_location_list)
+            except Exception:
+                logger.error("Moving Stuff Errored")
+            finally:
+                mm.close()
     if((warp_option == "World Order") or (warp_option == "Max Warps")):
         shuffle_world_order_warps(file_dir, seed_val)
 
@@ -4193,32 +4202,34 @@ def move_flagged_objects(mm, obj_index_list, object_location_list):
     '''For each object, assign it a new script and object id based on randomized list'''
     logger.info("Move Flagged Objects")
     for (object_index, flag_index) in obj_index_list:
+        # Object
         mm[object_index + 6] = object_location_list[0][0]["Script1"]
         mm[object_index + 7] = object_location_list[0][0]["Script2"]
         mm[object_index + 8] = object_location_list[0][0]["Obj_ID1"]
         mm[object_index + 9] = object_location_list[0][0]["Obj_ID2"]
-        mm[object_index + 10] = object_location_list[0][0]["IDK1"]
-        mm[object_index + 11] = object_location_list[0][0]["IDK2"]
-        mm[object_index + 12] = object_location_list[0][0]["IDK3"]
-        mm[object_index + 13] = object_location_list[0][0]["IDK4"]
-        mm[object_index + 14] = object_location_list[0][0]["Rotation"]
-        mm[object_index + 15] = object_location_list[0][0]["Size"]
-#         mm[object_index + 16] = object_location_list[0][0]["IDK5"]
-#         mm[object_index + 17] = object_location_list[0][0]["IDK6"]
-#         mm[object_index + 18] = object_location_list[0][0]["IDK7"]
-        mm[flag_index + 6] = object_location_list[0][1]["Script1"]
-        mm[flag_index + 7] = object_location_list[0][1]["Script2"]
+        mm[object_index + 10] = object_location_list[0][0]["IDK11"]
+        mm[object_index + 11] = object_location_list[0][0]["IDK12"]
+        mm[object_index + 12] = object_location_list[0][0]["IDK13"]
+        mm[object_index + 13] = object_location_list[0][0]["Rotation"]
+        mm[object_index + 14] = object_location_list[0][0]["Size1"]
+        mm[object_index + 15] = object_location_list[0][0]["Size2"]
+        mm[object_index + 16] = object_location_list[0][0]["IDK17"]
+        mm[object_index + 17] = object_location_list[0][0]["IDK18"]
+#         mm[object_index + 18] = object_location_list[0][0]["IDK19"]
+        # Flag
+        mm[flag_index + 6] = object_location_list[0][1]["Radius"]
+        mm[flag_index + 7] = object_location_list[0][1]["IDK8"]
         mm[flag_index + 8] = object_location_list[0][1]["Obj_ID1"]
         mm[flag_index + 9] = object_location_list[0][1]["Obj_ID2"]
-        mm[flag_index + 10] = object_location_list[0][1]["IDK1"]
-        mm[flag_index + 11] = object_location_list[0][1]["IDK2"]
-        mm[flag_index + 12] = object_location_list[0][1]["IDK3"]
-        mm[flag_index + 13] = object_location_list[0][1]["IDK4"]
-        mm[flag_index + 14] = object_location_list[0][1]["Rotation"]
-        mm[flag_index + 15] = object_location_list[0][1]["Size"]
-#         mm[flag_index + 16] = object_location_list[0][1]["IDK5"]
-#         mm[flag_index + 17] = object_location_list[0][1]["IDK6"]
-#         mm[flag_index + 18] = object_location_list[0][1]["IDK7"]
+        mm[flag_index + 10] = object_location_list[0][1]["IDK11"]
+        mm[flag_index + 11] = object_location_list[0][1]["IDK12"]
+        mm[flag_index + 12] = object_location_list[0][1]["IDK13"]
+        mm[flag_index + 13] = object_location_list[0][1]["IDK14"]
+        mm[flag_index + 14] = object_location_list[0][1]["IDK15"]
+        mm[flag_index + 15] = object_location_list[0][1]["IDK16"]
+        mm[flag_index + 16] = object_location_list[0][1]["IDK17"]
+        mm[flag_index + 17] = object_location_list[0][1]["IDK18"]
+#         mm[flag_index + 18] = object_location_list[0][1]["IDK19"]
         object_location_list.pop(0)
     return object_location_list
 
@@ -4418,10 +4429,16 @@ def get_grunty_lair_warp_index_list(file_dir, original_world):
 def edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world):
     # Replace it/them with new world warp
     mm_replace = create_mmap(file_dir, world_order_warps_list[original_world]["Gruntilda's Lair Address"])
-    for warp_index in warp_index_list:
-        first_new_warp = world_order_warps_list[new_world]["Gruntilda's Lair Warps"][0]
-        mm_replace[warp_index + 8] = int(first_new_warp[16:18], 16)
-        mm_replace[warp_index + 9] = int(first_new_warp[18:], 16)
+    try:
+        for warp_index in warp_index_list:
+            first_new_warp = world_order_warps_list[new_world]["Gruntilda's Lair Warps"][0]
+            mm_replace[warp_index + 8] = int(first_new_warp[16:18], 16)
+            mm_replace[warp_index + 9] = int(first_new_warp[18:], 16)
+    except Exception:
+        print("Error Here")
+    finally:
+        mm_replace.close()
+        
 
 def get_original_warp_pad(file_dir, original_world):
     with open(file_dir + tmp_folder + world_order_warps_list[original_world]["World Address"] + "-Decompressed.bin", "r+b") as decomp_file:
@@ -4436,11 +4453,16 @@ def get_original_warp_pad(file_dir, original_world):
 
 def edit_warp_pad(file_dir, warp_pad_index, original_world, new_world):
     mm_replace = create_mmap(file_dir, world_order_warps_list[original_world]["World Address"])
-    new_warp_pad = world_order_warps_list[new_world]["World Pad"]
-    mm_replace[warp_pad_index] = int(new_warp_pad[:2], 16)
-    mm_replace[warp_pad_index + 1] = int(new_warp_pad[2:4], 16)
-    mm_replace[warp_pad_index + 2] = int(new_warp_pad[4:6], 16)
-    mm_replace[warp_pad_index + 3] = int(new_warp_pad[6:], 16)
+    try:
+        new_warp_pad = world_order_warps_list[new_world]["World Pad"]
+        mm_replace[warp_pad_index] = int(new_warp_pad[:2], 16)
+        mm_replace[warp_pad_index + 1] = int(new_warp_pad[2:4], 16)
+        mm_replace[warp_pad_index + 2] = int(new_warp_pad[4:6], 16)
+        mm_replace[warp_pad_index + 3] = int(new_warp_pad[6:], 16)
+    except Exception:
+        print("Error Here")
+    finally:
+        mm_replace.close()
 
 def move_bottles_mounds(mm, seed_val, bottles_index_list, bottles_location_list, progression_bottles_moves_choices, non_progression_bottles_moves_choices):
     '''For each object, assign it a new script and object id based on randomized list'''
@@ -4471,8 +4493,41 @@ def move_bottles_mounds(mm, seed_val, bottles_index_list, bottles_location_list,
         seed_count += len("They ask you how you are, and you just have to say you're fine when you're not really fine, but you just can't get into it, because they would never understand.")
     return bottles_location_list
 
-def upgrade_water_level_button():
-    pass
+def upgrade_water_level_button(file_dir):
+    mm_shack = create_mmap(file_dir, "9B48")
+    try:
+        water_switch_index = mm_shack.find(bytes.fromhex("190C0221"))
+        if(water_switch_index > 0):
+            mm_shack[water_switch_index] = 25
+            mm_shack[water_switch_index + 1] = 12
+            mm_shack[water_switch_index + 2] = 2
+            mm_shack[water_switch_index + 3] = 34
+    except Exception:
+        print("Error Here")
+    finally:
+        mm_shack.close()
+
+def backup_jump_pad(file_dir):
+    mm_clanker = create_mmap(file_dir, "9888")
+    try:
+        droplet_index = mm_clanker.find(bytes.fromhex("FF1F07EDF8FD190C0354"))
+        if(droplet_index > 0):
+            mm_clanker[droplet_index] = 255 # FF
+            mm_clanker[droplet_index + 1] = 246 # F6
+            mm_clanker[droplet_index + 2] = 4 # 04
+            mm_clanker[droplet_index + 3] = 76 # 4C
+            mm_clanker[droplet_index + 4] = 244 # F4
+            mm_clanker[droplet_index + 5] = 224 # E0
+            mm_clanker[droplet_index + 6] = 25
+            mm_clanker[droplet_index + 7] = 12
+            mm_clanker[droplet_index + 8] = 0
+            mm_clanker[droplet_index + 9] = 11
+        else:
+            print("Flying Pad Here")
+    except Exception:
+        print("Error Here")
+    finally:
+        mm_clanker.close()
 
 def shuffle_world_order_warps(file_dir, seed_val):
     (original_world_order, new_world_order) = determine_world_order(seed_val)
@@ -4483,7 +4538,8 @@ def shuffle_world_order_warps(file_dir, seed_val):
         edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world)
         #warp_pad_index = get_original_warp_pad(file_dir, original_world)
         #edit_warp_pad(file_dir, warp_pad_index, original_world, new_world)
-        #upgrade_water_level_button()
+        upgrade_water_level_button(file_dir)
+        backup_jump_pad(file_dir)
 
 ##########################
 ### UNLOCKABLE OPTIONS ###
@@ -4497,7 +4553,6 @@ def modify_bottles_unskipable_text(file_dir, new_bottles_text):
     # "YOU'LL NEED 000 NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
     # "YOU'LL NEED 000 JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!"
     # "WELCOME TO BANJO-KAZOOIE RANDOMIZER VERSION 0.7.6!!! HOPE YOU ENJOY THE GENERATED SEED!!" + also_add
-    
     with open(file_dir + tmp_folder + "CF90-Decompressed.bin", "r+b") as decomp_file:
         mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
         text_index_start = mm_decomp.find(bytes.fromhex("50524553532041"))
