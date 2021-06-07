@@ -33,7 +33,7 @@ import json
 
 DEVELOPER_MODE = False
 # New Major Feature . New Minor Feature . Bug Fixes
-BK_Rando_Version = "0.8.2"
+BK_Rando_Version = "1.0.0"
 
 tmp_folder = "EPPIIISA/"
 
@@ -740,20 +740,6 @@ misc_setup_ids = {
 #         ],
     }
 
-### NOTE DOOR INDICES
-# 0x3F5D57C-D is the first note door's value (50%)
-# 0x3F5D57E-F is the second note door's value (60%)
-# 0x3F5D580-1 is the third note door's value (65%)
-# 0x3F5D582-3 is the fourth note door's value (70%)
-# 0x3F5D584-5 is the fifth note door's value (75%)
-# 0x3F5D586-7 is the sixth note door's value (80%)
-# 0x3F5D588-9 is the seventh note door's value (85%)
-# 0x3F5D58A-B is the eighth note door's value (90%)
-# 0x3F5D58C-D is the ninth note door's value (92%)
-# 0x3F5D58E-F is the tenth note door's value (94%)
-# 0x3F5D590-1 is the eleventh note door's value (96%)
-# 0x3F5D592-3 is the twelfth note door's value (98%)
-
 ### BGS Huts
 # Script: 190C
 # Obj ID: 000C
@@ -1111,10 +1097,10 @@ flagged_object_dict = {
             "Object":"FDFC001E01DD190C0046",
             "Flag":  "FE13001901D42E14005D",
             },
-        "005E": {
-            "Object":"F5100C67F9BF190C0046",
-            "Flag":  "F54E0B67F99E4E14005E",
-            },
+#         "005E": { # Top Of Church
+#             "Object":"F5100C67F9BF190C0046",
+#             "Flag":  "F54E0B67F99E4E14005E",
+#             },
         "0060": {
             "Object":"00020120FFFC190C0046",
             "Flag":  "0009013900056D940060",
@@ -1561,10 +1547,10 @@ abnormal_flagged_object_dict = {
             "Flag":  "000B0000FFF848140061",
             },
         # Mumbo Tokens
-        "0105": { # Dining Room
-            "Object":"FF6000BEF5D9190C002D",
-            "Flag":  "FF6A00CDF5C543140105",
-            },
+#         "0105": { # Dining Room
+#             "Object":"FF6000BEF5D9190C002D",
+#             "Flag":  "FF6A00CDF5C543140105",
+#             },
         },
     "Rusty Bucket Bay": {
         # Jiggies
@@ -1969,8 +1955,6 @@ abnormal_enemy_id_list = {
 #         },
     "Rusty Bucket Bay": {
         "Ground": [
-            "190C01C6", # Grimlet
-            "190C02A4", # TNT 1 (Provide 1-up)
             "190C030D", # TNT 2 (Seen Out In Open)
             ]
         },
@@ -1987,6 +1971,10 @@ abnormal_enemy_id_list = {
     }
 
 additional_abnormal_enemy_id_dict = {
+    "Ground": [
+        "190C01C6", # Grimlet
+        "190C02A4", # TNT 1 (Provide 1-up)
+        ],
     "Wall": [
         "190C0368", # Mumbo Token Sign
         "190C0369", # Mumbo Token Sign
@@ -2210,9 +2198,9 @@ within_world_warps_list = {
             "Right Tooth": [
                 "FBBE05DA18964706003200000000217D",
                 ],
-            "Gold Feather Room": [
-                "000D06E7EF427086009E000000000000",
-                ],
+#             "Gold Feather Room": [
+#                 "000D06E7EF427086009E000000000000",
+#                 ],
             },
         "To Inside Clanker": {
             "Blowhole To Belly": [
@@ -2256,12 +2244,12 @@ within_world_warps_list = {
             "Christmas Tree": [
                 "EE1803A718684C060042000000000000",
                 ],
-            "Wozza's Cave": [
-                "E6CB0396F0F1898600FD000000000064",
-                "E6E90396F156898600FD000000000000",
-                "E7080396F1A5898600FD000000000000",
-                "E72A0396F1EF898600FD000000000000",
-                ],
+#             "Wozza's Cave": [
+#                 "E6CB0396F0F1898600FD000000000064",
+#                 "E6E90396F156898600FD000000000000",
+#                 "E7080396F1A5898600FD000000000000",
+#                 "E72A0396F1EF898600FD000000000000",
+#                 ],
             "Mumbo's Skull": [
                 "1B7C02BAF30E32060040000000000000",
                 "1B9C02BAF356320600400000000128B5",
@@ -2839,7 +2827,7 @@ def seed(seed_val=None):
         seed_generated = True
     else:
         seed_generated = False
-    logger.debug("Seed: " + str(seed_val))
+    logger.info("Seed: " + str(seed_val))
     return (seed_val, seed_generated)
 
 def make_copy_of_rom(seed_val, file_dir, rom_file):
@@ -2964,9 +2952,11 @@ def parameter_gui():
         (file_dir, rom_file) = split_dir_rom(rom_dir)
         warning_list = []
         if(warp_var.get() != "None"):
-            warning_list.append("Within World Warps")
+            warning_list.append("Warps")
         if(allow_abnormalities_var.get() == 1):
             warning_list.append("Abnormalities")
+        if(f_obj_var.get() != None):
+            warning_list.append("Jiggies/Honeycombs/Tokens")
         if(enemy_var.get() == "Oh Whoops"):
             warning_list.append("Oh Whoops Enemies")
         if(len(warning_list) > 0):
@@ -3076,7 +3066,7 @@ def parameter_gui():
         '''Closes the window and ends the script'''
         window.destroy()
         raise SystemExit
-    
+
     json_data = load_last_used_config()
     window = tk.Tk()
     window.geometry('650x410')
@@ -4213,8 +4203,8 @@ def move_flagged_objects(mm, obj_index_list, object_location_list):
         mm[object_index + 13] = object_location_list[0][0]["Rotation"]
         mm[object_index + 14] = object_location_list[0][0]["Size1"]
         mm[object_index + 15] = object_location_list[0][0]["Size2"]
-        mm[object_index + 16] = object_location_list[0][0]["IDK17"]
-        mm[object_index + 17] = object_location_list[0][0]["IDK18"]
+#         mm[object_index + 16] = object_location_list[0][0]["IDK17"]
+#         mm[object_index + 17] = object_location_list[0][0]["IDK18"]
 #         mm[object_index + 18] = object_location_list[0][0]["IDK19"]
         # Flag
         mm[flag_index + 6] = object_location_list[0][1]["Radius"]
@@ -4227,8 +4217,8 @@ def move_flagged_objects(mm, obj_index_list, object_location_list):
         mm[flag_index + 13] = object_location_list[0][1]["IDK14"]
         mm[flag_index + 14] = object_location_list[0][1]["IDK15"]
         mm[flag_index + 15] = object_location_list[0][1]["IDK16"]
-        mm[flag_index + 16] = object_location_list[0][1]["IDK17"]
-        mm[flag_index + 17] = object_location_list[0][1]["IDK18"]
+#         mm[flag_index + 16] = object_location_list[0][1]["IDK17"]
+#         mm[flag_index + 17] = object_location_list[0][1]["IDK18"]
 #         mm[flag_index + 18] = object_location_list[0][1]["IDK19"]
         object_location_list.pop(0)
     return object_location_list
@@ -4503,7 +4493,7 @@ def upgrade_water_level_button(file_dir):
             mm_shack[water_switch_index + 2] = 2
             mm_shack[water_switch_index + 3] = 34
     except Exception:
-        print("Error Here")
+        pass
     finally:
         mm_shack.close()
 
@@ -4523,7 +4513,7 @@ def backup_jump_pad(file_dir):
             mm_clanker[droplet_index + 8] = 0
             mm_clanker[droplet_index + 9] = 11
         else:
-            print("Flying Pad Here")
+            pass
     except Exception:
         print("Error Here")
     finally:
@@ -4538,8 +4528,8 @@ def shuffle_world_order_warps(file_dir, seed_val):
         edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world)
         #warp_pad_index = get_original_warp_pad(file_dir, original_world)
         #edit_warp_pad(file_dir, warp_pad_index, original_world, new_world)
-        upgrade_water_level_button(file_dir)
-        backup_jump_pad(file_dir)
+    upgrade_water_level_button(file_dir)
+    backup_jump_pad(file_dir)
 
 ##########################
 ### UNLOCKABLE OPTIONS ###
@@ -4784,16 +4774,18 @@ def run_crc_tool(seed_val, file_dir):
 ### CLEAN UP ###
 ################
 
-def remove_bin_files(file_dir):
+def remove_bin_files(file_dir, it_errored):
     """Removes compressed and decompressed bin files created during the randomization"""
     logger.info("Remove Bin Files")
     for filename in os.listdir(file_dir + tmp_folder):
         file_path = os.path.join(file_dir + tmp_folder, filename)
         try:
             if((os.path.isfile(file_path) or os.path.islink(file_path)) and file_path.endswith(".bin")):
-                os.unlink(file_path)
+                os.remove(file_path)
             elif(os.path.isdir(file_path)):
                 shutil.rmtree(file_path)
+            elif((os.path.isfile(file_path) or os.path.islink(file_path)) and file_path.endswith(".z64") and (it_errored)):
+                os.remove(file_path)
         except Exception as e:
             logger.warning('Failed to delete %s. Reason: %s' % (file_path, e))
 
@@ -4846,35 +4838,42 @@ def main():
     """Goes through the steps of asking for parameters in a gui, setting up the folder, making a copy of the rom, decompressing the addresses, randomizing, compressing the files, and cleaning up"""
     logger.info("Main")
     ### Set Up ###
-    (rom_dir, seed_val,
-     non_flag_option, flagged_option, struct_option, enemy_option, warp_option,
-     croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option,
-     final_note_door_option, note_door_lower_limit, note_door_upper_limit,
-     final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit,
-     ) = parameter_gui()
-    (file_dir, rom_file) = split_dir_rom(rom_dir)
-    setup_tmp_folder(file_dir)
-    (seed_val, seed_generated) = seed(seed_val)
-    make_copy_of_rom(seed_val, file_dir, rom_file)
-    ### Decompress ROM ###
-    address_dict = decompressor(file_dir, rom_file)
-    ### Randomize Indexes ###
-    get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, warp_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option)
-    ### Compress ROM ###
-    reinsert_setup_files(seed_val, file_dir)
-    ### Misc Options ###
-    if((final_note_door_option == "1") or (final_puzzle_option == "1")):
-        unlockable_options(file_dir, rom_file, seed_val, seed_generated,
-                           final_note_door_option, note_door_lower_limit, note_door_upper_limit,
-                           final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit,
-                           )
-    ### CRC Tool ###
-    run_crc_tool(seed_val, file_dir)
-    ### Clean Up ###
-    if(not DEVELOPER_MODE):
-        remove_bin_files(file_dir)
-    ### Done ###
-    done_window(seed_val, file_dir)
+    try:
+        it_errored = False
+        (rom_dir, seed_val,
+         non_flag_option, flagged_option, struct_option, enemy_option, warp_option,
+         croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option,
+         final_note_door_option, note_door_lower_limit, note_door_upper_limit,
+         final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit,
+         ) = parameter_gui()
+        (file_dir, rom_file) = split_dir_rom(rom_dir)
+        setup_tmp_folder(file_dir)
+        (seed_val, seed_generated) = seed(seed_val)
+        make_copy_of_rom(seed_val, file_dir, rom_file)
+        ### Decompress ROM ###
+        address_dict = decompressor(file_dir, rom_file)
+        ### Randomize Indexes ###
+        get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_option, struct_option, enemy_option, warp_option, croctus_option, clanker_rings_option, ancient_ones_option, jinxy_head_option, allow_abnormalities_option)
+        ### Compress ROM ###
+        reinsert_setup_files(seed_val, file_dir)
+        ### Misc Options ###
+        if((final_note_door_option == "1") or (final_puzzle_option == "1")):
+            unlockable_options(file_dir, rom_file, seed_val, seed_generated,
+                               final_note_door_option, note_door_lower_limit, note_door_upper_limit,
+                               final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit,
+                               )
+        ### CRC Tool ###
+        run_crc_tool(seed_val, file_dir)
+    except Exception as e:
+        logger.error("Error: " + str(e))
+        it_errored = True
+    else:
+        ### Done ###
+        done_window(seed_val, file_dir)
+    finally:
+        ### Clean Up ###
+        if(not DEVELOPER_MODE):
+            remove_bin_files(file_dir, it_errored)
 
 ##########################################################################################
 ####################################### TEST CASES #######################################
