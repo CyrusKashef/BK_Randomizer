@@ -775,11 +775,11 @@ flagged_object_dict = {
             "Flag":  "10DD059B0302469400060000000000000E10", # 10 DD 05 9B 03 02 46 94 00 06 00 00 00 00 00 00 0E 10
             },
         # Empty Honeycombs
-#         "0064": { # Alcove
+#         "0064": { # Alcove; Sometimes messed up count totals
 #             "Object":"03D901E40691190C00470000000000641250", # 03 D9 01 E4 06 91 19 0C 00 47 00 00 00 00 00 64 12 50
 #             "Flag":  "03D2020E06944514006400000000006401B0", # 03 D2 02 0E 06 94 45 14 00 64 00 00 00 00 00 64 01 B0
 #             },
-#         "0065": { # Juju
+#         "0065": { # Juju; Sometimes messed up count totals
 #             "Object":"10CE0B54FA2E190C00470000000000640850", # 10 CE 0B 54 FA 2E 19 0C 00 47 00 00 00 00 00 64 08 50
 #             "Flag":  "10ED0B6CFA2B1F1400650000000000640330", # 10 ED 0B 6C FA 2B 1F 14 00 65 00 00 00 00 00 64 03 30
 #             },
@@ -837,11 +837,11 @@ flagged_object_dict = {
             "Flag":  "2106036FF59638140067", # 21 06 03 6F F5 96 38 14 00 67 00 00 00 00 00 64 0E 00
             },
         # Mumbo Tokens
-#         "00CE": {
+#         "00CE": { # Sometimes messed up count totals
 #             "Object":"F59C098FE841190C002D",
 #             "Flag":  "F59D096CE84C229400CE",
 #             },
-#         "00CF": {
+#         "00CF": { # Sometimes messed up count totals
 #             "Object":"F5AA098FE7B1190C002D",
 #             "Flag":  "F5AE096CE7AD261400CF",
 #             },
@@ -1044,11 +1044,11 @@ flagged_object_dict = {
             },
         # Empty Honeycombs
         # "006E": {
-            # "Object":"",
+            # "Object":"", Spawns
             # "Flag":  "0B790CC3F2E95994006E",
             # },
         # "006F": {
-            # "Object":"",
+            # "Object":"", Spawns
             # "Flag":  "E50709BE05CBFA14006F",
             # },
         # Mumbo Tokens
@@ -1099,7 +1099,7 @@ flagged_object_dict = {
             "Object":"FDFC001E01DD190C0046",
             "Flag":  "FE13001901D42E14005D",
             },
-#         "005E": { # Top Of Church
+#         "005E": { # Top Of Church; Sometimes messed up totals count
 #             "Object":"F5100C67F9BF190C0046",
 #             "Flag":  "F54E0B67F99E4E14005E",
 #             },
@@ -1209,7 +1209,7 @@ flagged_object_dict = {
             "Flag":  "FFCA0329F1733A940059",
             },
         # Empty Honeycombs
-        # "0072": { # Boat Room
+        # "0072": { # Boat Room; Spawns
             # "Object":"",
             # "Flag":  "002803E8FFBC5D940072",
             # },
@@ -1528,12 +1528,12 @@ abnormal_flagged_object_dict = {
         },
     "Gobi's Valley": {
         # Jiggies
-        "0041": { # Water Pyramid Jiggy
-            "Object":"FFFF0091FFE9190C0046",
-            "Flag":  "FFD200D1FFE14D140041",
-            },
+#         "0041": { # Water Pyramid Jiggy; People kept complaining about being softlocked
+#             "Object":"FFFF0091FFE9190C0046",
+#             "Flag":  "FFD200D1FFE14D140041",
+#             },
         # Mumbo Token
-#         "00F7": { # Water Pyramid Mumbo Token
+#         "00F7": { # Water Pyramid Mumbo Token; RBA is needed if water is emptied
 #             "Object":"FED4059FFB56190C002D",
 #             "Flag":  "FEEC05C3FB5F471400F7",
 #             },
@@ -1549,7 +1549,7 @@ abnormal_flagged_object_dict = {
             "Flag":  "000B0000FFF848140061",
             },
         # Mumbo Tokens
-#         "0105": { # Dining Room
+#         "0105": { # Dining Room; Napper messes up if two jiggies spawn here
 #             "Object":"FF6000BEF5D9190C002D",
 #             "Flag":  "FF6A00CDF5C543140105",
 #             },
@@ -1602,7 +1602,7 @@ abnormal_flagged_object_dict = {
         },
     "Gruntilda's Lair": {
 #         # Jiggies
-#         "0032": { # The First Jiggy
+#         "0032": { # The First Jiggy; If worlds aren't open, instant softlock
 #             "Object":"FA1F0258007B190C0046",
 #             "Flag":  "FA290258007F3F140032",
 #             },
@@ -4244,6 +4244,7 @@ def move_flagged_objects(mm, obj_index_list, object_location_list):
     return object_location_list
 
 def grab_sequence_camera_info(mm, object_dict):
+    '''Obtains the information for the sequence objects and cameras'''
     info_dict = {}
     for object_num in object_dict:
         # Croctus Object
@@ -4264,6 +4265,7 @@ def grab_sequence_camera_info(mm, object_dict):
     return info_dict
 
 def move_sequence_camera(mm, info_dict, original_order, new_order):
+    '''Moves the sequence objects and cameras according to the new order'''
     for sequence_index in range(len(original_order)):
         # Object
         original_obj_index = info_dict[original_order[sequence_index]]["Object_Index"]
@@ -4276,6 +4278,7 @@ def move_sequence_camera(mm, info_dict, original_order, new_order):
         mm[original_obj_index + 2] = info_dict[new_order[sequence_index]]["Camera_ID"]
 
 def randomize_croctus(file_dir, seed_val):
+    '''For each croctus, obtain the info of the object and its camera and assign them new ids based on randomized list'''
     mm_bgs = create_mmap(file_dir, "97E0")
     try:
         croctus_info_dict = grab_sequence_camera_info(mm_bgs, croctus_dict)
@@ -4285,9 +4288,9 @@ def randomize_croctus(file_dir, seed_val):
         random.shuffle(new_croctus_order)
         move_sequence_camera(mm_bgs, croctus_info_dict, original_croctus_order, new_croctus_order)
     except Exception as e:
-        print("Error Here: " + str(e))
-        mm_bgs.close()
-        exit(0)
+        logger.warning("Croctus Randomization Error")
+        error_window("Error During Randomization")
+        raise SystemExit
     finally:
         mm_bgs.close()
 
@@ -4329,6 +4332,7 @@ def oh_whoops_all_notes(mm, struct_index_list):
         mm[struct_index + 10] = 69
 
 def turn_brentildas_into_refills(mm, seed_val, address, brentilda_index_list, brentilda_location_list):
+    '''Turns all Brentildas into a randomly egg or feather refill station'''
     seed_count = 0
     for brentilda_index in brentilda_index_list:
         random.seed(a=(seed_val + int(address, 16) + seed_count))
@@ -4415,6 +4419,7 @@ def oh_whoops_all_enemies(mm, seed_val, enemy_index_list, enemy_type, location, 
 #############
 
 def get_warp_lists(mm, location_warps_entry_dict, address, warp_entry_index_dict, warp_entry_location_dict):
+    '''Obtains the index and information of all of the warps'''
     for shuffle_group in location_warps_entry_dict:
         if(shuffle_group not in warp_entry_index_dict):
             warp_entry_index_dict[shuffle_group] = {}
@@ -4442,6 +4447,7 @@ def get_warp_lists(mm, location_warps_entry_dict, address, warp_entry_index_dict
     return (warp_entry_index_dict, warp_entry_location_dict)
 
 def shuffle_within_world_warp_entry_order(seed_val, warp_seed_addition, warp_entry_location_dict):
+    '''Randomizes the warps within their group'''
     shuffled_warp_entry_location_dict = {}
     for shuffle_group in warp_entry_location_dict:
         warp_ids = sorted(list((warp_entry_location_dict[shuffle_group]).keys()))
@@ -4454,6 +4460,7 @@ def shuffle_within_world_warp_entry_order(seed_val, warp_seed_addition, warp_ent
     return shuffled_warp_entry_location_dict
 
 def move_within_world_warps_entries(mm, address, address_warp_entry_index_dict, address_warp_entry_location_dict):
+    '''Assigns the ids to the warps'''
     for shuffle_group in address_warp_entry_index_dict:
         for warp_id in address_warp_entry_index_dict[shuffle_group]:
             if(address == address_warp_entry_index_dict[shuffle_group][warp_id]["Warp_Address"]):
@@ -4462,15 +4469,16 @@ def move_within_world_warps_entries(mm, address, address_warp_entry_index_dict, 
                     mm[warp_index + 9] = address_warp_entry_location_dict[shuffle_group][warp_id]["Warps"][0]['Obj_ID2']
 
 def determine_world_order(seed_val):
-    original_world_order = ["Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Rusty Bucket Bay", "Click Clock Wood - Lobby"]
-    new_world_order = ["Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Rusty Bucket Bay", "Click Clock Wood - Lobby"]
+    '''Creates a random order for the worlds'''
+    original_world_order = ["Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood - Lobby"]
+    new_world_order = ["Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood - Lobby"]
     random.seed(a=seed_val)
     random.shuffle(new_world_order)
 #     new_world_order.insert(0, "Mumbo's Mountain")
-#     new_world_order.insert(5, "Mad Monster Mansion")
     return (original_world_order, new_world_order)
 
 def get_grunty_lair_warp_index_list(file_dir, original_world):
+    '''Obtains the index values of the gruntilda lair warps'''
     warp_index_list = []
     with open(file_dir + tmp_folder + world_order_warps_list[original_world]["Gruntilda's Lair Address"] + "-Decompressed.bin", "r+b") as decomp_file:
         mm_find = mmap.mmap(decomp_file.fileno(), 0)
@@ -4485,6 +4493,7 @@ def get_grunty_lair_warp_index_list(file_dir, original_world):
     return warp_index_list
 
 def edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world):
+    '''Changes the ids of the lair warps to the worlds'''
     # Replace it/them with new world warp
     mm_replace = create_mmap(file_dir, world_order_warps_list[original_world]["Gruntilda's Lair Address"])
     try:
@@ -4493,35 +4502,14 @@ def edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world)
             mm_replace[warp_index + 8] = int(first_new_warp[16:18], 16)
             mm_replace[warp_index + 9] = int(first_new_warp[18:], 16)
     except Exception:
-        print("Error Here")
-    finally:
-        mm_replace.close()
-
-def get_original_warp_pad(file_dir, original_world):
-    with open(file_dir + tmp_folder + world_order_warps_list[original_world]["World Address"] + "-Decompressed.bin", "r+b") as decomp_file:
-        mm_find = mmap.mmap(decomp_file.fileno(), 0)
-        warp_pad_search = world_order_warps_list[original_world]["World Pad"]
-        warp_pad_index = mm_find.find(bytes.fromhex(warp_pad_search))
-    if(warp_pad_index < 0):
-        logger.error("Error: Couldn't Find Warp Pad")
+        logger.warning("Grunty Lair Warps Edit Error")
         error_window("Error During Randomization")
         raise SystemExit
-    return warp_pad_index
-
-def edit_warp_pad(file_dir, warp_pad_index, original_world, new_world):
-    mm_replace = create_mmap(file_dir, world_order_warps_list[original_world]["World Address"])
-    try:
-        new_warp_pad = world_order_warps_list[new_world]["World Pad"]
-        mm_replace[warp_pad_index] = int(new_warp_pad[:2], 16)
-        mm_replace[warp_pad_index + 1] = int(new_warp_pad[2:4], 16)
-        mm_replace[warp_pad_index + 2] = int(new_warp_pad[4:6], 16)
-        mm_replace[warp_pad_index + 3] = int(new_warp_pad[6:], 16)
-    except Exception:
-        print("Error Here")
     finally:
         mm_replace.close()
 
 def wonderwing_camera_fix(file_dir, new_bottles_script_obj_id):
+    '''Gives the wonderwing camera a new id to prevent crashing the game'''
     mm_clanker = create_mmap(file_dir, "9890")
     try:
         ww_camera_index = mm_clanker.find(bytes.fromhex("010001020201"))
@@ -4566,6 +4554,7 @@ def move_bottles_mounds(mm, seed_val, file_dir, bottles_index_list, bottles_loca
     return bottles_location_list
 
 def upgrade_water_level_button(file_dir):
+    '''Turns the level 1 water button to a level 2 to prevent a softlock'''
     mm_shack = create_mmap(file_dir, "9B48")
     try:
         water_switch_index = mm_shack.find(bytes.fromhex("190C0221"))
@@ -4580,6 +4569,7 @@ def upgrade_water_level_button(file_dir):
         mm_shack.close()
 
 def backup_jump_pad(file_dir):
+    '''Provides a shock jump pad the player can use instead of a fly pad'''
     mm_clanker = create_mmap(file_dir, "9888")
     try:
         droplet_index = mm_clanker.find(bytes.fromhex("FF1F07EDF8FD190C0354"))
@@ -4602,14 +4592,13 @@ def backup_jump_pad(file_dir):
         mm_clanker.close()
 
 def shuffle_world_order_warps(file_dir, seed_val):
+    '''Main function to shuffle the world entrance warps within the lair'''
     (original_world_order, new_world_order) = determine_world_order(seed_val)
     for world_index in range(len(original_world_order)):
         original_world = original_world_order[world_index]
         new_world = new_world_order[world_index]
         warp_index_list = get_grunty_lair_warp_index_list(file_dir, original_world)
         edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world)
-        #warp_pad_index = get_original_warp_pad(file_dir, original_world)
-        #edit_warp_pad(file_dir, warp_pad_index, original_world, new_world)
     upgrade_water_level_button(file_dir)
     backup_jump_pad(file_dir)
 
