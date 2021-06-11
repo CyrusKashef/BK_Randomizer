@@ -11,6 +11,8 @@ Created on Mar 1, 2021
 # 4) Allow other format extensions (.n64, .v64, etc)
 # 5) Able to modify the file that lets you start with all moves and makes Mumbo transformations free
 # 6) Fix the cameras for croctus/ancient ones/jinxy heads
+# 7) Boggy Racing Flags
+# 8) Tiptup Choir Camera
 
 ###########################################################################
 ################################# IMPORTS #################################
@@ -1716,13 +1718,28 @@ abnormal_collectable_struct_id_list = [
 #     "1610", # Underwater Plant
     ]
 
-croctus_list = [
-    "008C01FA",
-    "010C01FA",
-    "018C01FA",
-    "020C01FA",
-    "028C01FA",
-    ]
+croctus_dict = {
+#     "1": {
+#         "Object": "008C01FA",
+#         "Camera": "010024020201",
+#         },
+    "2": {
+        "Object": "010C01FA",
+        "Camera": "010009020201",
+        },
+    "3": {
+        "Object": "018C01FA",
+        "Camera": "01000A020201",
+        },
+    "4": {
+        "Object": "020C01FA",
+        "Camera": "01000B020201",
+        },
+    "5": {
+        "Object": "028C01FA",
+        "Camera": "01000C020201",
+        },
+    }
 
 clanker_rings_list = [
     "190C00F9",
@@ -2101,11 +2118,11 @@ within_world_warps_list = {
             "Ticker's Tower Lower": [
                 "03DC0663FC384E06001800000001071A",
                 ],
-            "Ticker's Tower Upper": [
-                "011F0E1AFD224586001A000000000000",
-                "01670E13FCE74886001A000000017972",
-                "01D30E10FCC73A06001A00000006815B",
-                ],
+#             "Ticker's Tower Upper": [
+#                 "011F0E1AFD224586001A000000000000",
+#                 "01670E13FCE74886001A000000017972",
+#                 "01D30E10FCC73A06001A00000006815B",
+#                 ],
             },
         "Warp To Main": {
             "Mumbo's Skull": [
@@ -2241,9 +2258,9 @@ within_world_warps_list = {
             "Igloo": [
                 "01C20DF924EE2F86004100000000D45D",
                 ],
-            "Christmas Tree": [
-                "EE1803A718684C060042000000000000",
-                ],
+#             "Christmas Tree": [
+#                 "EE1803A718684C060042000000000000",
+#                 ],
 #             "Wozza's Cave": [
 #                 "E6CB0396F0F1898600FD000000000064",
 #                 "E6E90396F156898600FD000000000000",
@@ -2608,7 +2625,7 @@ within_world_warps_list = {
                 "E57F02D000004B0600E4000000040EC9",
                 ],
             "Beehive": [
-                "0E2AEED53386010E00000000000001B0",
+                "00000E2AEED53386010E000000000000"
                 ],
             "Nabnut's Door": [
                 "FFDA11B10886640600E8000000000000",
@@ -2755,6 +2772,18 @@ for item in progression_bottles_moves_mounds:
     combined_bottles_list.append(item)
 for item in non_progression_bottles_moves_mounds:
     combined_bottles_list.append(item)
+
+bottles_moves_camera_dict = {
+    "058C037A": 23, # Beak Buster
+    "060C037A": 24, # Talon Trot
+    "068C037A": 12, # Shock Jump Pad
+    "050C037A": 22, # Eggs
+    "070C037A": 13, # Fly Pad
+    "078C037A": 1, # Wonderwing
+    "080C037A": 16, # Wading Boots
+    "048C037A": 15, # Beak Bomb
+    "088C037A": 25, # Running Shoes
+    }
 
 other_setup_pointer_list = [
     "9BD0", "9AC0", "9AC8", "9AD0", "9B00", "9AE8", "9AF0", "9B40",
@@ -3924,9 +3953,9 @@ def generic_get_lists(mm, id_list):
             object_list = get_object_index_list(mm, obj_id)
         elif((id_list == collectable_struct_id_list) or (id_list == (collectable_struct_id_list + abnormal_collectable_struct_id_list))):
             object_list = get_struct_index_list(mm, obj_id)
-        elif((id_list == croctus_list) or (id_list == clanker_rings_list) or
-             (id_list == ancient_ones_list) or (id_list == jinxy_head_list) or
-             (id_list == brentilda_list) or (id_list == combined_bottles_list)):
+        elif((id_list == clanker_rings_list) or (id_list == ancient_ones_list) or
+             (id_list == jinxy_head_list) or (id_list == brentilda_list) or
+             (id_list == combined_bottles_list)):
             object_list = get_sequence_index_list(mm, obj_id)
         else:
             logger.error("Invalid ID List")
@@ -3938,9 +3967,9 @@ def generic_get_lists(mm, id_list):
         location_list = obtain_no_flag_object_list_info(mm, index_list)
     elif((id_list == collectable_struct_id_list) or (id_list == (collectable_struct_id_list + abnormal_collectable_struct_id_list))):
         location_list = obtain_struct_list_info(mm, index_list)
-    elif((id_list == croctus_list) or (id_list == clanker_rings_list) or
-         (id_list == ancient_ones_list) or (id_list == jinxy_head_list) or
-         (id_list == brentilda_list) or (id_list == combined_bottles_list)):
+    elif((id_list == clanker_rings_list) or (id_list == ancient_ones_list) or
+         (id_list == jinxy_head_list) or (id_list == brentilda_list) or
+         (id_list == combined_bottles_list)):
         location_list = obtain_sequence_object_list_info(mm, index_list)
     else:
         logger.error("Invalid ID List")
@@ -4052,12 +4081,6 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                         address_bottles_location_list.append(item)
                     address_index_dict[address]["Bottles"] = bottles_index_list
                 # Misc Options
-                if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
-                    logger.info("Get Croctus Index")
-                    (croctus_index_list, croctus_location_list) = generic_get_lists(mm, croctus_list)
-                    for item in croctus_location_list:
-                        address_croctus_location_list.append(item)
-                    address_index_dict[address]["Croctus"] = croctus_index_list
                 if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
                     logger.info("Get Clanker Rings Index")
                     (clanker_rings_index_list, clanker_rings_location_list) = generic_get_lists(mm, clanker_rings_list)
@@ -4096,8 +4119,6 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
         if((warp_option == "In-World") or (warp_option == "Max Warps")):
             address_warp_entry_location_dict = shuffle_within_world_warp_entry_order(seed_val, warp_seed_addition, address_warp_entry_location_dict)
             warp_seed_addition += len("If you're reading this, please check up on your friends <3")
-        if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
-            address_croctus_location_list = randomize_list(seed_val, address_croctus_location_list)
         if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
             address_clanker_rings_location_list = randomize_list(seed_val, address_clanker_rings_location_list)
         if((ancient_ones_option == "1") and (location == "Gobi's Valley")):
@@ -4157,10 +4178,7 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                     move_within_world_warps_entries(mm, address, address_warp_entry_index_dict, address_warp_entry_location_dict)
                 if((warp_option == "World Order") or (warp_option == "Max Warps")):
                     logger.info("Lair Warps")
-                    address_bottles_location_list = move_bottles_mounds(mm, seed_val, address_index_dict[address]["Bottles"], address_bottles_location_list, progression_bottles_moves_mounds, non_progression_bottles_moves_mounds)
-                # Croctus
-                if((croctus_option == "1") and (location == "Bubblegloop Swamp")):
-                    address_croctus_location_list = move_no_flag_objects(mm, address_index_dict[address]["Croctus"], address_croctus_location_list)
+                    address_bottles_location_list = move_bottles_mounds(mm, seed_val, file_dir, address_index_dict[address]["Bottles"], address_bottles_location_list, progression_bottles_moves_mounds, non_progression_bottles_moves_mounds)
                 # Clanker Rings
                 if((clanker_rings_option == "1") and (location == "Clanker's Cavern")):
                     address_clanker_rings_location_list = move_no_flag_objects(mm, address_index_dict[address]["Clanker_Rings"], address_clanker_rings_location_list)
@@ -4176,6 +4194,8 @@ def get_index_main(file_dir, address_dict, seed_val, non_flag_option, flagged_op
                 mm.close()
     if((warp_option == "World Order") or (warp_option == "Max Warps")):
         shuffle_world_order_warps(file_dir, seed_val)
+    if(croctus_option == "1"):
+        randomize_croctus(file_dir, seed_val)
 
 #################
 ### RANDOMIZE ###
@@ -4222,6 +4242,54 @@ def move_flagged_objects(mm, obj_index_list, object_location_list):
 #         mm[flag_index + 18] = object_location_list[0][1]["IDK19"]
         object_location_list.pop(0)
     return object_location_list
+
+def grab_sequence_camera_info(mm, object_dict):
+    info_dict = {}
+    for object_num in object_dict:
+        # Croctus Object
+        info_dict[object_num] = {}
+        info_dict[object_num]["Object"] = {}
+        print(object_dict[object_num]["Object"])
+        object_index = get_sequence_index_list(mm, object_dict[object_num]["Object"])[0]
+        info_dict[object_num]["Object_Index"] = object_index
+        info_dict[object_num]["Object"]["Script1"] = mm[object_index]
+        info_dict[object_num]["Object"]["Script2"] = mm[object_index + 1]
+        info_dict[object_num]["Object"]["Object_ID1"] = mm[object_index + 2]
+        info_dict[object_num]["Object"]["Object_ID2"] = mm[object_index + 3]
+        # Croctus Camera
+        print(object_dict[object_num]["Camera"])
+        object_camera_index = get_sequence_index_list(mm, object_dict[object_num]["Camera"])[0]
+        info_dict[object_num]["Camera_Index"] = object_camera_index
+        info_dict[object_num]["Camera_ID"] = mm[object_camera_index + 2]
+    return info_dict
+
+def move_sequence_camera(mm, info_dict, original_order, new_order):
+    for sequence_index in range(len(original_order)):
+        # Object
+        original_obj_index = info_dict[original_order[sequence_index]]["Object_Index"]
+        mm[original_obj_index] = info_dict[new_order[sequence_index]]["Object"]["Script1"]
+        mm[original_obj_index + 1] = info_dict[new_order[sequence_index]]["Object"]["Script2"]
+        mm[original_obj_index + 2] = info_dict[new_order[sequence_index]]["Object"]["Object_ID1"]
+        mm[original_obj_index + 3] = info_dict[new_order[sequence_index]]["Object"]["Object_ID2"]
+        # Camera
+        original_obj_index = info_dict[original_order[sequence_index]]["Camera_Index"]
+        mm[original_obj_index + 2] = info_dict[new_order[sequence_index]]["Camera_ID"]
+
+def randomize_croctus(file_dir, seed_val):
+    mm_bgs = create_mmap(file_dir, "97E0")
+    try:
+        croctus_info_dict = grab_sequence_camera_info(mm_bgs, croctus_dict)
+        random.seed(a=seed_val)
+        original_croctus_order = ["2", "3", "4", "5"]
+        new_croctus_order = ["2", "3", "4", "5"]
+        random.shuffle(new_croctus_order)
+        move_sequence_camera(mm_bgs, croctus_info_dict, original_croctus_order, new_croctus_order)
+    except Exception as e:
+        print("Error Here: " + str(e))
+        mm_bgs.close()
+        exit(0)
+    finally:
+        mm_bgs.close()
 
 def move_no_flag_objects(mm, obj_index_list, object_location_list):
     '''For each object, assign it a new script and object id based on randomized list'''
@@ -4428,7 +4496,6 @@ def edit_grunty_lair_warps(file_dir, warp_index_list, original_world, new_world)
         print("Error Here")
     finally:
         mm_replace.close()
-        
 
 def get_original_warp_pad(file_dir, original_world):
     with open(file_dir + tmp_folder + world_order_warps_list[original_world]["World Address"] + "-Decompressed.bin", "r+b") as decomp_file:
@@ -4454,7 +4521,20 @@ def edit_warp_pad(file_dir, warp_pad_index, original_world, new_world):
     finally:
         mm_replace.close()
 
-def move_bottles_mounds(mm, seed_val, bottles_index_list, bottles_location_list, progression_bottles_moves_choices, non_progression_bottles_moves_choices):
+def wonderwing_camera_fix(file_dir, new_bottles_script_obj_id):
+    mm_clanker = create_mmap(file_dir, "9890")
+    try:
+        ww_camera_index = mm_clanker.find(bytes.fromhex("010001020201"))
+        if(ww_camera_index > 0):
+            mm_clanker[ww_camera_index + 2] = bottles_moves_camera_dict[new_bottles_script_obj_id]
+        else:
+            pass
+    except Exception:
+        print("Error Here")
+    finally:
+        mm_clanker.close()
+
+def move_bottles_mounds(mm, seed_val, file_dir, bottles_index_list, bottles_location_list, progression_bottles_moves_choices, non_progression_bottles_moves_choices):
     '''For each object, assign it a new script and object id based on randomized list'''
     logger.info("Move Non-Flag Objects")
     seed_count = 0
@@ -4471,6 +4551,8 @@ def move_bottles_mounds(mm, seed_val, bottles_index_list, bottles_location_list,
             random.seed(a=(seed_val + seed_count))
             new_bottles_script_obj_id = random.choice(non_progression_bottles_moves_choices)
             non_progression_bottles_moves_choices.remove(new_bottles_script_obj_id)
+            if(bottles_script_obj_id == "078C037A"):
+                wonderwing_camera_fix(file_dir, new_bottles_script_obj_id)
         else:
             logger.error("Error: Non-Bottles Mound Found")
             error_window("Error During Randomization")
@@ -4739,26 +4821,27 @@ def unlockable_options(file_dir, rom_file, seed_val, seed_generated,
                        ):
     '''Runs through the misc options'''
     logger.info("Unlockable Options")
-    decompress_generic_individual_misc_file(file_dir, rom_file, "Requirements")
-    decompress_generic_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
-    if((note_door_option == "1") and (puzzle_option == "1")):
-        final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
-        final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
-        new_bottles_text = new_bottles_text = "YOU WILL NEED "+leading_zeros(str(final_note_score), 3)+ " NOTES AND "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO REACH THE TOP OF THE TOWER! PRESS B AND GET GOING!!!          "
-    elif(note_door_option == "1"):
-        final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
-        new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
-    elif(puzzle_option == "1"):
-        final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
-        new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!"
-    new_bottles_text_len = len(new_bottles_text)
-    for extra_space in range(new_bottles_text_len, 105):
-        new_bottles_text += " "
-    modify_bottles_unskipable_text(file_dir, new_bottles_text)
-    compress_individual_misc_file(file_dir, rom_file, "Requirements")
-    compress_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
-    insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Requirements")
-    insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Bottles Tutorial Confirmation")
+    if((note_door_option == "1") or (puzzle_option == "1")):
+        decompress_generic_individual_misc_file(file_dir, rom_file, "Requirements")
+        decompress_generic_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
+        if((note_door_option == "1") and (puzzle_option == "1")):
+            final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+            final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
+            new_bottles_text = new_bottles_text = "YOU WILL NEED "+leading_zeros(str(final_note_score), 3)+ " NOTES AND "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO REACH THE TOP OF THE TOWER! PRESS B AND GET GOING!!!          "
+        elif(note_door_option == "1"):
+            final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+            new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
+        elif(puzzle_option == "1"):
+            final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
+            new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO PASS THE FINAL PUZZLE DOOR! PRESS B TO GO OR PRESS A IF YOU'RE PUZZLED!"
+        new_bottles_text_len = len(new_bottles_text)
+        for extra_space in range(new_bottles_text_len, 105):
+            new_bottles_text += " "
+        modify_bottles_unskipable_text(file_dir, new_bottles_text)
+        compress_individual_misc_file(file_dir, rom_file, "Requirements")
+        compress_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
+        insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Requirements")
+        insert_misc_file_into_rom(seed_val, file_dir, rom_file, "Bottles Tutorial Confirmation")
 
 ################
 ### CRC TOOL ###
