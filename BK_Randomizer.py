@@ -4624,7 +4624,7 @@ def modify_bottles_unskipable_text(file_dir, new_bottles_text):
         for index in range(text_index_start + len(new_bottles_text), len(mm_decomp)):
             mm_decomp[index] = mm_decomp[index]
 
-def final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper):
+def final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper, struct_option):
     '''Sets the requirements of every note door to zero except for the note door proceeding the final battle'''
     # Find location of note doors
     # 00 32 00 B4 01 04 01 5E 01 C2 02 80 02 FD 03 2A 03 3C 03 4E 03 60 03 72
@@ -4633,11 +4633,15 @@ def final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_
     # Max Notes Is 900
     if((final_note_score_lower < 0) or (final_note_score_lower == "")):
         final_note_score_lower = 0
-    if((final_note_score_upper > 900) or (final_note_score_upper == "")):
+    if((struct_option == "Oh Whoops") and (final_note_score_upper > 2000) or (final_note_score_upper == "")):
+        final_note_score_upper = 2000
+    elif((struct_option != "Oh Whoops") and ((final_note_score_upper > 900) or (final_note_score_upper == ""))):
         final_note_score_upper = 900
     if(final_note_score_upper <= 0):
         final_note_score = 0
-    elif(final_note_score_lower >= 900):
+    elif((struct_option == "Oh Whoops") and (final_note_score_lower >= 2000)):
+        final_note_score = 2000
+    elif((struct_option != "Oh Whoops") and (final_note_score_lower >= 900)):
         final_note_score = 900
     else:
         random.seed(a=seed_val)
@@ -4807,18 +4811,18 @@ def insert_misc_file_into_rom(seed_val, file_dir, rom_file, file_type):
 def unlockable_options(file_dir, rom_file, seed_val, seed_generated,
                        note_door_option, final_note_score_lower, final_note_score_upper,
                        puzzle_option, final_puzzle_lower, final_puzzle_upper,
-                       ):
+                       struct_option):
     '''Runs through the misc options'''
     logger.info("Unlockable Options")
     if((note_door_option == "1") or (puzzle_option == "1")):
         decompress_generic_individual_misc_file(file_dir, rom_file, "Requirements")
         decompress_generic_individual_misc_file(file_dir, rom_file, "Bottles Tutorial Confirmation")
         if((note_door_option == "1") and (puzzle_option == "1")):
-            final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+            final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper, struct_option)
             final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
             new_bottles_text = new_bottles_text = "YOU WILL NEED "+leading_zeros(str(final_note_score), 3)+ " NOTES AND "+leading_zeros(str(final_puzzle_score), 3)+" JIGGIES TO REACH THE TOP OF THE TOWER! PRESS B AND GET GOING!!!          "
         elif(note_door_option == "1"):
-            final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper)
+            final_note_score = final_note_door_mode(file_dir, seed_val, final_note_score_lower, final_note_score_upper, struct_option)
             new_bottles_text = "YOU'LL NEED "+leading_zeros(str(final_note_score), 3)+" NOTES TO PASS THE FINAL NOTE DOOR! PRESS A FOR LESSONS OR PRESS B TO SKIP MY NOTES! HAHA!"
         elif(puzzle_option == "1"):
             final_puzzle_score = modify_world_puzzle_requirements(file_dir, seed_val, final_puzzle_lower, final_puzzle_upper)
@@ -4933,6 +4937,7 @@ def main():
             unlockable_options(file_dir, rom_file, seed_val, seed_generated,
                                final_note_door_option, note_door_lower_limit, note_door_upper_limit,
                                final_puzzle_option, puzzle_lower_limit, puzzle_upper_limit,
+                               struct_option,
                                )
         ### CRC Tool ###
         run_crc_tool(seed_val, file_dir)
