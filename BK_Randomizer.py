@@ -3027,16 +3027,16 @@ def parameter_gui():
     def UploadAction():
         '''Opens a browser to select the ROM file ending in .z64'''
         cwd = os.getcwd()
-        filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select The BK ROM File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
+        filename = tkinter.filedialog.askopenfilename(initialdir=cwd, title="Select The BK ROM File", filetypes =(("Rom Files","*.z64"),("all files","*.*")) )
         rom_file_entry.set(filename)
 
     def load_config():
         '''Opens a chosen JSON file and sets the parameters to match those'''
         config_default_dir = os.getcwd() + "/Configurations/"
         try:
-            filename = tkinter.filedialog.askopenfilename(initialdir=config_default_dir, title="Select A JSON Config File", filetype =(("Json Files","*.json"),("all files","*.*")) )
+            filename = tkinter.filedialog.askopenfilename(initialdir=config_default_dir, title="Select A JSON Config File", filetypes =(("Json Files","*.json"),("all files","*.*")) )
         except Exception:
-            filename = tkinter.filedialog.askopenfilename(initialdir=os.getcwd(), title="Select A JSON Config File", filetype =(("Json Files","*.json"),("all files","*.*")) )
+            filename = tkinter.filedialog.askopenfilename(initialdir=os.getcwd(), title="Select A JSON Config File", filetypes =(("Json Files","*.json"),("all files","*.*")) )
         try:
             with open(filename, "r") as json_file: 
                 json_data = json.load(json_file)
@@ -3075,8 +3075,8 @@ def parameter_gui():
 
     def save_current_config(rom_file_entry, seed_val, nf_obj_var, f_obj_var, struct_var, enemy_var, warps_var,
                             croctus_var, clanker_rings_var, ancient_ones_var, jinxy_heads_var, allow_abnormalities_var,
-                            final_note_door_var, note_door_lower_var, note_door_upper_var,
-                            final_puzzle_var, puzzle_lower_var, puzzle_upper_var,):
+                            note_door_var, note_door_lower_var, note_door_upper_var,
+                            puzzle_var, puzzle_lower_var, puzzle_upper_var,):
         '''Writes the current configuration to a JSON file'''
         config_dir = os.getcwd() + "/Configurations/"
         if(not os.path.isdir(config_dir)):
@@ -3085,8 +3085,8 @@ def parameter_gui():
             "Rom_File_Entry": rom_file_entry, "Seed_Value": seed_val,
             "Non_Flag_Objects": nf_obj_var, "Flagged_Objects": f_obj_var, "Structs": struct_var, "Enemies": enemy_var, "Warps": warps_var,
             "Croctus": croctus_var, "Clanker_Rings": clanker_rings_var, "Ancient_Ones": ancient_ones_var, "Jinxy_Heads": jinxy_heads_var, "Abnormalities": allow_abnormalities_var,
-            "Final_Note_Door": final_note_door_var, "Note_Door_Lower": note_door_lower_var, "Note_Door_Upper": note_door_upper_var,
-            "Final_Puzzle": final_puzzle_var, "Puzzle_Lower": puzzle_lower_var, "Puzzle_Upper": puzzle_upper_var,
+            "Final_Note_Door": note_door_var, "Note_Door_Lower": note_door_lower_var, "Note_Door_Upper": note_door_upper_var,
+            "Final_Puzzle": puzzle_var, "Puzzle_Lower": puzzle_lower_var, "Puzzle_Upper": puzzle_upper_var,
             }
         with open(config_dir + "Last_Used_Configuration.json", "w") as json_file: 
             json.dump(current_config, json_file)
@@ -3098,228 +3098,210 @@ def parameter_gui():
 
     json_data = load_last_used_config()
     window = tk.Tk()
-    window.geometry('650x410')
-    # Title
-    window.winfo_toplevel().title("Banjo-Kazooie Randomizer v"+BK_Rando_Version)
-    # String Input Frame
-    string_frame = tk.LabelFrame(window, text="ROM Settings", width=640, height=100, padx=5, pady=5)
-    string_frame.grid(row=0, sticky="nsew")
-    # Options Frame
-    options_frame = tk.LabelFrame(window, text="Options", width=640, height=200, padx=5, pady=5)
-    options_frame.grid(row=1, column=0, sticky="ns")
-    # Main Options Frame
-    main_options_frame = tk.LabelFrame(options_frame, text="Main Options", width=320, height=205, padx=5, pady=5)
-    main_options_frame.grid(row=0, column=0, sticky="ns")
-    # Misc Options Frame
-    misc_options_frame = tk.LabelFrame(options_frame, text="Misc Options", width=320, height=205, padx=5, pady=5)
-    misc_options_frame.grid(row=0, column=1, sticky="ns")
-    # Submit Frame
-    submit_frame = tk.LabelFrame(window, text="Submit", width=640, height=50, padx=5, pady=5)
-    submit_frame.grid(row=2, column=0, sticky="nsew")
-    # Select Rom File
-    select_rom_button = tk.Button(string_frame, text='Select ROM File', command=UploadAction)
-    select_rom_button.place(x=10, y=10)
+    window.minsize(100, 100)
+    window.geometry('675x440')
+    window.winfo_toplevel().title("Banjo-Kazooie Randomizer v" + BK_Rando_Version)
+
+    def set_default_value(tkvar, json_index, default):
+        ''' Attempts to set the value of a tkinter variable (stringvar, intvar, etc)
+            based on the json_data[json_index]. If the index doesn't exist, sets
+            the variable to default. '''
+        try:
+            tkvar.set(json_data[json_index])
+        except KeyError:
+            tkvar.set(default)
+
+    ###############################
+    ##  main 3 label frames
+    string_frame = tk.LabelFrame(window, text="ROM Settings")
+    string_frame.pack(padx=5, pady=5, expand=tk.TRUE, fill=tk.BOTH)
+
+    options_frame = tk.LabelFrame(window, text="Options")
+    options_frame.pack(padx=5, pady=5, expand=tk.TRUE, fill=tk.BOTH)
+
+    submit_frame = tk.LabelFrame(window, text="Submit")
+    submit_frame.pack(padx=5, pady=5, expand=tk.TRUE, fill=tk.BOTH)
+
+    string_frame.grid_columnconfigure(1, weight=1)  # stretch rom_entry across the screen
+    # options_frame.grid_columnconfigure(0, weight=1)  # uncomment to stretch both halves of misc_options across the screen
+    options_frame.grid_columnconfigure(1, weight=1)  # stretch right half (misc_options) across the screen
+    options_frame.grid_rowconfigure(0, weight=1)  # stretch inner label frames down the screen
+
+
+    ###############################
+    ##  rom settings
+    # related variables setup
     rom_file_entry = tk.StringVar(string_frame)
-    try:
-        rom_file_entry.set(json_data["Rom_File_Entry"])
-    except KeyError:
-        rom_file_entry.set(os.getcwd())
-    entry = tk.Entry(string_frame, textvariable=rom_file_entry, state='readonly', width=85)
-    entry.place(x=110, y=10)
-    # Seed Label And Entry
-    seed_label = tk.Label(string_frame, text='Seed (Optional):')
-    seed_label.place(x=10, y=50)
+    set_default_value(rom_file_entry, "Rom_File_Entry", os.getcwd())
     seed_var = tk.StringVar(string_frame)
-    try:
-        seed_var.set(json_data["Seed_Value"])
-    except KeyError:
-        seed_var.set("")
+    set_default_value(seed_var, "Seed_Value", "")
+    # widget setup
+    select_rom_button = tk.Button(string_frame, text="Select ROM File", command=UploadAction)
+    select_rom_button.grid(row=0, column=0, padx=5, pady=5, sticky='nws')
+    entry = tk.Entry(string_frame, textvariable=rom_file_entry, state='readonly')
+    entry.grid(row=0, column=1, padx=5, pady=5, sticky='news')
+    seed_label = tk.Label(string_frame, text="Seed (Optional):")
+    seed_label.grid(row=1, column=0, padx=5, pady=5)
     seed_entry = tk.Entry(string_frame, textvariable=seed_var)
-    seed_entry.place(x=110, y=50)
-    # Radio Buttons For Non-Flag Object Options
+    seed_entry.grid(row=1, column=1, padx=5, pady=5, sticky='w')
+
+
+    ###############################
+    ##  options
+    opy = 1
+    # main options
+    main_options_frame = tk.LabelFrame(options_frame, text="Main Options")
+    main_options_frame.grid(row=0, column=0, padx=5, pady=5, sticky='news')
+    for i in range(5):
+        # this is to let the labels and radiobuttons stretch and fit the window
+        main_options_frame.grid_rowconfigure(i, weight=1)
+    # related variables setup
     nf_obj_var = tk.StringVar(main_options_frame)
-    nf_obj_options = {
-        "None",
+    set_default_value(nf_obj_var, "Non_Flag_Objects", "Shuffle")
+    nf_obj_options = [
         "Shuffle",
-        #"Randomize",
-        }
-    try:
-        nf_obj_var.set(json_data["Non_Flag_Objects"])
-    except KeyError:
-        nf_obj_var.set("Shuffle")
-    nf_obj_dd = tk.OptionMenu(main_options_frame, nf_obj_var, *nf_obj_options)
-    tk.Label(main_options_frame, text="Jinjos/1-Ups/Misc Objects").place(x=10, y=10)
-    nf_obj_dd.place(x=200, y=5)
-    # Radio Buttons For Flagged Objects Options
+        "None",
+        # "Oh Whoops",
+        # "Randomize",
+    ]
     f_obj_var = tk.StringVar(main_options_frame)
-    f_obj_options = {
-        "None",
+    set_default_value(f_obj_var, "Flagged_Objects", "Shuffle")
+    f_obj_options = [
         "Shuffle",
-        #"Randomize",
-        }
-    try:
-        f_obj_var.set(json_data["Flagged_Objects"])
-    except KeyError:
-        f_obj_var.set("Shuffle")
-    f_obj_dd = tk.OptionMenu(main_options_frame, f_obj_var, *f_obj_options)
-    tk.Label(main_options_frame, text="Jiggies/E.Honeycombs/M.Tokens").place(x=10, y=45)
-    f_obj_dd.place(x=200, y=40)
-    # Radio Buttons For Struct Options
+        "None",
+        # "Oh Whoops",
+        # "Randomize",
+    ]
     struct_var = tk.StringVar(main_options_frame)
-    struct_options = {
-        "None",
+    set_default_value(struct_var, "Structs", "Shuffle")
+    struct_options = [
         "Shuffle",
-        #"Randomize",
+        "None",
         "Oh Whoops",
-        }
-    try:
-        struct_var.set(json_data["Structs"])
-    except KeyError:
-        struct_var.set("Shuffle")
-    struct_dd = tk.OptionMenu(main_options_frame, struct_var, *struct_options)
-    tk.Label(main_options_frame, text="Notes/Eggs/Feathers").place(x=10, y=80)
-    struct_dd.place(x=200, y=75)
-    # Radio Buttons For Enemy Options
+        # "Randomize",
+    ]
     enemy_var = tk.StringVar(main_options_frame)
-    enemy_options = {
-        "None",
+    set_default_value(enemy_var, "Enemies", "Randomize")
+    enemy_options = [
         "Shuffle",
-        "Randomize",
-        "Oh Whoops",
-        }
-    try:
-        enemy_var.set(json_data["Enemies"])
-    except KeyError:
-        enemy_var.set("Randomize")
-    enemy_dd = tk.OptionMenu(main_options_frame, enemy_var, *enemy_options)
-    tk.Label(main_options_frame, text="(Most) Enemies").place(x=10, y=115)
-    enemy_dd.place(x=200, y=110)
-    # Radio Buttons For Warps Options
-    warp_var = tk.StringVar(main_options_frame)
-    warp_options = {
         "None",
-        "In-World",
+        "Oh Whoops",
+        "Randomize",
+    ]
+    warp_var = tk.StringVar(main_options_frame)
+    set_default_value(warp_var, "Warps", "In-World")
+    warp_options = [
+        "None",
         "World Order",
         "Max Warps",
-        }
-    try:
-        warp_var.set(json_data["Warps"])
-    except KeyError:
-        warp_var.set("In-World")
+        "In-World",
+    ]
+
+    # widget setup
+    tk.Label(main_options_frame, text="Jinjos/1-Ups/Misc Objects", anchor=tk.W).grid(row=0, column=0, padx=5, pady=opy, sticky='ew')
+    nf_obj_dd = tk.OptionMenu(main_options_frame, nf_obj_var, *nf_obj_options)
+    nf_obj_dd.grid(row=0, column=1, padx=5, pady=opy, sticky='ew')
+
+    tk.Label(main_options_frame, text="Jiggies/E.Honeycombs/M.Tokens", anchor=tk.W).grid(row=1, column=0, padx=5, pady=opy, sticky='ew')
+    f_obj_dd = tk.OptionMenu(main_options_frame, f_obj_var, *f_obj_options)
+    f_obj_dd.grid(row=1, column=1, padx=5, pady=opy, sticky='ew')
+
+    tk.Label(main_options_frame, text="Notes/Eggs/Feathers", anchor=tk.W).grid(row=2, column=0, padx=5, pady=opy, sticky='ew')
+    struct_dd = tk.OptionMenu(main_options_frame, struct_var, *struct_options)
+    struct_dd.grid(row=2, column=1, padx=5, pady=opy, sticky='ew')
+
+    tk.Label(main_options_frame, text="(Most) Enemies", anchor=tk.W).grid(row=3, column=0, padx=5, pady=opy, sticky='ew')
+    enemy_dd = tk.OptionMenu(main_options_frame, enemy_var, *enemy_options)
+    enemy_dd.grid(row=3, column=1, padx=5, pady=opy, sticky='ew')
+
+    tk.Label(main_options_frame, text="Warps (None)", anchor=tk.W).grid(row=4, column=0, padx=5, pady=opy, sticky='ew')
     warp_dd = tk.OptionMenu(main_options_frame, warp_var, *warp_options)
-    tk.Label(main_options_frame, text="Warps (None)").place(x=10, y=150)
-    warp_dd.place(x=200, y=145)
-    # Checkbox For Clanker's Rings
-    clanker_rings_var = tk.IntVar()
+    warp_dd.grid(row=4, column=1, padx=5, pady=opy, sticky='ew')
+
+
+    # misc options
+    misc_options_frame = tk.LabelFrame(options_frame, text="Misc Options")
+    misc_options_frame.grid(row=0, column=1, padx=5, pady=5, sticky='news')
+    for i in range(5):
+        # this is to let the checkboxes stretch and fit the window
+        misc_options_frame.grid_rowconfigure(i, weight=1)
+    # related variables setup
+    clanker_rings_var = tk.IntVar(options_frame)
+    set_default_value(clanker_rings_var, "Clanker_Rings", "1")
+    croctus_var = tk.IntVar(options_frame)
+    set_default_value(croctus_var, "Crocutus", "1")
+    ancient_ones_var = tk.IntVar(options_frame)
+    set_default_value(ancient_ones_var, "Ancient_Ones", "1")
+    jinxy_heads_var = tk.IntVar(options_frame)
+    set_default_value(jinxy_heads_var, "Jinxy_Heads", "1")
+    # abilities_var = tk.IntVar(options_frame)
+    # set_default_value(abilities_var, "Abilities", "0")
+    allow_abnormalities_var = tk.IntVar(options_frame)
+    set_default_value(allow_abnormalities_var, "Abnormalities", "0")
+
+    note_door_var = tk.IntVar(options_frame)
+    set_default_value(note_door_var, "Final_Note_Door", "0")
+    note_door_lower_var = tk.StringVar(options_frame)
+    set_default_value(note_door_lower_var, "Note_Door_Lower", "0")
+    note_door_upper_var = tk.StringVar(options_frame)
+    set_default_value(note_door_upper_var, "Note_Door_Upper", "900")
+    puzzle_var = tk.IntVar(options_frame)
+    set_default_value(puzzle_var, "Final_Puzzle", "0")
+    puzzle_lower_var = tk.StringVar(options_frame)
+    set_default_value(puzzle_lower_var, "Puzzle_Lower", "0")
+    puzzle_upper_var = tk.StringVar(options_frame)
+    set_default_value(puzzle_upper_var, "Puzzle_Upper", "99")
+
+    # widget setup
     clanker_rings_button = tk.Checkbutton(misc_options_frame, text="Clanker Rings (Hard)", variable=clanker_rings_var)
-    try:
-        clanker_rings_var.set(json_data["Clanker_Rings"])
-    except KeyError:
-        clanker_rings_var.set("1")
-    clanker_rings_button.place(x=5, y=5)
-    # Checkbox For Croctus
-    croctus_var = tk.IntVar()
+    clanker_rings_button.grid(row=0, column=0, padx=5, pady=opy, sticky='w')
+
     croctus_button = tk.Checkbutton(misc_options_frame, text="Croctus", variable=croctus_var)
-    try:
-        croctus_var.set(json_data["Croctus"])
-    except KeyError:
-        croctus_var.set("1")
-    croctus_button.place(x=160, y=5)
-    # Checkbox For Ancient Ones
-    ancient_ones_var = tk.IntVar()
+    croctus_button.grid(row=0, column=1, padx=5, pady=opy, sticky='w')
+
     ancient_ones_button = tk.Checkbutton(misc_options_frame, text="Ancient Ones", variable=ancient_ones_var)
-    try:
-        ancient_ones_var.set(json_data["Ancient_Ones"])
-    except KeyError:
-        ancient_ones_var.set("1")
-    ancient_ones_button.place(x=5, y=35)
-    # Checkbox For Jinxy Heads
-    jinxy_heads_var = tk.IntVar()
+    ancient_ones_button.grid(row=1, column=0, padx=5, pady=opy, sticky='w')
+
     jinxy_heads_button = tk.Checkbutton(misc_options_frame, text="Jinxy Heads (Maze)", variable=jinxy_heads_var)
-    try:
-        jinxy_heads_var.set(json_data["Jinxy_Heads"])
-    except KeyError:
-        jinxy_heads_var.set("1")
-    jinxy_heads_button.place(x=160, y=35)
-    # Checkbox For Abilities
-#     abilities_var = tk.IntVar()
-#     abilities_button = tk.Checkbutton(misc_options_frame, text="Moves/Transformations", variable=abilities_var)
-#     try:
-#         abilities_var.set(json_data["Abilities"])
-#     except KeyError:
-#         abilities_var.set("0")
-#     abilities_button.place(x=5, y=65)
-    # Checkbox For Abnormalities
-    allow_abnormalities_var = tk.IntVar()
+    jinxy_heads_button.grid(row=1, column=1, padx=5, pady=opy, sticky='w')
+
+    # abilities_button = tk.Checkbutton(misc_options_frame, text="Moves/Transformations", variable=abilities_var)
+    # abilities_button.grid(row=2, column=0, padx=5, pady=opy, sticky='w')
+
     allow_abnormalities_button = tk.Checkbutton(misc_options_frame, text="Misc Abnormalities", variable=allow_abnormalities_var)
-    try:
-        allow_abnormalities_var.set(json_data["Abnormalities"])
-    except KeyError:
-        allow_abnormalities_var.set("0")
-    allow_abnormalities_button.place(x=160, y=65)
-    # Checkbox For Final Note Door Mode
-    note_door_var = tk.IntVar()
-    note_door_button = tk.Checkbutton(misc_options_frame, text="Final Note Door Only?", variable=note_door_var)
-    try:
-        note_door_var.set(json_data["Final_Note_Door"])
-    except KeyError:
-        note_door_var.set("0")
-    note_door_button.place(x=5, y=125)
-    note_door_lower_label = tk.Label(misc_options_frame, text='Lower:')
-    note_door_lower_label.place(x=160, y=125)
-    note_door_lower_var = tk.StringVar(misc_options_frame)
-    try:
-        note_door_lower_var.set(json_data["Note_Door_Lower"])
-    except KeyError:
-        note_door_lower_var.set("0")
-    note_door_lower_entry = tk.Entry(misc_options_frame, textvariable=note_door_lower_var, width=5)
-    note_door_lower_entry.place(x=200, y=125)
-    note_door_upper_label = tk.Label(misc_options_frame, text='Upper:')
-    note_door_upper_label.place(x=230, y=125)
-    note_door_upper_var = tk.StringVar(misc_options_frame)
-    try:
-        note_door_upper_var.set(json_data["Note_Door_Upper"])
-    except KeyError:
-        note_door_upper_var.set("900")
-    note_door_upper_entry = tk.Entry(misc_options_frame, textvariable=note_door_upper_var, width=5)
-    note_door_upper_entry.place(x=270, y=125)
-    # Checkbox For Final Puzzle Mode
-    puzzle_var = tk.IntVar()
-    puzzle_button = tk.Checkbutton(misc_options_frame, text="Final Puzzle Only?", variable=puzzle_var)
-    try:
-        puzzle_var.set(json_data["Final_Puzzle"])
-    except KeyError:
-        puzzle_var.set("0")
-    puzzle_button.place(x=5, y=155)
-    puzzle_lower_label = tk.Label(misc_options_frame, text='Lower:')
-    puzzle_lower_label.place(x=160, y=155)
-    puzzle_lower_var = tk.StringVar(misc_options_frame)
-    try:
-        puzzle_lower_var.set(json_data["Puzzle_Lower"])
-    except KeyError:
-        puzzle_lower_var.set("0")
-    puzzle_lower_entry = tk.Entry(misc_options_frame, textvariable=puzzle_lower_var, width=5)
-    puzzle_lower_entry.place(x=200, y=155)
-    puzzle_upper_label = tk.Label(misc_options_frame, text='Upper:')
-    puzzle_upper_label.place(x=230, y=155)
-    puzzle_upper_var = tk.StringVar(misc_options_frame)
-    try:
-        puzzle_upper_var.set(json_data["Puzzle_Upper"])
-    except KeyError:
-        puzzle_upper_var.set("99")
-    puzzle_upper_entry = tk.Entry(misc_options_frame, textvariable=puzzle_upper_var, width=5)
-    puzzle_upper_entry.place(x=270, y=155)
-    # Button To Start Randomization
-    start_label = tk.Label(submit_frame, text='Once finished, click submit!')
-    start_label.grid(row=0, column=0, padx=10, sticky="N")
-    sub_btn = tk.Button(submit_frame, text='Submit', command=verify_parameters)
-    sub_btn.grid(row=1, column=0, padx=10, sticky="N")
-    # Button To Load Configuration
-    load_label = tk.Label(submit_frame, text='Load A Configuration!')
-    load_label.grid(row=0, column=1, padx=10, sticky="N")
-    load_btn = tk.Button(submit_frame, text='Choose File', command=load_config)
-    load_btn.grid(row=1, column=1, padx=10, sticky="N")
-    # End Window Loop
+    allow_abnormalities_button.grid(row=2, column=1, padx=5, pady=opy, sticky='w')
+
+    entry_frame = tk.Frame(misc_options_frame)
+    entry_frame.grid(row=3, column=0, padx=5, pady=opy, columnspan=2, sticky='w')
+    note_door_button = tk.Checkbutton(entry_frame, text="Final Note Door", variable=note_door_var)
+    note_door_button.grid(row=0, column=0, padx=5, pady=opy, sticky='w')
+    note_door_lower_entry = tk.Entry(entry_frame, textvariable=note_door_lower_var, width=6)
+    note_door_lower_entry.grid(row=0, column=1, padx=5, pady=opy)
+    note_door_to_label = tk.Label(entry_frame, text="to")
+    note_door_to_label.grid(row=0, column=2, padx=5, pady=opy)
+    note_door_upper_entry = tk.Entry(entry_frame, textvariable=note_door_upper_var, width=6)
+    note_door_upper_entry.grid(row=0, column=3, padx=5, pady=opy)
+    puzzle_button = tk.Checkbutton(entry_frame, text="Final Puzzle", variable=puzzle_var)
+    puzzle_button.grid(row=1, column=0, padx=5, pady=opy, sticky='w')
+    puzzle_lower_entry = tk.Entry(entry_frame, textvariable=puzzle_lower_var, width=6)
+    puzzle_lower_entry.grid(row=1, column=1, padx=5, pady=opy)
+    puzzle_to_label = tk.Label(entry_frame, text="to")
+    puzzle_to_label.grid(row=1, column=2, padx=5, pady=opy)
+    puzzle_upper_entry = tk.Entry(entry_frame, textvariable=puzzle_upper_var, width=6)
+    puzzle_upper_entry.grid(row=1, column=3, padx=5, pady=opy)
+
+
+    ###############################
+    ##  submit
+    start_label = tk.Label(submit_frame, text="Once finished, click submit!")
+    start_label.grid(row=0, column=0, padx=5, pady=2, sticky='news')
+    load_label = tk.Label(submit_frame, text="Load a configuration!")
+    load_label.grid(row=0, column=1, padx=5, pady=2, sticky='news')
+    sub_btn = tk.Button(submit_frame, text="Submit", command=verify_parameters)
+    sub_btn.grid(row=1, column=0, padx=5, pady=2, sticky='news')
+    load_btn = tk.Button(submit_frame, text="Choose File", command=load_config)
+    load_btn.grid(row=1, column=1, padx=5, pady=2, sticky='news')
+
     window.protocol('WM_DELETE_WINDOW', close_window)
     window.mainloop()
     try:
