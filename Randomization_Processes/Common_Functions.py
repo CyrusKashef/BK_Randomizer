@@ -4,6 +4,8 @@ Created on Aug 24, 2021
 @author: Cyrus
 '''
 
+import json
+
 #################
 ### FUNCTIONS ###
 #################
@@ -15,6 +17,23 @@ def leading_zeros(num_string, num_of_digits):
     for add_zero in range(num_of_digits - len(num_string)):
         num_string = "0" + num_string
     return num_string
+
+def read_json(json_file_dir):
+    with open(json_file_dir, "r") as jf:
+        json_content = json.load(jf)
+    return json_content
+
+def possible_negative(int_val):
+    if(int_val > 32768):
+        int_val = int_val - 65536
+    return int_val
+
+def fit_for_hex(int_val):
+    while(int_val < 0):
+        int_val = int_val + 65536
+    while(int_val > 65536):
+        int_val = int_val - 65536
+    return int_val
 
 def get_address_endpoints(file_bytes, addr):
     """Goes to address (found in Banjo's Backpack) and address 8 bytes after to find the start and end of a setup file"""

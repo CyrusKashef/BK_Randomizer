@@ -37,7 +37,7 @@ def set_seed(seed_val=None):
     """If seed was not provided, generates a seed value."""
     if((seed_val == None) or (seed_val == "")):
         seed_val = randint(10000000, 19940303)
-    return seed_val
+    return int(seed_val)
 
 def make_copy_of_rom(seed_val, file_dir, original_rom):
     """Creates a copy of the rom that will be used for randomization"""
