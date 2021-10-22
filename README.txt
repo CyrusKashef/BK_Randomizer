@@ -134,9 +134,11 @@ I am not providing anyone the ROM file for Banjo-Kazooie, nor does the script cr
 Not-Planned Features:
 * Non-Collectable Objects, such as trees, crates, etc
 * Bosses, such as Conga, Nipper, etc
+
 Features I Attempted But Couldn't Get Working:
 * Starting the game with all of the moves
 * Free Mumbo transformations
+
 If you have any suggestions for new features, feel free to let me know. I honestly didn't think people would care about shuffling music, but that turned out to be a really funny feature. Even if your feedback is "This part of the game is too easy", I could try to figure out some way to make it harder.
 
 # Special Thanks
@@ -153,7 +155,7 @@ If you have any suggestions for new features, feel free to let me know. I honest
 
 # Contacting Me
 I'm really bad at looking at social media messages, but here are different ways to try to reach me:
-Twitter: https://twitter.com/GiantJigglypuff
-YouTube: https://www.youtube.com/channel/UCipn0cYaHIAOtnEAc6NOw8g
-Twitch: https://www.twitch.tv/giantjigglypuff3
-My Discord Server: https://discord.gg/SrFxshj4fF
+* Twitter: https://twitter.com/GiantJigglypuff
+* YouTube: https://www.youtube.com/channel/UCipn0cYaHIAOtnEAc6NOw8g
+* Twitch: https://www.twitch.tv/giantjigglypuff3
+* My Discord Server: https://discord.gg/SrFxshj4fF
