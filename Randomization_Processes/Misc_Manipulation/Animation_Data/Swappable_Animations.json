@@ -1,0 +1,28 @@
+{
+    "Hard_Throw": {
+        "Original": {
+            "0x5FE8": "Kazooie_Shooting_Egg"
+        },
+        "Replacements": {
+            "0x63A8": "Conga_Hard_Throwing"
+        }
+    },
+    "Soft_Throw": {
+        "Original": {
+            "0x5FF0": "Kazooie_Pooping_Egg"
+        },
+        "Replacements": {
+            "0x6138": "Conga_Soft_Throwing"
+        }
+    },
+    "BK_Standing": {
+        "Shuffle": {
+            "0x6008": "Jiggy_Jig",
+            "0x6340": "Kazooie Taunting Banjo",
+            "0x6648": "Banjo_Punishing_Kazooie",
+            "0x68E8": "Banjo_Listening",
+            "0x72A8": "BK_Unlocking_Note_Door",
+            "0x7370": "Kazooie_Hits_Banjo"
+        }
+    }
+}

@@ -10,570 +10,138 @@ Created on Aug 31, 2021
 
 import mmap
 
+###################
+### FILE IMPORT ###
+###################
+
+from ...Common_Functions import leading_zeros
+
 ###########################
 ### GENERIC MODEL CLASS ###
 ###########################
 
 class Model():
     '''Generic model class'''
-    def __init__(self, file_dir, address):
+    def __init__(self, file_dir, address, original_index_start=0):
         '''Initializes generic model class'''
         self._file_dir = file_dir
         self.address = address
+        self._create_mm()
+        self.original_index_start = original_index_start
+        self.original_index_end = len(self.mm)
     
     def _create_mm(self):
         '''Creates the currently used mmap for the model'''
-        with open(f"{self._file_dir}Randomized_ROM\\{self.address}-Decompressed.bin", "r+b") as f:
+        with open(f"{self._file_dir}Randomized_ROM/{self.address}-Decompressed.bin", "r+b") as f:
             self.mm = mmap.mmap(f.fileno(), 0)
 
-    def _sort_rgb_colors(self, rgb_list):
-        '''Sorts the low, medium, and high values of an rgb list'''
-        rgb_list.sort()
-        if(rgb_list[0] > 85):
-            rgb_list[0] = 85
-        if(rgb_list[1] < 85):
-            rgb_list[1] = 85
-        elif(rgb_list[1] > 170):
-            rgb_list[1] = 170
-        if(rgb_list[2] < 170):
-            rgb_list[2] = 170
-        return rgb_list
+    def _close_mm(self):
+        self.mm.close()
 
-
-    def _adjust_colors(self, model_dict):
+    def _vertex_change_color(self, body_part, new_color):
         '''
-        Changes the current vertex shading color to another color based on its previous color in order to maintain shading
-        # Colors! 1=Low, 2=Med, 3=High
-        # 111 - Black            112 - Navy           113 - Blue
-        # 121 - Swamp            122 - Avery          123 - Cosmos
-        # 131 - Green            132 - Emerald        133 - Teal
-        # 211 - Rust             212 - Purple         213 - Violet
-        # 221 - Shit             222 - Gray           223 - Lavender
-        # 231 - Lime2            232 - Lime           233 - Turquoise
-        # 311 - Red              312 - Pink           313 - Magenta
-        # 321 - Brown            322 - Amber          323 - Magenta2
-        # 331 - Yellow           332 - Gold           333 - White
+        Changes the current vertex shading color to another color
+        # 000008 - Black            FF0C0C - Red            09FF09 - Light Green    001C8C - Blue
+        # 214508 - Swamp            31658C - Eastern Blue   4B9D09 - Green          52AA8C - Teal
+        # 73EF8C - Verde            961109 - Red Brown      9C318C - Mauve          B95B09 - Burnt Orange
+        # BD758C - Dark Pink        E0A709 - Gold           DEBA8C - Light Tan      FFEE09 - Yellow
+        # 3165FF - Cosmos           438B7C - Turquoise      52AAFF - Sky Blue       73EFFF - Baby Blue
+        # 9C31FF - Violet           AF567D - Salmon         BD75FF - Lavender       D09C7C - Dark Tan
+        # DEBAFF - Light Pink       FFFFFF - White          FF00FF - Magenta        00FFFF - Cyan
         '''
-        for body_part in model_dict:
-            model_list = model_dict[body_part]["Model_List"]
-            color = model_dict[body_part]["New_Color"]
-            if((not model_list) or (not color)):
-                continue
-            if(color.lower() == "black"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "navy"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "blue"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "swamp"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "avery"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "cosmos"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "green"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "emerald"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "teal"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = low
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "rust"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "purple"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "violet"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "shit"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "gray"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "lavender"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "lime2"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "lime"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "turquoise"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = med
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "red"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "pink"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "magenta"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = low
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "brown"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "amber"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "magenta2"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = med
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "yellow"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = low
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "gold"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = med
-                            self.mm[index+0x0F] = 0xFE
-            elif(color.lower() == "white"):
-                for (index_start, index_end) in model_list:
-                    for index in range(index_start, index_end + 0x10, 0x10):
-                        red = self.mm[index+0x0C]
-                        green = self.mm[index+0x0D]
-                        blue = self.mm[index+0x0E]
-                        alpha = self.mm[index+0x0F]
-                        if(model_dict[body_part]["Color_Check"](red, green, blue, alpha)):
-                            (low, med, high) = self._sort_rgb_colors([red, green, blue])
-                            self.mm[index+0x0C] = high
-                            self.mm[index+0x0D] = high
-                            self.mm[index+0x0E] = high
-                            self.mm[index+0x0F] = 0xFE
+        if(len(new_color) == 6):
+            new_color_red = int(new_color[:2], 16)
+            new_color_green = int(new_color[2:4], 16)
+            new_color_blue = int(new_color[4:6], 16)
+            new_color_alpha = 0xFF
+        elif(len(new_color) == 8):
+            new_color_red = int(new_color[:2], 16)
+            new_color_green = int(new_color[2:4], 16)
+            new_color_blue = int(new_color[4:6], 16)
+            new_color_alpha = int(new_color[6:], 16)
+        elif(int(new_color, 16) == 0):
+            new_color_red = 0
+            new_color_green = 0
+            new_color_blue = 0
+            new_color_alpha = 0
+        else:
+            print(f"Not 6/8 Digits For RRGGBBAA: {body_part} {new_color}")
+            return
+        for color_string in self.model_vertex_dict[body_part]:
+            for item_index in range(self.original_index_start+4, self.original_index_end+4, 16):
+                if((self.mm[item_index] == int(color_string[:2], 16)) and
+                   (self.mm[item_index + 1] == int(color_string[2:4], 16)) and
+                   (self.mm[item_index + 2] == int(color_string[4:6], 16)) and
+                   (self.mm[item_index + 3] == int(color_string[6:], 16))):
+                    self.mm[item_index] = new_color_red
+                    self.mm[item_index + 1] = new_color_green
+                    self.mm[item_index + 2] = new_color_blue
+                    self.mm[item_index + 3] = new_color_alpha
 
+    def _vertex_model_subsection_color_change(self, body_part, new_color):
+        if(len(new_color) == 6):
+            new_color_red = int(new_color[:2], 16)
+            new_color_green = int(new_color[2:4], 16)
+            new_color_blue = int(new_color[4:6], 16)
+            new_color_alpha = 0xFF
+        elif(len(new_color) == 8):
+            new_color_red = int(new_color[:2], 16)
+            new_color_green = int(new_color[2:4], 16)
+            new_color_blue = int(new_color[4:6], 16)
+            new_color_alpha = int(new_color[6:], 16)
+        elif(int(new_color, 16) == 0):
+            new_color_red = 0
+            new_color_green = 0
+            new_color_blue = 0
+            new_color_alpha = 0
+        else:
+            print(f"Not 6/8 Digits For RRGGBBAA: {body_part} {new_color}")
+            return
+        for subsection in self.model_vertex_location_dict[body_part]:
+            for item_index in range(subsection[0], subsection[1], 16):
+                self.mm[item_index] = new_color_red
+                self.mm[item_index + 1] = new_color_green
+                self.mm[item_index + 2] = new_color_blue
+                self.mm[item_index + 3] = new_color_alpha
 
-    def _adjust_textures(self, model_dict):
+    def _texture_change_color(self, texture_part, new_color):
         '''
-        Changes the current texture color to another color; NOT based on its previous color
-        # Colors! 1=Low, 2=Med, 3=High
-        # 0001 - Black            008F - Navy           0031 - Blue
-        # 0301 - Swamp            0211 - Avery          0331 - Cosmos
-        # 0F0F - Green            0F8F - Emerald        0FFF - Teal
-        # 0501 - Rust             801F - Purple         0631 - Violet
-        # 8401 - Shit             841F - Gray           52B1 - Lavender
-        # 8F0F - Lime2            5F21 - Lime           5F37 - Turquoise
-        # F001 - Red              F2E1 - Pink           F0FF - Magenta
-        # CB0F - Brown            E3A1 - Amber          E2BF - Magenta2
-        # FF0F - Yellow           A54F - Gold           FFFF - White
+        Changes the current texture color to another color
+        # 0001 - Black           F841 - Red           0FE1 - Light Green   00D1 - Blue
+        # 0301 - Swamp           2B11 - Eastern Blue  4CC1 - Green         4D51 - Teal
+        # 6F71 - Verde           9081 - Red Brown     9191 - Mauve         B2C1 - Burnt Orange
+        # B391 - Dark Pink       DD21 - Gold          D5B1 - Light Tan     FF41 - Yellow
+        # 2B1F - Cosmos          444F - Turquoise     4D5F - Sky Blue      6F7F - Baby Blue
+        # 919F - Violet          AAAF - Salmon        B39F - Lavender      CCCF - Dark Tan
+        # D5BF - Light Pink      FFFF - White         F81F - Magenta       07FF - Cyan
+        # 841F - Light Gray      420F - Dark Gray
         '''
-        for body_part in model_dict:
-            if("Texture" in model_dict[body_part]):
-                color = model_dict[body_part]["New_Color"]
-                if(not color):
-                    continue
-                if(color.lower() == "black"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x00
-                            self.mm[byte_index+1] = 0x01
-                elif(color.lower() == "navy"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x00
-                            self.mm[byte_index+1] = 0x8F
-                elif(color.lower() == "blue"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x00
-                            self.mm[byte_index+1] = 0x31
-                elif(color.lower() == "swamp"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x03
-                            self.mm[byte_index+1] = 0x01
-                elif(color.lower() == "avery"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x02
-                            self.mm[byte_index+1] = 0x11
-                elif(color.lower() == "cosmos"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x03
-                            self.mm[byte_index+1] = 0x31
-                elif(color.lower() == "green"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x0F
-                            self.mm[byte_index+1] = 0x0F
-                elif(color.lower() == "emerald"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x0F
-                            self.mm[byte_index+1] = 0x8F
-                elif(color.lower() == "teal"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x0F
-                            self.mm[byte_index+1] = 0xFF
-                elif(color.lower() == "rust"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x50
-                            self.mm[byte_index+1] = 0x01
-                elif(color.lower() == "purple"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x80
-                            self.mm[byte_index+1] = 0x1F
-                elif(color.lower() == "violet"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x60
-                            self.mm[byte_index+1] = 0x31
-                elif(color.lower() == "shit"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x84
-                            self.mm[byte_index+1] = 0x01
-                elif(color.lower() == "gray"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x84
-                            self.mm[byte_index+1] = 0x1F
-                elif(color.lower() == "lavender"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x52
-                            self.mm[byte_index+1] = 0xB1
-                elif(color.lower() == "lime2"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x8F
-                            self.mm[byte_index+1] = 0x0F
-                elif(color.lower() == "lime"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x5F # 0x8F8F
-                            self.mm[byte_index+1] = 0x21 # 5F21
-                elif(color.lower() == "turquoise"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0x5F
-                            self.mm[byte_index+1] = 0x37
-                elif(color.lower() == "red"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xF0
-                            self.mm[byte_index+1] = 0x01
-                elif(color.lower() == "pink"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xF2
-                            self.mm[byte_index+1] = 0xE1
-                elif(color.lower() == "magenta"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xF0
-                            self.mm[byte_index+1] = 0xFF
-                elif(color.lower() == "brown"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xCB
-                            self.mm[byte_index+1] = 0x0F
-                elif(color.lower() == "amber"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xE3
-                            self.mm[byte_index+1] = 0xA1
-                elif(color.lower() == "magenta2"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xE2
-                            self.mm[byte_index+1] = 0xBF
-                elif(color.lower() == "yellow"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xFF
-                            self.mm[byte_index+1] = 0x0F
-                elif(color.lower() == "gold"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xA5 #0xFF
-                            self.mm[byte_index+1] = 0x4F #0x8F
-                elif(color.lower() == "white"):
-                    for part in model_dict[body_part]["Texture"]:
-                        for byte_index in model_dict[body_part]["Texture"][part]["Map"]:
-                            self.mm[byte_index] = 0xFF
-                            self.mm[byte_index+1] = 0XFF
-
-    def _main(self, model_dict):
-        '''Runs through the process of changing the colors of a model based on the given dictionary'''
-        self._create_mm()
-        try:
-            self._adjust_colors(model_dict)
-            self._adjust_textures(model_dict)
-        except Exception as e:
-            print(f"Error: {e}")
-        finally:
-            self.mm.close()
+        if(len(new_color) == 4):
+            new_color_red_green = int(new_color[:2], 16)
+            new_color_blue_alpha = int(new_color[2:], 16)
+        elif(len(new_color) == 6):
+            new_color = self._convert_32_to_16(f"{new_color}FF")
+        elif(len(new_color) == 8):
+            new_color = self._convert_32_to_16(new_color)
+        elif(int(new_color, 16) == 0):
+            new_color_red_green = 0
+            new_color_blue_alpha = 0
+        else:
+            print(f"Incorrect Number Of Digits For RGBA: {texture_part} {new_color}")
+            return
+        for item_index in self.model_texture_dict[texture_part]:
+            self.mm[item_index] = new_color_red_green
+            self.mm[item_index + 1] = new_color_blue_alpha
+    
+    def _convert_32_to_16(self, _32_bit_color):
+        red = int(_32_bit_color[0:2], 16)
+        green = int(_32_bit_color[2:4], 16)
+        blue = int(_32_bit_color[4:6], 16)
+        alpha = int(_32_bit_color[6:8], 16)
+        
+        r = (red >> 3)
+        g = (green >> 3)
+        b = (blue >> 3)
+        a = (alpha >> 7)
+        _16_bit_color = (r << 11) | (g << 6) | (b << 1) | (a)
+        return leading_zeros(_16_bit_color, 4)
