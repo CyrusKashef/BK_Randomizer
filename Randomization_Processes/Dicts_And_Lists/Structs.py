@@ -3,6 +3,8 @@ collectable_struct_id_list = [
     "164000B5", # Note 40 B5
     "164000B6", # Note 40 B6
     "164000B7", # Note 40 B7
+    "164000B8", # Note 40 B8
+    "164000BC", # Note 40 BC
     "165000A0", # Blue Egg 50 A0
     "165000A1", # Blue Egg 50 A1
     "165000A2", # Blue Egg 50 A2

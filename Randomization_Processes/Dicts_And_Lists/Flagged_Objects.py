@@ -1,50 +1,69 @@
-obj_flagged_id_list = [
-    "002D", # Mumbo Token
-    "0046", # Jiggy
-    "0047", # Empty Honeycomb
-    ]
+obj_flagged_id_dict = {
+    "002D": "Mumbo Token",
+    "0046": "Jiggy",
+    "0047": "Empty Honeycomb",
+    }
 
 flagged_object_dict = {
     "Spiral Mountain": {
+        # Jiggies
+        # Empty Honeycombs
+        "0076": { # Stump
+            "Object": "FA88006312D8190C0047",
+            "Flag": "FA9800A5129B51140076",
+            },
+        "0077": { # Waterfall
+            "Object": "E5BB0514F8F5190C0047",
+            "Flag": "E5B30514F8F061940077",
+            },
+        "0078": { # Underwater
+            "Object": "FEF8FE46FD75190C0047",
+            "Flag": "FF00FE29FD7450140078",
+            },
+        "0079": { # Climb Tree
+            "Object": "F54005130025190C0047",
+            "Flag": "F54C0582006D5C140079",
+            },
+        # Mumbo Tokens
         },
     "Mumbo's Mountain" : {
         # Jiggies
-        "0001": {                            #  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18
-            "Object":"0175107DFC76190C0046", # 01 75 10 7D FC 76 19 0C 00 46 00 00 24 00 00 64 05 40
-            "Flag":  "017D0FF1FC7C3F940001", # 01 7D 0F F1 FC 7C 3F 94 00 01 00 00 00 00 00 00 0E 00
+        "0001": {
+            "Object":"0175107DFC76190C0046",
+            "Flag":  "017D0FF1FC7C3F940001",
             },
         "0002": {
-            "Object":"15CC0AC4F56C190C0046", # 15 CC 0A C4 F5 6C 19 0C 00 46 00 00 10 80 00 64 05 20
-            "Flag":  "15D90ADDF54150940002", # 15 D9 0A DD F5 41 50 94 00 02 00 00 00 00 00 00 0E 30
+            "Object":"15CC0AC4F56C190C0046",
+            "Flag":  "15D90ADDF54150940002",
             },
         "0005": {
-            "Object":"F18D0986F7BF190C0046", # F1 8D 09 86 F7 BF 19 0C 00 46 00 00 00 00 00 64 05 30
-            "Flag":  "F19C0981F7CA4D940005", # F1 9C 09 81 F7 CA 4D 94 00 05 00 00 00 00 00 00 0E B0
+            "Object":"F18D0986F7BF190C0046",
+            "Flag":  "F19C0981F7CA4D940005",
             },
         "0006": {
-            "Object":"10EF05CD031A190C0046", # 10 EF 05 CD 03 1A 19 0C 00 46 00 00 00 00 00 64 05 10
-            "Flag":  "10DD059B030246940006", # 10 DD 05 9B 03 02 46 94 00 06 00 00 00 00 00 00 0E 10
+            "Object":"10EF05CD031A190C0046",
+            "Flag":  "10DD059B030246940006",
             },
         # Mumbo Tokens
         "00C8": {
-            "Object":"EEB101DB1827190C002D", # EE B1 01 DB 18 27 19 0C 00 2D 00 00 5A 00 00 64 08 80
-            "Flag":  "EEAF01DB1820341400C8", # EE AF 01 DB 18 20 34 14 00 C8 00 00 00 00 00 64 19 20
+            "Object":"EEB101DB1827190C002D",
+            "Flag":  "EEAF01DB1820341400C8",
             },
         "00C9": {
-            "Object":"ECFB08CFF636190C002D", # EC FB 08 CF F6 36 19 0C 00 2D 00 00 00 00 00 64 12 60
-            "Flag":  "ECEE08CFF64E4D9400C9", # EC EE 08 CF F6 4E 4D 94 00 C9 00 00 00 00 00 64 19 30
+            "Object":"ECFB08CFF636190C002D",
+            "Flag":  "ECEE08CFF64E4D9400C9",
             },
         "00CB": {
-            "Object":"16DF00000879190C002D", # 16 DF 00 00 08 79 19 0C 00 2D 00 00 00 00 00 64 12 70
-            "Flag":  "16D6000008823F9400CB", # 16 D6 00 00 08 82 3F 94 00 CB 00 00 00 00 00 64 19 50
+            "Object":"16DF00000879190C002D",
+            "Flag":  "16D6000008823F9400CB",
             },
         "00CA": {
-            "Object":"141E0878F671190C002D", # 14 1E 08 78 F6 71 19 0C 00 2D 00 00 9E 80 00 64 03 40
-            "Flag":  "14200875F6803F9400CA", # 14 20 08 75 F6 80 3F 94 00 CA 00 00 00 00 00 64 19 40
+            "Object":"141E0878F671190C002D",
+            "Flag":  "14200875F6803F9400CA",
             },
         "00CC": {
-            "Object":"FEA90159FDFA190C002D", # 19 0C 00 2D 00 00 00 00 00 64 03 50 00
-            "Flag":  "FE960155FDFC399400CC", # 39 94 00 CC 00 00 00 00 00 64 03 A0 00
+            "Object":"FEA90159FDFA190C002D",
+            "Flag":  "FE960155FDFC399400CC",
             },
         },
     "Treasure Trove Cove": {
@@ -886,10 +905,35 @@ softlock_flagged_object_dict = {
     "Click Clock Wood - Winter": {
         },
     "Gruntilda's Lair": {
-#         # Jiggies
-#         "0032": { # The First Jiggy
-#             "Object":"FA1F0258007B190C0046",
-#             "Flag":  "FA290258007F3F140032",
-#             },
+        # Jiggies
+        "0032": { # The First Jiggy
+            "Object":"FA1F0258007B190C0046",
+            "Flag":  "FA290258007F3F140032",
+            },
         },
     }
+
+for curr_dict in [flagged_object_dict, abnormal_flagged_object_dict, softlock_flagged_object_dict]:
+    curr_dict["Click Clock Wood"] = {}
+    for area in ["Lobby", "Spring", "Summer", "Fall", "Winter"]:
+        for item in curr_dict[f"Click Clock Wood - {area}"]:
+            curr_dict["Click Clock Wood"][item] = curr_dict[f"Click Clock Wood - {area}"][item]
+
+cheat_sheet_dict = {}
+for world_name in flagged_object_dict:
+    for object_id in flagged_object_dict[world_name]:
+        if("-" in object_id):
+            object_id = object_id.split("-")[0]
+        cheat_sheet_dict[object_id] = world_name
+
+for world_name in abnormal_flagged_object_dict:
+    for object_id in abnormal_flagged_object_dict[world_name]:
+        if("-" in object_id):
+            object_id = object_id.split("-")[0]
+        cheat_sheet_dict[object_id] = world_name
+
+for world_name in softlock_flagged_object_dict:
+    for object_id in softlock_flagged_object_dict[world_name]:
+        if("-" in object_id):
+            object_id = object_id.split("-")[0]
+        cheat_sheet_dict[object_id] = world_name

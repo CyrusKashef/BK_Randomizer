@@ -40,6 +40,14 @@ croctus_dict = {
         },
     }
 
+ttc_x_list = [
+    "190C0055",
+    "3C080047",
+    "3C080048",
+    "3C080049",
+    "3C08004A",
+    ]
+
 clanker_rings_list = [
     "190C00F9",
     "190C00FA",

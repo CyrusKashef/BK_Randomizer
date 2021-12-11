@@ -768,7 +768,47 @@ for item in progression_bottles_moves_mounds:
     combined_bottles_list.append(item)
 for item in non_progression_bottles_moves_mounds:
     combined_bottles_list.append(item)
-    
+
+
+bottles_moves_camera_dict = {
+    "058C037A": { # Beak Buster
+        "Primary_Camera": 23,
+        "Secondary_Camera": None,
+        },
+    "060C037A": { # Talon Trot
+        "Primary_Camera": 24,
+        "Secondary_Camera": None,
+        },
+    "068C037A": { # Shock Jump Pad
+        "Primary_Camera": 12,
+        "Secondary_Camera": None,
+        },
+    "050C037A": { # Eggs
+        "Primary_Camera": 22,
+        "Secondary_Camera": None,
+        },
+    "070C037A": { # Fly Pad
+        "Primary_Camera": 13,
+        "Secondary_Camera": None,
+        },
+    "078C037A": { # Wonderwing
+        "Primary_Camera": 1,
+        "Secondary_Camera": None,
+        },
+    "080C037A": { # Wading Boots
+        "Primary_Camera": 16,
+        "Secondary_Camera": 17,
+        },
+    "048C037A": { # Beak Bomb
+        "Primary_Camera": 15,
+        "Secondary_Camera": None,
+        },
+    "088C037A": { # Running Shoes
+        "Primary_Camera": 25,
+        "Secondary_Camera": 41,
+        },
+    }
+
 basic_world_warp_dict = {
         "MM": {
             "Bottles_Count": 3,
@@ -839,6 +879,7 @@ bottles_world_warp_dict = {
                 "Fly": [["Talon_Trot"]],
                 "Shock_Jump_Pad": [],
                 "Ledge_1_Up": [],
+                "Sharkfood_Island_1_Up": [],
                 "Orange_Jinjo": [],
                 "Yellow_Jinjo": [["Fly"]],
                 "Pink_Jinjo": [],
@@ -851,8 +892,9 @@ bottles_world_warp_dict = {
             "Possible_Bottles": {
                 "Wonderwing": [["Fly"], ["Shock_Jump_Pad"]],
                 "Platform_1_Up": [],
+                "Alcove_1_Up": ["Shock_Jump_Pad"],
                 "Yellow_Jinjo": [],
-                "Orange_Jinjo": ["Shock_Jump_Pad"],
+                "Orange_Jinjo": [["Shock_Jump_Pad", "Beak_Buster"], ["Shock_Jump_Pad", "Eggs"]],
                 }
             },
         "BGS": {
@@ -872,6 +914,7 @@ bottles_world_warp_dict = {
             "Possible_Bottles": {
                 "Beak_Bomb": [],
                 "Finish_Pole_1_Up": ["Talon_Trot", "Fly"],
+                "Mumbo_Skull_1_Up": ["Fly"],
                 "Blue_Jinjo": ["Talon_Trot", "Fly"],
                 "Green_Jinjo": [],
                 "Purple_Jinjo": [],
@@ -886,11 +929,12 @@ bottles_world_warp_dict = {
             "In_World_Moves": [],
             "Available_Slots": 3,
             "Possible_Bottles": {
-                "Turbo_Talon_Trot": [],
-                "King_Sandybutt_1_up": [["Eggs", "Turbo_Talon_Trot"]],
-                "Water_Pyramid_1_up": [],
-                "Green_Jinjo": [],
-                "Orange_Jinjo": [["Eggs", "Turbo_Talon_Trot"]],
+                "Turbo_Talon_Trot": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
+                "King_Sandybutt_1_up": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
+                "Water_Pyramid_1_up": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
+                "Yellow_Jinjo": [],
+                "Green_Jinjo": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
+                "Orange_Jinjo": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
                 }
             },
         "MMM": {
@@ -901,7 +945,6 @@ bottles_world_warp_dict = {
                 "Organ_1_up": [["Turbo_Talon_Trot", "Shock_Jump_Pad"]],
                 "Church_Secret_Room": [["Turbo_Talon_Trot", "Shock_Jump_Pad"]],
                 "Blue_Jinjo": [["Shock_Jump_Pad"]],
-                "Green_Jinjo": [["Shock_Jump_Pad"]],
                 "Orange_Jinjo": [],
                 "Yellow_Jinjo": [["Turbo_Talon_Trot", "Shock_Jump_Pad"]],
                 }
