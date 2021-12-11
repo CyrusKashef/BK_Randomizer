@@ -23,9 +23,9 @@ from ..Dicts_And_Lists import Sequences
 
 class SetupFile():
     '''Generic setup file class'''
-    def __init__(self, setup_address, setup_name=None):
+    def __init__(self, setup_address, cwd, setup_name=None):
         '''Initializes the setup file class'''
-        self.cwd = r"C:\\Users\\Cyrus\\eclipse-workspace\\BK_Rando_v2.0\\Randomized_ROM\\"
+        self.cwd = f"{cwd}Randomized_ROM/"
         self.setup_name = setup_name
         self.setup_address = int(setup_address, 16)
         self.struct_index_list = []
@@ -40,12 +40,19 @@ class SetupFile():
         self.wall_enemy_info_list = []
         self.flying_enemy_index_list = []
         self.flying_enemy_info_list = []
+        self.warp_index_list = []
+        self.warp_info_list = []
+        self.bottles_index_list = []
+        self.bottles_info_list = []
         with open(f"{self.cwd}{setup_address}-Decompressed.bin", "r+b") as f:
             self.mm = mmap.mmap(f.fileno(), 0)
         if(self.setup_address == "97B0"):
             self.adjust_ttc_oob_egg()
+        self.note_count = 0
+        self.jiggy_counts = 0
+        self.empty_honeycomb_count = 0
     
-    def _locate_item_index(self, item_search_string, item_type, seed=None):
+    def _locate_item_index(self, item_search_string, item_type=None, seed=None):
         '''Finds the index of every item type, then run the functions to pull their information'''
         item_index = 0
         item_list = []
@@ -70,10 +77,17 @@ class SetupFile():
             elif(item_type == "Flying_Enemy"):
                 self.flying_enemy_index_list += item_list
                 self._obtain_object_parameters(item_list, "Flying_Enemy")
-            elif(item_type == "Brentilda"):
-                self._replace_object_parameters(item_list, Sequences.inventory_refills, seed)
             elif(item_type == "Note_Door"):
-                self._remove_note_doors(item_list)
+                self._remove_object(item_list)
+            elif(item_type == "Magic_Barrier"):
+                self._remove_object(item_list)
+            elif(item_type == "Warp"):
+                self.warp_index_list += item_list
+                self._obtain_object_parameters(item_list, "Warp")
+            elif(item_type == "Bottles_Mound"):
+                self.bottles_index_list += item_list
+                self._obtain_object_parameters(item_list, "Bottles_Mound")
+        return item_list
     
     def _obtain_struct_parameters(self, item_list):
         '''Grabs the necessary information for a struct'''
@@ -137,6 +151,20 @@ class SetupFile():
                     "Obj_ID1": self.mm[object_index+2],
                     "Obj_ID2": self.mm[object_index+3],
                     })
+        elif(item_type == "Warp"):
+            for object_index in item_list:
+                self.warp_info_list.append({
+                    "Obj_ID1": self.mm[object_index+8],
+                    "Obj_ID2": self.mm[object_index+9],
+                    })
+        elif(item_type == "Bottles_Mound"):
+            for object_index in item_list:
+                self.bottles_info_list.append({
+                    "Script1": self.mm[object_index],
+                    "Script2": self.mm[object_index+1],
+                    "Obj_ID1": self.mm[object_index+2],
+                    "Obj_ID2": self.mm[object_index+3],
+                    })
     
     def _set_object(self, object_index, object_info):
         '''Overwrites the previous object info with new info'''
@@ -144,6 +172,13 @@ class SetupFile():
         self.mm[object_index+1] = object_info["Script2"]
         self.mm[object_index+2] = object_info["Obj_ID1"]
         self.mm[object_index+3] = object_info["Obj_ID2"]
+        if((object_info["Script1"] == 0x19) and (object_info["Script2"] == 0x0C) and 
+           (object_info["Obj_ID1"] == 0x02) and (object_info["Obj_ID2"] == 0x89)):
+            rot_val = self.mm[object_index + 6]
+            if(rot_val >= 45):
+                self.mm[object_index + 6] = rot_val - 45
+            else:
+                self.mm[object_index + 6] = rot_val + 135
     
     def _locate_flagged_object_index(self, object_search_string, flag_search_string):
         '''Finds the index of a flagged object and its flag, then run the functions to pull their information'''
@@ -360,23 +395,37 @@ class SetupFile():
         # CAMERA
         self.mm[camera_index+2] = camera_info["Camera_ID"]
     
-    def _replace_object_parameters(self, item_list, replace_list, seed):
+    def _replace_object_parameters(self, item_list, replace_list, seed=0):
         '''Overwrites the previous object info with randomly selected info from a list'''
         for item_index in item_list:
             random.seed(a=(seed + self.setup_address))
-            refill_choice = random.choice(replace_list)
-            self.mm[item_index] = int(refill_choice[:2], 16)
-            self.mm[item_index+1] = int(refill_choice[2:4], 16)
-            self.mm[item_index+2] = int(refill_choice[4:6], 16)
-            self.mm[item_index+3] = int(refill_choice[6:], 16)
+            replace_choice = random.choice(replace_list)
+            self.mm[item_index] = int(replace_choice[:2], 16)
+            self.mm[item_index+1] = int(replace_choice[2:4], 16)
+            self.mm[item_index+2] = int(replace_choice[4:6], 16)
+            self.mm[item_index+3] = int(replace_choice[6:], 16)
     
-    def _remove_note_doors(self, item_list):
+    def _replace_each_object_parameters(self, search_string_list, replacement_list):
+        '''PyDoc'''
+        for index_num in range(len(search_string_list)):
+            self._edit_object(search_string_list[index_num],
+                              replacement_list[index_num])
+    
+    def _replace_all_in_area(self, search_string, replace_list):
+        '''PyDoc'''
+        item_index = self._locate_item_index(search_string)
+        if(item_index):
+            for item_index_start in item_index:
+                self._edit_object_index(item_index_start, replace_list)
+    
+    def _remove_object(self, item_list):
         '''Replaces note doors with an object that doesn't seem to do anything'''
         for item_index in item_list:
             self.mm[item_index] = 0x19
             self.mm[item_index+1] = 0xC
             self.mm[item_index+2] = 0x2
             self.mm[item_index+3] = 0x68
+            self.mm[item_index+9] = 0x1
     
     ######################
     ### MISC FUNCTIONS ###
@@ -385,14 +434,32 @@ class SetupFile():
     def _edit_object(self, item_search_string, replacement_dict):
         '''Takes specific parameters of an object and replaces them with the info from a dictionary'''
         item_index = self.mm.find(bytes.fromhex(item_search_string))
+        if(item_index > -1):
+            for index_add in replacement_dict:
+                self.mm[item_index + index_add] = replacement_dict[index_add]
+            return True
+        return False
+
+    def _edit_object_index(self, item_index_start, replacement_dict):
+        '''Takes specific parameters of an object and replaces them with the info from a dictionary'''
         for index_add in replacement_dict:
-            self.mm[item_index + index_add] = replacement_dict[index_add]
+            self.mm[item_index_start + index_add] = replacement_dict[index_add]
+    
+    def _does_string_exist(self, item_search_string):
+        item_index = self.mm.find(bytes.fromhex(item_search_string))
+        if(item_index >= 0):
+            return True
+        return False
 
     def adjust_ttc_oob_egg(self):
         '''Moves the out of bounds egg in TTC slightly higher'''
         ttc_egg_index = self.mm.find(bytes.fromhex("F078041E06D6"))
         self.mm[ttc_egg_index+2] = 4
         self.mm[ttc_egg_index+3] = 166
+    
+    def adjust_ttc_lighthouse_token(self):
+        '''PyDoc'''
+        pass
     
     def _skip_non_ring(self, item_index):
         '''Skips a string pattern that looks like a Clanker ring'''
