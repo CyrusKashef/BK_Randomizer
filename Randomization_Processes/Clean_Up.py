@@ -33,6 +33,8 @@ class CleanUp():
                     shutil.rmtree(file_path)
                 elif((os.path.isfile(file_path) or os.path.islink(file_path)) and file_path.endswith(".z64") and (it_errored)):
                     os.remove(file_path)
+                elif((os.path.isfile(file_path) or os.path.islink(file_path)) and file_path.endswith(".json") and (it_errored)):
+                    os.remove(file_path)
             except Exception:# as e:
                 #logger.warning('Failed to delete %s. Reason: %s' % (file_path, e))
                 pass

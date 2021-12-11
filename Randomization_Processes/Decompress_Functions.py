@@ -33,7 +33,7 @@ import subprocess
 ### FILE IMPORTS ###
 ####################
 
-from .Dicts_And_Lists.Setups import setup_ids, speech_file_ids, asm_setup_ids, texture_setup_ids
+from .Dicts_And_Lists.Setups import setup_ids, speech_file_ids, asm_setup_ids, texture_setup_ids, level_model_ids
 from .Common_Functions import get_address_endpoints
 
 #################
@@ -99,6 +99,7 @@ class Decompressor():
         self._decompressor(speech_file_ids, address_type="Pointer")
         self._decompressor(asm_setup_ids, address_type="Address")
         self._decompressor(texture_setup_ids, address_type="Pointer")
+        self._decompressor(level_model_ids, address_type="Pointer")
 
 if __name__ == '__main__':
     pass

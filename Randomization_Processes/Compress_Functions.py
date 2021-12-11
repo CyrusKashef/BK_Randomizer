@@ -16,8 +16,8 @@ import os
 ### FILE IMPORTS ###
 ####################
 
-from .Dicts_And_Lists.Setups import setup_ids, speech_file_ids, asm_setup_ids, texture_setup_ids
-from .Dicts_And_Lists.Misc_Dicts_And_Lists import other_setup_pointer_list, skip_these_setup_pointer_list
+from .Dicts_And_Lists.Setups import setup_ids, speech_file_ids, asm_setup_ids, texture_setup_ids, level_model_ids
+from .Dicts_And_Lists.Misc_Dicts_And_Lists import skip_these_setup_pointer_list, furnace_fun_questions_pointer_list
 from .Common_Functions import leading_zeros, get_address_endpoints
 
 ########################
@@ -26,133 +26,15 @@ from .Common_Functions import leading_zeros, get_address_endpoints
 
 class Compressor():
     '''Compressor class'''
-    def __init__(self, seed_val, file_dir):
+    def __init__(self, master, seed_val, file_dir):
         '''Initializes compressor class'''
+        self.master = master
         self._seed_val = seed_val
         self._file_dir = file_dir
 
-    def verify_pointers(self):
-        '''Checks that all setup files point to a setup starting with 11 72 and is on an 8n byte'''
-        #logger.info("Verifying Pointer")
-        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rand_rom:
-            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
-            #logger.debug("Modified Pointer List")
-            for location in setup_ids:
-                for file_pointer in setup_ids[location]:
-                    pointer_start_1 = str(hex(mm_rand_rom[int(file_pointer[0][2:], 16)]))[2:]
-                    pointer_start_1 = leading_zeros(pointer_start_1, 2)
-                    pointer_start_2 = str(hex(mm_rand_rom[int(file_pointer[0][2:], 16) + 1]))[2:]
-                    pointer_start_2 = leading_zeros(pointer_start_2, 2)
-                    pointer_start_3 = str(hex(mm_rand_rom[int(file_pointer[0][2:], 16) + 2]))[2:]
-                    pointer_start_3 = leading_zeros(pointer_start_3, 2)
-                    pointer_start_4 = str(hex(mm_rand_rom[int(file_pointer[0][2:], 16) + 3]))[2:]
-                    pointer_start_4 = leading_zeros(pointer_start_4, 2)
-                    pointer_start = int(pointer_start_1 + pointer_start_2 + pointer_start_3 + pointer_start_4, 16)
-                    header_start = pointer_start + 68816 # decimal 68816 -> hex 10CD0
-                    if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
-                        #logger.error("Invalid Header At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
-                        #error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                        raise SystemExit
-                    elif(((header_start % 8) != 0)):
-                        #logger.error("Invalid Index Start At Hex Index: " + file_pointer[0] + " , " + str(hex(header_start)))
-                        #error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                        raise SystemExit
-            #logger.debug("Misc Pointer List")
-            for file_pointer in other_setup_pointer_list:
-                pointer_start_1 = str(hex(mm_rand_rom[int(file_pointer, 16)]))[2:]
-                pointer_start_1 = leading_zeros(pointer_start_1, 2)
-                pointer_start_2 = str(hex(mm_rand_rom[int(file_pointer, 16) + 1]))[2:]
-                pointer_start_2 = leading_zeros(pointer_start_2, 2)
-                pointer_start_3 = str(hex(mm_rand_rom[int(file_pointer, 16) + 2]))[2:]
-                pointer_start_3 = leading_zeros(pointer_start_3, 2)
-                pointer_start_4 = str(hex(mm_rand_rom[int(file_pointer, 16) + 3]))[2:]
-                pointer_start_4 = leading_zeros(pointer_start_4, 2)
-                pointer_start = int(pointer_start_1 + pointer_start_2 + pointer_start_3 + pointer_start_4, 16)
-                header_start = pointer_start + 68816 # decimal 68816 -> hex 10CD0
-                if((mm_rand_rom[header_start] != 17) or (mm_rand_rom[header_start + 1] != 114)):
-                    #logger.error("Invalid Header At Decimal Index: " + str(file_pointer))
-                    #error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                    raise SystemExit
-                elif(((header_start % 8) != 0)):
-                    #logger.error("Invalid Index Start At Hex Index: " + str(file_pointer))
-                    #error_window("Bad Seed (" + str(seed_val) + "), Try Another")
-                    raise SystemExit
-    
-    def compress_file(self, decompressed_file):
-        """Compresses the hex file that was extracted from the main ROM file"""
-        #logger.info("Compress File")
-        cmd = f"{self._file_dir}GZIP.EXE -c {self._file_dir}Randomized_ROM\\{decompressed_file.upper()}-Decompressed.bin > {self._file_dir}Randomized_ROM\\{decompressed_file.upper()}-New_Compressed.bin"
-    #     #logger.debug(cmd)
-        subprocess.Popen(cmd.split(),shell=True).communicate()
-    
-    def location_compressor(self, location_setup):
-        """Prepares the hex file that was extracted from the main ROM file for compression by providing the correct header and footer"""
-        #logger.info("Compressor")
-        (addr, header, footer, lead, tail) = location_setup
-        # Decomp Size
-        file_pointer = addr[2:]
-        with open(f"{self._file_dir}Randomized_ROM\\{file_pointer}-Decompressed.bin", "r+b") as rand_comp_file:
-            mm_decomp = mmap.mmap(rand_comp_file.fileno(), 0)
-            decomp_len = str(hex(len(mm_decomp)))[2:]
-            decomp_len = leading_zeros(decomp_len, 8)
-        # Compress File
-        self.compress_file(file_pointer)
-        # Get Length Of Original Compressed File
-        with open(f"{self._file_dir}Randomized_ROM\\{file_pointer}-New_Compressed.bin", "r+b") as comp_file:
-            mm_comp = mmap.mmap(comp_file.fileno(), 0)
-            comp_file_len = len(mm_comp)
-            header_end = ""
-            for header_val in header[-4:]:
-                header_end += header_val
-            header_end_index = mm_comp.find(bytes.fromhex(header_end)) + 4
-            with open(f"{self._file_dir}Randomized_ROM\\{file_pointer}-Randomized_Compressed.bin", "w+b") as new_comp_file:
-                new_comp_file.write(bytes.fromhex("1172"))
-                new_comp_file.write(bytes.fromhex(decomp_len))
-                new_comp_len = 6
-                for index in range(header_end_index, comp_file_len-len(footer)):
-                    hex_string = str(hex(mm_comp[index]))[2:]
-                    hex_string = leading_zeros(hex_string, 2)
-                    new_comp_file.write(bytes.fromhex(hex_string))
-                    new_comp_len += 1
-                if((new_comp_len % 8) != 0):
-                    needs_padding = 8 - (new_comp_len % 8)
-                    for index in range(new_comp_len, new_comp_len + needs_padding):
-                        new_comp_file.write(bytes.fromhex("AA"))
-        return addr
-    
-    def remove_unknown_object(self, index_hex_str):
-        '''THIS FUNCTION IS NOT IN USE! Removes the object with the id 0268.'''
-        #-11-10 -9 -8 -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
-        # Cm Voxel No SO X1 X2 Y1 Y2 Z1 Z2 S1 S2 O1 O2 .. .. .. .. Ro Si .. .. .. E1 E2 E3
-        # 01 03 0A 01 0B FA 47 01 6E FB E8 19 0C 02 68 00 00 00 00 00 64 11 40 00 40 08 00
-        unknown_object_count = 0
-        with open(f"{self._file_dir}Randomized_ROM\\{index_hex_str}-Decompressed.bin", "r+b") as rand_decomp_file:
-            still_searching = True
-            start_index = 0
-            while(still_searching):
-                mm_rand_decomp = mmap.mmap(rand_decomp_file.fileno(), 0)
-                mm_rand_decomp_len = len(mm_rand_decomp)
-                search_index = mm_rand_decomp.find(bytes.fromhex("190C0268"), start_index)
-                if(search_index == -1):
-                    still_searching = False
-    #             elif((mm_rand_decomp[search_index - 12] == 0) and (mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and
-    #                  (mm_rand_decomp[search_index - 9] == 10) and (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and 
-    #                  (mm_rand_decomp[search_index + 14] == 1)):
-                elif((mm_rand_decomp[search_index - 11] == 1) and (mm_rand_decomp[search_index - 10] == 3) and (mm_rand_decomp[search_index - 9] == 10) and
-                     (mm_rand_decomp[search_index - 7] == 11) and (mm_rand_decomp[search_index + 13] == 1) and (mm_rand_decomp[search_index + 14] == 1)):
-                    mm_rand_decomp[search_index - 12] = 1
-                    unknown_object_count += 1
-                    for index in range(search_index, mm_rand_decomp_len-15):
-                        mm_rand_decomp[index - 11] = mm_rand_decomp[index + 15]
-                    mm_rand_decomp.size(mm_rand_decomp_len - 26)
-                else:
-                    start_index = search_index + 1
-        print(f"Unknown Object Count: {str(unknown_object_count)}")
-    
-    def extract_unchanged_setup(self, addr):
+    def _extract_unchanged_setup(self, addr):
         '''For every setup file not randomized, pull it out of the ROM into a compressed file.'''
-        randomized_rom_path = f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64"
-        with open(randomized_rom_path, "rb") as file:
+        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "rb") as file:
             file_bytes = file.read()
         (address1, address2) = get_address_endpoints(file_bytes, addr)
         with open(f"{self._file_dir}Randomized_ROM\\{addr}-Randomized_Compressed.bin", "w+b") as comp_file:
@@ -161,179 +43,190 @@ class Compressor():
                 if(len(hex_string) < 2):
                     hex_string = "0" + hex_string
                 comp_file.write(bytes.fromhex(hex_string))
+
+    def _compress_file(self, file_name):
+        """Compresses the hex file that was extracted from the main ROM file"""
+        cmd = f"{self._file_dir}GZIP.EXE -c {self._file_dir}Randomized_ROM\\{file_name.upper()}-Decompressed.bin > {self._file_dir}Randomized_ROM\\{file_name.upper()}-New_Compressed.bin"
+        subprocess.Popen(cmd.split(),shell=True).communicate()
     
-    ### MAIN FILES ###
+    def _post_compress_operations(self, file_name, header, footer, decomp_len, padding_text="AA"):
+        with open(f"{self._file_dir}Randomized_ROM/{file_name}-New_Compressed.bin", "r+b") as comp_file:
+            mm_comp = mmap.mmap(comp_file.fileno(), 0)
+            comp_file_len = len(mm_comp)
+            header_end = ""
+            for header_val in header[-4:]:
+                header_end += header_val
+            header_end_index = mm_comp.find(bytes.fromhex(header_end)) + 4
+            with open(f"{self._file_dir}Randomized_ROM/{file_name}-Randomized_Compressed.bin", "w+b") as new_comp_file:
+                new_comp_file.write(bytes.fromhex("1172"))
+                new_comp_file.write(bytes.fromhex(decomp_len))
+                new_comp_len = 6
+                for index in range(header_end_index, comp_file_len-len(footer)):
+                    hex_string = leading_zeros(mm_comp[index], 2)
+                    new_comp_file.write(bytes.fromhex(hex_string))
+                    new_comp_len += 1
+                if((new_comp_len % 8) != 0):
+                    needs_padding = 8 - (new_comp_len % 8)
+                    for index in range(new_comp_len, new_comp_len + needs_padding):
+                        new_comp_file.write(bytes.fromhex(padding_text))
     
-    def skip_this_setup(self, mm_rand_rom, index_dec):
-        '''Move the next pointer to the current pointer's location, making the pointer size zero.'''
-        for offset in range(4):
-            mm_rand_rom[index_dec + offset + 8] = mm_rand_rom[index_dec + offset]
-    
-    def insert_file_into_rom(self):
-        '''Inserts a compressed file back into the ROM.'''
-        setup_pointer_start = 38784
-        setup_pointer_end = 40000
-        # For every compressed file in numerical order,
-        for index_dec in range(setup_pointer_start, setup_pointer_end+1, 8):
-            with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rand_rom:
-                mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+    def _insert_into_rom_by_pointer(self, setup_pointer_start, setup_pointer_end, additional_skip_these_pointer_list=[]):
+        for index_dec in range(setup_pointer_start, setup_pointer_end + 1, 8):
+            with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as bk_rom:
+                mm_bk_rom = mmap.mmap(bk_rom.fileno(), 0)
                 index_hex_str = str(hex(index_dec))[2:]
-                if(index_hex_str in skip_these_setup_pointer_list):
-                    self.skip_this_setup(mm_rand_rom, index_dec)
+                if(index_hex_str in additional_skip_these_pointer_list):
+                    self.skip_this_setup(mm_bk_rom, index_dec)
                 else:
                     with open(f"{self._file_dir}Randomized_ROM\\{index_hex_str}-Randomized_Compressed.bin", "r+b") as setup_bin:
                         setup_content = setup_bin.read()
                         # Find The Pointer Start
                         pointer_start = ""
                         for offset in range(4):
-                            pointer_start += leading_zeros(str(hex(mm_rand_rom[index_dec + offset]))[2:], 2)
+                            pointer_start += leading_zeros(mm_bk_rom[index_dec + offset], 2)
                         address_start = int("0x" + pointer_start, 16) + int("0x10CD0", 16)
                         # Place It Where The Pointer Start Points To
                         setup_count = 0
                         for index in range(address_start, address_start + len(setup_content)):
-                            mm_rand_rom[index] = setup_content[setup_count]
+                            mm_bk_rom[index] = setup_content[setup_count]
                             setup_count += 1
                         # Calculate Where The Pointer Ends And Put That As The Next Pointer Start
                         if(index_dec != setup_pointer_end):
                             address_end = address_start + len(setup_content) - int("0x10CD0", 16)
-                            address_end_hex = leading_zeros(str(hex(address_end))[2:], 8)
-                            mm_rand_rom[index_dec + 8] = int(address_end_hex[:2], 16)
-                            mm_rand_rom[index_dec + 9] = int(address_end_hex[2:4], 16)
-                            mm_rand_rom[index_dec + 10] = int(address_end_hex[4:6], 16)
-                            mm_rand_rom[index_dec + 11] = int(address_end_hex[6:], 16)
+                            address_end_hex = leading_zeros(address_end, 8)
+                            mm_bk_rom[index_dec + 8] = int(address_end_hex[:2], 16)
+                            mm_bk_rom[index_dec + 9] = int(address_end_hex[2:4], 16)
+                            mm_bk_rom[index_dec + 10] = int(address_end_hex[4:6], 16)
+                            mm_bk_rom[index_dec + 11] = int(address_end_hex[6:], 16)
         # After The Last File Is Placed, Replace Bytes With AA Until Next Pointer Start
         pointer_start = ""
         for offset in range(4):
-            pointer_start += leading_zeros(str(hex(mm_rand_rom[setup_pointer_end + 8 + offset]))[2:], 2)
+            pointer_start += leading_zeros(mm_bk_rom[setup_pointer_end + 8 + offset], 2)
         address_next_start = int(f"0x{pointer_start}", 16) + int("0x10CD0", 16)
-        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rand_rom:
-            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as bk_rom:
+            mm_bk_rom = mmap.mmap(bk_rom.fileno(), 0)
             for index in range(address_start + len(setup_content), address_next_start):
-                mm_rand_rom[index] = 170
+                mm_bk_rom[index] = 0xAA
     
-    def reinsert_setup_files(self):
-        '''The entire procedure for placing all of the randomized compressed setups back into the ROM file.'''
-        # For every set up pointer, check if it's already a compressed file
-        setup_pointer_start = 38784
-        setup_pointer_end = 40000
-        file_list = os.listdir(f"{self._file_dir}Randomized_ROM\\")
-        for index_dec in range(setup_pointer_start, setup_pointer_end+1, 8):
-            index_hex_str = str(hex(index_dec))[2:]
-            if((index_hex_str + "-Decompressed.bin") in file_list):
-                #remove_unknown_object(file_dir, index_hex_str)
+    def _insert_into_rom_by_location(self, section_dict):
+        for subsection in section_dict:
+            if((subsection == "Rusty_Bucket_Bay_Overlay") and (self.master.buttons_var.get() == 0)):
+                pass
+            elif((subsection == "Gobis_Valley_Overlay") and (self.master.matching_puzzle_var.get() == 0)):
                 pass
             else:
-                self.extract_unchanged_setup(index_hex_str)
-        # Compress every decompressed file
-        #logger.info("Compress Files")
-        for location in setup_ids:
-            for location_setup in setup_ids[location]:
-                self.location_compressor(location_setup)
-        self.insert_file_into_rom()
-        self.verify_pointers()
+                print(f"Subsection: {subsection}")
+                for subsection_info in section_dict[subsection]:
+                    with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as bk_rom:
+                        mm_bk_rom = mmap.mmap(bk_rom.fileno(), 0)
+                        file_name = subsection_info[0].split(",")[0]
+                        address_start = int(file_name, 16)
+                        with open(f"{self._file_dir}Randomized_ROM\\{file_name}-Randomized_Compressed.bin", "r+b") as setup_bin:
+                            setup_content = setup_bin.read()
+                            # Place It Where The Pointer Start Points To
+                            setup_count = 0
+                            for index in range(address_start, address_start + len(setup_content)):
+                                mm_bk_rom[index] = setup_content[setup_count]
+                                setup_count += 1
     
-    ### MISC FILES ###
+    def _verify_pointer_header(self, setup_pointer_start, setup_pointer_end):
+        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as bk_rom:
+            mm_bk_rom = mmap.mmap(bk_rom.fileno(), 0)
+            for pointer_index in range(setup_pointer_start, setup_pointer_end + 1, 8):
+                address_start = int((leading_zeros(mm_bk_rom[pointer_index], 2) +
+                                     leading_zeros(mm_bk_rom[pointer_index + 1], 2) +
+                                     leading_zeros(mm_bk_rom[pointer_index + 2], 2) +
+                                     leading_zeros(mm_bk_rom[pointer_index + 3], 2)), 16) + 0x10CD0
+                if((mm_bk_rom[address_start] != 0x11) or (mm_bk_rom[address_start + 1] != 0x72)):
+                    print(f"Pointer {hex(pointer_index)}: Header At Address {hex(address_start)} Does Not Start With 11 72")
+                    raise SystemExit
 
-    def verify_original_header(self, file_bytes, address):
-        """Verifies the start of an address by looking for 11 72"""
-#         logger.info("Verify Original Header")
-        if((file_bytes[address] != 17) or (file_bytes[address+1] != 114)):# or (file_bytes[address+2] != 0) or (file_bytes[address+3] != 0)):
-#             logger.error("Error: Please verify ROM is v1.0")
-#             error_window("Error During Randomization")
-            raise SystemExit
+    def _subection_compression_main(self, file_name, header, footer, padding_text="AA"):
+        # Decomp Size
+        if(file_name.startswith("0x")):
+            file_name = file_name[2:]
+        else:
+            file_name = file_name.split(",")[0]
+        with open(f"{self._file_dir}Randomized_ROM\\{file_name}-Decompressed.bin", "r+b") as rand_comp_file:
+            mm_decomp = mmap.mmap(rand_comp_file.fileno(), 0)
+            decomp_len = leading_zeros(len(mm_decomp), 8)
+        # Compress File
+        self._compress_file(file_name)
+        self._post_compress_operations(file_name, header, footer, decomp_len, padding_text)
 
-    def compress_individual_misc_file(self, misc_dict):
-        """Prepares the hex file that was extracted from the main ROM file for compression by providing the correct header and footer"""
-        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "rb") as file:
-            file_bytes = file.read()
-        for file_type in misc_dict:
-            (addr, header, footer, lead, tail) = misc_dict[file_type][0]
-            if(addr.startswith("0x")):
-                # Get Address Endpoints
-                (address1, address2) = get_address_endpoints(file_bytes, addr)
-                if(addr != "0x7908"):
-                    self.verify_original_header(file_bytes, address1)
-                file_pointer = addr[2:]
+    def _section_compression_main(self, section_dict, setup_pointer_start=None, setup_pointer_end=None, additional_skip_these_pointer_list=[]):
+        # Check every pointer within the start and end
+        # If a section was not extracted to be randomized,
+        #    extract it now to reinsert when things get shifted
+        if((not setup_pointer_start) and (not setup_pointer_end)):
+            for subsection in section_dict:
+                for subsection_info in section_dict[subsection]:
+                    curr_pointer = int(subsection_info[0][2:], 16)
+                    if((not setup_pointer_start) and (not setup_pointer_end)):
+                        setup_pointer_start = curr_pointer
+                    elif(curr_pointer < setup_pointer_start):
+                        setup_pointer_start = curr_pointer
+                    elif(curr_pointer > setup_pointer_end):
+                        setup_pointer_end = curr_pointer
+        file_list = os.listdir(f"{self._file_dir}Randomized_ROM/")
+        for index_dec in range(setup_pointer_start, setup_pointer_end + 1, 8):
+            index_hex_str = str(hex(index_dec))[2:]
+            if((index_hex_str + "-Decompressed.bin") not in file_list):
+                self._extract_unchanged_setup(index_hex_str)
+        # For every modified file,
+        #     Compress it and reformat it to prepare for insertion
+        for subsection in section_dict:
+            for subsection_info in section_dict[subsection]:
+                self._subection_compression_main(file_name=subsection_info[0],
+                                                 header=subsection_info[1],
+                                                 footer=subsection_info[2])
+        # Insert the files and verify the pointers are correct
+        self._insert_into_rom_by_pointer(setup_pointer_start, setup_pointer_end, additional_skip_these_pointer_list)
+        self._verify_pointer_header(setup_pointer_start, setup_pointer_end)
+    
+    def _location_compression_main(self, section_dict):
+        # For every modified file,
+        #     Compress it and reformat it to prepare for insertion
+        for subsection in section_dict:
+            if((subsection == "Rusty_Bucket_Bay_Overlay") and (self.master.buttons_var.get() == 0)):
+                pass
+            elif((subsection == "Gobis_Valley_Overlay") and (self.master.matching_puzzle_var.get() == 0)):
+                pass
             else:
-                # Get Address Endpoints
-                address1 = int(addr.split(",")[0], 16)
-                file_pointer = addr.split(",")[0]
-            with open(f"{self._file_dir}Randomized_ROM\\{file_pointer}-Decompressed.bin", "r+b") as rand_comp_file:
-                mm_decomp = mmap.mmap(rand_comp_file.fileno(), 0)
-                decomp_len = str(hex(len(mm_decomp)))[2:]
-                decomp_len = leading_zeros(decomp_len, 8)
-            # Compress File
-            self.compress_file(file_pointer)
-            # Get Length Of Original Compressed File
-            with open(f"{self._file_dir}Randomized_ROM\\{file_pointer}-New_Compressed.bin", "r+b") as comp_file:
-                mm_comp = mmap.mmap(comp_file.fileno(), 0)
-                comp_file_len = len(mm_comp)
-                header_end = ""
-                for header_val in header[-4:]:
-                    header_end += header_val
-                header_end_index = mm_comp.find(bytes.fromhex(header_end)) + 4
-                with open(f"{self._file_dir}Randomized_ROM\\{file_pointer}-Randomized_Compressed.bin", "w+b") as new_comp_file:
-                    new_comp_file.write(bytes.fromhex("1172"))
-                    new_comp_file.write(bytes.fromhex(decomp_len))
-                    new_comp_len = 6
-                    for index in range(header_end_index, comp_file_len-len(footer)):
-                        hex_string = str(hex(mm_comp[index]))[2:]
-                        hex_string = leading_zeros(hex_string, 2)
-                        new_comp_file.write(bytes.fromhex(hex_string))
-                        new_comp_len += 1
-                    if((new_comp_len % 8) != 0):
-                        needs_padding = 8 - (new_comp_len % 8)
-                        if(addr.startswith("0x")):
-                            for index in range(new_comp_len, new_comp_len + needs_padding):
-                                new_comp_file.write(bytes.fromhex("AA"))
-                        else:
-                            for index in range(new_comp_len, new_comp_len + needs_padding):
-                                new_comp_file.write(bytes.fromhex("00"))
-    
-    def insert_misc_file_into_rom(self, misc_dict):
-        '''For every misc file, insert it back into the ROM file'''
-        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "rb") as file:
-            file_bytes = file.read()
-        # For every compressed file in numerical order,
-        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rand_rom:
-            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
-            for file_type in misc_dict:
-                (addr, header, footer, lead, tail) = misc_dict[file_type][0]
-                if(addr.startswith("0x")):
-                    # Get Address Endpoints
-                    (address1, address2) = get_address_endpoints(file_bytes, addr)
-                    if(addr != "0x7908"):
-                        self.verify_original_header(file_bytes, address1)
-                    file_pointer = addr[2:]
-                else:
-                    # Get Address Endpoints
-                    address1 = int(addr.split(",")[0], 16)
-                    address2 = int(addr.split(",")[1], 16)
-                    file_pointer = addr.split(",")[0]
-                with open(f"{self._file_dir}Randomized_ROM\\{file_pointer}-Randomized_Compressed.bin", "r+b") as setup_bin:
-                    setup_content = setup_bin.read()
-                    # Place It Where The Pointer Start Points To
-                    setup_count = 0
-                    for index in range(address1, address1 + len(setup_content)):
-                        mm_rand_rom[index] = setup_content[setup_count]
-                        setup_count += 1
-                if(addr.startswith("0x")):
-                    pointer_start = ""
-                    for offset in range(4):
-                        pointer_start += leading_zeros(str(hex(mm_rand_rom[int(file_pointer, 16) + 8 + offset]))[2:], 2)
-                    with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rand_rom:
-                        mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
-                        for index in range(address1 + len(setup_content), address2):
-                            mm_rand_rom[index] = 170
-                else:
-                    with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rand_rom:
-                        mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
-                        for index in range(address1 + len(setup_content), address2):
-                            mm_rand_rom[index] = 0
-    
-    def misc_compress(self):
-        '''Compresses and inserts the miscellaneous files'''
-        print("Misc Compress")
-        for misc_dict in [speech_file_ids, asm_setup_ids, texture_setup_ids]:
-            self.compress_individual_misc_file(misc_dict)
-            self.insert_misc_file_into_rom(misc_dict)
+                for subsection_info in section_dict[subsection]:
+                    self._subection_compression_main(file_name=subsection_info[0],
+                                                     header=subsection_info[1],
+                                                     footer=subsection_info[2],
+                                                     padding_text="00")
+        self._insert_into_rom_by_location(section_dict)
+
+    def _main(self):
+        print("Setups")
+        self._section_compression_main(setup_ids, 0x9780, 0x9C40, skip_these_setup_pointer_list) # Setups
+        print("Intro & Lair Cutscene")
+        self._section_compression_main(speech_file_ids, 0xD150, 0xD1C8) # Intro & Lair Cutscene
+        print("Bottles Intro")
+        self._section_compression_main(speech_file_ids, 0xCE30, 0xCE30) # Bottles Intro
+        print("Bottles Tutorial Confirm")
+        self._section_compression_main(speech_file_ids, 0xCF90, 0xCF98) # Bottles Tutorial Confirm & Secret Game Text
+        print("Bottles Move Texts")
+        self._section_compression_main(speech_file_ids, 0xAFD0, 0xDA00) # Bottles Move Texts
+        if(self.master.skip_furnace_fun_var.get() == 1):
+            print("Brentilda Hints")
+#             self._section_compression_main(speech_file_ids, 0xE2B0, 0xE3A0) # Brentilda Hints
+            self._section_compression_main(speech_file_ids, 0xE2B0, 0xFFB8, furnace_fun_questions_pointer_list) # Brentilda Hints & Furnace Fun & Whatever Is In Between
+        print("BK Models Through Note Doors")
+        self._section_compression_main(texture_setup_ids, 0x7900, 0x8320) # Note Doors
+        if(self.master.world_entrance_var.get() != "None"):
+            print("Level Sign")
+            self._section_compression_main(texture_setup_ids, 0x89B0, 0x89B0) # Level Sign
+        if(self.master.matching_puzzle_var.get() == 1):
+            print("GV Matching Puzzle")
+            self._section_compression_main(texture_setup_ids, 0x10248, 0x10248) # GV Matching Puzzle
+        if(self.master.buttons_var.get() == 1):
+            print("RBB Boat 1")
+            self._section_compression_main(texture_setup_ids, 0x10418, 0x10418) # RBB Boat 1
+        if(self.master.gruntilda_difficulty_var.get() > 0):
+            self._section_compression_main(level_model_ids, 0x10678, 0x10678) # Final Battle Area 1
+        print("ASM")
+        self._location_compression_main(asm_setup_ids)
