@@ -85,7 +85,7 @@ class World_Order_Bottles():
                         possible_bottles.append(available_bottles_location)
                         break
             random.seed(a=self.seed_val)
-            bottles_location = random.choice(possible_bottles)
+            bottles_location = random.choice(sorted(possible_bottles))
             World_Order_Warps.bottles_world_warp_dict[next_world]["Available_Bottles"].remove(bottles_location)
             self.remaining_moves.remove(selected_move)
             self.learned_moves.append(selected_move)
@@ -111,7 +111,7 @@ class World_Order_Bottles():
                         break
             if(len(possible_bottles) > 0):
                 random.seed(a=self.seed_val)
-                bottles_location = random.choice(possible_bottles)
+                bottles_location = random.choice(sorted(possible_bottles))
                 World_Order_Warps.bottles_world_warp_dict[next_world]["Available_Bottles"].remove(bottles_location)
                 self.remaining_moves.remove(selected_move)
                 self.learned_moves.append(selected_move)
@@ -124,7 +124,7 @@ class World_Order_Bottles():
         for world_num in range(1, 10):
             self._possible_next_worlds()
             random.seed(a=self.seed_val)
-            next_world = random.choice(self.possible_next_world_list)
+            next_world = random.choice(sorted(self.possible_next_world_list))
 #             print(next_world)
             self.world_order_list.append(next_world)
             self.world_order_dict[next_world] = {"Order": world_num}

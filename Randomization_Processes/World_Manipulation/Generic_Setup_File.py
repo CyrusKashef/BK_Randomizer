@@ -467,3 +467,13 @@ class SetupFile():
             print("Skipping Non-Ring")
             return False
         return True
+    
+    def _check_for_orange(self):
+        '''PyDoc'''
+        orange_index = self.mm.find(bytes.fromhex("E8DA00C81845190C0029"))
+        if(orange_index > -1):
+            print("Moving Orange From Inaccessible Location")
+            one_up_index = self.mm.find(bytes.fromhex("190C0049"))
+            self._edit_object_index(orange_index, {9: 0x49})
+            self._edit_object_index(one_up_index, {9: 0x29})
+            

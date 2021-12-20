@@ -40,7 +40,7 @@ from Randomization_Processes.World_Manipulation.Warps.Basic_World_Order import W
 from Randomization_Processes.World_Manipulation.Warps.Bottles_World_Order import World_Order_Bottles
 from ..Common_Functions import leading_zeros, possible_negative, fit_for_hex
 from Randomization_Processes.Misc_Manipulation.Texture_Data.Texture_Main import Texture_Class
-from ..Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation
+from ..Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation_Class
 from .Level_Model_Manip.Level_Models import Level_Model_Class
 from Randomization_Processes.World_Manipulation.Warps.Within_World_Warp_Logic import Within_World_Warps_Class
 from Randomization_Processes.Dicts_And_Lists.In_World_Warps import warp_dict
@@ -49,7 +49,7 @@ from Randomization_Processes.Dicts_And_Lists.In_World_Warps import warp_dict
 ### WORLD MANIPULATION CLASS ###
 ################################
 
-class world_manipulation_main():
+class World_Manipulation_Class():
     '''The world manipulation class makes changes within the world maps'''
     def __init__(self, grandmaster, seed):
         '''Initializes the world manipulation class'''
@@ -170,7 +170,7 @@ class world_manipulation_main():
         self.rusty_bucket_bay._add_setup_file(SetupFile("9970", self.grandmaster.cwd, "Captain's Room"))
         self.world_list.append(self.rusty_bucket_bay)
         # CLICK CLOCK WOOD - Seasons
-        if(self.grandmaster.ccw_var.get() == "Season"):
+        if(self.grandmaster.ccw_var.get() == "By Season"):
             self.click_clock_wood_lobby = World("Click Clock Wood - Lobby")
             self.click_clock_wood_lobby._add_setup_file(SetupFile("9978", self.grandmaster.cwd, "Lobby"))
             self.world_list.append(self.click_clock_wood_lobby)
@@ -386,7 +386,7 @@ class world_manipulation_main():
                 self._shuffle_structs_within_world(world_object)
                 self._move_structs_within_world(world_object)
                 self.struct_info_list = []
-        if(self.grandmaster.struct_var.get() == "Shuffle (Game)"):
+        elif(self.grandmaster.struct_var.get() == "Shuffle (Game)"):
             for world_object in self.world_list[:-2]:
                 self._gather_structs(world_object)
             self._shuffle_structs_within_game()
@@ -396,13 +396,13 @@ class world_manipulation_main():
             self._shuffle_structs_within_world(self.world_list[-1])
             self._move_structs_within_world(self.world_list[-1])
             self.struct_info_list = []
-        if(self.grandmaster.struct_var.get() == "Randomize"):
+        elif(self.grandmaster.struct_var.get() == "Randomize"):
             for world_object in self.world_list:
                 self._gather_structs(world_object)
             self._randomize_structs()
             self._move_structs_within_game()
             self.struct_info_list = []
-        if(self.grandmaster.struct_var.get() == "All Notes"):
+        elif(self.grandmaster.struct_var.get() == "All Notes"):
             for world_object in self.world_list:
                 self._gather_structs(world_object)
             self._oh_whoops_all_notes()
@@ -504,6 +504,15 @@ class world_manipulation_main():
     ### ENEMIES ###
     ###############
     
+    def _adjust_enemy_dicts(self):
+        '''PyDoc'''
+        enemy_filter_list = []
+        for enemy in self.grandmaster.enemy_checkbox_dict:
+            if(self.grandmaster.enemy_checkbox_dict[enemy].get() == 0):
+                for enemy_id in Enemies.master_enemy_dict[enemy]:
+                    enemy_filter_list.append(enemy_id)
+        return enemy_filter_list
+    
     def _gather_enemies(self, world_object):
         '''Collects the enemies per setup for the world'''
         for setup_file in world_object._setup_list:
@@ -544,7 +553,7 @@ class world_manipulation_main():
         self._shuffle_list(self.wall_enemy_info_list)
         self._shuffle_list(self.flying_enemy_info_list)
     
-    def _randomize_enemies(self, world_object):
+    def _randomize_enemies(self, world_object, enemy_filter_list):
         '''Randomizes the value of each enemies found'''
         ground_enemy_list = []
         for enemy_id in Enemies.enemy_id_dict["Global"]["Ground"]:
@@ -552,34 +561,24 @@ class world_manipulation_main():
         if("Ground" in Enemies.enemy_id_dict[world_object._world_name]):
             for enemy_id in Enemies.enemy_id_dict[world_object._world_name]["Ground"]:
                 ground_enemy_list.append(enemy_id)
+        for enemy_id in enemy_filter_list:
+            ground_enemy_list = list(filter((enemy_id).__ne__, ground_enemy_list))
         wall_enemy_list = []
         for enemy_id in Enemies.enemy_id_dict["Global"]["Wall"]:
             wall_enemy_list.append(enemy_id)
         if("Wall" in Enemies.enemy_id_dict[world_object._world_name]):
             for enemy_id in Enemies.enemy_id_dict[world_object._world_name]["Wall"]:
                 wall_enemy_list.append(enemy_id)
+        for enemy_id in enemy_filter_list:
+            wall_enemy_list = list(filter((enemy_id).__ne__, wall_enemy_list))
         flying_enemy_list = []
         for enemy_id in Enemies.enemy_id_dict["Global"]["Flying"]:
             flying_enemy_list.append(enemy_id)
         if("Flying" in Enemies.enemy_id_dict[world_object._world_name]):
             for enemy_id in Enemies.enemy_id_dict[world_object._world_name]["Flying"]:
                 flying_enemy_list.append(enemy_id)
-        if(self.grandmaster.enemies_beta_var.get() == 1):
-            for enemy_id in Enemies.beta_enemy_id_dict["Global"]["Ground"]:
-                ground_enemy_list.append(enemy_id)
-            if("Ground" in Enemies.beta_enemy_id_dict[world_object._world_name]):
-                for enemy_id in Enemies.beta_enemy_id_dict[world_object._world_name]["Ground"]:
-                    ground_enemy_list.append(enemy_id)
-            for enemy_id in Enemies.beta_enemy_id_dict["Global"]["Wall"]:
-                wall_enemy_list.append(enemy_id)
-            if("Wall" in Enemies.beta_enemy_id_dict[world_object._world_name]):
-                for enemy_id in Enemies.beta_enemy_id_dict[world_object._world_name]["Wall"]:
-                    wall_enemy_list.append(enemy_id)
-            for enemy_id in Enemies.beta_enemy_id_dict["Global"]["Flying"]:
-                flying_enemy_list.append(enemy_id)
-            if("Flying" in Enemies.beta_enemy_id_dict[world_object._world_name]):
-                for enemy_id in Enemies.beta_enemy_id_dict[world_object._world_name]["Flying"]:
-                    flying_enemy_list.append(enemy_id)
+        for enemy_id in enemy_filter_list:
+            flying_enemy_list = list(filter((enemy_id).__ne__, flying_enemy_list))
         for setup_file in world_object._setup_list:
             for item_count in range(len(setup_file.ground_enemy_info_list)):
                 reroll = True
@@ -608,47 +607,6 @@ class world_manipulation_main():
                 self.wall_enemy_info_list.append(new_enemy_info)
             for item_count in range(len(setup_file.flying_enemy_info_list)):
                 new_enemy = self._choose_from_list(flying_enemy_list, setup_file.setup_address, increment=item_count)
-                new_enemy_info = {
-                    "Script1": int(new_enemy[:2], 16),
-                    "Script2": int(new_enemy[2:4], 16),
-                    "Obj_ID1": int(new_enemy[4:6], 16),
-                    "Obj_ID2": int(new_enemy[6:], 16),
-                    }
-                self.flying_enemy_info_list.append(new_enemy_info)
-    
-    def _all_toughies(self, world_object):
-        '''PyDoc'''
-        ground_enemies = ["190C0004"] # Bull
-        if(world_object._world_name == "Rusty Bucket Bay"):
-            ground_enemies.append("190C030D") # TNT
-        wall_enemies = ["190C013B"]
-        if(self.grandmaster.enemies_beta_var.get() == 1):
-            wall_enemies.append("190C0289")
-        flying_enemies = ["078C034D"]
-        for setup_file in world_object._setup_list:
-            for item_count in range(len(setup_file.ground_enemy_info_list)):
-                random.seed(a=(self.seed + setup_file.setup_address + item_count))
-                new_enemy = random.choice(ground_enemies)
-                new_enemy_info = {
-                    "Script1": int(new_enemy[:2], 16),
-                    "Script2": int(new_enemy[2:4], 16),
-                    "Obj_ID1": int(new_enemy[4:6], 16),
-                    "Obj_ID2": int(new_enemy[6:], 16),
-                    }
-                self.ground_enemy_info_list.append(new_enemy_info)
-            for item_count in range(len(setup_file.wall_enemy_info_list)):
-                random.seed(a=(self.seed + setup_file.setup_address + item_count + 1))
-                new_enemy = random.choice(wall_enemies)
-                new_enemy_info = {
-                    "Script1": int(new_enemy[:2], 16),
-                    "Script2": int(new_enemy[2:4], 16),
-                    "Obj_ID1": int(new_enemy[4:6], 16),
-                    "Obj_ID2": int(new_enemy[6:], 16),
-                    }
-                self.wall_enemy_info_list.append(new_enemy_info)
-            for item_count in range(len(setup_file.flying_enemy_info_list)):
-                random.seed(a=(self.seed + setup_file.setup_address + item_count + 2))
-                new_enemy = random.choice(flying_enemies)
                 new_enemy_info = {
                     "Script1": int(new_enemy[:2], 16),
                     "Script2": int(new_enemy[2:4], 16),
@@ -686,17 +644,10 @@ class world_manipulation_main():
                 self.flying_enemy_info_list = []
                 self.wall_enemy_info_list = []
         elif(self.grandmaster.enemies_var.get() == "Randomize"):
+            enemy_filter_list = self._adjust_enemy_dicts()
             for world_object in self.world_list:
                 self._gather_enemies(world_object)
-                self._randomize_enemies(world_object)
-                self._move_enemies_within_world(world_object)
-                self.ground_enemy_info_list = []
-                self.flying_enemy_info_list = []
-                self.wall_enemy_info_list = []
-        elif(self.grandmaster.enemies_var.get() == "All Toughies"):
-            for world_object in self.world_list:
-                self._gather_enemies(world_object)
-                self._all_toughies(world_object)
+                self._randomize_enemies(world_object, enemy_filter_list)
                 self._move_enemies_within_world(world_object)
                 self.ground_enemy_info_list = []
                 self.flying_enemy_info_list = []
@@ -927,7 +878,7 @@ class world_manipulation_main():
                 world_order_note_count[self.world_order.index("Click Clock Wood")] += note_count
             elif(world_object._world_name in world_order_list):
                 world_order_note_count[self.world_order.index(world_object._world_name)] += note_count
-        note_door_scaling = [50/810, 180/810, 260/810, 350/810, 450/810, 640/810, 765/810, 1, 0, 0, 0, 0]
+        note_door_scaling = [50/810, 180/810, 260/810, 350/810, 450/810, 640/810, 765/810, 1]#, 0, 0, 0, 0]
         final_note_door_count = int(self.grandmaster.final_note_door_value.get())
         note_door_list = []
         for scaling in note_door_scaling:
@@ -947,25 +898,31 @@ class world_manipulation_main():
             #                                                      0 1 2 3 4 5 6 7 8 91011121314151617181920212223
             note_door_index_start = mm_decomp.find(bytes.fromhex("003200B40104015E01C2028002FD032A033C034E03600372"))
             for index_add, note_door_val in enumerate(note_door_list):
+                hundreths = tenths = ones = None
                 # New Note Door Value
                 mm_decomp[note_door_index_start + (index_add * 2)] = int(leading_zeros(note_door_val, 4)[:2], 16)
                 mm_decomp[note_door_index_start + (index_add * 2) + 1] = int(leading_zeros(note_door_val, 4)[2:], 16)
                 if(index_add < 8):
+                    if(note_door_val > 999):
+                        hundreths = tenths = ones = 9
                     if(index_add > 0):
-                        hundreths = (note_door_val // 100) % 10
+                        if(not hundreths):
+                            hundreths = (note_door_val // 100) % 10
                         note_door_texture_obj.mm[note_door_indices[index_add][100]["Overlay_Textures"]] = int(note_door_texture_offsets[hundreths][:2], 16)
                         note_door_texture_obj.mm[note_door_indices[index_add][100]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[hundreths][2:], 16)
-                        if(hundreths == 6):
+                        if(hundreths == 9):
                             note_door_texture_obj._flip_texture(note_door_indices[index_add][100]["Door_Textures"], x_axis=True, y_axis=True)
-                    tenths = (note_door_val // 10) % 10
+                    if(not tenths):
+                        tenths = (note_door_val // 10) % 10
                     note_door_texture_obj.mm[note_door_indices[index_add][10]["Overlay_Textures"]] = int(note_door_texture_offsets[tenths][:2], 16)
                     note_door_texture_obj.mm[note_door_indices[index_add][10]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[tenths][2:], 16)
-                    if(tenths == 6):
+                    if(tenths == 9):
                         note_door_texture_obj._flip_texture(note_door_indices[index_add][10]["Door_Textures"], x_axis=True, y_axis=True)
-                    ones = note_door_val % 10
+                    if(not ones):
+                        ones = note_door_val % 10
                     note_door_texture_obj.mm[note_door_indices[index_add][1]["Overlay_Textures"]] = int(note_door_texture_offsets[ones][:2], 16)
                     note_door_texture_obj.mm[note_door_indices[index_add][1]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[ones][2:], 16)
-                    if(ones == 6):
+                    if(ones == 9):
                         note_door_texture_obj._flip_texture(note_door_indices[index_add][1]["Door_Textures"], x_axis=True, y_axis=True)
         self._remove_note_doors(note_door_list=Sequences.note_door[-4:])
     
@@ -1353,18 +1310,18 @@ class world_manipulation_main():
             world_object_list.append(self.mumbos_mountain)
         for world_name in self.world_order.world_order_list:
             if(world_name == "Click Clock Wood"):
-                if(self.grandmaster.ccw_var.get() == "Season"):
+                if(self.grandmaster.ccw_var.get() == "By Season"):
                     world_object_list.append([self.click_clock_wood_lobby,
                                               self.click_clock_wood_spring, self.click_clock_wood_summer,
                                               self.click_clock_wood_fall, self.click_clock_wood_winter])
                 elif(self.grandmaster.ccw_var.get() == "Within World"):
                     world_object_list.append(self.click_clock_wood)
-                continue
-            for world_object in self.world_list:
-                if(world_object._world_name == world_name):
-                    world_object_list.append(world_object)
-                    break
-        speech_manip = Speech_Manipulation(self.grandmaster, self.seed)
+            else:
+                for world_object in self.world_list:
+                    if(world_object._world_name == world_name):
+                        world_object_list.append(world_object)
+                        break
+        speech_manip = Speech_Manipulation_Class(self.grandmaster, self.seed)
         speech_manip._brentilda_intro()
         speech_manip._brentilda_1_1(world_object_list[0])
         speech_manip._brentilda_1_2(world_object_list[0])
@@ -1496,6 +1453,8 @@ class world_manipulation_main():
         '''PyDoc'''
         for world_object in self.world_list[:-2]:
             world_name = world_object._world_name
+            if("-" in world_name):
+                world_name = world_name.split("-")[0][:-1]
             for setup_file in world_object._setup_list:
                 for move_location in self.world_order.world_order_dict[world_name]["Learned_Moves"]:
                     replace_1_up = f"{World_Order_Warps.possible_bottles_locations[world_name][move_location]}190C0049"
@@ -1513,6 +1472,7 @@ class world_manipulation_main():
     def _bottles_world_order_shuffle_main(self):
         '''PyDoc'''
         # self._bottles_to_1_ups() should be done beforehand
+        self.mumbos_mountain._setup_list[0]._check_for_orange()
         self._determine_available_move_slots()
         self._bottles_new_world_order()
         self._move_world_order(shuffle_type="Bottles")
@@ -2091,7 +2051,7 @@ class world_manipulation_main():
     
     ### ENVIRONMENT ###
     
-    def _final_battle_floor_is_lava(self):
+    def _final_battle_floor_is_missing(self):
         '''PyDoc'''
         search_string_list = [
 #             "02AEF5C10FF5", # Lava
@@ -2339,12 +2299,16 @@ class world_manipulation_main():
     def _harder_final_battle_main(self, difficulty_level):
         '''PyDoc'''
         self.curr_setup_file = self.gruntildas_lair._setup_list[-1]
-        category_points = {"Enemies": 0, "Size": 0, "Lava": 0}
+        category_points = {"Size": 0}
+        if(self.grandmaster.monster_house_var.get() == 1):
+            category_points["Enemies"] = 0
+        if(self.grandmaster.what_floor_var.get() == 1):
+            category_points["Floor"] = 0
         for points in range(difficulty_level):
-            category_points[self._choose_from_list(["Enemies", "Size", "Lava"], increment=points)] += 1
-        if((category_points["Enemies"] > 0) and (category_points["Lava"] > 0)):
+            category_points[self._choose_from_list(list(category_points), increment=points)] += 1
+        if(("Enemies" in category_points) and ("Floor" in category_points) and (category_points["Enemies"] > 0) and (category_points["Floor"] > 0)):
             category_points["Size"] += 1
-            category_points[self._choose_from_list(["Enemies", "Lava"])] -= 1
+            category_points[self._choose_from_list(["Enemies", "Floor"])] -= 1
         print(f"Final Battle: {category_points}")
         # Enemies
         if(category_points["Enemies"] > 0):
@@ -2355,12 +2319,12 @@ class world_manipulation_main():
             if(category_points["Enemies"] > 2):
                 self._final_battle_more_enemies()
         # Environment
-        if(category_points["Lava"] > 0):
+        if(category_points["Floor"] > 0):
             # Reverse Layered
-            self._final_battle_floor_is_lava()
-            if(category_points["Lava"] < 3):
+            self._final_battle_floor_is_missing()
+            if(category_points["Floor"] < 3):
                 self._final_battle_jinjo_pads()
-            if(category_points["Lava"] < 2):
+            if(category_points["Floor"] < 2):
                 self._final_battle_jinjonator_floor()
         # Grunty
         if(category_points["Size"] == 1):
