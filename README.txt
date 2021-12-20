@@ -1,101 +1,210 @@
-# BK_Randomizer
+# Intro
 
-Basic Instructions Text
-1) Place the original rom file, the Banjo Kazooie Randomizer executable file, GZIP, and the CRC Tool (unzipped) in the same folder.
-2) Run the Banjo Kazooie Randomizer executable file.
-3) Input the rom file, seed, and prefered customizations.
-4) Click submit.
-5) In that same folder, a new folder should have been created called EPIIISA. In that folder should be the new randomized rom file, with it's name being "Banjo-Kazooie_Randomized_Seed_#.z64". That # is the seed value.
+## What Is A Randomizer?
+A randomizer takes a game and randomly generates all sorts of aspects, such as what enemy spawns, the location of an item, and what order certain tasks must be accomplished. To learn what the Banjo-Kazooie Randomizer does, look at Feature Overview and Feature Details.
 
-In Case You Need A Video:
-https://www.youtube.com/watch?v=RABrhP6MdVs
+## Who Made The Banjo-Kazooie Randomizer?
+In terms of coding the randomizer, almost all of it was coded by myself, GiantJigglypuff3. I will mention others who have contributed in the Special Thanks section. As far as hacking, I did almost nothing. I had a lot of help in terms of information and how ROM hacking works from the Banjo-Kazooie modding community (known as Banjo's Backpack). I hope the Banjo-Kazooie Randomizer serves as a small demonstration of what the Banjo-Kazooie modding community is capable of. Please go visit their discord server and try out some of their hacks (Here's an invite to the server: https://discord.gg/KSkN3yf4dt).
 
-Known Errors:
- * Location where enemy normally was will be blank. This is because some enemies can't appear in that world, so they end up disappearing. In Grunty's Lair, this happens because you have to enter the world first for that enemy to appear. Example, entering Gobi's Valley will allow Mummies to roam the lair.
- * When randomizing objects with flags (Jiggies, Mumbo Tokens, Empty Honeycombs), you might encounter an Empty Honeycomb that does not add to your total when collected. There is also a glitch where the totals don't match up with what you actually have.
- * When running the Final Puzzle option and loading up a beaten version of the game, the second floor of Gruntilda's Lair may softlock.
- During any of these cases, that's a sign that something in the randomization has messed up. My only suggestion is to inform me of the error with the seed number and try a different seed.
+## Why Make The Banjo-Kazooie Randomizer?
+Banjo-Kazooie is my favorite game, and I'm sure others love the game as well. When I saw both Ocarina of Time and Super Mario 64 had randomizers, I felt the need to attempt to create one for Banjo-Kazooie. It may not be as good as the other randomizers, but I'm proud of how far it has gone.
 
-Which ROM extentions work with the randomizer?
- * I've only tested for .z64 roms. I don't know if it works for others (probably not).
+# How To Use
 
-Which emulator(s) did you test on?
- * I did most of my testing on Mupen64Py and Project 64 (versions 1.6 and 2.3), but it should work on others.
- * This should also work for everdrive, but I don't have one, so I can't confirm. However others have played on everdrive just fine.
+## Requirements
+1) Emulator or Everdrive+Console
+2) A v1.0 NTSC ROM File of Banjo-Kazooie
+Note: I am not providing anyone the ROM file, nor does the script create the ROM file for them. It takes the user's software and creates a copy, then modifies that copy. It is up to the user to obtain a copy of the software legally.
 
-Does this work with ROM hacks?
- * I can't guarantee it, but because the script makes a copy of your game, it won't ruin the original and you can test it without worry.
+## Setting Up
+1. Go to https://github.com/CyrusKashef/BK_Randomizer/releases.
+2. Locate the latest version of the Banjo-Kazooie Randomizer at the top of the screen (as of this README, the latest version is 2.0.Open_Beta).
+3. Download the zip file called "BK_Randomizer". If your computer is giving you issues about the zip file being a virus, go to the "Common Problems" section of this README for a work around.
+4. Extract the contents of the zip file to a folder.
+5. Place your software copy of the Banjo-Kazooie v1.0 ROM file into the extracted folder.
 
-Some Terms You Should Know:
->Flagged vs Non-Flagged Objects
- * A flagged object is an object where when you collect it and exit the level, the object will not return back to the level, such as Jiggies, Mumbo Tokens, and Empty Honeycombs. A non-flagged object is an object you collect, but will respawn when you re-enter the level. This includes, but isn't limited to, Jinjos, 1-Ups, and temporary collectibles for various NPCs, like an orange, acorns, and worms.
->Structs
- * A struct is a collectible that adds to your values, such as notes, blue eggs, red feathers, and gold feathers.
->Enemies
- * This includes all small enemies, but not bosses.
->Warps
- * The within world warps are split into two sections: going from a main area to a subarea and going from a subarea to a main area. All of the warps that do not cause an issue are shuffled around within their sections.
- * The world order warps send you to a shuffled world. Taking the warp pad will always send you to the entrance of the world you exited via warp pad.
->Final Note Door
- * This is typically the 810 note door before reaching the Gruntilda battle. With this feature on, you can either set or randomize the note door's value, with every other door having a value of zero. Bottles's unskippable text at the start of the game will inform you the value if randomized.
->Final Puzzle
- * This is typically the 25 puzzle before reaching the Gruntilda battle. With this feature on, you can either set or randomize the puzzle's value, with every other puzzle having a value of zero, making the worlds open by default. Bottles's unskippable text at the start of the game will inform you the value if randomized.
+## Running
 
-What isn't randomized?
- * Some enemies with weird/unkillable properties
- * Non-Collectible Objects (trees, crates, etc)
- * Bosses (Conga, Napper, etc)
+# Feature Overview
+* Shuffle/Randomize Collectables: Challenges the player to search the levels for collectable locations.
+* Shuffle Warps: Challenges the player to remember what leads where and what moves are needed for specific locations.
+* Shuffle/Randomize Enemies: Allows players to face against selected enemies.
+* Aesthetic Features: Changes how he game looks and sounds.
+* Customizable Features: Neither competitive nor merely asthetic features with modifiable JSON files for modders to explore with.
+* World Specific Features: Changes unique things about each world.
+* Miscellaneous Features: None of these affect gameplay, but may prove useful.
 
-Do I plan on expanding on the randomizer?
- * From writing this message, I have worked on this randomizer for three months straight. It has drained me, and I'm on the verge of a break down. I'm releasing v1.0.0 as it is because it has all of the features I initially planned on having in the randomizer, and works for the most part. There are a few bugs, but my mental health is more important. Thank you for understanding.
+# Feature Details
+## Overall Buttons
+* Load Config: Reads a JSON file to configure the settings automatically.
+* Save Config: Writes a JSON file for future use. See LOAD CONFIG.
+* Open README: Opens the README.txt file (If you're reading this, bless your heart).
+* Submit: Runs the randomizer with the current features, barring everything is set correctly. If not, a window should appear telling you what is incorrect/missing.
 
-GUI Explained:
->Rom Select
- * Opens a browser to select the rom file (default to .z64)
->Seed
- * Can optionally set a seed
-Randomization Options:
->None
- * Nothing changes in that category
->Shuffle
- * All of the items in a world rearrange their xyz locations with each other
->Randomize
- * All of the items in a world change into an item that can take its place
->Oh Whoops
- * For enemies, it turns every enemy into the hardest version of that type.
- * For notes/eggs/feathers, it turns all items into notes. There are some refills in the overworld, though.
+## General
+* ROM File: Displays the directory path of the ROM file the user has selected.
+* Select ROM Button (Folder): Click on the folder button to open a file browser and select the BK ROM file.
+* Seed: Allows the player to pick a seed to match other people's randomized ROM.
+* Random Seed Button (Acorn): Randomly generates a seed value.
 
-Script Errors:
- * Providing a rom file that doesn't end in .z64 will cause an error that will show up in the log.
- * Providing a seed that isn't comprised of just numbers will cause an error that will show up in the log.
- * Rom file formatted differently than the tested roms may cause an error and show up in the log.
- * Having a space in the directory path will cause a pop up.
- * Not having GZIP or the CRC Tool in the folder with the ROM file will cause a pop up.
- * Giving a non-integer value to the note door and puzzle options.
+## Collectables
+### All Items
+* None: Skips the setting.
+* Shuffle (World): Takes all items of that set and swaps the Object IDs within the world (can be overriden for Click Clock Wood; see World Specific Features).
+* Shuffle (Game): Takes all items of that set and swaps the Object IDs within all worlds/lair. This will override the World Specific Feature for Click Clock Wood.
+* Randomize: For every item in the world, randomly assign a new Object ID.
+### Jiggy, Empty Honeycomb, & Mumbo Token Specific
+* Include Abnormalities: Some items have special properties that won't softlock the game, but create weird effects in game.
+* Include Potential Softlocks: Some items create scenarios that prevent the player from 100%-ing or sometimes finishing the game.
+* Door Of Grunty Only: All worlds will automatically open, and the value for the Door Of Grunty can be set on the side (from 0 to 99).
+* Free Transformations: All Mumbo transformations won't cost you a single Mumbo Token.
+### Notes, Blue Eggs, Red Feathers, & Gold Feathers
+* Scaling Note Doors:
+* All Notes: All eggs and feathers become notes. Brentildas are replaced with egg and feather refills. The refill at that Brentilda location is random.
+* Scaling Note Doors: Depending on how many notes you set the 810 Note Door Value to, the number of notes needed per proceeding door will be increased/decreased accordingly.
+* Final Note Door Only: Removes all note doors proceeding the 810 Note Door, and sets the value of the 810 Note Door to the desired value.
+* Item Carrying Capacity: Sets the number of each item the player can carry before and after visiting Cheato between 0 and 255, inclusively.
+#### WARNINGS:
+* Before opening any Note Door, the player must talk to Bottles at the 50 Note door. In order to add to the Quality of Life, a bottles is added to the 810 Note Door Location for Final Note Door Only mode.
+* Item Carrying Capacity: I'm not sure if the game will break if you set the After Cheato value to a value smaller than the Before Cheato value. Please be weary.
+### Jinjos, Extra Lives, & Misc Objects
+* Include Abnormalities: Some blue eggs, red feathers, and gold feathers are structured differently in the ROM than normal eggs and feathers, and turning on this feature will shuffle them in with these instead.
 
-What To Do If Rom Errors:
- * If it's the base game with the .z64 extension, send me (GiantJigglpuff3/Cyrus Kashef) a message with the log file, the seed value, and briefly explain what the error is.
- * If it's the practice rom mod, do the above, but also let me know that it's the practice rom mod and what extension you're using. For this one, I won't be able to fix the issues alone since I didn't make the practice rom, but I know there might be a few people wanting to test it out.
- * If it's any other modded version of the game, please be patient with me, as I'm still trying to get the randomizer to work for the base game.
+## Warps
+### World Order Warps
+* None: Skips the setting.
+* Simple Shuffle: Simplified shuffling to guarantee a solution. Mumbo's Mountain is always the first level, with the moves Talon Trot, Shock Jump Pad, and Beak Buster. All other world and moves are random.
+* Bottles Shuffle: More complicated shuffle. Worlds are placed in a logical order so that the previous worlds will give the needed moves to progress the game. Logic might not work if worlds are skipped. Bottles mounds are shuffled with Jinjos, Extra Lives, and Miscellaneous Object locations to promote more exploration.
+### Within World Warps
+* None: Skips the setting
+* Shuffle By World: All warps going into a room are linked with warps until there's an eventual exit. Includes transformation warps if possible.
+* Shuffle By Game: LMAO this is ambitious and is not currently implemented.
+### Starting Area
+* New Game Start Area: Starting a new game will start you here. Loading a game may start you here depending on what flags you hit, but I'm not entirely sure.
+* Skip Intro Cutscene: Skips the cutscene when starting a new game, but not the one where the player enters the lair for the first time.
 
-Is This A Virus?
->If you go to virustotal.com and upload the BK Randomizer, it will tell you that about 10% (this value changes) of Anti-Virus softwares will claim this is a virus. This is a common issue when using pyinstaller to turn the python code into an exectuable file. I will have my code in a GitHub repository if anyone would like to check to see that the BK Randomizer is not doing anything malicious.
+## Enemies
+* None: Skips the setting.
+* Shuffle: Shuffles the enemies by category (Ground, Flying, Wall).
+* Randomize: Randomizes the enemies by category (Ground, Flying, Wall). Some enemies only appear in specific worlds.
+* Checkboxes: Select the enemies you want to appear when using the Randomize option. Must select at least 1 generic Ground, Wall, and Flying enemy each. Enemies with an asterisks may softlock/crash the game.
 
-Legality
->I am not providing anyone the ROM file for Banjo-Kazooie, nor does the script create the ROM file for them. It takes the users software and creates a copy, then modifies that copy. It is up to the user to obtain a copy of the software legally and to not distrubute copies of the software illegally.
+## Aesthetics
 
-Taking Source Code
->If you'd like to take the source code to use for your own purposes, feel free. If you plan on making your own randomizer from the one I've made, consider the next section of this README or at least giving me credit somewhere.
+### Banjo-Kazooie Model Color
+Stuff Here
+### Short Sounds, Fanfare/Jingles, & Looped Music
+Stuff Here
+### Sprites & Textures
+Stuff Here
 
-Contributing
->I coded entire project on my own, but that doesn't mean I wouldn't mind a team to work with. I currently wrote this code in Python. If you'd like to continue working on the Python version or need help creating a randomizer in a different coding language, I'll try to provide comments and answer questions as to what I personally did to randomize the rom. Keep in mind that I'm learning how to randomize this rom as I go, and might not have all of the answers to your questions.
->There's a community dedicated to Banjo-Kazooie modding called "Banjo's Backpack". There's a lot of smart people there, though most of us are still trying to learn as we go, since there was no documentation for us to work with.
+## Customizable
 
-Special Thanks
->Although I coded the randomizer myself, I could not have gotten this far without:
- 1) The technical knowledge of SapChap99 to help me get started.
- 2) The expertise of Jombo, who not only taught me how to compress/decompress, what tools I could use (GZIP and CRC), and guided me through pointers, but also put up with my snarky behavior and for running the Banjo's Backpack discord, along with the moderators.
- 3) The entire Banjo's Backpack community for their support, most notably BanjoFreak64, ThatCowGuy, PaleKing, Atezian, and TheSourOG
- 4) The Banjo Kazooie speedrun community, whose excitement for the randomizer kept me going, most notably Gogo, LogBaseQ, and BlackDragonMax, who helped me test the randomizer.
- 5) The Ocarina of Time and Super Mario 64 randomizers for serving as inspirations for this randomizer.
->And a special shoutout to RARE for making such an impactful game to me and so many others.
+### Models
+Stuff Here
+### Animations
+Stuff Here
+### Properties
+Stuff Here
+
+## World Specific
+
+### Gruntilda's Lair
+* Skip Furnace: Places a warp on the first square of Furnace Fun that leads to the next area. Also changes Brentilda's text to potentially give useful hints.
+* No Detransformations: Removes all transformation barriers in the lair.
+* Final Battle Difficulty:
+* Monster House:
+* What Floor?:
+
+### Mumbo's Mountain
+* Include Flowers: If the notes/eggs/feathers feature is not set to 'none', the flowers in the level will be included.
+
+### Treasure Trove Cove
+* Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear.
+
+### Clanker's Cavern
+* Shuffle Clanker Ring Order: Clanker's ring order is shuffled.
+
+### Bubblegloop Swamp
+* Shuffle Croctus Order: Croctus spawn order is shuffled.
+* Mr. Vile Bigger, Badder Crocodile: Makes Mr. Vile appear larger. He still moves at the same speed and eats at the same distance, but it's harder to see where the Yumblies and Grumblies spawn.
+* Tiptup Choir: The turtles are scattered across the room, with their heads barely appearing above the floor.
+
+### Freezeezy Peak
+* Boggy Races Moved Flags: Flag poles for the Boggy race are either tighter left, tighter right, lowered to the floor to make harder to see, or rotated.
+
+### Gobi's Valley
+* Shuffle Ancient Ones Order: Ancient Ones order is shuffled.
+* Shuffle Maze Jinxy Heads Order: Jinxy heads to raise King Sandybutt's Tomb order is shuffled.
+* Randomize Matching Puzzle: The matching puzzle changes the colors of the tiles that the player has to match, rather than the icons themselves.
+
+### Mad Monster Mansion
+* Pots Are Lit:
+
+### Rusty Bucket Bay
+* Randomized Button Combo: Generates a random 6-digit combination of 1s, 2s, and 3s for the whistle buttons and places the code over the original code spot.
+
+### Click Clock Wood
+* By Season: All shuffling happens within each seasons/lobby area. This makes it easier for players to track what they are missing.
+* Within World: All shuffling happens throughout the level.
+
+## Miscellaneous
+* Create Cheat Sheet(s): Writes helpful into to files that gives hints item locations, warps, and some misc info.
+* Remove Extra Files: Removes the compressed and decompressed files extrated from the ROM. Useful for BK modders or debugging an issue.
+* Show Tool Tips: With the feature on, hovering over a Brentilda icon will inform the user what the feature does.
+
+# Common Problems
+
+## Computer Says Randomizer Is A Virus
+If you go to virustotal.com and upload the BK Randomizer, it will tell you that about 10% (this value changes) of Anti-Virus softwares will claim this is a virus. This is a common issue when using pyinstaller to turn the python code into an exectuable file. I will have my code in a GitHub repository if anyone would like to check to see that the BK Randomizer is not doing anything malicious. If you trust me that the randomizer is not a virus, there is a work around to the Windows Defender Anti-Virus, demonstrated in the following YouTube video: https://www.youtube.com/watch?v=_5gbWPEcHZs
+
+## GUI Errors/Warnings
+* ROM directory cannot include spaces. This is because GZIP.EXE uses the command prompt and treats spaces as new inputs. Avoid using special characters as well.
+* ROM file must be a Banjo-Kazooie ROM v1.0 NTSC (.z64). Other formats are currently not supported. Randomizer may work on top of other BK mods, but not guaranteed.
+* Seed, upper bounds, and lower bounds must be positive integers.
+* Python Files, Folders, and GZIP.EXE must be in their original locations with the BK ROM in the main folder.
+
+## Potential Softlocks
+* When turning on the 'Potential Softlock' features, the game may be put into a state where a collectable cannot be reached or the game cannot be progressed without resetting.
+* If performing RBA (Reverse Bee Adventure, where you avoid the detransformation areas to roam the rest of the game as the bee), the bee can get stuck in a lot of places.
+
+## Known Bugs/Crashes
+* In Clanker's Cavern, if the move in the gold feather room gets randomized, there's a possible chance the game will crash due to the lack of cameras in that room. The work around is to start the dialog, end the dialog using L+R+B, then reactivating the dialog.
+* In specific areas, such as Treasure Trove Cove and Furnace Fun, the game may crash. The reason is unknown, and there are currently no work arounds.
+* In Mad Monster Mansion, Napper may be indefinetly awake and guarding a Jiggy. The reason is unknown, but only occurs with potential softlocks.
+* In Click Clock Wood, there is an occasional glitch where the player can collect 11/10 Jiggies when items are only shuffled within the world. The reason is unknown.
+
+# FAQ
+
+## Where Could I Find A Banjo-Kazooie v1.0 NTSC ROM File?
+I am not providing anyone the ROM file for Banjo-Kazooie, nor does the script create the ROM file for them. It takes the users software and creates a copy, then modifies that copy. It is up to the user to obtain a copy of the software legally.
+
+## Could ___ Feature Be Added?
+Not-Planned Features:
+* Non-Collectable Objects, such as trees, crates, etc
+* Bosses, such as Conga, Nipper, etc
+If you have any suggestions for new features, feel free to let me know. I honestly didn't think people would care about shuffling music, but that turned out to be a really funny feature. If you don't like a feature, don't use it, but if you have an idea of how it can be changed, let me know. Even if your feedback is "This part of the game is too easy", I could try to figure out some way to make it harder.
+
+# Special Thanks
+* The RARE staff, for making such an impactful game. Big shoutouts to Grant Kirkhope for an amazing soundtrack and being an amazing person in general.
+* The Developers Of Banjo-Kazooie Modding/Viewing Tools, such as Banjo's Backpack, GEDecompressor, CRC Tool, and BK2BT. Also thank you to anyone who posted information on Hack64. I cannot name everyone by name, but your work is very appreciated and on behalf of the Banjo-Kazooie modding community, we cannot thank you enough. Discord link is listed in Contributing.
+* People Who Played The Randomizer, whether it was playtesting, casually experiencing, or racing others. All feedback was taken seriously. All features that could reasonable be added were attempted at the very least. All issues brought up were either fixed or a work around was needed. Big shoutout to g0go, BlackDragonMax, HatWearingGamer, Wizzard, and Brittanykins for beta testing and feedback.
+* Wizzard for providing the general basis for the Within World Warps code logic.
+* Trynan for providing a more adaptable GUI interface.
+* Mittenz for providing the checksum calculating code in C/C++, which was translated to Python for this project.
+* Banjo's Backpack Discord, for everything ranging from technical support to emotional support. Big shoutouts to Jombo for most of the technical support. Other shoutouts go to BanjoFreak64, ThatCowGuy, PaleKing, Atezian, TheSourOG, Wedarobi, RetroNuva, and SapChap99.
+* OoT And SM64 Randomizers, for inspiring me to find the Banjo's Backpack discord.
+
+# Contributing
+* If you'd like to take the source code to use for your own purposes, feel free. If you plan on making your own randomizer from the one I've made, consider the next bullet point or at least giving me credit somewhere.
+* I currently wrote this code in Python, which is simple to pick up if anyone would like to learn. If you'd like to continue working on the Python version or need help creating a randomizer in a different coding language or something, I'll try to provide comments and answer questions as to what I personally did to randomize the ROM. Keep in mind that I'm learning how to randomize Banjo-Kazooie as I go, and might not have all of the answers to your questions.
+* There's a community dedicated to Banjo-Kazooie modding called "Banjo's Backpack". There's a lot of smart people there, though most of us are still trying to learn as we go. Here is an invite: https://discord.gg/KSkN3yf4dt
+
+# Contacting Me
+I'm really bad at looking at social media messages, but here are different ways to try to reach me:
+Twitter: https://twitter.com/GiantJigglypuff
+YouTube: https://www.youtube.com/channel/UCipn0cYaHIAOtnEAc6NOw8g
+Twitch: https://www.twitch.tv/giantjigglypuff3
+My Discord Server: https://discord.gg/SrFxshj4fF
+
+If you read all of this, bless your heart.
