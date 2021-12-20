@@ -14,7 +14,7 @@ def leading_zeros(num_string, num_of_digits):
         num_string = "0" + num_string
     return num_string
 
-class Speech_File():
+class Speech_File_Class():
     def __init__(self, file_dir, pointer):
         self._file_dir = file_dir
         with open(f"{self._file_dir}Randomized_ROM/{pointer}-Decompressed.bin", "r+b") as decomp_file:
@@ -95,16 +95,15 @@ class Speech_File():
     
     def _replace_line(self, old_text, new_text):
         old_text_index = self.mm_decomp.find(bytes.fromhex(old_text))
-#         print(f"Old Text Index: {old_text_index}")
+        if(old_text_index == -1):
+            print("SOMETHING MESSED UP HERE, BROSKI")
+            raise SystemError
         old_len = self.mm_decomp[old_text_index - 1] - 1
-#         print(f"Old Length: {hex(old_len)}")
         self.mm_decomp[old_text_index - 1] = len(new_text) + 1
         ending_size = len(self.mm_decomp) - old_text_index - old_len
         ending = []
         for index in range(old_text_index + old_len, len(self.mm_decomp)):
             ending.append(self.mm_decomp[index])
-#         print(f"Ending: {ending}")
-#         print(f"Ending Size: {hex(ending_size)}")
         self.mm_decomp.resize(old_text_index + len(new_text) + ending_size)
         index_add = 0
         for char in new_text:
@@ -164,13 +163,3 @@ class Speech_File():
         for index_add, char in enumerate(answer3):
             self.mm_decomp[curr_index + 4 + index_add] = ord(char)
         self.mm_decomp[curr_index + 5 + len(answer3)] = 0x00
-
-if __name__ == '__main__':
-    file_dir = "C:/Users/Cyrus/eclipse-workspace/BK_Rando_v2.0/"
-#     pointer = "5CF130" # Brentilda Hint
-#     pointer = "5CA8F8" # Grunty Dingpot Intro
-#     pointer = "5CAB30" # Kazooie Wake Up To Banjo
-    pointer = "CF90"
-    speech_file = Speech_File(file_dir, pointer)
-    speech_file._breakdown()
-    speech_file._print_speech(readable=False)

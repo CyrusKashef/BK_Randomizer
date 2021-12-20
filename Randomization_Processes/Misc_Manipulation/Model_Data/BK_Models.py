@@ -8,7 +8,7 @@ Created on Sep 4, 2021
 ### PYTHON IMPORT ###
 #####################
 
-import mmap
+from mmap import mmap
 import shutil
 
 ###################
@@ -22,7 +22,7 @@ from Randomization_Processes.Misc_Manipulation.Model_Data import Generic_Models
 ### BK MODEL CLASS ###
 ######################
  
-class BK_Model(Generic_Models.Model):
+class BK_Model_Class(Generic_Models.Model):
     def _bk_model_low_poly(self):
         self.model_vertex_dict = {
             "Banjo_Fur": ["270E00FF", "411700FF", "632501FF", "833203FF", "AE4707FF", "BA7F4BFF", "CC560BFF", "FA6F12FF", "F6B400FF"],
@@ -60,7 +60,7 @@ class BK_Model(Generic_Models.Model):
         '''Copys the low poly model for Banjo-Kazooie and replaces the high poly model'''
         shutil.copy(f"{self._file_dir}Randomized_ROM/7900-Decompressed.bin", f"{self._file_dir}Randomized_ROM/7908-Decompressed.bin")
         with open(f"{self._file_dir}Randomized_ROM/Banjo-Kazooie_Randomized_Seed_{seed_val}.z64", "r+b") as rand_rom:
-            mm_rand_rom = mmap.mmap(rand_rom.fileno(), 0)
+            mm_rand_rom = mmap(rand_rom.fileno(), 0)
             # 18D800 + 10CD0 = 19E4D0
             mm_rand_rom[30984] = 0
             mm_rand_rom[30985] = 24
@@ -106,23 +106,3 @@ class BK_Model(Generic_Models.Model):
             self._texture_change_color("Shorts_Texture", shorts_texture)
         # CLOSE MM
         self._close_mm()
-
-if __name__ == '__main__':
-    print("Start")
-    shutil.copy(f"C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/temp/197E38/197E38-Decompressed.bin", f"C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/temp/197E38/Randomized_ROM/197E38-Decompressed.bin")
-    bk_model = BK_Model(f"C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/temp/197E38/", "197E38", original_index_start=0xB138)
-    bk_model._main(
-        banjo_fur="000008",
-        banjo_skin="818181",
-        banjo_feet="841F",
-        kazooie_primary="818181",
-        kazooie_secondary="FFFFFF",
-        kazooie_wing_primary="841F",
-        kazooie_wing_secondary="FFFF",
-        backpack="818181",
-        wading_boots="818181",
-        shorts_vertex="000008",
-        shorts_texture="0001",
-        tooth_necklace="FF0C0C"
-        )
-    print("Done")

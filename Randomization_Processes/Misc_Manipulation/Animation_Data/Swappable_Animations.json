@@ -1,28 +1,92 @@
 {
-    "Hard_Throw": {
+    "Hard Throw": {
         "Original": {
-            "0x5FE8": "Kazooie_Shooting_Egg"
+            "0x5FE8": "Kazooie Shooting Egg"
         },
         "Replacements": {
-            "0x63A8": "Conga_Hard_Throwing"
+            "0x63A8": "Conga Hard Throwing"
         }
     },
-    "Soft_Throw": {
+    "Soft Throw": {
         "Original": {
-            "0x5FF0": "Kazooie_Pooping_Egg"
+            "0x5FF0": "Kazooie Pooping Egg"
         },
         "Replacements": {
-            "0x6138": "Conga_Soft_Throwing"
+            "0x6138": "Conga Soft Throwing"
         }
     },
-    "BK_Standing": {
+    "Beak Bomb": {
+        "Original": {
+            "0x60D0": "Kazooie Beak Bomb"
+        },
+        "Replacements": {
+            "0x7298": "Jinjonator Attacking"
+        }
+    },
+    "BK Standing": {
         "Shuffle": {
-            "0x6008": "Jiggy_Jig",
+            "0x6008": "Jiggy Jig",
             "0x6340": "Kazooie Taunting Banjo",
-            "0x6648": "Banjo_Punishing_Kazooie",
-            "0x68E8": "Banjo_Listening",
-            "0x72A8": "BK_Unlocking_Note_Door",
-            "0x7370": "Kazooie_Hits_Banjo"
+            "0x6648": "Banjo Punishing Kazooie",
+            "0x68E8": "Banjo Listening",
+            "0x72A8": "BK Unlocking Note Door",
+            "0x7370": "Kazooie Hits Banjo"
         }
+    },
+    "Ripper Idle": {
+        "Original": {
+            "0x6368": "Ripper"
+        },
+        "Replacements": {
+            "0x69C0": "Beehive"
+        }
+    },
+    "Full Body Movement": {
+        "Original": {
+            "0x5EF8": "Banjo Running"
+        },
+        "Replacements": {
+            "0x6180": "Chimpy Walking"
+        }
+    },
+    "Buzzbomb Zubba Swap 1": {
+        "Swap 1": {
+            "0x6660": "Buzzbomb Flying"
+        },
+        "Swap 2": {
+            "0x6A18": "Zubba Flying"
+        }
+    },
+    "Buzzbomb Zubba Swap 2": {
+        "Swap 1": {
+            "0x6710": "Buzzbomb Charging"
+        },
+        "Swap 2": {
+            "0x6A10": "Zubba Flying Moving"
+        }
+    },
+    "Buzzbomb Zubba Swap 3": {
+        "Swap 1": {
+            "0x6718": "Buzzbomb Falling From Sky"
+        },
+        "Swap 2": {
+            "0x6A20": "Zubba Falling"
+        }
+    },
+    "Buzzbomb Zubba Swap 4": {
+        "Swap 1": {
+            "0x6720": "Buzzbomb Dying"
+        },
+        "Swap 2": {
+            "0x6A28": "Zubba Landing"
+        }
+    },
+    "Upper Body Movement": {
+    	"Shuffle": {
+            "0x6D58": "Grublin Chasing",
+            "0x6DC8": "Limbo Chasing",
+            "0x70C0": "Grublin-Hood Chasing",
+            "0x7210": "Gruntling Chasing"
+    	}
     }
 }

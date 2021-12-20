@@ -8,20 +8,20 @@ Created on Oct 23, 2021
 ### PYTHON IMPORT ###
 #####################
 
-import random
-import mmap
+from random import seed, shuffle
+from mmap import mmap
 
 ###################
 ### FILE IMPORT ###
 ###################
 
-from ...Common_Functions import get_address_endpoints, leading_zeros, read_json
+from Randomization_Processes.Common_Functions import get_address_endpoints, leading_zeros, read_json
 
 ##########################
 ### SKYBOX MANIP CLASS ###
 ##########################
 
-class Skybox_Manipulation():
+class Skybox_Manipulation_Class():
     '''Skybox manipulation class'''
     def __init__(self, seed_val, file_dir, randomized_rom_path):
         '''Initializes the skybox manipulation class'''
@@ -55,7 +55,7 @@ class Skybox_Manipulation():
             with open(f"{self._file_dir}Randomized_ROM\\{curr_pointer_file}", "r+b") as comp_file:
                 pointer_content = comp_file.read()
             with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rom_file:
-                mm_rand_rom = mmap.mmap(rom_file.fileno(), 0)
+                mm_rand_rom = mmap(rom_file.fileno(), 0)
 #                 print(f"Pointer Str: {pointer_str}   Pointer File: {curr_pointer_file}")
                 # Find The Pointer Start
                 pointer_start = ""
@@ -87,8 +87,8 @@ class Skybox_Manipulation():
     
     def _shuffle_list(self, original_list):
         '''Shuffles a given list'''
-        random.seed(a=self._seed_val)
-        random.shuffle(original_list)
+        seed(a=self._seed_val)
+        shuffle(original_list)
         return original_list
     
     def _skybox_manip_main(self):

@@ -8,7 +8,7 @@ Created on Oct 19, 2021
 ### PYTHON IMPORT ###
 #####################
 
-import random
+from random import seed, shuffle
 import mmap
 import json
 
@@ -16,13 +16,13 @@ import json
 ### FILE IMPORT ###
 ###################
 
-from ...Common_Functions import get_address_endpoints, leading_zeros, read_json
+from Randomization_Processes.Common_Functions import get_address_endpoints, leading_zeros, read_json
 
 #########################
 ### MUSIC MANIP CLASS ###
 #########################
 
-class Music_Manipulation():
+class Music_Manipulation_Class():
     '''Music manipulation class'''
     def __init__(self, seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var):
         '''Initializes the music manipulation class'''
@@ -89,8 +89,8 @@ class Music_Manipulation():
     
     def _shuffle_list(self, original_list):
         '''Shuffles a given list'''
-        random.seed(a=self._seed_val)
-        random.shuffle(original_list)
+        seed(a=self._seed_val)
+        shuffle(original_list)
         return original_list
     
     def _generate_cheat_sheet(self):

@@ -4,9 +4,21 @@ Created on Nov 15, 2021
 @author: Cyrus
 '''
 
-import mmap
+######################
+### PYTHON IMPORTS ###
+######################
+
+from mmap import mmap
+
+####################
+### FILE IMPORTS ###
+####################
 
 from Randomization_Processes.Common_Functions import leading_zeros
+
+#####################
+### TEXTURE CLASS ###
+#####################
 
 class Texture_Class():
     def __init__(self, file_dir, address, seed_val=0):
@@ -15,7 +27,7 @@ class Texture_Class():
         self._seed_val = seed_val
         with open(f"{self._file_dir}Randomized_ROM\\{self._address}-Decompressed.bin", "r+b") as decomp_file:
 #         with open(f"{self._file_dir}{self._address}-Decompressed.bin", "r+b") as decomp_file:
-            self.mm = mmap.mmap(decomp_file.fileno(), 0)
+            self.mm = mmap(decomp_file.fileno(), 0)
     
     def _extract_header_info(self):
         self._texture_setup_offset = int(leading_zeros(self.mm[8], 2) + leading_zeros(self.mm[9], 2), 16)
@@ -61,7 +73,7 @@ class Texture_Class():
             self.mm[text_header_index + 9] = curr_info["Y_Length"]
             next_texture_start = next_texture_start + (curr_info["X_Length"] * curr_info["Y_Length"])//2 + 0x20
             with open(f"{self._file_dir}Randomized_ROM\\{self._address}-Texture_{image_num}.bin", "r+b") as texture_file:
-                mm_texture = mmap.mmap(texture_file.fileno(), 0)
+                mm_texture = mmap(texture_file.fileno(), 0)
                 index_count = 0
                 for index in range(self._texture_list[texture_count]["Texture_Start"], self._texture_list[texture_count]["Texture_Start"] + (curr_info["X_Length"] * curr_info["Y_Length"])//2 + 0x20):
                     self.mm[index] = mm_texture[index_count]

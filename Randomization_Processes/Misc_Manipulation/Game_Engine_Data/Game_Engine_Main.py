@@ -9,15 +9,15 @@ Created on Dec 10, 2021
 #####################
 
 import mmap
-import shutil
-import os
+# import shutil
+# import os
 
 ##########################
 ### PYTHON FILE IMPORT ###
 ##########################
 
 from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids
-from ...Common_Functions import apply_patch
+# from ...Common_Functions import apply_patch
 
 #########################
 ### GAME ENGINE CLASS ###
@@ -70,39 +70,39 @@ class Game_Engine_Class():
         # 0x8ACAB
         self.mm[0x8ACAB] = e_honeycomb_count
     
-    def _empty_honeycombs_for_more_health(self, e_honeycomb_count):
+    def _empty_honeycombs_for_sm(self, e_honeycomb_count):
         # 0x8ACAF
         self.mm[0x8ACAF] = e_honeycomb_count
     
     def _blue_egg_limit(self, count_before_cheato, count_after_cheato=None):
-        # 0xBF217 Before Cheato
-        # 0xBF21F After Cheato
-        self.mm[0xBF217] = count_before_cheato
+        # 0xBF21F Before Cheato
+        # 0xBF217 After Cheato
+        self.mm[0xBF21F] = count_before_cheato
         if(count_after_cheato):
-            self.mm[0xBF21F] = count_after_cheato
+            self.mm[0xBF217] = count_after_cheato
         else:
             count_after_cheato = min(count_before_cheato*2, 0xFF)
-            self.mm[0xBF21F] = count_after_cheato
+            self.mm[0xBF217] = count_after_cheato
     
     def _red_feather_limit(self, count_before_cheato, count_after_cheato=None):
-        # 0xBF237 Before Cheato
-        # 0xBF23F After Cheato
-        self.mm[0xBF237] = count_before_cheato
+        # 0xBF23F Before Cheato
+        # 0xBF237 After Cheato
+        self.mm[0xBF23F] = count_before_cheato
         if(count_after_cheato):
-            self.mm[0xBF23F] = count_after_cheato
+            self.mm[0xBF237] = count_after_cheato
         else:
             count_after_cheato = min(count_before_cheato*2, 0xFF)
-            self.mm[0xBF23F] = count_after_cheato
+            self.mm[0xBF237] = count_after_cheato
         
     def _gold_feather_limit(self, count_before_cheato, count_after_cheato=None):
-        # 0xBF257 Before Cheato
-        # 0xBF25B After Cheato
-        self.mm[0xBF257] = count_before_cheato
+        # 0xBF25B Before Cheato
+        # 0xBF257 After Cheato
+        self.mm[0xBF25B] = count_before_cheato
         if(count_after_cheato):
-            self.mm[0xBF25B] = count_after_cheato
+            self.mm[0xBF257] = count_after_cheato
         else:
             count_after_cheato = min(count_before_cheato*2, 0xFF)
-            self.mm[0xBF25B] = count_after_cheato
+            self.mm[0xBF257] = count_after_cheato
     
     def _new_game_start_level(self, new_start_level_name, skip_intro_cutscene=False):
         # 0x3E17B - Intro Cutscene

@@ -57,20 +57,20 @@ Created on Oct 31, 2021
 ### PYTHON IMPORT ###
 #####################
 
-import random
-import mmap
+from random import seed, shuffle, choice
+from mmap import mmap
 
 ###################
 ### FILE IMPORT ###
 ###################
 
-from ...Common_Functions import get_address_endpoints, leading_zeros, read_json
+from Randomization_Processes.Common_Functions import get_address_endpoints, leading_zeros, read_json
 
 ##########################
 ### MODEL MANIP CLASS ###
 ##########################
 
-class Swap_Models_Manipulation():
+class Swap_Models_Manipulation_Class():
     '''Swap models manipulation class'''
     def __init__(self, seed_val, file_dir, randomized_rom_path):
         '''Initializes the swap models manipulation class'''
@@ -82,12 +82,12 @@ class Swap_Models_Manipulation():
         self._pointers_start = None
         self._pointers_end = None
         self._model_address_dict = {}
-        self._model_dict = read_json(f"{self._file_dir}Randomization_Processes\\Misc_Manipulation\\Model_Data\\Swappable_Models.json")
+        self._model_dict = read_json(f"{self._file_dir}Randomization_Processes/Misc_Manipulation/Model_Data/Swappable_Models.json")
     
     def _grab_compressed_file(self, pointer_str):
         '''Uses the pointer to find the beginning and end of a model file and extracts it'''
         (address1, address2) = get_address_endpoints(self._file_bytes, pointer_str)
-        with open(f"{self._file_dir}Randomized_ROM\\{pointer_str[2:].lower()}-Compressed.bin", "w+b") as comp_file:
+        with open(f"{self._file_dir}Randomized_ROM/{pointer_str[2:].lower()}-Compressed.bin", "w+b") as comp_file:
             for index in range(address1, address2):
                 hex_string = str(hex(self._file_bytes[index]))[2:]
                 if(len(hex_string) < 2):
@@ -104,7 +104,7 @@ class Swap_Models_Manipulation():
             with open(f"{self._file_dir}Randomized_ROM\\{curr_pointer_file}", "r+b") as comp_file:
                 pointer_content = comp_file.read()
             with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rom_file:
-                mm_rand_rom = mmap.mmap(rom_file.fileno(), 0)
+                mm_rand_rom = mmap(rom_file.fileno(), 0)
 #                 print(f"Pointer Str: {pointer_str}   Pointer File: {curr_pointer_file}")
                 # Find The Pointer Start
                 pointer_start = ""
@@ -127,8 +127,8 @@ class Swap_Models_Manipulation():
     
     def _shuffle_list(self, original_list):
         '''Shuffles a given list'''
-        random.seed(a=self._seed_val)
-        random.shuffle(original_list)
+        seed(a=self._seed_val)
+        shuffle(original_list)
         return original_list
     
     def _model_manip_main(self):
@@ -152,8 +152,8 @@ class Swap_Models_Manipulation():
                 for replacement_file in self._model_dict[category]["Replacements"]:
                     replacement_list.append(replacement_file)
                 for original_file in self._model_dict[category]["Original"]:
-                    random.seed(a=(self._seed_val + int(original_file[2:], 16)))
-                    replacement_model = random.choice(replacement_list)
+                    seed(a=(self._seed_val + int(original_file[2:], 16)))
+                    replacement_model = choice(replacement_list)
                     self._model_address_dict[original_file.lower()] = f"{replacement_model[2:].lower()}-Compressed.bin"
                     replacement_list.remove(replacement_model)
             else:

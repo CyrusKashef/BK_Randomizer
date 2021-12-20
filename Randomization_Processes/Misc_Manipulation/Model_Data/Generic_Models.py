@@ -8,13 +8,13 @@ Created on Aug 31, 2021
 ### PYTHON IMPORT ###
 #####################
 
-import mmap
+from mmap import mmap
 
 ###################
 ### FILE IMPORT ###
 ###################
 
-from ...Common_Functions import leading_zeros
+from Randomization_Processes.Common_Functions import leading_zeros
 
 ###########################
 ### GENERIC MODEL CLASS ###
@@ -33,7 +33,7 @@ class Model():
     def _create_mm(self):
         '''Creates the currently used mmap for the model'''
         with open(f"{self._file_dir}Randomized_ROM/{self.address}-Decompressed.bin", "r+b") as f:
-            self.mm = mmap.mmap(f.fileno(), 0)
+            self.mm = mmap(f.fileno(), 0)
 
     def _close_mm(self):
         self.mm.close()
