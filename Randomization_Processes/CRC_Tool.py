@@ -9,7 +9,7 @@ Created on Sep 13, 2021
 ######################
 
 import subprocess
-import mmap
+from mmap import mmap
 
 #################
 ### FUNCTIONS ###
@@ -119,7 +119,7 @@ class CRC_Calc_Class:
     
     def set_crc(self):
         with open(f"{self._file_dir}Randomized_ROM/Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as f:
-            mm = mmap.mmap(f.fileno(), 0)
+            mm = mmap(f.fileno(), 0)
             crc1_str = str(hex(self.crc1))[2:]
             while(len(crc1_str) < 8):
                 crc1_str = "0" + crc1_str

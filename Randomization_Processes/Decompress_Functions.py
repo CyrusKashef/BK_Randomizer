@@ -33,8 +33,8 @@ import subprocess
 ### FILE IMPORTS ###
 ####################
 
-from .Dicts_And_Lists.Setups import setup_ids, speech_file_ids, asm_setup_ids, texture_setup_ids, level_model_ids
-from .Common_Functions import get_address_endpoints
+from Randomization_Processes.Dicts_And_Lists.Setups import setup_ids, speech_file_ids, asm_setup_ids, texture_setup_ids, level_model_ids
+from Randomization_Processes.Common_Functions import get_address_endpoints
 
 #################
 ### FUNCTIONS ###

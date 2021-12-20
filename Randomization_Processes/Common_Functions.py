@@ -31,16 +31,16 @@ def read_json(json_file_dir):
         json_content = json.load(jf)
     return json_content
 
-def apply_patch(xdelta_path, old_file_path, delta_file_path, new_file_path):
-    # xdelta -d -s old_file delta_file decoded_new_file
-    cmd = f"{xdelta_path}xdelta.exe -d -s {old_file_path} {delta_file_path} {new_file_path}"
-    print(cmd)
-    subprocess.Popen(cmd.split(), shell=True).communicate()
-
-def create_patch(xdelta_path, old_file_path, new_file_path, delta_file_path):
-    # xdelta -e -s old_file new_file delta_file
-    cmd = f"{xdelta_path}xdelta.exe -e -s {old_file_path} {new_file_path} {delta_file_path}"
-    subprocess.Popen(cmd.split(), shell=True).communicate()
+# def apply_patch(xdelta_path, old_file_path, delta_file_path, new_file_path):
+#     # xdelta -d -s old_file delta_file decoded_new_file
+#     cmd = f"{xdelta_path}xdelta.exe -d -s {old_file_path} {delta_file_path} {new_file_path}"
+#     print(cmd)
+#     subprocess.Popen(cmd.split(), shell=True).communicate()
+# 
+# def create_patch(xdelta_path, old_file_path, new_file_path, delta_file_path):
+#     # xdelta -e -s old_file new_file delta_file
+#     cmd = f"{xdelta_path}xdelta.exe -e -s {old_file_path} {new_file_path} {delta_file_path}"
+#     subprocess.Popen(cmd.split(), shell=True).communicate()
 
 def space_in_directory(filename):
     # You can use the following to allow spaces in directory names

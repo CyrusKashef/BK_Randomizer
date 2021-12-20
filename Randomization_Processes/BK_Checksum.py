@@ -1,4 +1,18 @@
-import mmap
+'''
+Created on Oct 10, 2021
+
+The code was translated from Mittenz's Mr. Patcher (C/C++) to Python.
+'''
+
+######################
+### PYTHON IMPORTS ###
+######################
+
+from mmap import mmap
+
+#########################
+### BK CHECKSUM CLASS ###
+#########################
 
 class BK_Checksum_Class():
     def __init__(self, file_dir, seed_val):
@@ -28,10 +42,10 @@ class BK_Checksum_Class():
     def _set_checksum(self, checksum_val, index_start, address=None):
         if(address):
             with open(f"{self._file_dir}Randomized_ROM/{address}-Decompressed.bin", "r+b") as f:
-                mm = mmap.mmap(f.fileno(), 0)
+                mm = mmap(f.fileno(), 0)
         else:
             with open(f"{self._file_dir}Randomized_ROM/Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as f:
-                mm = mmap.mmap(f.fileno(), 0)
+                mm = mmap(f.fileno(), 0)
         checksum_str = self.leading_zeros(checksum_val, 8)
         print(checksum_str)
         for index_add in range(4):
