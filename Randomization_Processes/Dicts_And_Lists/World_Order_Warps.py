@@ -212,7 +212,7 @@ possible_bottles_locations = {
             "Summer_Grass_1_Up": "0E140016F054",
             "Winter_Sir_Slush": "F9C00FB310CC",
             "Yellow_Jinjo": "F1EE000010AA",
-            "Red_Jinjo": "F9C80384E847",
+            "Orange_Jinjo": "F9C80384E847",
             },
         }
 

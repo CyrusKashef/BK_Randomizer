@@ -6,7 +6,7 @@ Created on Dec 10, 2021
 
 start_level_ids = {
     "SM - Main": 0x1,
-    "SM - Banjo's House": 0x8C,
+#     "SM - Banjo's House": 0x8C,
     "MM - Main": 0x2,
     "MM - Ticker's Tower": 0xC,
     "MM - Mumbo's Skull": 0xE,
