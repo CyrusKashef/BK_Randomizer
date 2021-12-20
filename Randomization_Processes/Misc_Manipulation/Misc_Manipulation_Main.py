@@ -9,28 +9,30 @@ Created on Oct 9, 2021
 ### PYTHON IMPORT ###
 #####################
 
-import mmap
-import random
+from mmap import mmap
+from random import seed, choices, shuffle
 
 ###################
 ### FILE IMPORT ###
 ###################
 
-from .Model_Data.BK_Models import BK_Model
-from .Model_Data.Swap_Models_Main import Swap_Models_Manipulation
-from .Music_Data.Music_Main import Music_Manipulation
-from .Skybox_Data.Skybox_Main import Skybox_Manipulation
-from .Sprite_Data.Sprite_Main import Sprite_Manipulation
-from .Speech_Data.Speech_Main import Speech_Manipulation
-from .Animation_Data.Animation_Main import Swap_Animations_Manipulation
-from ..Dicts_And_Lists.Misc_Dicts_And_Lists import gv_matching_puzzle_pictures
-from .Game_Engine_Data.Game_Engine_Main import Game_Engine_Class
+from Randomization_Processes.Misc_Manipulation.Model_Data.BK_Models import BK_Model_Class
+from Randomization_Processes.Misc_Manipulation.Model_Data.Swap_Models_Main import Swap_Models_Manipulation_Class
+from Randomization_Processes.Misc_Manipulation.Music_Data.Music_Main import Music_Manipulation_Class
+from Randomization_Processes.Misc_Manipulation.Skybox_Data.Skybox_Main import Skybox_Manipulation_Class
+from Randomization_Processes.Misc_Manipulation.Sprite_Data.Sprite_Main import Sprite_Manipulation_Class
+from Randomization_Processes.Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation_Class
+from Randomization_Processes.Misc_Manipulation.Animation_Data.Animation_Main import Swap_Animations_Manipulation
+from Randomization_Processes.Misc_Manipulation.Game_Engine_Data.Game_Engine_Main import Game_Engine_Class
+from Randomization_Processes.Misc_Manipulation.Properties_Data.Properties_Main import Properties_Manipulation_Class
+
+from Randomization_Processes.Dicts_And_Lists.Misc_Dicts_And_Lists import gv_matching_puzzle_pictures
 
 #################################
 ### MISCELLANEOUS MANIP CLASS ###
 #################################
 
-class misc_manipulation():
+class Misc_Manipulation_Class():
     '''Miscellaneous setting manipulation class'''
     def __init__(self, grandmaster, seed_val):
         '''Initializes the miscellaneous setting manipulation class'''
@@ -40,7 +42,7 @@ class misc_manipulation():
         self.world_abbreviations = {"Mumbo's Mountain": "MM", "Treasure Trove Cove": "TTC", "Clanker's Cavern": "CC",
                                     "Bubblegloop Swamp": "BGS", "Freezeezy Peak": "FP", "Gobi's Valley": "GV",
                                     "Mad Monster Mansion": "MMM", "Rusty Bucket Bay": "RBB", "Click Clock Wood": "CCW"}
-        self.speech_manip = Speech_Manipulation(grandmaster, seed_val)
+        self.speech_manip = Speech_Manipulation_Class(grandmaster, seed_val)
     
     #########################
     ### REQUIREMENTS TEXT ###
@@ -76,20 +78,20 @@ class misc_manipulation():
         #     COUNT PATRN ?? ?? ?? ??
         #     01 90 00 01 00 00 00 00
         with open(f"{self._file_dir}Randomized_ROM/FAE27E-Decompressed.bin", "r+b") as overlay_file:
-            mm_overlay = mmap.mmap(overlay_file.fileno(), 0)
+            mm_overlay = mmap(overlay_file.fileno(), 0)
             index_start = mm_overlay.find(bytes.fromhex("0190000100000000"))
             selectable_values = []
             for index_val in range(16):
                 selectable_values.append(mm_overlay[index_start + 3 + (8*index_val)])
-            random.seed(a=self._seed_val)
-            random.shuffle(selectable_values)
+            seed(a=self._seed_val)
+            shuffle(selectable_values)
             for index_val in range(16):
                 mm_overlay[index_start + 3 + (8*index_val)] = selectable_values[index_val]
         return selectable_values
     
     def _gv_matching_puzzle_textures(self, selectable_values):
         with open(f"{self._file_dir}Randomized_ROM/10248-Decompressed.bin", "r+b") as decomp_file:
-            mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+            mm_decomp = mmap(decomp_file.fileno(), 0)
             RGBA32_address_dict = {"Jinjo": (0x240, 0x1240), "Egg": (0x2E60, 0x3E60), "Kazooie": (0x4660, 0x5660), "Mumbo": (0xA6C0, 0xB6C0)}
             for texture in RGBA32_address_dict:
                 for curr_index in range(RGBA32_address_dict[texture][0], RGBA32_address_dict[texture][1], 4):
@@ -166,7 +168,7 @@ class misc_manipulation():
     def _rbb_code_texture(self, button_combo):
         '''Edits the texture of the side of the boat with the button combination'''
         with open(f"{self._file_dir}Randomized_ROM\\10418-Decompressed.bin", "r+b") as decomp_file:
-            mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+            mm_decomp = mmap(decomp_file.fileno(), 0)
             # Clears Number
             for index1 in range(0x1CD60, 0x1CF90, 0x20):
                 for index2 in range(0x03, 0x10):
@@ -177,7 +179,7 @@ class misc_manipulation():
                     index = index1 + index2
                     mm_decomp[index] = 0x11
         with open(f"{self._file_dir}Randomized_ROM\\10418-Decompressed.bin", "r+b") as decomp_file:
-            mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+            mm_decomp = mmap(decomp_file.fileno(), 0)
             index_list = [0x1CDE4, 0x1CDE8, 0x1CDEC, 0x1CDF0, 0x1CDF4, 0x1CDF8]
             for num in range(len(button_combo)):
                 button_num = button_combo[num]
@@ -196,10 +198,10 @@ class misc_manipulation():
         # FBE5E2 - FBEBE0
         # Search for 33 31 32 31 31 31 00
         with open(f"{self._file_dir}Randomized_ROM/FBE5E2-Decompressed.bin", "r+b") as decomp_file:
-            mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+            mm_decomp = mmap(decomp_file.fileno(), 0)
             text_index_start = mm_decomp.find(bytes.fromhex("33313231313100"))
-            random.seed(a=self._seed_val)
-            button_combo = random.choices([49, 50, 51], k=6)
+            seed(a=self._seed_val)
+            button_combo = choices([49, 50, 51], k=6)
             for index in range(len(button_combo)):
                 mm_decomp[text_index_start + index] = button_combo[index]
         return button_combo
@@ -215,7 +217,7 @@ class misc_manipulation():
     
     def _bk_model(self, seed_val):
         '''Runs the functions for editing the Banjo Kazooie models'''
-        bk_model_obj = BK_Model(self._file_dir, "7900", original_index_start=0xB138)
+        bk_model_obj = BK_Model_Class(self._file_dir, "7900", original_index_start=0xB138)
         bk_model_obj._main(
             banjo_fur=self._grandmaster.banjo_fur_var.get(),
             banjo_skin=self._grandmaster.banjo_skin_var.get(),
@@ -234,7 +236,7 @@ class misc_manipulation():
 
     def _other_model_shuffle(self, seed_val, file_dir, randomized_rom_path):
         '''PyDoc'''
-        swap_model_manip = Swap_Models_Manipulation(seed_val, file_dir, randomized_rom_path)
+        swap_model_manip = Swap_Models_Manipulation_Class(seed_val, file_dir, randomized_rom_path)
         swap_model_manip._model_manip_main()
 
     def _animation_shuffle(self, seed_val, file_dir, randomized_rom_path):
@@ -242,13 +244,24 @@ class misc_manipulation():
         swap_animation_manip = Swap_Animations_Manipulation(seed_val, file_dir, randomized_rom_path)
         swap_animation_manip._animation_manip_main()
 
+    ##################
+    ### PROPERTIES ###
+    ##################
+    
+    def _properties_shuffle(self, seed_val, file_dir):
+        '''PyDoc'''
+        properties_manip_obj = Properties_Manipulation_Class(seed_val, file_dir)
+        properties_manip_obj._swap_properties_main()
+        if(self._grandmaster.cheat_sheet_var.get() == 1):
+            properties_manip_obj._generate_cheat_sheet()
+
     ########################
     ### SOUNDS AND MUSIC ###
     ########################
     
     def _shuffle_music(self, seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var):
         '''Runs the functions for shuffling the music'''
-        music_manip = Music_Manipulation(seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var)
+        music_manip = Music_Manipulation_Class(seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var)
         music_manip._music_manip_main()
     
     ################
@@ -257,7 +270,7 @@ class misc_manipulation():
     
     def _shuffle_skyboxes(self, seed_val, file_dir, randomized_rom_path):
         '''Runs the functions for shuffling the skyboxes'''
-        skybox_manip = Skybox_Manipulation(seed_val, file_dir, randomized_rom_path)
+        skybox_manip = Skybox_Manipulation_Class(seed_val, file_dir, randomized_rom_path)
         skybox_manip._skybox_manip_main()
     
     ###############
@@ -266,7 +279,7 @@ class misc_manipulation():
     
     def _shuffle_sprites(self, seed_val, file_dir, randomized_rom_path):
         '''Runs the functions for shuffling the sprites'''
-        sprite_manip = Sprite_Manipulation(seed_val, file_dir, randomized_rom_path)
+        sprite_manip = Sprite_Manipulation_Class(seed_val, file_dir, randomized_rom_path)
         sprite_manip._sprite_manip_main()
 
     ###################
@@ -275,7 +288,14 @@ class misc_manipulation():
     
     def _setup_game_engine_manip(self):
         game_engine_obj = Game_Engine_Class(self._file_dir)
-        game_engine_obj._starting_moves()
+        if(self._grandmaster.all_starting_moves_var.get()):
+            game_engine_obj._starting_moves()
+        if(self._grandmaster.free_transformations_var.get() == 1):
+            game_engine_obj._mumbo_transformations_costs()
+        game_engine_obj._blue_egg_limit(int(self._grandmaster.before_blue_egg_carry_value.get()), int(self._grandmaster.after_blue_egg_carry_value.get()))
+        game_engine_obj._red_feather_limit(int(self._grandmaster.before_red_feather_carry_value.get()), int(self._grandmaster.after_red_feather_carry_value.get()))
+        game_engine_obj._gold_feather_limit(int(self._grandmaster.before_gold_feather_carry_value.get()), int(self._grandmaster.after_gold_feather_carry_value.get()))
+        game_engine_obj._new_game_start_level(self._grandmaster.new_area_var.get(), self._grandmaster.skip_intro_cutscene_var.get())
 
     ########################
     ### EDIT OTHER TEXTS ###
