@@ -1,440 +1,185 @@
 '''
-Created on Aug 29, 2021
-
-@author: Cyrus
+@author: Wizzard
 '''
 
-########################
-### MUMBO'S MOUNTAIN ###
-########################
+from warp import Warp
 
-mm_warps_dict = {
-    "Safe": [
-        "Outside_Skull",
-        "Outside_Lower_Ticker"
+# Relevant information about the warps within each level
+Levels = {
+    #  0 - Main Area
+    #  1 - Mumbo's Skull
+    #  2 - Ticker's Tower
+    #  3 - Top Of Ticker's Tower
+    "Mumbo's Mountain": {
+        # Coming outside from Mumbo's Skull
+        Warp("Mumbo's Skull - Outside", 0x16, 0, 1, 0, 0, Warp.Termite): [
+            "1579098CF47532060016000000000000",
+            "159D098DF49232060016000000000662",
+            "15C1098CF4AE32060016000000000663",
+            "15E0098EF4CB32060016000000000000",
         ],
-    "Unsafe": [
-        "Inside_Skull",
-        "Inside_Lower_Ticker",
-        "Inside_Upper_Ticker",
-        "Outside_Upper_Ticker"
+        # Coming inside to Mumbo's Skull
+        Warp("Mumbo's Skull - Inside", 0x17, 1, 0): [
+            "0000005103A94B0600170000000063A9",
         ],
-    "Safe_Transform": [
+        # Coming outside from the lower part of Ticker's Tower
+        Warp("Ticker's Tower - Lower/Outside", 0x18, 0, 2): [
+            "03DC0663FC384E06001800000001071A",
         ],
-    "Unsafe_Transform": [
+        # Coming inside to the lower part of Ticker's Tower
+        Warp("Ticker's Tower - Lower/Inside", 0x19, 2, 0): [
+            "008E003CFCB83206001900000006118B",
+            "0124003CFCB93206001900000006118C",
         ],
-}
-
-###########################
-### TREASURE TROVE COVE ###
-###########################
-
-ttc_warps_dict = {
-    "Safe": [
-        "Outside_Sandcastle",
-        "Outside_Nipper",
-        "Outside_Ship_Lower",
-        "Outside_Ship_Upper",
-        "Alcove",
-        "Top_Of_Mountain",
-        "Bottom_Lighthouse",
+        # Coming outside from the upper part of Ticker's Tower
+        Warp("Ticker's Tower - Upper/Outside", 0x1A, 3, 2): [
+            "011F0E1AFD224586001A000000000000",
+            "01670E13FCE74886001A000000017972",
+            "01D30E10FCC73A06001A00000006815B",
         ],
-    "Unsafe": [
-        "Inside_Sandcastle",
-        "Inside_Nipper",
-        "Inside_Ship_Lower",
-        "Inside_Ship_Upper",
-        "Top_Lighthouse"
+        # Coming inside to the upper part of Ticker's Tower
+        Warp("Ticker's Tower - Upper/Inside", 0x1B, 2, 3): [
+            "FDC608DCFD662586001B00000006784B",
+            "FD9C08CCFD932586001B000000067856",
+            "FD6A08DCFDC62586001B00000006784A",
+            "FD60090EFD5F2586001B000000000000",
         ],
-    "Safe_Transform": [
+    },
+    #  0 - Main Area
+    #  1 - Blubber's Ship
+    #  2 - Sandcastle
+    #  3 - Nipper
+    #  4 - Alcove Under Arch
+    #  5 - Top Of Mountain/Bottom Of Lighthouse
+    #  6 - Top Of Lighthouse
+    "Treasure Trove Cove": {
+    },
+    "Clanker's Cavern": {
+    },
+    # 0 - Main Area
+    # 1 - Mumbo's Skull
+    # 2 - Tiptup Choir
+    "Bubblegloop Swamp": {
+    },
+    # 0 - Main Area
+    # 1 - Mumbo's Skull
+    # 2 - Boggy's Igloo
+    # 3 - Christmas Tree
+    # 4 - Wozza's Cave
+    "Freezeezy Peak": {
+        # Coming outside from Mumbo's Skull
+        Warp(debugName="Skull (Outside)", objectId=0x43, warpsTo=0, warpsFrom=1, flagsNeededToExit=0, flagsNeededToEnter=0, flagsForLearnedAbilities=Warp.Walrus): [
+            "0000005103A94B060043000000000064",
         ],
-    "Unsafe_Transform": [
+        # Coming inside to Mumbo's Skull
+        Warp("Skull (Inside)", 0x40, 1, 0): [
+            "1B7C02BAF30E32060040000000000000",
+            "1B9C02BAF356320600400000000128B5",
+            "1BC002BAF38F32060040000000000000",
         ],
-}
-
-########################
-### CLANKER'S CAVERN ###
-########################
-
-cc_warps_dict = {
-    "Safe": [
-#             "Left_Gill",
-#             "Right_Gill",
-#             "Gold_Feather_Room"
+        # Coming outside from Igloo
+        Warp("Igloo (Outside)", 0x44, 0, 2): [
+            "0007008603D25006004400000011FFB7",
         ],
-    "Unsafe": [
-#             "Left_Tooth",
-#             "Right_Tooth",
-#             "Blowhole_To_Belly",
-#             "Blowhole_To_Mouth",
-#             "From_Gold_Feather_Room"
+        # Coming inside to Igloo
+        Warp("Igloo (Inside)", 0x41, 2, 0): [
+            "01C20DF924EE2F86004100000000D45D",
         ],
-    "Safe_Transform": [
+        # Coming outside from Christmas Tree
+        Warp("Tree (Outside)", 0x45, 0, 3): [
+            "0017FDA6FFE599860045000000000F84",
         ],
-    "Unsafe_Transform": [
+        # Coming inside to Christmas Tree
+        Warp("Tree (Inside)", 0x42, 3, 0): [
+            "EE1803A718684C060042000000000000",
         ],
-}
-
-#########################
-### BUBBLEGLOOP SWAMP ###
-#########################
-
-bgs_warps_dict = {
-    "Safe": [
-        "Outside_Skull",
-        "Outside_Tanktup"
+        # Coming outside from Cave
+        Warp("Cave (Outside)", 0xFC, 0, 4): [
+            "031B0066F9F0640600FC000000000000",
+            "03590066FA0B640600FC000000000064",
+            "03970066FA33640600FC00000000F9BA",
+            "03D80066FA58640600FC000000000000",
         ],
-    "Unsafe": [
-        "Inside_Skull",
-        "Inside_Tanktup"
+        # Coming inside to Cave
+        Warp("Cave (Inside)", 0xFD, 4, 0): [
+            "E6CB0396F0F1898600FD000000000064",
+            "E6E90396F156898600FD000000000000",
+            "E7080396F1A5898600FD000000000000",
+            "E72A0396F1EF898600FD000000000000",
         ],
-    "Safe_Transform": [
-        "Outside_Left_Croc_Nostril",
-        "Outside_Right_Croc_Nostril"
+    },
+    # 0 - Main Area
+    # 1 - Jinxy
+    # 2 - Rupee
+    # 3 - Matching Puzzle
+    # 4 - Water Pyramid
+    # 5 - King Sandybutt Maze
+    "Gobi's Valley": {
+        # Jinxy To Main
+        Warp(debugName="Jinxy (To Main)", objectId=0x06, warpsTo=0, warpsFrom=1, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "0B73004EFFCF50060006000000000000",
         ],
-    "Unsafe_Transform": [
-        "Inside_Left_Croc_Nostril",
-        "Inside_Right_Croc_Nostril",
+        # Main To Jinxy
+        Warp(debugName="Jinxy (From Main)", objectId=0x05, warpsTo=1, warpsFrom=0, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "F06D05D317103E860005000000000000",
         ],
-}
-
-######################
-### FREEZEEZY PEAK ###
-######################
-
-fp_warps_dict = {
-    "Safe": [
-        "Outside_Igloo",
-        "Outside_Skull"
+        # Rupee To Main
+        Warp(debugName="Rupee (To Main)", objectId=0x64, warpsTo=0, warpsFrom=2, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "000F00A306417D860064000000000064",
         ],
-    "Unsafe": [
-        "Inside_Igloo",
-        "Inside_Skull",
-        "Inside_Tree",
-        "Inside_Cave",
-        "Outside_Tree",
-        "Outside_Cave"
+        # Main To Rupee
+        Warp(debugName="Rupee (From Main)", objectId=0x60, warpsTo=2, warpsFrom=0, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "F09E0B4C02A443860060000000000000",
         ],
-    "Safe_Transform": [
+        # Matching Puzzle To Main
+        Warp(debugName="Matching Puzzle (To Main)", objectId=0x61, warpsTo=0, warpsFrom=3, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "FA91015000236406006100002B000064",
         ],
-    "Unsafe_Transform": [
+        # Main To Matching Puzzle
+        Warp(debugName="Matching Puzzle (From Main)", objectId=0x5C, warpsTo=3, warpsFrom=0, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "0F3F09DF01432A86005C000000000000",
         ],
-}
-
-#####################
-### GOBI'S VALLEY ###
-#####################
-
-gv_warps_dict = {
-    "Safe": [
-        "Outside_Jinxy",
-        "Outside_Rupee_Pyramid",
-        "Outside_King_Sandybutt_Maze",
-        "Outside_Matching_Pyramid",
-        "Outside_Water_Pyramid_Top",
-        "Outside_Water_Pyramid_Bottom",
+        # Water Pyramid Bottom To Main
+        Warp(debugName="Water Pyramid Bottom (To Main)", objectId=0x63, warpsTo=0, warpsFrom=4, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "0006011406D48D060063000000000000",
         ],
-    "Unsafe": [
-        "Inside_Matching_Pyramid",
-        "King_Sandybutt_Maze_Start",
-        "King_Sandybutt_Maze_End",
-        "Inside_Water_Pyramid",
-        "Inside_Rupee_Pyramid",
-        "Inside_Jinxy",
+        # Main To Water Pyramid Bottom
+        Warp(debugName="Water Pyramid Bottom (From Main)", objectId=0x5F, warpsTo=4, warpsFrom=0, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "FF1C0BCBF20D6406005F000000029226",
         ],
-    "Safe_Transform": [
+        # Main To Water Pyramid Top
+        Warp(debugName="Water Pyramid Top (From Main)", objectId=0x5E, warpsTo=4, warpsFrom=0, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "000610A2EED56386005E000000000000",
         ],
-    "Unsafe_Transform": [
+        # Main To King Sandybutt Start
+        Warp(debugName="King Sandybutt Start (From Main)", objectId=0x5D, warpsTo=5, warpsFrom=0, flagsNeededToExit=0, flagsNeededToEnter=Warp.NeedsEggs): [
+            "00460A0A028D5186005D00000000FF49",
         ],
-}
-
-###########################
-### MAD MONSTER MANSION ###
-###########################
-
-mmm_warps_dict = {
-    "Safe": [
-        "Outside_Dining_Room",
-        "First_Floor_1",
-        "First_Floor_2",
-        "Second_Floor_1",
-        "Second_Floor_2",
-        "Well_Top_Entrance",
-        "Outside_Tumblar",
-        "Outside_Church_Secret_Room",
-        "Outside_Cellar",
-        "Outside_Mumbo_Skull",
+        # King Sandybutt Start To Main
+        Warp(debugName="King Sandybutt Start (To Main)", objectId=0x62, warpsTo=0, warpsFrom=5, flagsNeededToExit=0, flagsNeededToEnter=0): [
+            "1825008C015E63860062000000000064",
         ],
-    "Unsafe": [
-        "Inside_Church",
-        "Inside_Cellar",
-        "Inside_Tumblar",
-        "Well_Top_Exit",
-        "Inside_Dining_Room",
-        "Inside_Egg_Room",
-        "Inside_Note_Room",
-        "Inside_Feather_Room",
-        "Inside_Church_Secret_Room",
-        "Inside_Bathroom",
-        "Inside_Bedroom",
-        "Inside_Gold_Feather_Room",
-        "Inside_Mumbo_Skull",
-        "Third_Floor_1",
-        "Third_Floor_2",
-        "Chimney",
-#             "Outside_Church_Door",
-        "Church_Tower_Lower",
-        "Chuch_Tower_Upper",
+        # King Sandybutt End To Main
+        Warp(debugName="King Sandybutt End (From Main)", objectId=0xDE, warpsTo=0, warpsFrom=5, flagsNeededToExit=0, flagsNeededToEnter=0): [
+                "EA94006B046C460600DE000000000064",
+                "EACB006B0486460600DE000000000000",
+                "EB0B006B04A4460600DE000000000000",
         ],
-    "Safe_Transform": [
-        "Outside_Loggo",
-        "Outside_Gutter_Upper",
-        "Outside_Gutter_Lower",
-        ],
-    "Unsafe_Transform": [
-        "Inside_Loggo",
-        "Inside_Gutter_Lower",
-        ],
-}
-
-########################
-### RUSTY BUCKET BAY ###
-########################
-
-rbb_warps_dict = {
-    "Safe": [
-        "Outside_Big_Fish_Warehouse_Top",
-        "Outside_Big_Fish_Warehouse_Side",
-        "Outside_Boat_Room",
-        "Outside_Left_Blue_Container",
-        "Outside_Middle_Blue_Container",
-        "Outside_Right_Blue_Container",
-        "Outside_Kitchen",
-        "Outside_Navigation_Room",
-        "Outside_Captain_Room",
-        "Outside_Middle_Pipe",
-        "Outside_Bedroom",
-        "Outside_Main_Engine_Room",
-        "Outside_Big_Boombox_Room",
-        "Outside_Machine_Control_Room",
-        "Outside_Anchor_Room",
-        ],
-    "Unsafe": [
-        "Inside_Big_Fish_Warehouse",
-        "Inside_Boat_Room",
-        "Inside_Left_Blue_Container",
-        "Inside_Middle_Blue_Container",
-        "Inside_Right_Blue_Container",
-        "Inside_Kitchen",
-        "Inside_Navigation_Room",
-        "Inside_Captain_Room",
-        "Inside_Middle_Pipe",
-        "Inside_Bedroom",
-        "Inside_Main_Engine_Room",
-        "Inside_Big_Boombox_Room",
-        "Inside_Machine_Control_Room",
-        "Inside_Anchor_Room",
-        ],
-    "Safe_Transform": [
-        ],
-    "Unsafe_Transform": [
-        ],
-}
-
-##############################
-### CLICK CLOCK WOOD LOBBY ###
-##############################
-
-ccw_lobby_warps_dict = {
-    "Safe": [
-        ],
-    "Unsafe": [
-        "Lobby_Spring_Entrance",
-        "Lobby_Summer_Entrance",
-        "Lobby_Fall_Entrance",
-        "Lobby_Winter_Entrance",
-        ],
-    "Safe_Transform": [
-        ],
-    "Unsafe_Transform": [
-        ],
-}
-
-###############################
-### CLICK CLOCK WOOD SPRING ###
-###############################
-
-ccw_spring_warps_dict = {
-    "Safe": [
-#             "Spring_Warp_From_Lobby",
-        "Spring_Outside_Mumbo_Skull",
-        "Spring_Outside_Nabnut_Door",
-        "Spring_Outside_Nabnut_Window",
-        "Spring_Outside_Whipcrack_Room"
-        ],
-    "Unsafe": [
-#             "Spring_Warp_To_Lobby",
-        "Spring_Inside_Mumbo_Skull",
-        "Spring_Inside_Nabnut_Door",
-        "Spring_Inside_Nabnut_Window",
-        "Spring_Inside_Whipcrack_Room"
-        ],
-    "Safe_Transform": [
-#         "Spring_Outside_Beehive",
-        ],
-    "Unsafe_Transform": [
-#         "Spring_Inside_Beehive",
-        ],
-}
-
-###############################
-### CLICK CLOCK WOOD SUMMER ###
-###############################
-
-ccw_summer_warps_dict = {
-    "Safe": [
-#             "Summer_Warp_From_Lobby",
-        "Summer_Outside_Mumbo_Skull",
-        "Summer_Outside_Nabnut_Door",
-        "Summer_Outside_Nabnut_Window",
-        "Summer_Outside_Whipcrack_Room",
-        "Summer_Outside_Beehive",
-        ],
-    "Unsafe": [
-#             "Summer_Warp_To_Lobby",
-        "Summer_Inside_Mumbo_Skull",
-        "Summer_Inside_Nabnut_Door",
-        "Summer_Inside_Nabnut_Window",
-        "Summer_Inside_Whipcrack_Room",
-        "Summer_Inside_Beehive",
-        ],
-    "Safe_Transform": [
-        ],
-    "Unsafe_Transform": [
-        ],
-}
-
-#############################
-### CLICK CLOCK WOOD FALL ###
-#############################
-
-ccw_fall_warps_dict = {
-    "Safe": [
-#             "Fall_Warp_From_Lobby",
-        "Fall_Outside_Mumbo_Skull",
-        "Fall_Outside_Nabnut_Door",
-        "Fall_Outside_Nabnut_Window",
-        "Fall_Outside_Whipcrack_Room",
-        "Fall_Outside_Attic_1",
-        "Fall_Outside_Beehive",
-        ],
-    "Unsafe": [
-        "Fall_Warp_To_Lobby",
-        "Fall_Inside_Mumbo_Skull",
-        "Fall_Inside_Nabnut_Door",
-        "Fall_Inside_Nabnut_Window",
-        "Fall_Inside_Whipcrack_Room",
-        "Fall_Inside_Attic_1",
-        "Fall_Inside_Beehive",
-        ],
-    "Safe_Transform": [
-        ],
-    "Unsafe_Transform": [
-        ],
-}
-
-###############################
-### CLICK CLOCK WOOD WINTER ###
-###############################
-
-ccw_winter_warps_dict = {
-    "Safe": [
-        "Winter_Warp_From_Lobby",
-        "Winter_Outside_Mumbo_Skull",
-        "Winter_Outside_Nabnut_Door",
-        "Winter_Outside_Nabnut_Window",
-        "Winter_Outside_Whipcrack_Room",
-        "Winter_Outside_Attic_1",
-        "Winter_Outside_Attic_2",
-        ],
-    "Unsafe": [
-#             "Winter_Warp_To_Lobby",
-        "Winter_Inside_Mumbo_Skull",
-        "Winter_Inside_Nabnut_Door",
-        "Winter_Inside_Nabnut_Window",
-        "Winter_Inside_Whipcrack_Room",
-        "Winter_Inside_Attic_1",
-        "Winter_Inside_Attic_2",
-        ],
-    "Safe_Transform": [
-        ],
-    "Unsafe_Transform": [
-        ],
-}
-
-############################
-### CLICK CLOCK WOOD ALL ###
-############################
-
-ccw_all_warps_dict = {
-    "Safe": [
-        "Spring_Warp_To_Lobby",
-        "Summer_Warp_To_Lobby",
-        "Fall_Warp_To_Lobby",
-        "Winter_Warp_To_Lobby",
-        ],
-    "Unsafe": [
-        "Spring_Outside_Mumbo_Skull",
-        "Spring_Outside_Nabnut_Door",
-        "Spring_Outside_Nabnut_Window",
-        "Spring_Outside_Whipcrack_Room",
-        "Summer_Outside_Mumbo_Skull",
-        "Summer_Outside_Nabnut_Door",
-        "Summer_Outside_Nabnut_Window",
-        "Summer_Outside_Whipcrack_Room",
-        "Summer_Outside_Beehive",
-        "Fall_Outside_Mumbo_Skull",
-        "Fall_Outside_Nabnut_Door",
-        "Fall_Outside_Nabnut_Window",
-        "Fall_Outside_Whipcrack_Room",
-        "Fall_Outside_Attic_1",
-        "Fall_Outside_Beehive",
-        "Winter_Outside_Mumbo_Skull",
-        "Winter_Outside_Nabnut_Door",
-        "Winter_Outside_Nabnut_Window",
-        "Winter_Outside_Whipcrack_Room",
-        "Winter_Outside_Attic_1",
-        "Winter_Outside_Attic_2",
-        "Lobby_Spring_Entrance",
-        "Lobby_Summer_Entrance",
-        "Lobby_Fall_Entrance",
-        "Lobby_Winter_Entrance",
-        "Spring_Inside_Mumbo_Skull",
-        "Spring_Inside_Nabnut_Door",
-        "Spring_Inside_Nabnut_Window",
-        "Spring_Inside_Whipcrack_Room",
-        "Summer_Inside_Mumbo_Skull",
-        "Summer_Inside_Nabnut_Door",
-        "Summer_Inside_Nabnut_Window",
-        "Summer_Inside_Whipcrack_Room",
-        "Summer_Inside_Beehive",
-        "Fall_Inside_Mumbo_Skull",
-        "Fall_Inside_Nabnut_Door",
-        "Fall_Inside_Nabnut_Window",
-        "Fall_Inside_Whipcrack_Room",
-        "Fall_Inside_Attic_1",
-        "Fall_Inside_Beehive",
-        "Winter_Inside_Mumbo_Skull",
-        "Winter_Inside_Nabnut_Door",
-        "Winter_Inside_Nabnut_Window",
-        "Winter_Inside_Whipcrack_Room",
-        "Winter_Inside_Attic_1",
-        "Winter_Inside_Attic_2",
-        ],
-    "Safe_Transform": [
-#         "Spring_Outside_Beehive",
-        ],
-    "Unsafe_Transform": [
-#         "Spring_Inside_Beehive",
-        ],
+    },
+    "Mad Monster Mansion": {
+    },
+    "Rusty Bucket Bay": {
+    },
+    "Click Clock Wood - Lobby": {
+    },
+    "Click Clock Wood - Spring": {
+    },
+    "Click Clock Wood - Summer": {
+    },
+    "Click Clock Wood - Fall": {
+    },
+    "Click Clock Wood - Winter": {
+    },
+    "Click Clock Wood": {
+    },
 }

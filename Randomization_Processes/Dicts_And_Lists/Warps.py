@@ -930,7 +930,7 @@ bottles_world_warp_dict = {
             "Available_Slots": 3,
             "Possible_Bottles": {
                 "Turbo_Talon_Trot": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
-                "King_Sandybutt_1_up": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
+                "King_Sandybutt_1_up": [["Eggs", "Turbo_Talon_Trot", "Beak_Buster"], ["Eggs", "Talon_Trot", "Beak_Buster"]],
                 "Water_Pyramid_1_up": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
                 "Yellow_Jinjo": [],
                 "Green_Jinjo": [["Talon_Trot"], ["Turbo_Talon_Trot"]],

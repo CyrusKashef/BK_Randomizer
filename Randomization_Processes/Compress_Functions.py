@@ -131,10 +131,10 @@ class Compressor():
 
     def _extract_unchanged_setup(self, addr):
         '''For every setup file not randomized, pull it out of the ROM into a compressed file.'''
-        with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "rb") as file:
+        with open(f"{self._file_dir}Randomized_ROM/Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "rb") as file:
             file_bytes = file.read()
         (address1, address2) = get_address_endpoints(file_bytes, addr)
-        with open(f"{self._file_dir}Randomized_ROM\\{addr}-Randomized_Compressed.bin", "w+b") as comp_file:
+        with open(f"{self._file_dir}Randomized_ROM/{addr}-Randomized_Compressed.bin", "w+b") as comp_file:
             for index in range(address1, address2):
                 hex_string = str(hex(file_bytes[index]))[2:]
                 if(len(hex_string) < 2):
@@ -143,7 +143,7 @@ class Compressor():
 
     def _compress_file(self, file_name):
         """Compresses the hex file that was extracted from the main ROM file"""
-        cmd = f"{self._file_dir}GZIP.EXE -c {self._file_dir}Randomized_ROM\\{file_name.upper()}-Decompressed.bin > {self._file_dir}Randomized_ROM\\{file_name.upper()}-New_Compressed.bin"
+        cmd = f"{self._file_dir}GZIP.EXE -c {self._file_dir}Randomized_ROM/{file_name.upper()}-Decompressed.bin > {self._file_dir}Randomized_ROM/{file_name.upper()}-New_Compressed.bin"
         subprocess.Popen(cmd.split(),shell=True).communicate()
     
     def _post_compress_operations(self, file_name, header, footer, decomp_len, padding_text="AA"):
@@ -290,7 +290,7 @@ class Compressor():
         file_list = os.listdir(f"{self._file_dir}Randomized_ROM/")
         for index_dec in range(setup_pointer_start, setup_pointer_end + 1, 8):
             index_hex_str = str(hex(index_dec))[2:]
-            if((index_hex_str + "-Decompressed.bin") not in file_list):
+            if((f"{index_hex_str}-Decompressed.bin" not in file_list) and (f"{index_hex_str}-Randomized_Compressed.bin" not in file_list)):
                 self._extract_unchanged_setup(index_hex_str)
         # For every modified file,
         #     Compress it and reformat it to prepare for insertion
@@ -334,9 +334,14 @@ class Compressor():
         print("Bottles Move Texts")
         self._section_compression_main(speech_file_ids, 0xAFD0, 0xDA00) # Bottles Move Texts
         if(self.master.skip_furnace_fun_var.get() == 1):
-            print("Brentilda Hints")
-#             self._section_compression_main(speech_file_ids, 0xE2B0, 0xE3A0) # Brentilda Hints
-            self._section_compression_main(speech_file_ids, 0xE2B0, 0xFFB8, furnace_fun_questions_pointer_list) # Brentilda Hints & Furnace Fun & Whatever Is In Between
+            print("Lair Speeches & Brentilda Hints")
+            self._section_compression_main(speech_file_ids, 0xDAC8, 0xFFB8, furnace_fun_questions_pointer_list) # Gruntilda Lair Speeches, Brentilda Hints, Furnace Fun & Whatever Is In Between
+#             self._section_compression_main(speech_file_ids, 0xE2B0, 0xFFB8, furnace_fun_questions_pointer_list) # Brentilda Hints & Furnace Fun & Whatever Is In Between
+        else:
+            if((self.master.before_blue_egg_carry_value.get() != 100) or (self.master.after_blue_egg_carry_value.get() != 200) or
+               (self.master.before_red_feather_carry_value.get() != 50) or (self.master.after_red_feather_carry_value.get() != 100) or
+               (self.master.before_gold_feather_carry_value.get() != 10) or (self.master.after_gold_feather_carry_value.get() != 20)):
+                self._section_compression_main(speech_file_ids, 0xDBD8, 0xDBE8, furnace_fun_questions_pointer_list)
         print("BK Models Through Note Doors")
         self._section_compression_main(texture_setup_ids, 0x7900, 0x8320) # Note Doors
         if(self.master.world_entrance_var.get() != "None"):
@@ -348,7 +353,11 @@ class Compressor():
         if(self.master.buttons_var.get() == 1):
             print("RBB Boat 1")
             self._section_compression_main(texture_setup_ids, 0x10418, 0x10418) # RBB Boat 1
+#         if((self.master.gruntilda_difficulty_var.get() == 3) and self.master.skip_furnace_fun_var.get() and ("69" in str(self._seed_val))):
+#             print("Furnace Fun Returns")
+#             self._section_compression_main({}, 0x10678, 0x10680)
         if(self.master.gruntilda_difficulty_var.get() > 0):
+            print("Typical Harder Grunty")
             self._section_compression_main(level_model_ids, 0x10678, 0x10678) # Final Battle Area 1
         print("ASM")
         self._location_compression_main(asm_setup_ids)

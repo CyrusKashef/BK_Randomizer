@@ -49,35 +49,35 @@
             "0x6180": "Chimpy Walking"
         }
     },
-    "Buzzbomb Zubba Swap 1": {
-        "Swap 1": {
+    "Buzzbomb Zubba Swap1": {
+        "Swap1": {
             "0x6660": "Buzzbomb Flying"
         },
-        "Swap 2": {
+        "Swap2": {
             "0x6A18": "Zubba Flying"
         }
     },
-    "Buzzbomb Zubba Swap 2": {
-        "Swap 1": {
+    "Buzzbomb Zubba Swap2": {
+        "Swap1": {
             "0x6710": "Buzzbomb Charging"
         },
-        "Swap 2": {
+        "Swap2": {
             "0x6A10": "Zubba Flying Moving"
         }
     },
-    "Buzzbomb Zubba Swap 3": {
-        "Swap 1": {
+    "Buzzbomb Zubba Swap3": {
+        "Swap1": {
             "0x6718": "Buzzbomb Falling From Sky"
         },
-        "Swap 2": {
+        "Swap2": {
             "0x6A20": "Zubba Falling"
         }
     },
-    "Buzzbomb Zubba Swap 4": {
-        "Swap 1": {
+    "Buzzbomb Zubba Swap4": {
+        "Swap1": {
             "0x6720": "Buzzbomb Dying"
         },
-        "Swap 2": {
+        "Swap2": {
             "0x6A28": "Zubba Landing"
         }
     },

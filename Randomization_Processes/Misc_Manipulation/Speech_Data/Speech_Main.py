@@ -840,6 +840,493 @@ class Speech_Manipulation_Class():
                                                           furnace_fun_json[pointer_index_str]["Answer_2"],
                                                           furnace_fun_json[pointer_index_str]["Answer_3"])
     
+    ###############################
+    ### GRUNTILDA LAIR SPEECHES ###
+    ###############################
+    
+    ### RANDOM SPEECHES ###
+    
+    def _gruntilda_lair_speech_1(self, message1, message2):
+        # 0xDAC8 - 5CCCE0
+        # GRUNTILDA: Your feathered buddy, that you've brung, useless like a pile of dung!
+        grunty_text = Speech_File_Class(self._file_dir, "DAC8")
+        grunty_text._replace_line("594F5552204645415448455245442042", message1)
+        grunty_text._replace_line("5553454C455353204C494B4520412050", message2)
+    
+    def _gruntilda_lair_speech_2(self, message1, message2):
+        # 0xDAD0 - 5CCD38
+        # GRUNTILDA: Hey Banjo, you're looking glum, it must be hard, being so dumb!
+        grunty_text = Speech_File_Class(self._file_dir, "DAD0")
+        grunty_text._replace_line("", message1)
+        grunty_text._replace_line("", message2)
+    
+    def _gruntilda_lair_speech_3(self, message1, message2):
+        # 0xDAD8 - 5CCD90
+        # GRUNTILDA: Many tricks are up my sleeve, to save yourself you'd better leave!
+        grunty_text = Speech_File_Class(self._file_dir, "DAD8")
+        grunty_text._replace_line("4D414E5920545249434B532041524520", message1)
+        grunty_text._replace_line("544F205341564520594F555253454C46", message2)
+    
+    def _gruntilda_lair_speech_4(self, message1, message2):
+        # 0xDAE0 - 5CCDE8
+        # GRUNTILDA: I can see it's quite hard work, to lump around that squawking jerk!
+        grunty_text = Speech_File_Class(self._file_dir, "DAE0")
+        grunty_text._replace_line("492043414E2053454520495427532051", message1)
+        grunty_text._replace_line("544F204C554D502041524F554E442054", message2)
+    
+    def _gruntilda_lair_speech_5(self, message1, message2):
+        # 0xDAE8 - 5CCE40
+        # GRUNTILDA: How bright they are, your stupid shorts, a target for my dumb cohorts!
+        grunty_text = Speech_File_Class(self._file_dir, "DAE8")
+        grunty_text._replace_line("484F5720425249474854205448455920", message1)
+        grunty_text._replace_line("412054415247455420464F52204D5920", message2)
+    
+    def _gruntilda_lair_speech_6(self, message1, message2):
+        # 0xDAF0 - 5CCE98
+        # GRUNTILDA: Join me now and dump the bear, that little backpack then I'll wear!
+        grunty_text = Speech_File_Class(self._file_dir, "DAF0")
+        grunty_text._replace_line("4A4F494E204D45204E4F5720414E4420", message1)
+        grunty_text._replace_line("54484154204C4954544C45204241434B", message2)
+    
+    def _gruntilda_lair_speech_7(self, message1, message2):
+        # 0xDAF8 - 5CCEF0
+        # GRUNTILDA: That ugly bear, you feathered freak, is nothing but a stupid geek!
+        grunty_text = Speech_File_Class(self._file_dir, "DAF8")
+        grunty_text._replace_line("544841542055474C5920424541522059", message1)
+        grunty_text._replace_line("4953204E4F5448494E47204255542041", message2)
+    
+    def _gruntilda_lair_speech_8(self, message1, message2):
+        # 0xDB00 - 5CCF48
+        # GRUNTILDA: It really does sound quite absurd, adventure of a bear and bird!
+        grunty_text = Speech_File_Class(self._file_dir, "DB00")
+        grunty_text._replace_line("4954205245414C4C5920444F45532053", message1)
+        grunty_text._replace_line("414456454E54555245204F4620412042", message2)
+    
+    def _gruntilda_lair_speech_9(self, message1, message2):
+        # 0xDB08 - 5CCFA0
+        # GRUNTILDA: You side with Banjo but change tack, imagine you on Grunty's back!
+        grunty_text = Speech_File_Class(self._file_dir, "DB08")
+        grunty_text._replace_line("594F5520534944452057495448204241", message1)
+        grunty_text._replace_line("494D4147494E4520594F55204F4E2047", message2)
+    
+    def _gruntilda_lair_speech_10(self, message1, message2):
+        # 0xDB10 - 5CCFF8
+        # GRUNTILDA: I'm still here, I watch you play, but I can't think of much to say!
+        grunty_text = Speech_File_Class(self._file_dir, "DB10")
+        grunty_text._replace_line("49274D205354494C4C20484552452C20", message1)
+        grunty_text._replace_line("42555420492043414E2754205448494E", message2)
+    
+    def _gruntilda_lair_speech_11(self, message1, message2):
+        # 0xDB18 - 5CD050
+        # GRUNTILDA: When the back of Grunty's hand, whups your butt you'll hardly stand!
+        grunty_text = Speech_File_Class(self._file_dir, "DB18")
+        grunty_text._replace_line("5748454E20544845204241434B204F46", message1)
+        grunty_text._replace_line("574855505320594F5552204255545420", message2)
+    
+    def _gruntilda_lair_speech_12(self, message1, message2):
+        # 0xDB20 - 5CD0A8
+        # GRUNTILDA: Your butt will tell you and you'll know, when my boot swings to and fro!
+        grunty_text = Speech_File_Class(self._file_dir, "DB20")
+        grunty_text._replace_line("594F555220425554542057494C4C2054", message1)
+        grunty_text._replace_line("5748454E204D5920424F4F5420535749", message2)
+    
+    def _gruntilda_lair_speech_13(self, message1, message2):
+        # 0xDB28 - 5CD100
+        # GRUNTILDA: Monsters chase you, they're a hounding, then you'll get a Grunty pounding!
+        grunty_text = Speech_File_Class(self._file_dir, "DB28")
+        grunty_text._replace_line("", message1)
+        grunty_text._replace_line("", message2)
+    
+    def _gruntilda_lair_speech_14(self, message1, message2):
+        # 0xDB30 - 5CD158
+        # GRUNTILDA: Long of tooth and strong of arm, Grunty's got the lasting charm!
+        grunty_text = Speech_File_Class(self._file_dir, "DB30")
+        grunty_text._replace_line("4C4F4E47204F4620544F4F544820414E", message1)
+        grunty_text._replace_line("4752554E5459275320474F5420544845", message2)
+    
+    def _gruntilda_lair_speech_15(self, message1, message2):
+        # 0xDB38 - 5CD1A8
+        # GRUNTILDA: If you think I'm rather soft, I'll be waiting in the loft!
+        grunty_text = Speech_File_Class(self._file_dir, "DB38")
+        grunty_text._replace_line("494620594F55205448494E4B2049274D", message1)
+        grunty_text._replace_line("49274C4C2042452057414954494E4720", message2)
+    
+    def _gruntilda_lair_speech_16(self, message1, message2):
+        # 0xDB40 - 5CD1F8
+        # GRUNTILDA: Can't you get here any faster? Come and fight me, I'm the master!
+        grunty_text = Speech_File_Class(self._file_dir, "DB40")
+        grunty_text._replace_line("43414E275420594F5520474554204845", message1)
+        grunty_text._replace_line("434F4D4520414E44204649474854204D", message2)
+    
+    def _gruntilda_lair_speech_17(self, message1, message2):
+        # 0xDB48 - 5CD248
+        # GRUNTILDA: Why do I talk all the time, it's really hard to make these rhyme!
+        grunty_text = Speech_File_Class(self._file_dir, "DB48")
+        grunty_text._replace_line("57485920444F20492054414C4B20414C", message1)
+        grunty_text._replace_line("49542753205245414C4C592048415244", message2)
+    
+    def _gruntilda_lair_speech_18(self, message1, message2):
+        # 0xDB50 - 5CD2A0
+        # GRUNTILDA: I don't like stairs much in my lair, they always make me gasp for air!
+        grunty_text = Speech_File_Class(self._file_dir, "DB50")
+        grunty_text._replace_line("4920444F4E2754204C494B4520535441", message1)
+        grunty_text._replace_line("5448455920414C57415953204D414B45", message2)
+    
+    def _gruntilda_lair_speech_19(self, message1, message2):
+        # 0xDB58 - 5CD2F8
+        # GRUNTILDA: My filthy bed gives me a rash, I never wash, I save my cash!
+        grunty_text = Speech_File_Class(self._file_dir, "DB58")
+        grunty_text._replace_line("4D592046494C54485920424544204749", message1)
+        grunty_text._replace_line("49204E4556455220574153482C204920", message2)
+    
+    def _gruntilda_lair_speech_20(self, message1, message2):
+        # 0xDB60 - 5CD348
+        # GRUNTILDA: My belly's big, it's rather neat, it's years since I have seen my feet!
+        grunty_text = Speech_File_Class(self._file_dir, "DB60")
+        grunty_text._replace_line("4D592042454C4C592753204249472C20", message1)
+        grunty_text._replace_line("495427532059454152532053494E4345", message2)
+    
+    def _gruntilda_lair_speech_21(self, message1, message2):
+        # 0xDB68 - 5CD3A0
+        # GRUNTILDA: I've learned this spell, it's really neat, I'll keep it later for your treat!
+        grunty_text = Speech_File_Class(self._file_dir, "DB68")
+        grunty_text._replace_line("49275645204C4541524E454420544849", message1)
+        grunty_text._replace_line("49274C4C204B454550204954204C4154", message2)
+    
+    def _gruntilda_lair_speech_22(self, message1, message2):
+        # 0xDB70 - 5CD400
+        # GRUNTILDA: Grunty admits she's a hog, I really need a big hot dog!
+        grunty_text = Speech_File_Class(self._file_dir, "DB70")
+        grunty_text._replace_line("", message1)
+        grunty_text._replace_line("", message2)
+    
+    def _gruntilda_lair_speech_23(self, message1, message2):
+        # 0xDB78 - 5CD450
+        # GRUNTILDA: This stupid quest you should stop, you won't get to me at the top!
+        grunty_text = Speech_File_Class(self._file_dir, "DB78")
+        grunty_text._replace_line("54484953205354555049442051554553", message1)
+        grunty_text._replace_line("594F5520574F4E27542047455420544F", message2)
+    
+    def _gruntilda_lair_speech_24(self, message1, message2):
+        # 0xDB80 - 5CD4A0
+        # GRUNTILDA: My next world is the hardest yet, and you will fail, on that I'll bet!
+        grunty_text = Speech_File_Class(self._file_dir, "DB80")
+        grunty_text._replace_line("4D59204E45585420574F524C44204953", message1)
+        grunty_text._replace_line("414E4420594F552057494C4C20464149", message2)
+    
+    def _gruntilda_lair_speech_25(self, message1, message2):
+        # 0xDB88 - 5CD4F8
+        # GRUNTILDA: Tooty's fate is looking grim, it's because her brother's dim!
+        grunty_text = Speech_File_Class(self._file_dir, "DB88")
+        grunty_text._replace_line("544F4F54592753204641544520495320", message1)
+        grunty_text._replace_line("49542753204245434155534520484552", message2)
+    
+    def _gruntilda_lair_speech_26(self, message1, message2):
+        # 0xDB90 - 5CD548
+        # GRUNTILDA: I've got this skirt so when I'm thinner, it really makes me look a winner!
+        grunty_text = Speech_File_Class(self._file_dir, "DB90")
+        grunty_text._replace_line("4927564520474F54205448495320534B", message1)
+        grunty_text._replace_line("4954205245414C4C59204D414B455320", message2)
+    
+    def _gruntilda_lair_speech_27(self, message1, message2):
+        # 0xDB98 - 5CD5A0
+        # GRUNTILDA: When Tooty is a big ole lump, I've got just the frock to hide her rump!
+        grunty_text = Speech_File_Class(self._file_dir, "DB98")
+        grunty_text._replace_line("5748454E20544F4F5459204953204120", message1)
+        grunty_text._replace_line("49275645204A55535420544845204652", message2)
+    
+    def _gruntilda_lair_speech_28(self, message1, message2):
+        # 0xDBA0 - 5CD5F8
+        # GRUNTILDA: Grunty's stomach and leg thins, goodbye to all those double chins!
+        grunty_text = Speech_File_Class(self._file_dir, "DBA0")
+        grunty_text._replace_line("4752554E54592753204C45475320414E", message1)
+        grunty_text._replace_line("474F4F4442594520544F20414C4C2054", message2)
+    
+    def _gruntilda_lair_speech_29(self, message1, message2):
+        # 0xDBA8 - 5CD650
+        # GRUNTILDA: When I'm nice and thin once more, burgers, fries, and chips galore!
+        grunty_text = Speech_File_Class(self._file_dir, "DBA8")
+        grunty_text._replace_line("5748454E2049274D204E49434520414E", message1)
+        grunty_text._replace_line("425552474552532C2046524945532041", message2)
+    
+    def _gruntilda_lair_speech_30(self, message1, message2):
+        # 0xDBB0 - 5CD6A8
+        # GRUNTILDA: Tooty says she's fine with me, if you go home I'll set her free!
+        grunty_text = Speech_File_Class(self._file_dir, "DBB0")
+        grunty_text._replace_line("544F4F54592053415953205348452753", message1)
+        grunty_text._replace_line("494620594F5520474F20484F4D452049", message2)
+    
+    def _gruntilda_lair_speech_31(self, message1, message2):
+        # 0xDBB8 - 5CD6F8
+        # GRUNTILDA: Grunty's plan is rather cunning, when I'm thin, guys will be running!
+        grunty_text = Speech_File_Class(self._file_dir, "DBB8")
+        grunty_text._replace_line("4752554E5459275320504C414E204953", message1)
+        grunty_text._replace_line("5748454E2049274D205448494E204755", message2)
+    
+    ### FIXED SPEECHES ###
+    
+    def _gruntilda_lair_speech_32(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: There he is, the fun begins, my tricks and traps will see who wins!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "THERE HE IS, THE FUN BEGINS, WITH THESE SETTINGS LET'S SEE WHO WINS!")
+    
+    def _gruntilda_lair_speech_33(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: That was such an easy fit, the others may just test your wit!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_34(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: You've found some notes but you need more, to break my spell and pass this door!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "YOU GOT SOME NOTES, THOUGHT YOU WERE STOCKED, BUT UNTIL THEN, GET SOFTLOCKED!")
+    
+    def _gruntilda_lair_speech_35(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: That door was easy you got past, unfortunately your first and last!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_36(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: When you open a world door, baddies escape and roam once more!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "WORLDS ARE NOT THE ONLY CHANGE, IN MY LAIR, THINGS ARE STRANGE!")
+    
+    def _gruntilda_lair_speech_37(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Hey, book brain, what did you say? You'd better not give my spells away!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_38(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: If one more page I see you turn, then Grunty shall make Cheato burn!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_39(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: That traitor book has pushed its luck, so in the burning fire I'll chuck!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_40(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: It's not over stupid bear, see my picture over there!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_41(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: To fill it up is no mean feat, lots of Jiggies make it complete!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "GET ONE LAST LOOK AT MY PIC! IN A MOMENT, I WILL LOOK SLICK!")
+    
+    def _gruntilda_lair_speech_42(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Pieces that you've left behind, to battle me you must go find!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_43(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Don't be sure you silly pot, soon I'll have you nice and hot!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_44(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: See these filthy clothes I've got, when I've won you'll wash the lot!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_45(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Grunty's fate this should not be, so hurry, Klungo, rescue me!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_46(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Stop using cheats in my tower, you are getting all the power.
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_47(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Now I will erase your Game Pak, because you had the need to hack!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_48(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: That golden treasure was for me, now harder still the game will be!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_49(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: That lousy cheat for extra eggs, won't help bear and chicken legs!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_50(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: All my feathers, it makes me sick, fly to me, your butt I'll kick!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_51(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Golden Feathers you may have twenty, but bruises you'll still get plenty!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_52(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Stop this cheating Grunty says, or your Game Pak I'll erase!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_53(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: You didn't listen, I'm amazed, so now your Game Pak is erased!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_54(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: First you see it, now you don't, the fast one wins, the slow one won't!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_55(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: I'll be young and Tooty old, before you get Gruntilda's gold!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_56(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Grunty's race you cannot beat, until you find some faster feet!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_57(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Oh, those lovely thorns, how they've grown, music to my ears as you moan!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_58(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: I can't believe you went in there, wash your hands now, filthy bear!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_59(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: These two guests are rather dumb, let's make sure they're unwelcome!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_60(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Yes I'm mad, my boot I'll put, up your useless spooky butt!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_61(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Big oak door is very tough, stupid bear's not fast enough!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_62(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: My oily water, in you plunge, you'll lose air while in that gunge!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_63(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Under the scum you'll breathe your last, 'cuz air is used twice as fast!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_64(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Stupid bear, you'll have to learn, that red hot ovens tend to burn!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_65(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: A simple task you were sure, but Grunty's engines start once more!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_66(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: My bramble field makes you yelp, and loss of life it sure does help!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_67(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: You'll use your air up double fold, I've made this water double cold!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_68(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: Yes that's right, swim under there, icy water takes double air!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_69(self):
+        # 0x0000 - 000000
+        # GRUNTILDA: What's wrong Banjo, is it tough? Let me know when you've had enough!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    def _gruntilda_lair_speech_70(self):
+        # 0xDBF8 - 5CDC40
+        # GRUNTILDA: I'm sad to say down there you'll stop, 'cuz I'm safe here at the top!
+        grunty_text = Speech_File_Class(self._file_dir, "")
+        grunty_text._replace_line("", "")
+    
+    ##################
+    ### SANDCASTLE ###
+    ##################
+    
+    def _raised_maximum_blue_eggs_speech(self):
+        # 0xDBD8 - 5CDA58
+        # Cheato: 200 EGGS ARE NOW YOURS! NOW 200 IS MAXIMUM TOO!
+        # Grunty: THAT LOUSY CHEAT FOR EXTRA EGGS,
+        # Grunty: WON'T HELP BEAR AND CHICKEN LEGS!
+        grunty_text = Speech_File_Class(self._file_dir, "DBD8")
+        grunty_text._replace_line("323030204547475320415245204E4F57", "YOU CAN NOW CARRY MORE EGGS!")
+    
+    def _raised_maximum_red_feathers_speech(self):
+        # 0xDBE0 - 5CDAD0
+        # Cheato: BEAR AND BIRD GET 100 RED FEATHERS. 100 MAXIMUM NOW IS!
+        # Grunty: ALL MY FEATHERS, IT MAKES ME SICK,
+        # Grunty: FLY TO ME, YOUR BUTT I'LL KICK!
+        grunty_text = Speech_File_Class(self._file_dir, "DBE0")
+        grunty_text._replace_line("4245415220414E442042495244204745", "YOU CAN NOW CARRY MORE RED FEATHERS!")
+    
+    def _raised_maximum_gold_feathers_speech(self):
+        # 0xDBE8 - 5CDB50
+        # Cheato: 20 GOLD FEATHERS YOU GET! NEW MAXIMUM 20 IS!
+        # Grunty: GOLD FEATHERS YOU MAY HAVE TWENTY,
+        # Grunty: BUT BRUISES YOU'LL STILL GET PLENTY!
+        grunty_text = Speech_File_Class(self._file_dir, "DBE8")
+        grunty_text._replace_line("323020474F4C44204645415448455253", "YOU CAN NOW CARRY MORE GOLD FEATHERS!")
+    
     #####################
     ### MISCELLANEOUS ###
     #####################

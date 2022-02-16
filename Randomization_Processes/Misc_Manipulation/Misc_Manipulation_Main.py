@@ -10,7 +10,7 @@ Created on Oct 9, 2021
 #####################
 
 from mmap import mmap
-from random import seed, choices, shuffle
+from random import seed, choices, shuffle, sample
 
 ###################
 ### FILE IMPORT ###
@@ -162,12 +162,34 @@ class Misc_Manipulation_Class():
             self._gv_cheat_sheet(selectable_values)
     
     ##################
+    ### MMM OPTION ###
+    ##################
+    
+    def _motzand_keys_main(self):
+        seed(a=(self._seed_val))
+        pattern_1 = sample(range(0, 23), 5)
+        print(f"Pattern 1: {pattern_1}")
+        seed(a=(self._seed_val + 5))
+        pattern_2 = sample(range(0, 23), 10)
+        print(f"Pattern 2: {pattern_2}")
+        with open(f"{self._file_dir}Randomized_ROM/FA8CE6-Decompressed.bin", "r+b") as decomp_file:
+            mm_decomp = mmap(decomp_file.fileno(), 0)
+            for count, index in enumerate(range(0xD4, 0xD9)):
+                mm_decomp[index] = pattern_1[count]
+            for count, index in enumerate(range(0x7EC, 0x7F1)):
+                mm_decomp[index] = pattern_1[count]
+            for count, index in enumerate(range(0xDC, 0xE6)):
+                mm_decomp[index] = pattern_2[count]
+            for count, index in enumerate(range(0x7F4, 0x7FE)):
+                mm_decomp[index] = pattern_2[count]
+    
+    ##################
     ### RBB OPTION ###
     ##################
     
     def _rbb_code_texture(self, button_combo):
         '''Edits the texture of the side of the boat with the button combination'''
-        with open(f"{self._file_dir}Randomized_ROM\\10418-Decompressed.bin", "r+b") as decomp_file:
+        with open(f"{self._file_dir}Randomized_ROM/10418-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap(decomp_file.fileno(), 0)
             # Clears Number
             for index1 in range(0x1CD60, 0x1CF90, 0x20):
@@ -178,7 +200,7 @@ class Misc_Manipulation_Class():
                 for index2 in range(0x00, 0x0C):
                     index = index1 + index2
                     mm_decomp[index] = 0x11
-        with open(f"{self._file_dir}Randomized_ROM\\10418-Decompressed.bin", "r+b") as decomp_file:
+        with open(f"{self._file_dir}Randomized_ROM/10418-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap(decomp_file.fileno(), 0)
             index_list = [0x1CDE4, 0x1CDE8, 0x1CDEC, 0x1CDF0, 0x1CDF4, 0x1CDF8]
             for num in range(len(button_combo)):
@@ -292,10 +314,13 @@ class Misc_Manipulation_Class():
             game_engine_obj._starting_moves()
         if(self._grandmaster.free_transformations_var.get() == 1):
             game_engine_obj._mumbo_transformations_costs()
+        if(self._grandmaster.one_health_banjo_var.get() == 1):
+            game_engine_obj._max_health()
         game_engine_obj._blue_egg_limit(int(self._grandmaster.before_blue_egg_carry_value.get()), int(self._grandmaster.after_blue_egg_carry_value.get()))
         game_engine_obj._red_feather_limit(int(self._grandmaster.before_red_feather_carry_value.get()), int(self._grandmaster.after_red_feather_carry_value.get()))
         game_engine_obj._gold_feather_limit(int(self._grandmaster.before_gold_feather_carry_value.get()), int(self._grandmaster.after_gold_feather_carry_value.get()))
         game_engine_obj._new_game_start_level(self._grandmaster.new_area_var.get(), self._grandmaster.skip_intro_cutscene_var.get())
+        game_engine_obj._starting_lives(self._grandmaster.starting_lives_value.get())
 
     ########################
     ### EDIT OTHER TEXTS ###
@@ -338,3 +363,93 @@ class Misc_Manipulation_Class():
     def _edit_furnace_fun_questions_main(self):
         '''I probably won't implement this, since it seems everyone just wants to skip furnace fun'''
         pass
+    
+    def _gruntildas_lair_speeches_main(self):
+        grunty_lair_speeches_list = [
+            #"TOOTY SAYS SHE'S FINE WITH ME,", "IF YOU GO HOME I'LL SET HER FREE!"
+            # Inside Jokes
+            ("PROUD OF YOURSELF? THINK YOU'RE A HERO?", "YOU'RE NOTHING BUT A LEADING ZERO!"),
+            ("THERE'S A FEATURE YOU WANT TO SEE?", "REQUEST IT BEFORE VERSION 3!"),
+            # Shoutouts
+            ("WANT TO MAKE A BK HACK?", "JOIN THE SERVER CALLED BANJO'S BACKPACK!"), # Banjo's Backpack (Approved)
+            ("DON'T KNOW KURKO? THAT IS A CRIME!", "GO TRY OUT HIS JIGGIES OF TIME!"), # Kurko Mods (Approved)
+            ("ONLY ONE LEVEL, BUT IT'S WORTH A BOAST!", "GO TRY OUT CUT-THROAT COAST!"), # Retro (Approved)
+            ("YOU KNOW WHO DESERVES SOME RIBBONS?", "THAT ONE HACKER WE CALL MITTENZ!"), # Mittenz (Approved)
+            ("NEED MORE BK? HERE'S AN EXPANSION!", "LOOK UP A MOD CALLED GRUNTY'S MANSION!"), # JacksonG13 (Approved)
+            ("WANT A CHALLENGE WHERE YOU'RE SURE TO DIE?", "TRY FORT FUN BY THATCOWGUY!"), # ThatCowGuy (Approved)
+            ("BELOVED BY ALL, HIS MUSIC IS DOPE!", "BIG SHOUTOUTS TO GRANT KIRKHOPE!"), # Grant Kirkhope
+            ("YOU'RE OUT OF STYLE, COULDN'T BE LAMER!", "TRY WEARING A HAT, AND BEING A GAMER!"), # HatWearingGamer (Approved)
+            ("YOU WANT TO SEE A MODDED TOOIE?", "THERE'S TONS OF FEATURES ON SNOOIE!"), # Wedarobi (Approved)
+            ("YOU SEEM TO BE FULL OF RAGE.", "TRY CALMING DOWN LIKE MONOTONE GAGE!"), # Gage (Approved)
+            ("BLAST THAT STUPID NINPALK SKIP!", "I NEED THAT CUTSCENE FOR TIME TO DIP"), # Ninpalk (Approved)
+#             ("YOU HAVEN'T CLIPPED THROUGH THE FLOOR AT LEAST,", "IT SEEMS YOU'RE NO 8 BIT BEAST!"), # The8BitBeast
+            ("WANNA SEE RUNNERS AT A FAST PACE?", "CHECK OUT THE TWITCH CHANNEL BANJO RACE!"), # GarageDoorOpener (Approved)
+            ("LOVEABLE STREAMER, HIS NAME IS DEDE,", "FULL OF CHARM AND HIS SOCKS ARE STINKY!"), # Dedelux (Approved)
+#             ("AZMI HAS WORLD RECORD, BUT HE'S NOT PREPARED,", "TO PLAY THE RANDO, I HAVE HIM SCARED!"), # Azmi
+            ("NADE, CHILE, TREP, AND MORE,", "ARE TOO AFRAID OF LOSING THEIR NOTE SCORE!"), # XBOX Players
+            # Poking The Community
+            ("WE GET IT, YOU CAN STOP, GOGO!", "THE GRUNTY'S REVENGE SCENE WILL NEVER GROW!"), # G0go (Approved)
+            # References
+            ("MARIO IS JUST A PLUMBER,", "BUT YOU STILL MANAGE TO BE DUMBER!"), # Mario
+            ("IF KIRBY DECIDED TO SWALLOW YOU,", "THEN HE'D END UP STUPID TOO!"), # Kirby
+            ("THAT'S ALL YOU HAVE, JUST YOU TWO?", "HALF THE SIZE OF THE DK CREW!"), # Donkey Kong
+            ("TOO MANY ITEMS, I THINK NOT!", "YOU STILL NEED BOMBCHUS AND A HOOKSHOT!"), # Legend Of Zelda
+            ("YOU LEARN NEW MOVES BUT ONLY USE FOUR,", "GET IN MY POKEBALL, I'LL TEACH YOU MORE!"), # Pokemon
+            ("A BEAR AND A BIRD? NO ONE WANTS THAT!", "WE ALL WANT THE LIZARD AND BAT!"), # Yooka Laylee
+            ("OVER THE FIREPLACE YOU SHALL STAY,", "WHILE I DRINK MY POTIONS ON A BAD FUR DAY!"), # Conker
+            ("MY NEW TRICKS WILL MAKE YOU FOOLIES,", "JUST WAIT TIL YOU'RE GRABBED BY THE GHOULIES!"), # Grabbed By The Ghoulies
+            ("WHEN I AM PRETTY, I'LL ATTRACT THE COLTS,", "WHILE YOU PLAY WITH YOUR NUTS AND BOLTS!"), # Nuts And Bolts
+            ("YOU SUMMON KAZOOIE, IS THAT HER PREFERENCE?", "LOOKS A LOT LIKE A JOJO REFERENCE!"), # Jojo's Bizzare Adventure
+            ("COULD YOU HAVE ANY SLOWER PACING?", "YOU SHOULD GO BACK TO DIDDY KONG RACING!"), # Diddy Kong Racing
+            ("YOU LACK STYLE, BUT YOUR BACKPACK'S GOT DRIP.", "I'VE SEEN IT BEFORE IN AN AIRSHIP!"), # Among Us Reference
+            ("YOU THINK YOU'RE GOOD, I THINK YOU'RE TRASH!", "LET'S SETTLE THIS IN SMASH!"), # Super Smash Bros
+            ("YOU LACK WIT, YOU HAVE NO BRAIN!", "I'M SURPRISED YOU COULD FLY A PLANE!"), # Banjo Pilots
+            # Community Submissions
+            ("HAVE YOU EVER TRIED HOLDING Z?", "SOME WACKY DRAGON USED IT TO GET PAST ME!"), # BlackDragonMax
+            ("I DON'T LIKE SAND MUCH IN MY LAIR.", "IT'S COURSE AND ROUGH AND GETS EVERYWHERE!"), # HatWearingGamer
+            ]
+        seed(a=(self._seed_val))
+        shuffle(grunty_lair_speeches_list)
+        self.speech_manip._gruntilda_lair_speech_1(grunty_lair_speeches_list[0][0], grunty_lair_speeches_list[0][1])
+        self.speech_manip._gruntilda_lair_speech_2(grunty_lair_speeches_list[1][0], grunty_lair_speeches_list[1][1])
+        self.speech_manip._gruntilda_lair_speech_3(grunty_lair_speeches_list[2][0], grunty_lair_speeches_list[2][1])
+        self.speech_manip._gruntilda_lair_speech_4(grunty_lair_speeches_list[3][0], grunty_lair_speeches_list[3][1])
+        self.speech_manip._gruntilda_lair_speech_5(grunty_lair_speeches_list[4][0], grunty_lair_speeches_list[4][1])
+        self.speech_manip._gruntilda_lair_speech_6(grunty_lair_speeches_list[5][0], grunty_lair_speeches_list[5][1])
+        self.speech_manip._gruntilda_lair_speech_7(grunty_lair_speeches_list[6][0], grunty_lair_speeches_list[6][1])
+        self.speech_manip._gruntilda_lair_speech_8(grunty_lair_speeches_list[7][0], grunty_lair_speeches_list[7][1])
+        self.speech_manip._gruntilda_lair_speech_9(grunty_lair_speeches_list[8][0], grunty_lair_speeches_list[8][1])
+        self.speech_manip._gruntilda_lair_speech_10(grunty_lair_speeches_list[9][0], grunty_lair_speeches_list[9][1])
+        self.speech_manip._gruntilda_lair_speech_11(grunty_lair_speeches_list[10][0], grunty_lair_speeches_list[10][1])
+        self.speech_manip._gruntilda_lair_speech_12(grunty_lair_speeches_list[11][0], grunty_lair_speeches_list[11][1])
+        self.speech_manip._gruntilda_lair_speech_13(grunty_lair_speeches_list[12][0], grunty_lair_speeches_list[12][1])
+        self.speech_manip._gruntilda_lair_speech_14(grunty_lair_speeches_list[13][0], grunty_lair_speeches_list[13][1])
+        self.speech_manip._gruntilda_lair_speech_15(grunty_lair_speeches_list[14][0], grunty_lair_speeches_list[14][1])
+        self.speech_manip._gruntilda_lair_speech_16(grunty_lair_speeches_list[15][0], grunty_lair_speeches_list[15][1])
+        self.speech_manip._gruntilda_lair_speech_17(grunty_lair_speeches_list[16][0], grunty_lair_speeches_list[16][1])
+        self.speech_manip._gruntilda_lair_speech_18(grunty_lair_speeches_list[17][0], grunty_lair_speeches_list[17][1])
+        self.speech_manip._gruntilda_lair_speech_19(grunty_lair_speeches_list[18][0], grunty_lair_speeches_list[18][1])
+        self.speech_manip._gruntilda_lair_speech_20(grunty_lair_speeches_list[19][0], grunty_lair_speeches_list[19][1])
+        self.speech_manip._gruntilda_lair_speech_21(grunty_lair_speeches_list[20][0], grunty_lair_speeches_list[20][1])
+        self.speech_manip._gruntilda_lair_speech_22(grunty_lair_speeches_list[21][0], grunty_lair_speeches_list[21][1])
+        self.speech_manip._gruntilda_lair_speech_23(grunty_lair_speeches_list[22][0], grunty_lair_speeches_list[22][1])
+        self.speech_manip._gruntilda_lair_speech_24(grunty_lair_speeches_list[23][0], grunty_lair_speeches_list[23][1])
+        self.speech_manip._gruntilda_lair_speech_25(grunty_lair_speeches_list[24][0], grunty_lair_speeches_list[24][1])
+        self.speech_manip._gruntilda_lair_speech_26(grunty_lair_speeches_list[25][0], grunty_lair_speeches_list[25][1])
+        self.speech_manip._gruntilda_lair_speech_27(grunty_lair_speeches_list[26][0], grunty_lair_speeches_list[26][1])
+        self.speech_manip._gruntilda_lair_speech_28(grunty_lair_speeches_list[27][0], grunty_lair_speeches_list[27][1])
+        self.speech_manip._gruntilda_lair_speech_29(grunty_lair_speeches_list[28][0], grunty_lair_speeches_list[28][1])
+        self.speech_manip._gruntilda_lair_speech_30(grunty_lair_speeches_list[29][0], grunty_lair_speeches_list[29][1])
+        self.speech_manip._gruntilda_lair_speech_31(grunty_lair_speeches_list[30][0], grunty_lair_speeches_list[30][1])
+    
+    def _adjust_sandcastle_speeches(self):
+        self.speech_manip._raised_maximum_blue_eggs_speech()
+        self.speech_manip._raised_maximum_red_feathers_speech()
+        self.speech_manip._raised_maximum_gold_feathers_speech()
+    
+############
+### MAIN ###
+############
+
+if __name__ == '__main__':
+    pass

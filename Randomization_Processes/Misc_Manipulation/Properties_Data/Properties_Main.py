@@ -29,12 +29,13 @@ class Properties_Manipulation_Class():
         self._file_dir = file_dir
         self._seed_val = seed_val
         self._properties_dict = read_json(f"{self._file_dir}Randomization_Processes/Misc_Manipulation/Properties_Data/Swappable_Properties.json")
-        asm_file_address_list = ["F19250", "F362EB", "F37F90", "F9CAE0", "FC4810", "FC6C0F",
-                                 "FB24A0", "FB42D9", "FAE860", "FB1AEB", "FA3FD0", "FA5D96",
-                                 "FB44E0", "FB9610", "FBEBE0", "FC3FEF", "FA9150", "FAE27E",
-#                                  "FA5F50", "FA8CE6", 
-                                 "FB9A30", "FBE5E2", "FD6190", "FDA2FF",
-                                 "FC9150", "FCF698", "FD0420", "FD5A60", "FC6F20", "FC8AFC"]
+        asm_file_address_list = [
+            "F19250", "F362EB", "F37F90", "F9CAE0", "FC4810", "FC6C0F",
+            "FB24A0", "FB42D9", "FAE860", "FB1AEB", "FA3FD0", "FA5D96",
+            "FB44E0", "FB9610", "FBEBE0", "FC3FEF", "FA9150", "FAE27E",
+            "FA5F50", "FA8CE6", "FB9A30", "FBE5E2", "FD6190", "FDA2FF",
+            "FC9150", "FCF698", "FD0420", "FD5A60", "FC6F20", "FC8AFC"
+            ]
         self._asm_file_address_list = []
         for asm_file_address in asm_file_address_list:
             self._asm_file_address_list.append(f"{self._file_dir}Randomized_ROM/{asm_file_address}-Decompressed.bin")
@@ -66,3 +67,4 @@ class Properties_Manipulation_Class():
         cheat_sheet_file = f"{self._file_dir}Randomized_ROM/PROPERTIES_CHEAT_SHEET_{self._seed_val}.json"
         with open(cheat_sheet_file, "w+") as json_file: 
             json.dump(self._new_properties_cheat_sheet, json_file, indent=4)
+

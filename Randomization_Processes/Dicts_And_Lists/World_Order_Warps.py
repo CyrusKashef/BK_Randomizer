@@ -328,7 +328,7 @@ bottles_world_warp_dict = {
                 "Summer_Grass_1_Up": [["Shock_Jump_Pad"]],
                 "Winter_Sir_Slush": [["Fly", "Beak_Bomb", "Shock_Jump_Pad"]],
                 "Yellow_Jinjo": [["Shock_Jump_Pad"]],
-                "Red_Jinjo": [["Talon_Trot", "Shock_Jump_Pad"]],
+                "Orange_Jinjo": [["Talon_Trot", "Shock_Jump_Pad"]],
                 }
             },
         }

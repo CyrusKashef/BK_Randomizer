@@ -95,53 +95,6 @@ class Level_Model_Class():
     ### GEOMETRY LAYOUT ###
     #######################
     
-    def _SORT(self):
-        print("SORT")
-        return 4
-    
-    def _BONE(self):
-        print("BONE")
-        return 4
-    
-    def _LOAD_DL(self):
-        print("LOAD_DL")
-        return 4
-    
-    def _SKINNING(self):
-        print("SKINNING")
-        return 4
-    
-    def _LOD(self):
-        print("LOD")
-        return 4
-    
-    def _REFERENCE_POINT(self):
-        print("REFERENCE_POINT")
-        return 4
-    
-    def _SELECTOR(self):
-        print("SELECTOR")
-        return 4
-    
-    def _DRAW_DISTANCE(self):
-        print("DRAW_DISTANCE")
-        return 4
-    
-    def _geometry_layout_main(self):
-        known_sort_commands_dict = {
-            0x1: self._SORT, 0x2: self._BONE,            0x3: self._LOAD_DL,  0x5: self._SKINNING,
-            0x8: self._LOD,  0xA: self._REFERENCE_POINT, 0xC: self._SELECTOR, 0xD: self._DRAW_DISTANCE,
-            }
-        curr_index = self._geometry_layout_offset
-        while(curr_index < self._file_length):
-            if((self.mm[curr_index] == 0) and (self.mm[curr_index + 1] == 0) and (self.mm[curr_index + 2] == 0) and (self.mm[curr_index + 3] in known_sort_commands_dict)):
-                command = self.mm[curr_index + 3]
-                index_add = known_sort_commands_dict[command]()
-                curr_index += index_add
-            else:
-                #print(f"{self.leading_zeros(self.mm[curr_index], 2)} {self.leading_zeros(self.mm[curr_index + 1], 2)} {self.leading_zeros(self.mm[curr_index + 2], 2)} {self.leading_zeros(self.mm[curr_index + 3], 2)}")
-                curr_index += 4
-    
     #####################
     ### TEXTURE SETUP ###
     #####################

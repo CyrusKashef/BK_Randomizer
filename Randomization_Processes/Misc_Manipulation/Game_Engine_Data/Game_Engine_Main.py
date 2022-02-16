@@ -17,6 +17,7 @@ import mmap
 ##########################
 
 from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids
+from Randomization_Processes.Common_Functions import leading_zeros
 # from ...Common_Functions import apply_patch
 
 #########################
@@ -42,8 +43,8 @@ class Game_Engine_Class():
 #         shutil.move(f"{this_dir}F37F90-Decompressed.bin", f"{self._file_dir}Randomized_ROM/F37F90-Decompressed.bin")
 
     def _starting_moves(self):
-        # 0x384E & 0x384F
-        # 0F 98 -> C3 A0
+        # 0xE84E & 0xE84F
+        # C3 A0 -> 0F 98
         self.mm[0xE84E] = 0x0F
         self.mm[0xE84F] = 0x98
     
@@ -120,3 +121,28 @@ class Game_Engine_Class():
         # new_start_level_id = (level_pointer - starting pointer) // 8
         # new_start_level_id = Game_Engine[new_start_level_name]
         self.mm[0x98BAE] = start_level_ids[load_game_start_level_name]
+    
+    def _starting_lives(self, life_count):
+        # 0xBF51A & 0xBF51B
+        # Default is 3 lives
+        # 24 18 00 [03]
+        life_count_str = leading_zeros(life_count, 4)
+        self.mm[0xBF51A] = int(life_count_str[:2], 16)
+        self.mm[0xBF51B] = int(life_count_str[2:], 16)
+    
+    def _starting_health(self, health_val):
+        # Starting Health
+        # 24 0E 00 [05]
+        life_count_str = leading_zeros(health_val, 4)
+        self.mm[0xBF516] = int(life_count_str[:2], 16)
+        self.mm[0xBF517] = int(life_count_str[2:], 16)
+    
+    def _start_double_health(self):
+        ## Double Health (I Think?)
+        # 24 03 00 02 24 03 00 [01]
+        self.mm[0xBF14F] = 0x02
+    
+    def _max_health(self):
+        ## Lower Health Total?
+        # 00 03 20 [C0]
+        self.mm[0xBF157] = 0x00

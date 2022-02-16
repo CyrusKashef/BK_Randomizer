@@ -209,8 +209,8 @@ master_enemy_dict = {
     "Vent": ["190C0289"],
     "Snarebear*": ["190C01E9"],
     "Snarebear (Dead)*": ["190C037E"],
-    "Snippet (Mutie)*": ["190C00F5"],
-    "Lockup*": ["050C0153"],
+    "Snippet (Mutie)*": ["190C00F5", "008C00F5"],
+    "Lockup*": ["050C0153", "190C0152"],
     "Whipcrack*": ["008C030F"],
     "Whiplash*": ["190C028A"],
     }

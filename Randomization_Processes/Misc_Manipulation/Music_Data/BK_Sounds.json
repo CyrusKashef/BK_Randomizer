@@ -25,7 +25,6 @@
         "0x10B58": "Puzzle_Out",
         "0x10BA0": "Strum",
         "0x10BD8": "Gruntys_Spell",
-        "0x10BE0": "Bottles_Game_Piece",
         "0x10BF8": "Pick_Up_Puzzle_Piece",
         "0x10C00": "Put_Puzzle_Piece_Down",
         "0x10C18": "Jinjonator_Hitting_Grunty1",
@@ -63,8 +62,6 @@
         "0x10B98": "Turbo_Talon_Trot_Short",
         "0x10BA8": "Jinjonator",
         "0x10BC8": "Door_Of_Grunty_Opening",
-        "0x10BF0": "Start_Of_Bottles_Game",
-        "0x10C08": "Start_Of_Bottles_Game",
         "0x10CA8": "Final_Game_Over"
     },
     "Loops": {
@@ -150,7 +147,6 @@
         "0x10B80": "CCW_SNS",
         "0x10B88": "Collection_Of_SNS_Item",
         "0x10BB8": "Cast_List",
-        "0x10BE8": "Bottles_Game_Music",
         "0x10C10": "Barbecue_Tune",
         "0x10C88": "Gruntys_Lament",
         "0x10C90": "Tootys_Theme",
@@ -158,8 +154,8 @@
         "0x10CA0": "Gruntys_Lament"
     },
     "Beta_Short": {
-        "0x10810": "Beta?",
-        "0x10938": "Beta?"
+        "0x10810": "Beta_Short_1?",
+        "0x10938": "Beta_Short_2?"
     },
     "Beta_Jingle": {
         "0x10A28": "Beta_Game_Over"
@@ -180,6 +176,10 @@
         "0x10BB0": "Jinjonator_Appearing",
         "0x10BC0": "Jinjonator_Charging",
         "0x10BD0": "Grunty_Falling",
+        "0x10BE0": "Bottles_Game_Piece",
+        "0x10BE8": "Bottles_Game_Music",
+        "0x10BF0": "Start_Of_Bottles_Game",
+        "0x10C08": "Start_Of_Bottles_Game",
         "0x10C68": "Barbeque_Shock1",
         "0x10C70": "Barbeque_Shock2",
         "0x10C78": "Barbeque_Shock3",

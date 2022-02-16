@@ -11,12 +11,6 @@ Created on Aug 30, 2021
 import mmap
 import random
 
-####################
-### FILE IMPORTS ###
-####################
-
-from ..Dicts_And_Lists import Sequences
-
 ########################
 ### SETUP FILE CLASS ###
 ########################
@@ -476,4 +470,3 @@ class SetupFile():
             one_up_index = self.mm.find(bytes.fromhex("190C0049"))
             self._edit_object_index(orange_index, {9: 0x49})
             self._edit_object_index(one_up_index, {9: 0x29})
-            
