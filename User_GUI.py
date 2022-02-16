@@ -50,6 +50,11 @@ tool_tips_dict = {
     "SEED": {
         "RANDOM_SEED_BUTTON": "Click the button to generate a random seed.",
         },
+    "SETTING_CODE": {
+        "GENERATING_SETTING_CODE": "Generates a settings code to verify matching settings with another user.\n" +
+                                   "This code does not apply for the file directory, seed value, BK's model,\n" +
+                                   "colors, music settings, skyboxes, sprites, and miscellaneous settings.",
+        },
     "FLAGGED_OBJECTS": {
         "FRAME":
             "NONE:\n"+
@@ -234,6 +239,7 @@ tool_tips_dict = {
         },
     "MAD_MONSTER_MANSION": {
         "POTS_ARE_LIT": "Flower pots are shuffled with the fire pain objects.",
+        "MOTZAND_KEYS": "Motzand's music pattern is randomized.",
         },
     "RUSTY_BUCKET_BAY": {
         "RANDOMIZED_BUTTON_COMBO": "Generates a random 6-digit combination of 1s, 2s, and 3s for the\n" +
@@ -271,7 +277,7 @@ from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0"
+BK_RANDO_VERSION = "2.0.20220212"
 
 #######################
 ### ERROR GUI CLASS ###
@@ -291,7 +297,7 @@ def Error_GUI(error_msg):
     error_msg = error_msg
     error_window.winfo_toplevel().title("Banjo-Kazooie Randomizer Error")
     error_window.config(background="#F3E5AB")
-    # Mumbo Jumbo Talking
+    # Bottles Talking
     frame_count = 10
     frames = [tk.PhotoImage(master=error_window, file=(f"{os.getcwd()}/Pictures/Bottles_Speaking.gif"), format = 'gif -index %i' %(i)) for i in range(frame_count)]
     bottles_talking_label = tk.Label(error_window, background="#F3E5AB")
@@ -302,6 +308,7 @@ def Error_GUI(error_msg):
     ok_btn = tk.Button(error_window, text='Doh!', background="#F3E5AB", command=error_window.destroy, font=("LITHOGRAPH-BOLD", 12))
     ok_btn.config(anchor='center')
     ok_btn.pack(padx=5, pady=2)
+    error_window.protocol("WM_DELETE_WINDOW", error_window.destroy)
     error_window.after(0, update_bottles_gif, 0)
     error_window.mainloop()
 
@@ -376,6 +383,8 @@ class User_GUI_Class():
     def _select_rom_file(self):
         '''Opens a browser to select the ROM file ending in .z64'''
         filename = tkinter.filedialog.askopenfilename(initialdir=self.cwd, title="Select The BK ROM File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
+        if(not filename):
+            return
         if(" " in filename):
             filename = space_in_directory(filename)
         self.rom_file_entry.set(filename)
@@ -455,6 +464,214 @@ class User_GUI_Class():
             self.shorts_vertex_var.set(self.bk_model_json[bk_model_preset]["Shorts_Vertex"])
             self.shorts_texture_var.set(self.bk_model_json[bk_model_preset]["Shorts_Texture"])
     
+    def _select_non_softlock_enemies(self):
+        for enemy_name in self.enemy_checkbox_dict:
+            if("*" in enemy_name):
+                self.enemy_checkbox_dict[enemy_name].set(0)
+            else:
+                self.enemy_checkbox_dict[enemy_name].set(1)
+    
+    def _remove_all_enemies(self):
+        for enemy_name in self.enemy_checkbox_dict:
+            self.enemy_checkbox_dict[enemy_name].set(0)
+    
+    def _randomizer_settings_int_to_char_translator(self):
+#         print(f"Randomizer Settings Generated Code: {self.randomizer_settings_code}")
+        randomizer_settings_code = self.generated_randomizer_settings_code
+        ascii_code = ""
+        while(randomizer_settings_code > 0):
+            curr_val = (randomizer_settings_code % 26) + 65
+            ascii_code = chr(curr_val) + ascii_code
+            randomizer_settings_code = randomizer_settings_code // 26
+        self.randomizer_setting_code_value.set(ascii_code)
+    
+    def _random_starting_area(self):
+        self.new_area_var.set(choice([option for option in start_level_ids]))
+    
+    def _skip_intro_cutscene_checkbox(self, *args):
+        if(self.new_area_var.get() != "SM - Main"):
+            self.skip_intro_cutscene_var.set(1)
+    
+    ################################
+    ### RANDOMIZER SETTINGS CODE ###
+    ################################
+    
+    def _add_randomizer_settings_to_code(self, add_val, counter_add=1):
+        self.generated_randomizer_settings_code += (int(add_val) << self.randomizer_settings_count)
+        self.randomizer_settings_count += counter_add
+    
+    def _generate_randomizer_settings_code(self):
+        self.generated_randomizer_settings_code = 0
+        self.randomizer_settings_count = 0
+        ### General Settings ###
+        # Flagged Objects
+        self._add_randomizer_settings_to_code(["None", "Shuffle (World)", "Shuffle (Game)"].index(self.flagged_object_var.get()), 2)
+        self._add_randomizer_settings_to_code(self.flagged_object_abnormalities_var.get())
+        self._add_randomizer_settings_to_code(self.flagged_object_softlock_var.get())
+        self._add_randomizer_settings_to_code(self.final_puzzle_var.get())
+        self._add_randomizer_settings_to_code(self.final_puzzle_value.get())
+        self._add_randomizer_settings_to_code(self.free_transformations_var.get())
+        self._add_randomizer_settings_to_code(self.one_health_banjo_var.get())
+        # Non-Flagged Objects
+        self._add_randomizer_settings_to_code(["None", "Shuffle (World)"].index(self.non_flagged_object_var.get()))
+        self._add_randomizer_settings_to_code(self.non_flagged_object_abnormalities_var.get())
+        self._add_randomizer_settings_to_code(self.starting_lives_value.get(), 8)
+        # Structs
+        self._add_randomizer_settings_to_code(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"].index(self.struct_var.get()), 3)
+        self._add_randomizer_settings_to_code(["Scaling Note Doors", "Final Note Door Only"].index(self.final_note_door_var.get()))
+        self._add_randomizer_settings_to_code(self.final_note_door_value.get(), 11)
+        self._add_randomizer_settings_to_code(self.before_blue_egg_carry_value.get(), 9)
+        self._add_randomizer_settings_to_code(self.after_blue_egg_carry_value.get(), 9)
+        self._add_randomizer_settings_to_code(self.before_red_feather_carry_value.get(), 9)
+        self._add_randomizer_settings_to_code(self.after_red_feather_carry_value.get(), 9)
+        self._add_randomizer_settings_to_code(self.before_gold_feather_carry_value.get(), 9)
+        self._add_randomizer_settings_to_code(self.after_gold_feather_carry_value.get(), 9)
+        # World Entrances
+        self._add_randomizer_settings_to_code(["None", "Basic Shuffle", "Bottles Shuffle"].index(self.world_entrance_var.get()), 2)
+        self._add_randomizer_settings_to_code(self.all_starting_moves_var.get())
+        # Within World Warps
+        self._add_randomizer_settings_to_code(["None", "Shuffle By World", "Shuffle By Game"].index(self.within_world_warps_var.get()), 2)
+        # Starting World
+        self._add_randomizer_settings_to_code([option for option in start_level_ids].index(self.new_area_var.get()), 8)
+        self._add_randomizer_settings_to_code(self.skip_intro_cutscene_var.get())
+        # Enemies
+        self._add_randomizer_settings_to_code(["None", "Shuffle", "Randomize"].index(self.enemies_var.get()), 2)
+        for enemy_name in sorted(self.enemy_checkbox_dict):
+            self._add_randomizer_settings_to_code(self.enemy_checkbox_dict[enemy_name].get())
+        ### Aesthetic Settings ###
+        # Enemy Models
+        self._add_randomizer_settings_to_code(self.other_model_var.get())
+        self._add_randomizer_settings_to_code(self.animation_var.get())
+        self._add_randomizer_settings_to_code(self.properties_var.get())
+        ### World Specific ###
+        # Gruntilda's Lair
+        self._add_randomizer_settings_to_code(self.skip_furnace_fun_var.get())
+        self._add_randomizer_settings_to_code(self.remove_magic_barriers_var.get())
+        self._add_randomizer_settings_to_code(self.gruntilda_difficulty_var.get(), 2)
+        self._add_randomizer_settings_to_code(self.monster_house_var.get())
+        self._add_randomizer_settings_to_code(self.what_floor_var.get())
+        self._add_randomizer_settings_to_code(self.grunty_size_var.get())
+        # Mumbo's Mountain
+        self._add_randomizer_settings_to_code(self.flowers_var.get())
+        # Treasure Trove Cove
+        self._add_randomizer_settings_to_code(self.scattered_structs_var.get())
+        # Clanker's Cavern
+        self._add_randomizer_settings_to_code(self.hard_rings_var.get())
+        # Bubblegloop Swamp
+        self._add_randomizer_settings_to_code(self.croctus_var.get())
+        self._add_randomizer_settings_to_code(self.mr_vile_var.get())
+        self._add_randomizer_settings_to_code(self.tiptup_choir_var.get())
+        # Freezeezy Peak
+        self._add_randomizer_settings_to_code(self.hard_races_var.get())
+        # Gobi's Valley
+        self._add_randomizer_settings_to_code(self.ancient_ones_var.get())
+        self._add_randomizer_settings_to_code(self.maze_jinxy_heads_var.get())
+        self._add_randomizer_settings_to_code(self.matching_puzzle_var.get())
+        # Mad Monster Mansion
+        self._add_randomizer_settings_to_code(self.lit_pots_var.get())
+        self._add_randomizer_settings_to_code(self.motzand_keys_var.get())
+        # Rusty Bucket Bay
+        self._add_randomizer_settings_to_code(self.buttons_var.get())
+        # Click Clock Wood
+        self._add_randomizer_settings_to_code(["By Season", "Within World"].index(self.ccw_var.get()))
+        self._randomizer_settings_int_to_char_translator()
+#         print(f"Code: {self.generated_randomizer_settings_code}")
+    
+    def _randomizer_settings_char_to_int_translator(self):
+        ascii_code = self.randomizer_setting_code_value.get()
+        randomizer_settings_code = 0
+        for char_count, char_value in enumerate(reversed(ascii_code)):
+            randomizer_settings_code += (ord(char_value) - 65) * (26 ** char_count)
+        return randomizer_settings_code
+#         print(f"Randomizer Settings Applied Code:   {self.randomizer_settings_code}")
+    
+    def _get_randomizer_setting(self, bit_count=1, options_list=None):
+        compare_to_value = (2 ** bit_count) - 1
+        set_this_option = self.applied_randomizer_settings_code & compare_to_value
+        self.applied_randomizer_settings_code = self.applied_randomizer_settings_code >> bit_count
+        if(options_list):
+            return options_list[set_this_option]
+        else:
+            return set_this_option
+    
+    def _apply_randomizer_settings_code(self):
+        try:
+            self.applied_randomizer_settings_code = self._randomizer_settings_char_to_int_translator()
+            self._randomizer_settings_char_to_int_translator()
+            ### General Settings ###
+            # Flagged Objects
+            self.flagged_object_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle (World)", "Shuffle (Game)"]))
+            self.flagged_object_abnormalities_var.set(self._get_randomizer_setting())
+            self.flagged_object_softlock_var.set(self._get_randomizer_setting())
+            self.final_puzzle_var.set(self._get_randomizer_setting())
+            self.final_puzzle_value.set(self._get_randomizer_setting())
+            self.free_transformations_var.set(self._get_randomizer_setting())
+            self.one_health_banjo_var.set(self._get_randomizer_setting())
+            # Non-Flagged Objects
+            self.non_flagged_object_var.set(self._get_randomizer_setting(options_list=["None", "Shuffle (World)"]))
+            self.non_flagged_object_abnormalities_var.set(self._get_randomizer_setting())
+            self.starting_lives_value.set(self._get_randomizer_setting(bit_count=8))
+            # Structs
+            self.struct_var.set(self._get_randomizer_setting(bit_count=3, options_list=["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
+            self.final_note_door_var.set(self._get_randomizer_setting(options_list=["Scaling Note Doors", "Final Note Door Only"]))
+            self.final_note_door_value.set(self._get_randomizer_setting(bit_count=11))
+            self.before_blue_egg_carry_value.set(self._get_randomizer_setting(bit_count=9))
+            self.after_blue_egg_carry_value.set(self._get_randomizer_setting(bit_count=9))
+            self.before_red_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
+            self.after_red_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
+            self.before_gold_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
+            self.after_gold_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
+            # World Entrances
+            self.world_entrance_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Basic Shuffle", "Bottles Shuffle"]))
+            self.all_starting_moves_var.set(self._get_randomizer_setting())
+            # Within World Warps
+            self.within_world_warps_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle By World", "Shuffle By Game"]))
+            # Starting World
+            self.new_area_var.set(self._get_randomizer_setting(bit_count=8, options_list=[option for option in start_level_ids]))
+            self.skip_intro_cutscene_var.set(self._get_randomizer_setting())
+            # Enemies
+            self.enemies_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle", "Randomize"]))
+            for enemy_name in sorted(self.enemy_checkbox_dict):
+                self.enemy_checkbox_dict[enemy_name].set(self._get_randomizer_setting())
+            ### Aesthetic Settings ###
+            # Enemy Models
+            self.other_model_var.set(self._get_randomizer_setting())
+            self.animation_var.set(self._get_randomizer_setting())
+            self.properties_var.set(self._get_randomizer_setting())
+            ### World Specific ###
+            # Gruntilda's Lair
+            self.skip_furnace_fun_var.set(self._get_randomizer_setting())
+            self.remove_magic_barriers_var.set(self._get_randomizer_setting())
+            self.gruntilda_difficulty_var.set(self._get_randomizer_setting(bit_count=2))
+            self.monster_house_var.set(self._get_randomizer_setting())
+            self.what_floor_var.set(self._get_randomizer_setting())
+            self.grunty_size_var.set(self._get_randomizer_setting())
+            # Mumbo's Mountain
+            self.flowers_var.set(self._get_randomizer_setting())
+            # Treasure Trove Cove
+            self.scattered_structs_var.set(self._get_randomizer_setting())
+            # Clanker's Cavern
+            self.hard_rings_var.set(self._get_randomizer_setting())
+            # Bubblegloop Swamp
+            self.croctus_var.set(self._get_randomizer_setting())
+            self.mr_vile_var.set(self._get_randomizer_setting())
+            self.tiptup_choir_var.set(self._get_randomizer_setting())
+            # Freezeezy Peak
+            self.hard_races_var.set(self._get_randomizer_setting())
+            # Gobi's Valley
+            self.ancient_ones_var.set(self._get_randomizer_setting())
+            self.maze_jinxy_heads_var.set(self._get_randomizer_setting())
+            self.matching_puzzle_var.set(self._get_randomizer_setting())
+            # Mad Monster Mansion
+            self.lit_pots_var.set(self._get_randomizer_setting())
+            self.motzand_keys_var.set(self._get_randomizer_setting())
+            # Rusty Bucket Bay
+            self.buttons_var.set(self._get_randomizer_setting())
+            # Click Clock Wood
+            self.ccw_var.set(self._get_randomizer_setting(options_list=["By Season", "Within World"]))
+        except IndexError:
+            Error_GUI(f"Error: Something went wrong with applying the settings.\nPlease check your settings code.")
+    
     ######################
     ### SETTING VALUES ###
     ######################
@@ -471,10 +688,14 @@ class User_GUI_Class():
         self.flagged_object_var.set("Shuffle (World)")
         self.flagged_object_abnormalities_var.set(0)
         self.flagged_object_softlock_var.set(0)
-        self.free_transformations_var.set(0),
+        self.final_puzzle_var.set(0)
+        self.final_puzzle_value.set(25)
+        self.free_transformations_var.set(0)
+        self.one_health_banjo_var.set(0)
         # Non-Flagged Objects
         self.non_flagged_object_var.set("Shuffle (World)")
         self.non_flagged_object_abnormalities_var.set(0)
+        self.starting_lives_value.set(3)
         # Structs
         self.struct_var.set("Shuffle (World)")
         self.final_note_door_var.set("Scaling Note Doors")
@@ -492,6 +713,7 @@ class User_GUI_Class():
         self.within_world_warps_var.set("Shuffle By World")
         # Starting Area
         self.new_area_var.set("SM - Main")
+        self.skip_intro_cutscene_var.set(0)
 #         self.load_area_var.set("GL - MM Puzzle/Entrance Room")
         # Enemies
         self.enemies_var.set("Randomize")
@@ -533,13 +755,12 @@ class User_GUI_Class():
         self.tool_tips_var.set(1)
         ### World Specific ###
         # Gruntilda's Lair
-        self.final_puzzle_var.set(0)
-        self.final_puzzle_value.set(0)
         self.skip_furnace_fun_var.set(0)
         self.remove_magic_barriers_var.set(0)
         self.gruntilda_difficulty_var.set(0)
         self.monster_house_var.set(1)
         self.what_floor_var.set(1)
+        self.grunty_size_var.set(1)
         # Mumbo's Mountain
         self.flowers_var.set(0)
         # Treasure Trove Cove
@@ -558,6 +779,7 @@ class User_GUI_Class():
         self.matching_puzzle_var.set(0)
         # Mad Monster Mansion
         self.lit_pots_var.set(0)
+        self.motzand_keys_var.set(0)
         # Rusty Bucket Bay
         self.buttons_var.set(0)
         # Click Clock Wood
@@ -566,18 +788,44 @@ class User_GUI_Class():
     def _load_configuration(self, button_press=True, random_file=False):
         '''Opens a chosen JSON file and sets the parameters to match those'''
         if(random_file):
-            list_of_files = os.listdir(f"{self.cwd}Configurations/")
-            if("Last_Used_Configuration.json" in list_of_files):
-                list_of_files.remove("Last_Used_Configuration.json")
-            list_of_configs = [file for file in list_of_files if(file.endswith(".json"))]
-            filename = f"{self.cwd}Configurations/{choice(list_of_configs)}"
+            try:
+                list_of_files = os.listdir(f"{self.cwd}Configurations/")
+                if("Last_Used_Configuration.json" in list_of_files):
+                    list_of_files.remove("Last_Used_Configuration.json")
+                list_of_configs = [file for file in list_of_files if(file.endswith(".json"))]
+                filename = f"{self.cwd}Configurations/{choice(list_of_configs)}"
+                with open(filename, "r") as json_file:
+                    json_data = json.load(json_file)
+            except FileNotFoundError:
+                Error_GUI("Error: File Not Found?!\nLeaving Settings As They Are.")
+                return
+            except Exception:
+                Error_GUI("Error Occurred During Random Configuration.\nLeaving Settings As They Are.")
+                return
         elif(button_press):
-            config_default_dir = f"{self.cwd}Configurations/"
-            filename = tkinter.filedialog.askopenfilename(initialdir=config_default_dir, title="Select A JSON Config File", filetypes =(("Json Files","*.json"),("all files","*.*")))
+            try:
+                config_default_dir = f"{self.cwd}Configurations/"
+                filename = tkinter.filedialog.askopenfilename(initialdir=config_default_dir, title="Select A JSON Config File", filetypes =(("Json Files","*.json"),("all files","*.*")))
+                with open(filename, "r") as json_file:
+                    json_data = json.load(json_file)
+            except FileNotFoundError:
+                Error_GUI("JSON File Was Not Found Or Operation Was Canceled.\nLeaving The Settings As They Are.")
+                return
+            except Exception:
+                Error_GUI("Error Occurred During Random Configuration.\nLeaving The Settings As They Are.")
+                return
         else:
-            filename = self.cwd + "Configurations/Last_Used_Configuration.json"
-        with open(filename, "r") as json_file:
-            json_data = json.load(json_file)
+            try:
+                filename = f"{self.cwd}Configurations/Last_Used_Configuration.json"
+                with open(filename, "r") as json_file:
+                    json_data = json.load(json_file)
+            except FileNotFoundError:
+                Error_GUI("Last Used Configuration File Not Found.\nImplementing The Default Settings!")
+                self._set_recommended_defaults()
+                return
+            except Exception:
+                Error_GUI("Error Occurred During Random Configuration.\nLeaving Settings As They Are.")
+                return
         ### ROM and Seed ###
         # ROM
         self.rom_file_entry.set(json_data["ROM_File"])
@@ -590,10 +838,12 @@ class User_GUI_Class():
         self.flagged_object_softlock_var.set(json_data["Flagged_Objects_Softlock"])
         self.final_puzzle_var.set(json_data["Final_Puzzle"])
         self.final_puzzle_value.set(json_data["Final_Puzzle_Value"])
-        self.free_transformations_var.set(json_data["Free Transformations"]),
+        self.free_transformations_var.set(json_data["Free_Transformations"])
+        self.one_health_banjo_var.set(json_data["One_Health_Only"])
         # Non-Flagged Objects
         self.non_flagged_object_var.set(json_data["Non_Flagged_Objects_Option"])
         self.non_flagged_object_abnormalities_var.set(json_data["Non_Flagged_Objects_Abnormalities"])
+        self.starting_lives_value.set(json_data["Starting_Lives"])
         # Structs
         self.struct_var.set(json_data["Struct_Option"])
         self.final_note_door_var.set(json_data["Final_Note_Door"])
@@ -654,6 +904,7 @@ class User_GUI_Class():
         self.gruntilda_difficulty_var.set(json_data["Final_Battle_Difficulty"])
         self.monster_house_var.set(json_data["Monster_House"])
         self.what_floor_var.set(json_data["What_Floor"])
+        self.grunty_size_var.set(json_data["Mini_Me"])
         # Mumbo's Mountain
         self.flowers_var.set(json_data["MM_Flowers"])
         # Treasure Trove Cove
@@ -672,6 +923,10 @@ class User_GUI_Class():
         self.matching_puzzle_var.set(json_data["GV_Matching_Puzzle"])
         # Mad Monster Mansion
         self.lit_pots_var.set(json_data["MMM_Lit_Pots"])
+        try:
+            self.motzand_keys_var.set(json_data["Motzand_Keys"])
+        except Exception:
+            pass
         # Rusty Bucket Bay
         self.buttons_var.set(json_data["RBB_Buttons"])
         # Click Clock Wood
@@ -691,10 +946,12 @@ class User_GUI_Class():
         self.flagged_object_softlock_var.set(randint(0, 1))
         self.final_puzzle_var.set(randint(0, 1))
         self.final_puzzle_value.set(randint(0, 99))
-        self.free_transformations_var.set(randint(0, 1)),
+        self.free_transformations_var.set(randint(0, 1))
+        self.one_health_banjo_var.set(randint(0, 1))
         # Non-Flagged Objects
         self.non_flagged_object_var.set(choice(["None", "Shuffle (World)"]))
         self.non_flagged_object_abnormalities_var.set(randint(0, 1))
+        self.starting_lives_value.set(randint(0, 69))
         # Structs
         self.struct_var.set(choice(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
         self.final_note_door_var.set(choice(["Scaling Note Doors", "Final Note Door Only"]))
@@ -703,11 +960,11 @@ class User_GUI_Class():
         else:
             self.final_note_door_value.set(randint(0, 900))
         self.before_blue_egg_carry_value.set(randint(0, 255))
-        self.after_blue_egg_carry_value.set(randint(self.before_blue_egg_carry_value.get(), 255))
+        self.after_blue_egg_carry_value.set(randint(int(self.before_blue_egg_carry_value.get()), 255))
         self.before_red_feather_carry_value.set(randint(0, 255))
-        self.after_red_feather_carry_value.set(randint(self.before_red_feather_carry_value.get(), 255))
+        self.after_red_feather_carry_value.set(randint(int(self.before_red_feather_carry_value.get()), 255))
         self.before_gold_feather_carry_value.set(randint(0, 255))
-        self.after_gold_feather_carry_value.set(randint(self.before_gold_feather_carry_value.get(), 255))
+        self.after_gold_feather_carry_value.set(randint(int(self.before_gold_feather_carry_value.get()), 255))
         # World Entrances
         self.world_entrance_var.set(choice(["None", "Basic Shuffle", "Bottles Shuffle"]))
         self.all_starting_moves_var.set(randint(0, 1))
@@ -715,6 +972,7 @@ class User_GUI_Class():
         self.within_world_warps_var.set(choice(["None", "Shuffle By World", "Shuffle By Game"]))
         # Starting World
         self.new_area_var.set(choice([option for option in start_level_ids]))
+        self.skip_intro_cutscene_var.set(randint(0, 1))
         # Enemies
         self.enemies_var.set(choice(["None", "Shuffle", "Randomize"]))
         for enemy_name in self.enemy_checkbox_dict:
@@ -745,6 +1003,15 @@ class User_GUI_Class():
         self.gruntilda_difficulty_var.set(randint(0, 3))
         self.monster_house_var.set(randint(0, 1))
         self.what_floor_var.set(randint(0, 1))
+        self.grunty_size_var.set(randint(0, 1))
+        if(not (self.monster_house_var.get() or self.what_floor_var.get() or self.grunty_size_var.get()) and self.gruntilda_difficulty_var.get()):
+            grunty_option = randint(0, 2)
+            if(grunty_option == 0):
+                self.monster_house_var.set(1)
+            elif(grunty_option == 1):
+                self.what_floor_var.set(1)
+            else:
+                self.grunty_size_var.set(1)
         # Mumbo's Mountain
         self.flowers_var.set(randint(0, 1))
         # Treasure Trove Cove
@@ -763,10 +1030,11 @@ class User_GUI_Class():
         self.matching_puzzle_var.set(randint(0, 1))
         # Mad Monster Mansion
         self.lit_pots_var.set(randint(0, 1))
+        self.motzand_keys_var.set(randint(0, 1))
         # Rusty Bucket Bay
         self.buttons_var.set(randint(0, 1))
         # Click Clock Wood
-        self.ccw_var.set(choice(["Season", "Within World"]))
+        self.ccw_var.set(choice(["By Season", "Within World"]))
     
     def _save_current_configuration(self, button_press=True):
         '''Writes the current configuration to a JSON file'''
@@ -783,10 +1051,12 @@ class User_GUI_Class():
             "Flagged_Objects_Softlock": self.flagged_object_softlock_var.get(),
             "Final_Puzzle": self.final_puzzle_var.get(),
             "Final_Puzzle_Value": self.final_puzzle_value.get(),
-            "Free Transformations": self.free_transformations_var.get(),
+            "Free_Transformations": self.free_transformations_var.get(),
+            "One_Health_Only": self.one_health_banjo_var.get(),
             # Non-Flagged Objects
             "Non_Flagged_Objects_Option": self.non_flagged_object_var.get(),
             "Non_Flagged_Objects_Abnormalities": self.non_flagged_object_abnormalities_var.get(),
+            "Starting_Lives": self.starting_lives_value.get(),
             # Structs
             "Struct_Option": self.struct_var.get(),
             "Final_Note_Door": self.final_note_door_var.get(),
@@ -845,6 +1115,7 @@ class User_GUI_Class():
             "Final_Battle_Difficulty": self.gruntilda_difficulty_var.get(),
             "Monster_House": self.monster_house_var.get(),
             "What_Floor": self.what_floor_var.get(),
+            "Mini_Me": self.grunty_size_var.get(),
             # Mumbo's Mountain
             "MM_Flowers": self.flowers_var.get(),
             # Treasure Trove Cove
@@ -863,6 +1134,7 @@ class User_GUI_Class():
             "GV_Matching_Puzzle": self.matching_puzzle_var.get(),
             # Mad Monster Mansion
             "MMM_Lit_Pots": self.lit_pots_var.get(),
+            "Motzand_Keys": self.motzand_keys_var.get(),
             # Rusty Bucket Bay
             "RBB_Buttons": self.buttons_var.get(),
             # Click Clock Wood
@@ -878,13 +1150,15 @@ class User_GUI_Class():
             except Exception:
                 pass # log something here?
         else:
-            config_file = self.cwd + "Configurations\\Last_Used_Configuration.json"
+            config_file = f"{self.cwd}Configurations/Last_Used_Configuration.json"
             with open(config_file, "w+") as json_file: 
                 json.dump(current_config, json_file, indent=4)
     
     #########################################
     ### VERIFY SETTINGS BEFORE SUBMITTING ###
     #########################################
+    
+    # GENERAL
     
     def _check_rom_directory(self):
         '''Checks if ROM file ends in .z64 and is located in the folder with GZIP.EXE'''
@@ -919,6 +1193,23 @@ class User_GUI_Class():
             return False
         return True
     
+    # COLLECTABLES
+    
+    def _check_final_puzzle_value(self):
+        '''Verifies the puzzle door limits are digits'''
+        final_puzzle_val = self.final_puzzle_value.get()
+        if(not final_puzzle_val.isdigit()):
+            Error_GUI(f"Final Puzzle Value Must Be An Integer: '{str(final_puzzle_val)}'")
+            return False
+        final_puzzle_val= int(final_puzzle_val)
+        if(final_puzzle_val < 0):
+            Error_GUI("Final Puzzle Value Must Be Greater Than Zero.")
+            return False
+        elif(final_puzzle_val > 100):
+            Error_GUI("Final Puzzle Value Must Be Less Than 100 Under These Settings.")
+            return False
+        return True
+    
     def _check_final_note_door_value(self):
         '''Verifies the note door limits are digits'''
         final_note_door_val = self.final_note_door_value.get()
@@ -937,24 +1228,109 @@ class User_GUI_Class():
             return False
         return True
     
-    def _check_final_puzzle_value(self):
-        '''Verifies the puzzle door limits are digits'''
-        final_puzzle_val = self.final_puzzle_value.get()
-        if(not final_puzzle_val.isdigit()):
-            Error_GUI(f"Final Puzzle Value Must Be An Integer: '{str(final_puzzle_val)}'")
-            return False
-        final_puzzle_val= int(final_puzzle_val)
-        if(final_puzzle_val < 0):
-            Error_GUI("Final Puzzle Value Must Be Greater Than Zero.")
-            return False
-        elif(final_puzzle_val > 100):
-            Error_GUI("Final Puzzle Value Must Be Less Than 100 Under These Settings.")
+    def _check_cheato_values(self):
+        for value in [self.before_blue_egg_carry_value.get(), self.after_blue_egg_carry_value.get(),
+                      self.before_red_feather_carry_value.get(), self.after_red_feather_carry_value.get(),
+                      self.before_gold_feather_carry_value.get(), self.after_gold_feather_carry_value.get()]:
+            if((not value.isdigit()) or (int(value) < 0) or (int(value) > 255)):
+                Error_GUI("Egg and Feather carrying capacities should be between 0 and 255.")
+                return False
+        return True
+    
+    def _check_starting_life_count(self):
+        starting_lives = self.starting_lives_entry.get()
+        if((not starting_lives.isdigit()) or (int(self.starting_lives_entry.get()) < 0) or (int(self.starting_lives_entry.get()) > 255)):
+            Error_GUI("Starting life count should be between 0 and 255.")
             return False
         return True
     
+    # AESTHETICS
+    
+    def _check_bk_colors(self):
+        self.banjo_fur_var.get()
+        self.tooth_necklace_var.get()
+        self.banjo_skin_var.get()
+        self.banjo_feet_var.get()
+        self.kazooie_primary_var.get()
+        self.kazooie_secondary_var.get()
+        self.kazooie_wing_primary_var.get()
+        self.kazooie_wing_secondary_var.get()
+        self.backpack_var.get()
+        self.wading_boots_var.get()
+        self.shorts_vertex_var.get()
+        self.shorts_texture_var.get()
+    
+    # CUSTOMIZABLE
+    
+    def _check_model_json(self):
+        try:
+            model_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/Swappable_Models.json")
+        except Exception as e:
+            print(e)
+            Error_GUI("Model JSON file did not open properly. May be formatted incorrectly.")
+            return False
+        for category in model_dict:
+            if("Swap1" in model_dict[category]):
+                for subcategory in model_dict[category]:
+                    if(not subcategory.startswith("Swap")):
+                        Error_GUI("Model JSON file not formatted incorrectly.\nSwap categories need to be labeled properly.")
+                        return False
+                    if(len(model_dict[category][subcategory]) != 1):
+                        Error_GUI("Model JSON file not formatted incorrectly.\nSwap categories need one value per subcategory.")
+                        return False
+            elif(("Original" in model_dict[category]) and ("Replacements" in model_dict[category])):
+                if(len(model_dict[category]["Original"]) > len(model_dict[category]["Replacements"])):
+                    Error_GUI("Model JSON file not formatted incorrectly.\nThere should be the same number or more Originals than Replacements.")
+                    return False
+            elif("Shuffle" not in model_dict[category]):
+                Error_GUI("Model JSON file not formatted incorrectly.")
+                return False
+        return True
+    
+    def _check_animation_json(self):
+        try:
+            animation_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Animation_Data/Swappable_Animations.json")
+        except Exception:
+            Error_GUI("Animation JSON file did not open properly. May be formatted incorrectly.")
+            return False
+        for category in animation_dict:
+            if("Swap1" in animation_dict[category]):
+                for subcategory in animation_dict[category]:
+                    if(not subcategory.startswith("Swap")):
+                        Error_GUI("Model JSON file not formatted incorrectly.\nSwap categories need to be labeled properly.")
+                        return False
+                    if(len(animation_dict[category][subcategory]) != 1):
+                        Error_GUI("Model JSON file not formatted incorrectly.\nSwap categories need one value per subcategory.")
+                        return False
+            elif(("Original" in animation_dict[category]) and ("Replacements" in animation_dict[category])):
+                if(len(animation_dict[category]["Original"]) > len(animation_dict[category]["Replacements"])):
+                    Error_GUI("Model JSON file not formatted incorrectly.\nThere should be the same number or more Original than Replacements.")
+                    return False
+            elif("Shuffle" not in animation_dict[category]):
+                Error_GUI("Animation JSON file not formatted incorrectly.")
+                return False
+        return True
+    
+    def _check_properties_json(self):
+        try:
+            properties_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Properties_Data/Swappable_Properties.json")
+        except Exception:
+            Error_GUI("Properties JSON file did not open properly. May be formatted incorrectly.")
+            return False
+        for category in properties_dict:
+            if(("Original" not in properties_dict[category]) or ("Selection" not in properties_dict[category])):
+                Error_GUI("Properties JSON file not formatted incorrectly.\nEach category needs Original and Selection.")
+                return False
+        return True
+    
+    # SUBMIT
+    
     def _submit(self):
         '''If all input paramaters meet the requirements, we move onto actually randomizing the game'''
-        if(self._check_rom_directory() and self._check_seed_value() and self._check_final_note_door_value() and self._check_final_puzzle_value()):
+        if(self._check_rom_directory() and self._check_seed_value() and
+           self._check_final_note_door_value() and self._check_final_puzzle_value() and self._check_cheato_values() and self._check_starting_life_count() and
+           self._check_model_json() and self._check_animation_json() and self._check_properties_json()):
+            print("Everything Checks")
             self._save_current_configuration(button_press=False)
             progression_app = Progression_GUI_Class(self)
             progression_app._main()
@@ -1020,10 +1396,10 @@ class User_GUI_Class():
         self.select_rom_button_ttp = self.CreateToolTip(self.select_rom_button_ttp_canvas, self, tool_tips_dict["ROM"]["SELECT_ROM_FILE"])
         self.folder_image = tk.PhotoImage(file=f"{self.cwd}Pictures/Open_File.png")
         self.select_rom_button = tk.Button(self.rom_frame, text='Select ROM File', image=self.folder_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size), command=self._select_rom_file)
-        self.select_rom_button.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.select_rom_button.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.rom_file_entry = tk.StringVar(self.rom_frame)
-        self.rom_file_display = tk.Entry(self.rom_frame, textvariable=self.rom_file_entry, state='readonly', width=40, font=(self.font_type, self.medium_font_size))
-        self.rom_file_display.grid(row=1, column=1, columnspan=2, padx=10, pady=self.pady)
+        self.rom_file_display = tk.Entry(self.rom_frame, textvariable=self.rom_file_entry, state='readonly', width=35, font=(self.font_type, self.medium_font_size))
+        self.rom_file_display.grid(row=0, column=2, columnspan=2, padx=10, pady=self.pady)
         ### Seed ###
         self.seed_frame = tk.LabelFrame(self._general_tab, text="Seed", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.seed_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
@@ -1032,10 +1408,23 @@ class User_GUI_Class():
         self.random_seed_button_ttp = self.CreateToolTip(self.random_seed_button_ttp_canvas, self, tool_tips_dict["SEED"]["RANDOM_SEED_BUTTON"])
         self._seed_image = tk.PhotoImage(file=f"{self.cwd}Pictures/Seed.png")
         self.random_seed_button = tk.Button(self.seed_frame, text='Select ROM File', command=self._random_seed, image=self._seed_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.random_seed_button.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.random_seed_button.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.seed_value = tk.StringVar(self.seed_frame)
         self.seed_entry = tk.Entry(self.seed_frame, textvariable=self.seed_value, width=20, font=(self.font_type, self.medium_font_size))
-        self.seed_entry.grid(row=1, column=1, columnspan=2, padx=10, pady=self.pady)
+        self.seed_entry.grid(row=0, column=2, columnspan=2, padx=10, pady=self.pady)
+        ### Randomizer Setting Code ###
+        self.randomizer_setting_code_frame = tk.LabelFrame(self._general_tab, text="Randomizer Setting Code", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
+        self.randomizer_setting_code_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
+        self.randomizer_setting_code_ttp_canvas = tk.Label(self.randomizer_setting_code_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.randomizer_setting_code_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady)
+        self.randomizer_setting_code_ttp = self.CreateToolTip(self.randomizer_setting_code_ttp_canvas, self, tool_tips_dict["SETTING_CODE"]["GENERATING_SETTING_CODE"])
+        self.generate_randomizer_setting_code_button = tk.Button(self.randomizer_setting_code_frame, text='Generate Settings Code', command=self._generate_randomizer_settings_code, foreground=self.white, background=self.red, font=(self.font_type, self.medium_font_size))
+        self.generate_randomizer_setting_code_button.grid(row=0, column=1, padx=10, pady=self.pady)
+        self.apply_randomizer_setting_code_button = tk.Button(self.randomizer_setting_code_frame, text='Apply Settings Code', command=self._apply_randomizer_settings_code, foreground=self.white, background=self.red, font=(self.font_type, self.medium_font_size))
+        self.apply_randomizer_setting_code_button.grid(row=0, column=2, padx=10, pady=self.pady)
+        self.randomizer_setting_code_value = tk.StringVar(self.randomizer_setting_code_frame)
+        self.randomizer_setting_code_entry = tk.Entry(self.randomizer_setting_code_frame, textvariable=self.randomizer_setting_code_value, width=45, font=(self.font_type, self.medium_font_size))
+        self.randomizer_setting_code_entry.grid(row=1, column=0, columnspan=5, padx=10, pady=self.pady, sticky='w')
         ### Random Settings ###
         self.random_settings_frame = tk.LabelFrame(self._general_tab, text="Random Settings", foreground=self.red, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.random_settings_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
@@ -1083,6 +1472,9 @@ class User_GUI_Class():
         self.free_transformations_var = tk.IntVar()
         self.free_transformations_checkbox = tk.Checkbutton(self.flagged_object_frame, text="Free Transformations", variable=self.free_transformations_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.free_transformations_checkbox.grid(row=3, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.one_health_banjo_var = tk.IntVar()
+        self.one_health_banjo_checkbox = tk.Checkbutton(self.flagged_object_frame, text="One Health Only", variable=self.one_health_banjo_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.one_health_banjo_checkbox.grid(row=3, column=3, padx=self.padx, pady=self.pady, sticky='w')
         # Structs
         self.struct_frame = tk.LabelFrame(self._collectables_tab, text="Notes, Blue Eggs, Red Feathers, & Gold Feathers", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.struct_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
@@ -1160,10 +1552,15 @@ class User_GUI_Class():
         self.non_flagged_object_dropdown = ttk.Combobox(self.non_flagged_object_frame, textvariable=self.non_flagged_object_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.non_flagged_object_dropdown['values'] = self.non_flagged_object_options
         self.non_flagged_object_dropdown['state'] = 'readonly'
-        self.non_flagged_object_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.non_flagged_object_dropdown.grid(row=0, column=1, columnspan=3, padx=self.padx, pady=self.pady, sticky='w')
         self.non_flagged_object_abnormalities_var = tk.IntVar()
         self.non_flagged_object_abnormalities_checkbutton = tk.Checkbutton(self.non_flagged_object_frame, text="Include Abnormalities (May Include Eggs and Feathers)", variable=self.non_flagged_object_abnormalities_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.non_flagged_object_abnormalities_checkbutton.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='sw')
+        self.non_flagged_object_abnormalities_checkbutton.grid(row=1, column=1, columnspan=3, padx=self.padx, pady=self.pady, sticky='sw')
+        self.starting_lives_text = tk.Label(self.non_flagged_object_frame, text="Starting Life Count:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.starting_lives_text.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.starting_lives_value = tk.StringVar(self.struct_frame)
+        self.starting_lives_entry = tk.Entry(self.non_flagged_object_frame, textvariable=self.starting_lives_value, width=6)
+        self.starting_lives_entry.grid(row=2, column=2, padx=self.padx, pady=self.pady, sticky='w')
         #################
         ### WARPS TAB ###
         #################
@@ -1185,7 +1582,7 @@ class User_GUI_Class():
         self.all_starting_moves_checkbutton = tk.Checkbutton(self.world_entrance_frame, text="Start Game With All Moves", variable=self.all_starting_moves_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.all_starting_moves_checkbutton.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='sw')
         # Within World Warps
-        self.within_world_warp_frame = tk.LabelFrame(self._warps_tab, text="Within The World Warps*", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.within_world_warp_frame = tk.LabelFrame(self._warps_tab, text="Within The World Warps", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.within_world_warp_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.within_world_warp_ttp_canvas = tk.Label(self.within_world_warp_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.within_world_warp_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
@@ -1196,13 +1593,20 @@ class User_GUI_Class():
         self.within_world_warps_dropdown['values'] = self.within_world_warps_options
         self.within_world_warps_dropdown['state'] = 'readonly'
         self.within_world_warps_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        warp_disclaimer_text = (
+            "WARNING:\n" +
+            "  The 'Shuffle By Game' option has some warps that crash\n"+
+            "  and notes do not save. Would not recommend. Use at own risk."
+            )
+        self.warp_disclaimer_text = tk.Label(self.within_world_warp_frame, text=warp_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.warp_disclaimer_text.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Starting Area
         self.starting_area_frame = tk.LabelFrame(self._warps_tab, text="Starting Area", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.starting_area_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.starting_area_ttp_canvas = tk.Label(self.starting_area_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.starting_area_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.new_area_ttp = self.CreateToolTip(self.starting_area_ttp_canvas, self, tool_tips_dict["STARTING_AREA"]["NEW_GAME"])
-        self.new_area_text = tk.Label(self.starting_area_frame, text="New Game Start Area", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.new_area_text = tk.Label(self.starting_area_frame, text="Starting Area", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.new_area_text.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.new_area_var = tk.StringVar(self.world_entrance_frame)
         self.starting_area_options = [option for option in start_level_ids]
@@ -1210,6 +1614,8 @@ class User_GUI_Class():
         self.new_area_dropdown['values'] = self.starting_area_options
         self.new_area_dropdown['state'] = 'readonly'
         self.new_area_dropdown.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.random_starting_area_button = tk.Button(self.starting_area_frame, text='Random\nStarting Area', command=self._random_starting_area, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
+        self.random_starting_area_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='w')
 #         self.load_area_text = tk.Label(self.starting_area_frame, text="Load Game Area", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
 #         self.load_area_text.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
 #         self.load_area_var = tk.StringVar(self.world_entrance_frame)
@@ -1219,6 +1625,7 @@ class User_GUI_Class():
         self.skip_intro_cutscene_var = tk.IntVar()
         self.skip_intro_cutscene_checkbutton = tk.Checkbutton(self.starting_area_frame, text="Skip Intro Cutscene", variable=self.skip_intro_cutscene_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.skip_intro_cutscene_checkbutton.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.new_area_var.trace('w', self._skip_intro_cutscene_checkbox)
         ###################
         ### ENEMIES TAB ###
         ###################
@@ -1238,6 +1645,10 @@ class User_GUI_Class():
         self.enemies_dropdown['values'] = self.enemies_options
         self.enemies_dropdown['state'] = 'readonly'
         self.enemies_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.non_softlock_enemies_button = tk.Button(self.enemies_frame, text='Select All\nNon-Softlock Enemies', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._select_non_softlock_enemies()))
+        self.non_softlock_enemies_button.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='e')
+        self.clear_enemies_button = tk.Button(self.enemies_frame, text='Remove All\nEnemies', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._remove_all_enemies()))
+        self.clear_enemies_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='e')
         self.enemy_checklist_frame = tk.LabelFrame(self.enemies_frame, text="Enemies To Include In Randomization:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.enemy_checklist_frame.grid(row=1, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
         self.enemy_checklist_frame["borderwidth"] = 0
@@ -1478,11 +1889,14 @@ class User_GUI_Class():
         self.what_floor_var = tk.IntVar()
         self.what_floor_checkbox = tk.Checkbutton(self.gruntildas_lair_frame, text="What Floor?", variable=self.what_floor_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.what_floor_checkbox.grid(row=3, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.grunty_size_var = tk.IntVar()
+        self.grunty_size_checkbox = tk.Checkbutton(self.gruntildas_lair_frame, text="Mini Me", variable=self.grunty_size_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.grunty_size_checkbox.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Mumbo's Mountain
         curr_background_color = "#009999"
         self._mumbos_mountain_tab = ttk.Frame(self._world_specific_tab_control)
         self._world_specific_tab_control.add(self._mumbos_mountain_tab, text="MM")
-        self.mumbos_mountain_frame = tk.LabelFrame(self._mumbos_mountain_tab, text="Mumbo's Mountain", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
+        self.mumbos_mountain_frame = tk.LabelFrame(self._mumbos_mountain_tab, text="Mumbo's Mountain", foreground=self.white, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.mumbos_mountain_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.mumbos_mountain_frame["borderwidth"] = 0
         self.mumbos_mountain_frame["highlightthickness"] = 0
@@ -1490,7 +1904,7 @@ class User_GUI_Class():
         self.flowers_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.flowers_checkbox_ttp = self.CreateToolTip(self.flowers_ttp_canvas, self, tool_tips_dict["MUMBOS_MOUNTAIN"]["INCLUDE_FLOWERS"])
         self.flowers_var = tk.IntVar()
-        self.flowers_checkbox = tk.Checkbutton(self.mumbos_mountain_frame, text="Include Flowers (Shuffling/Randomizing)", variable=self.flowers_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.flowers_checkbox = tk.Checkbutton(self.mumbos_mountain_frame, text="Include Flowers (Shuffling/Randomizing)", variable=self.flowers_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.flowers_checkbox.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Treasure Trove Cove
         curr_background_color = "#DDDD00"
@@ -1524,7 +1938,7 @@ class User_GUI_Class():
         curr_background_color = "#006600"
         self._bubblegloop_swamp_tab = ttk.Frame(self._world_specific_tab_control)
         self._world_specific_tab_control.add(self._bubblegloop_swamp_tab, text="BGS")
-        self.bubblegloop_swamp_frame = tk.LabelFrame(self._bubblegloop_swamp_tab, text="Bubblegloop Swamp", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
+        self.bubblegloop_swamp_frame = tk.LabelFrame(self._bubblegloop_swamp_tab, text="Bubblegloop Swamp", foreground=self.white, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.bubblegloop_swamp_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.bubblegloop_swamp_frame["borderwidth"] = 0
         self.bubblegloop_swamp_frame["highlightthickness"] = 0
@@ -1532,19 +1946,19 @@ class User_GUI_Class():
         self.croctus_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.croctus_checkbox_ttp = self.CreateToolTip(self.croctus_ttp_canvas, self, tool_tips_dict["BUBBLEGLOOP_SWAMP"]["SHUFFLE_CROCTUS_ORDER"])
         self.croctus_var = tk.IntVar()
-        self.croctus_checkbox = tk.Checkbutton(self.bubblegloop_swamp_frame, text="Shuffle Croctus Order", variable=self.croctus_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.croctus_checkbox = tk.Checkbutton(self.bubblegloop_swamp_frame, text="Shuffle Croctus Order", variable=self.croctus_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.croctus_checkbox.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.mr_vile_ttp_canvas = tk.Label(self.bubblegloop_swamp_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.mr_vile_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.mr_vile_checkbox_ttp = self.CreateToolTip(self.mr_vile_ttp_canvas, self, tool_tips_dict["BUBBLEGLOOP_SWAMP"]["MR_VILE_BIGGER_BADDER_CROCODILE"])
         self.mr_vile_var = tk.IntVar()
-        self.mr_vile_checkbox = tk.Checkbutton(self.bubblegloop_swamp_frame, text="Mr. Vile: Bigger, Badder Crocodile", variable=self.mr_vile_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.mr_vile_checkbox = tk.Checkbutton(self.bubblegloop_swamp_frame, text="Mr. Vile: Bigger, Badder Crocodile", variable=self.mr_vile_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.mr_vile_checkbox.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.tiptup_choir_ttp_canvas = tk.Label(self.bubblegloop_swamp_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.tiptup_choir_ttp_canvas.grid(row=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.tiptup_choir_checkbox_ttp = self.CreateToolTip(self.tiptup_choir_ttp_canvas, self, tool_tips_dict["BUBBLEGLOOP_SWAMP"]["TIPTUP_CHOIR_NO_ASSIGNED_SEATS"])
         self.tiptup_choir_var = tk.IntVar()
-        self.tiptup_choir_checkbox = tk.Checkbutton(self.bubblegloop_swamp_frame, text="Tiptup Choir: No Assigned Seats", variable=self.tiptup_choir_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.tiptup_choir_checkbox = tk.Checkbutton(self.bubblegloop_swamp_frame, text="Tiptup Choir: No Assigned Seats", variable=self.tiptup_choir_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.tiptup_choir_checkbox.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Freezeezy Peak
         curr_background_color = "#66CCCC"
@@ -1564,7 +1978,7 @@ class User_GUI_Class():
         curr_background_color = "#AA6600"
         self._gobis_valley_tab = ttk.Frame(self._world_specific_tab_control)
         self._world_specific_tab_control.add(self._gobis_valley_tab, text="GV")
-        self.gobis_valley_frame = tk.LabelFrame(self._gobis_valley_tab, text="Gobi's Valley", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
+        self.gobis_valley_frame = tk.LabelFrame(self._gobis_valley_tab, text="Gobi's Valley", foreground=self.white, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.gobis_valley_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.gobis_valley_frame["borderwidth"] = 0
         self.gobis_valley_frame["highlightthickness"] = 0
@@ -1572,19 +1986,19 @@ class User_GUI_Class():
         self.ancient_ones_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.ancient_ones_checkbox_ttp = self.CreateToolTip(self.ancient_ones_ttp_canvas, self, tool_tips_dict["GOBIS_VALLEY"]["SHUFFLED_ANCIENT_ONES_ORDER"])
         self.ancient_ones_var = tk.IntVar()
-        self.ancient_ones_checkbox = tk.Checkbutton(self.gobis_valley_frame, text="Shuffle Ancient Ones Order", variable=self.ancient_ones_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.ancient_ones_checkbox = tk.Checkbutton(self.gobis_valley_frame, text="Shuffle Ancient Ones Order", variable=self.ancient_ones_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.ancient_ones_checkbox.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.maze_jinxy_heads_ttp_canvas = tk.Label(self.gobis_valley_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.maze_jinxy_heads_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.maze_jinxy_heads_checkbox_ttp = self.CreateToolTip(self.maze_jinxy_heads_ttp_canvas, self, tool_tips_dict["GOBIS_VALLEY"]["SHUFFLE_MAZE_JINXY_HEADS_ORDER"])
         self.maze_jinxy_heads_var = tk.IntVar()
-        self.maze_jinxy_heads_checkbox = tk.Checkbutton(self.gobis_valley_frame, text="Shuffle Maze Jinxy Heads Order", variable=self.maze_jinxy_heads_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.maze_jinxy_heads_checkbox = tk.Checkbutton(self.gobis_valley_frame, text="Shuffle Maze Jinxy Heads Order", variable=self.maze_jinxy_heads_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.maze_jinxy_heads_checkbox.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.matching_puzzle_ttp_canvas = tk.Label(self.gobis_valley_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.matching_puzzle_ttp_canvas.grid(row=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.matching_puzzle_checkbox_ttp = self.CreateToolTip(self.matching_puzzle_ttp_canvas, self, "Randomized Matching Puzzle Not Implemented Yet")
         self.matching_puzzle_var = tk.IntVar()
-        self.matching_puzzle_checkbox = tk.Checkbutton(self.gobis_valley_frame, text="Randomize Matching Puzzle", variable=self.matching_puzzle_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.matching_puzzle_checkbox = tk.Checkbutton(self.gobis_valley_frame, text="Randomize Matching Puzzle", variable=self.matching_puzzle_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.matching_puzzle_checkbox.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Mad Monster Mansion
         curr_background_color = "#000033"
@@ -1600,6 +2014,12 @@ class User_GUI_Class():
         self.lit_pots_var = tk.IntVar()
         self.lit_pots_checkbox = tk.Checkbutton(self.mad_monster_mansion_frame, text="Pots Are Lit", variable=self.lit_pots_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.lit_pots_checkbox.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.lit_pots_ttp_canvas = tk.Label(self.mad_monster_mansion_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.lit_pots_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.motzand_keys_checkbox_ttp = self.CreateToolTip(self.lit_pots_ttp_canvas, self, tool_tips_dict["MAD_MONSTER_MANSION"]["MOTZAND_KEYS"])
+        self.motzand_keys_var = tk.IntVar()
+        self.motzand_keys_checkbox = tk.Checkbutton(self.mad_monster_mansion_frame, text="Motzand Keys", variable=self.motzand_keys_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.motzand_keys_checkbox.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Rusty Bucket Bay
         curr_background_color = "#660000"
         self._rusty_bucket_bay_tab = ttk.Frame(self._world_specific_tab_control)
@@ -1618,14 +2038,14 @@ class User_GUI_Class():
         curr_background_color = "#AA5500"
         self._click_clock_wood_tab = ttk.Frame(self._world_specific_tab_control)
         self._world_specific_tab_control.add(self._click_clock_wood_tab, text="CCW")
-        self.click_clock_wood_frame = tk.LabelFrame(self._click_clock_wood_tab, text="Click Clock Wood", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
+        self.click_clock_wood_frame = tk.LabelFrame(self._click_clock_wood_tab, text="Click Clock Wood", foreground=self.white, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.click_clock_wood_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.click_clock_wood_frame["borderwidth"] = 0
         self.click_clock_wood_frame["highlightthickness"] = 0
         self.ccw_ttp_canvas = tk.Label(self.click_clock_wood_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.ccw_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.ccw_checkbox_ttp = self.CreateToolTip(self.ccw_ttp_canvas, self, tool_tips_dict["CLICK_CLOCK_WOOD"]["SHUFFLE_BY"])
-        self.ccw_text = tk.Label(self.click_clock_wood_frame, text="Shuffle By:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.ccw_text = tk.Label(self.click_clock_wood_frame, text="Shuffle By:", foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.ccw_text.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.ccw_var = tk.StringVar(self.click_clock_wood_frame)
         self.ccw_options = ["Season", "Within World"]
