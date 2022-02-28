@@ -277,7 +277,7 @@ from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0.20220212"
+BK_RANDO_VERSION = "2.0.20220227"
 
 #######################
 ### ERROR GUI CLASS ###
@@ -415,6 +415,7 @@ class User_GUI_Class():
         self.final_puzzle_value.set(str(randint(0, 99)))
     
     def _random_bk_model_preset(self):
+        '''Randomly selects a BK Preset from the JSON file'''
         key_list = []
         for key in self.bk_model_json:
             key_list.append(key)
@@ -422,6 +423,7 @@ class User_GUI_Class():
         self.bk_model_var.set(random_bk_model)
     
     def _random_hex(self, digit_len):
+        '''Randomly generates hex values for the colors in BK'''
         max_num = "F" * digit_len
         random_hex_val = leading_zeros(randint(0, int(max_num, 16)), digit_len).upper()
         if(digit_len == 4):
@@ -433,6 +435,7 @@ class User_GUI_Class():
         return random_hex_val
     
     def _random_bk_model_colors(self):
+        '''Randomly generates all of the BK model's hex colors'''
         self.bk_model_var.set("Custom")
         self.banjo_fur_var.set(self._random_hex(6))
         self.tooth_necklace_var.set(self._random_hex(6))
@@ -448,7 +451,7 @@ class User_GUI_Class():
         self.shorts_texture_var.set(self._random_hex(4))
     
     def _update_bk_model(self, *args):
-        '''PyDoc'''
+        '''When selecting a BK preset, it will update the color fields with the proper hex values'''
         bk_model_preset = self.bk_model_var.get()
         if(bk_model_preset in self.bk_model_json):
             self.banjo_fur_var.set(self.bk_model_json[bk_model_preset]["Banjo_Fur"])
@@ -465,6 +468,7 @@ class User_GUI_Class():
             self.shorts_texture_var.set(self.bk_model_json[bk_model_preset]["Shorts_Texture"])
     
     def _select_non_softlock_enemies(self):
+        '''Checks the boxes for all non-softlock enemies and unchecks all softlock enemies'''
         for enemy_name in self.enemy_checkbox_dict:
             if("*" in enemy_name):
                 self.enemy_checkbox_dict[enemy_name].set(0)
@@ -472,10 +476,40 @@ class User_GUI_Class():
                 self.enemy_checkbox_dict[enemy_name].set(1)
     
     def _remove_all_enemies(self):
+        '''Unchecks all enemy checkboxes'''
         for enemy_name in self.enemy_checkbox_dict:
             self.enemy_checkbox_dict[enemy_name].set(0)
     
+    def _random_starting_area(self):
+        '''Selects a random starting area'''
+        self.new_area_var.set(choice([option for option in start_level_ids]))
+    
+    def _skip_intro_cutscene_checkbox(self, *args):
+        '''If the starting area is not the default area, skip the intro cutscene'''
+        if(self.new_area_var.get() != "SM - Main"):
+            self.skip_intro_cutscene_var.set(1)
+    
+    def _set_random_carry_capacities(self, *args):
+        '''Select random capacities for blue eggs, red feathers, and gold feathers'''
+        before_blue_egg = randint(0, 255)
+        after_blue_egg = randint(before_blue_egg, 255)
+        before_red_feather = randint(0, 255)
+        after_red_feather = randint(before_red_feather, 255)
+        before_gold_feather = randint(0, 255)
+        after_gold_feather = randint(before_gold_feather, 255)
+        self.before_blue_egg_carry_value.set(before_blue_egg)
+        self.after_blue_egg_carry_value.set(after_blue_egg)
+        self.before_red_feather_carry_value.set(before_red_feather)
+        self.after_red_feather_carry_value.set(after_red_feather)
+        self.before_gold_feather_carry_value.set(before_gold_feather)
+        self.after_gold_feather_carry_value.set(after_gold_feather)
+    
+    ################################
+    ### RANDOMIZER SETTINGS CODE ###
+    ################################
+    
     def _randomizer_settings_int_to_char_translator(self):
+        '''Translates the randomizer settings code from numeric to char'''
 #         print(f"Randomizer Settings Generated Code: {self.randomizer_settings_code}")
         randomizer_settings_code = self.generated_randomizer_settings_code
         ascii_code = ""
@@ -485,22 +519,13 @@ class User_GUI_Class():
             randomizer_settings_code = randomizer_settings_code // 26
         self.randomizer_setting_code_value.set(ascii_code)
     
-    def _random_starting_area(self):
-        self.new_area_var.set(choice([option for option in start_level_ids]))
-    
-    def _skip_intro_cutscene_checkbox(self, *args):
-        if(self.new_area_var.get() != "SM - Main"):
-            self.skip_intro_cutscene_var.set(1)
-    
-    ################################
-    ### RANDOMIZER SETTINGS CODE ###
-    ################################
-    
     def _add_randomizer_settings_to_code(self, add_val, counter_add=1):
+        '''Adds the numerical value of a setting to the randomizer settings code'''
         self.generated_randomizer_settings_code += (int(add_val) << self.randomizer_settings_count)
         self.randomizer_settings_count += counter_add
     
     def _generate_randomizer_settings_code(self):
+        '''Generates the randomizer settings code by turning all settings into numerical values'''
         self.generated_randomizer_settings_code = 0
         self.randomizer_settings_count = 0
         ### General Settings ###
@@ -573,11 +598,12 @@ class User_GUI_Class():
         # Rusty Bucket Bay
         self._add_randomizer_settings_to_code(self.buttons_var.get())
         # Click Clock Wood
-        self._add_randomizer_settings_to_code(["By Season", "Within World"].index(self.ccw_var.get()))
+        self._add_randomizer_settings_to_code(["Season", "Within World"].index(self.ccw_var.get()))
         self._randomizer_settings_int_to_char_translator()
 #         print(f"Code: {self.generated_randomizer_settings_code}")
     
     def _randomizer_settings_char_to_int_translator(self):
+        '''Translates the randomizer settings code from char to numeric'''
         ascii_code = self.randomizer_setting_code_value.get()
         randomizer_settings_code = 0
         for char_count, char_value in enumerate(reversed(ascii_code)):
@@ -586,6 +612,7 @@ class User_GUI_Class():
 #         print(f"Randomizer Settings Applied Code:   {self.randomizer_settings_code}")
     
     def _get_randomizer_setting(self, bit_count=1, options_list=None):
+        '''Generates the randomizer settings code'''
         compare_to_value = (2 ** bit_count) - 1
         set_this_option = self.applied_randomizer_settings_code & compare_to_value
         self.applied_randomizer_settings_code = self.applied_randomizer_settings_code >> bit_count
@@ -595,6 +622,7 @@ class User_GUI_Class():
             return set_this_option
     
     def _apply_randomizer_settings_code(self):
+        '''Applies settings based on the randomizer settings code provided'''
         try:
             self.applied_randomizer_settings_code = self._randomizer_settings_char_to_int_translator()
             self._randomizer_settings_char_to_int_translator()
@@ -668,7 +696,7 @@ class User_GUI_Class():
             # Rusty Bucket Bay
             self.buttons_var.set(self._get_randomizer_setting())
             # Click Clock Wood
-            self.ccw_var.set(self._get_randomizer_setting(options_list=["By Season", "Within World"]))
+            self.ccw_var.set(self._get_randomizer_setting(options_list=["Season", "Within World"]))
         except IndexError:
             Error_GUI(f"Error: Something went wrong with applying the settings.\nPlease check your settings code.")
     
@@ -783,7 +811,7 @@ class User_GUI_Class():
         # Rusty Bucket Bay
         self.buttons_var.set(0)
         # Click Clock Wood
-        self.ccw_var.set("By Season")
+        self.ccw_var.set("Season")
     
     def _load_configuration(self, button_press=True, random_file=False):
         '''Opens a chosen JSON file and sets the parameters to match those'''
@@ -1034,7 +1062,7 @@ class User_GUI_Class():
         # Rusty Bucket Bay
         self.buttons_var.set(randint(0, 1))
         # Click Clock Wood
-        self.ccw_var.set(choice(["By Season", "Within World"]))
+        self.ccw_var.set(choice(["Season", "Within World"]))
     
     def _save_current_configuration(self, button_press=True):
         '''Writes the current configuration to a JSON file'''
@@ -1229,6 +1257,7 @@ class User_GUI_Class():
         return True
     
     def _check_cheato_values(self):
+        '''PyDoc'''
         for value in [self.before_blue_egg_carry_value.get(), self.after_blue_egg_carry_value.get(),
                       self.before_red_feather_carry_value.get(), self.after_red_feather_carry_value.get(),
                       self.before_gold_feather_carry_value.get(), self.after_gold_feather_carry_value.get()]:
@@ -1238,6 +1267,7 @@ class User_GUI_Class():
         return True
     
     def _check_starting_life_count(self):
+        '''PyDoc'''
         starting_lives = self.starting_lives_entry.get()
         if((not starting_lives.isdigit()) or (int(self.starting_lives_entry.get()) < 0) or (int(self.starting_lives_entry.get()) > 255)):
             Error_GUI("Starting life count should be between 0 and 255.")
@@ -1247,6 +1277,7 @@ class User_GUI_Class():
     # AESTHETICS
     
     def _check_bk_colors(self):
+        '''PyDoc'''
         self.banjo_fur_var.get()
         self.tooth_necklace_var.get()
         self.banjo_skin_var.get()
@@ -1263,6 +1294,7 @@ class User_GUI_Class():
     # CUSTOMIZABLE
     
     def _check_model_json(self):
+        '''PyDoc'''
         try:
             model_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/Swappable_Models.json")
         except Exception as e:
@@ -1288,6 +1320,7 @@ class User_GUI_Class():
         return True
     
     def _check_animation_json(self):
+        '''PyDoc'''
         try:
             animation_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Animation_Data/Swappable_Animations.json")
         except Exception:
@@ -1312,6 +1345,7 @@ class User_GUI_Class():
         return True
     
     def _check_properties_json(self):
+        '''PyDoc'''
         try:
             properties_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Properties_Data/Swappable_Properties.json")
         except Exception:
@@ -1541,6 +1575,8 @@ class User_GUI_Class():
         self.after_gold_feather_carry_value = tk.StringVar(self.struct_frame)
         self.gold_feather_carry_entry = tk.Entry(self.carry_limit_frame, textvariable=self.after_gold_feather_carry_value, width=6)
         self.gold_feather_carry_entry.grid(row=2, column=4, padx=self.padx, pady=self.pady)
+        self.random_carry_capacity_button = tk.Button(self.carry_limit_frame, text='Random Carry\nCapacities', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._set_random_carry_capacities)
+        self.random_carry_capacity_button.grid(row=1, rowspan=2, column=5, padx=self.padx, pady=self.pady)
         # Non Flagged Objects
         self.non_flagged_object_frame = tk.LabelFrame(self._collectables_tab, text="Jinjos, 1-Ups, & Misc Objects", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.non_flagged_object_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
@@ -2018,7 +2054,7 @@ class User_GUI_Class():
         self.lit_pots_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.motzand_keys_checkbox_ttp = self.CreateToolTip(self.lit_pots_ttp_canvas, self, tool_tips_dict["MAD_MONSTER_MANSION"]["MOTZAND_KEYS"])
         self.motzand_keys_var = tk.IntVar()
-        self.motzand_keys_checkbox = tk.Checkbutton(self.mad_monster_mansion_frame, text="Motzand Keys", variable=self.motzand_keys_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.motzand_keys_checkbox = tk.Checkbutton(self.mad_monster_mansion_frame, text="Randomize Motzand's Song", variable=self.motzand_keys_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.motzand_keys_checkbox.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Rusty Bucket Bay
         curr_background_color = "#660000"

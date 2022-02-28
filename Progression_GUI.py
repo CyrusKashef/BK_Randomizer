@@ -126,7 +126,7 @@ from Randomization_Processes.Decompress_Functions import Decompressor
 from Randomization_Processes.Compress_Functions import Compressor
 from Randomization_Processes.World_Manipulation.World_Manipulation_Main import World_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Misc_Manipulation_Main import Misc_Manipulation_Class
-# from Randomization_Processes.CRC_Tool import run_crc_tool
+# from Randomization_Processes.CRC_Tool import run_crc_calc
 from Randomization_Processes.CRC_Tool import CRC_Calc_Class
 from Randomization_Processes.Clean_Up import CleanUp
 from Randomization_Processes.BK_Checksum import BK_Checksum_Class
@@ -181,27 +181,6 @@ class Progression_GUI_Class():
         def pack_bar(self):
             '''Displays progress bar'''
             self.progressbar.pack(padx=5, pady=5)
-    
-    class Progression_Logger():
-        '''PyDoc'''
-        def __init__(self):
-            self._logger = logging.getLogger("Rotating Log")
-            self._FORMAT = '[%(levelname)s] %(asctime)-15s - %(funcName)s: %(message)s'
-            self._handler = RotatingFileHandler(f"{self.master.cwd}/Randomizer_Log_File.log", maxBytes=(512*1024), backupCount=1)
-            self._logger.addHandler(self._handler)
-            self._logging.basicConfig(format=self._FORMAT)
-        
-        def _write(self, message, log_level="INFO"):
-            if(log_level == "DEBUG"):
-                self._logger.debug(message)
-            elif(log_level == "INFO"):
-                self._logger.debug(message)
-            elif(log_level == "WARNING"):
-                self._logger.debug(message)
-            elif(log_level == "ERROR"):
-                self._logger.debug(message)
-            elif(log_level == "CRITICAL"):
-                self._logger.debug(message)
     
     def _setup(self):
         '''Creates the randomized ROM folder with a copy of the original ROM file'''
@@ -388,7 +367,7 @@ class Progression_GUI_Class():
                                               self.master.final_puzzle_var.get(), self.master.final_puzzle_value.get())
         except Exception:
             self.warning_label.set_text("Uh-Oh...")
-            self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+            self.pb_label.set_text(f"Note & Jiggy Requirement Error:\nPlease Check The ReadMe Under 'Errors'")
             raise
         if(self.master.buttons_var.get() == 1):
             try:
@@ -396,7 +375,7 @@ class Progression_GUI_Class():
                 misc_manip._rbb_buttons_main()
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"RBB Buttons Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.motzand_keys_var.get() == 1):
             try:
@@ -404,7 +383,7 @@ class Progression_GUI_Class():
                 misc_manip._motzand_keys_main()
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Motzand Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.matching_puzzle_var.get() == 1):
             try:
@@ -412,7 +391,7 @@ class Progression_GUI_Class():
                 misc_manip._gv_puzzle_main()
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Matching Puzzle Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.bk_model_var.get() != "Default"):
             try:
@@ -420,7 +399,7 @@ class Progression_GUI_Class():
                 misc_manip._bk_model(seed_val=self.seed_val)
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Banjo-Kazooie Color Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.other_model_var.get() == 1):
             try:
@@ -428,7 +407,7 @@ class Progression_GUI_Class():
                 misc_manip._other_model_shuffle(self.seed_val, self.master.cwd, self.rom_path)
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Model Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.animation_var.get() == 1):
             try:
@@ -436,14 +415,14 @@ class Progression_GUI_Class():
                 misc_manip._animation_shuffle(self.seed_val, self.master.cwd, self.rom_path)
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Animation Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if((self.master.short_sounds_var.get() == 1) or (self.master.jingles_var.get() == 1) or (self.master.music_var.get() == 1)):
             try:
                 self.pb_label.set_text("Hut Music Best Music...")
                 misc_manip._shuffle_music(self.seed_val, self.master.cwd, self.rom_path, self.master.short_sounds_var.get(), self.master.jingles_var.get(), self.master.music_var.get(), self.master.beta_sounds_var.get())
             except Exception:
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Sounds Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.skybox_var.get() == 1):
             try:
@@ -451,7 +430,7 @@ class Progression_GUI_Class():
                 misc_manip._shuffle_skyboxes(self.seed_val, self.master.cwd, self.rom_path)
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Skybox Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.talking_sprite_var.get() == 1):
             try:
@@ -459,7 +438,7 @@ class Progression_GUI_Class():
                 misc_manip._shuffle_sprites(self.seed_val, self.master.cwd, self.rom_path)
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Talking Sprite Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if((self.master.before_blue_egg_carry_value.get() != 100) or (self.master.after_blue_egg_carry_value.get() != 200) or
            (self.master.before_red_feather_carry_value.get() != 50) or (self.master.after_red_feather_carry_value.get() != 100) or
@@ -469,7 +448,7 @@ class Progression_GUI_Class():
                 misc_manip._adjust_sandcastle_speeches()
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Carrying Capacity Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         try:
             self.pb_label.set_text("Mumbo Hide Easter Egg...")
@@ -478,7 +457,7 @@ class Progression_GUI_Class():
                 misc_manip._gruntildas_lair_speeches_main()
         except Exception:
             self.warning_label.set_text("Uh-Oh...")
-            self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+            self.pb_label.set_text(f"Easter Egg Error:\nPlease Check The ReadMe Under 'Errors'")
             raise
         if(self.master.skip_furnace_fun_var.get() == 1):
             try:
@@ -486,14 +465,14 @@ class Progression_GUI_Class():
                 misc_manip._edit_world_order_related_text_main()
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Furnace Fun Skip Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         try:
             self.pb_label.set_text("Mumbo Found Game Engine...")
             misc_manip._setup_game_engine_manip()
         except Exception:
             self.warning_label.set_text("Uh-Oh...")
-            self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+            self.pb_label.set_text(f"Game Engine Error:\nPlease Check The ReadMe Under 'Errors'")
             raise
         if(self.master.properties_var.get() == 1):
             try:
@@ -519,10 +498,9 @@ class Progression_GUI_Class():
         compressor._main()
         print("End Compression")
     
-    def _crc_tool(self):
+    def _crc_calc(self):
         '''Runs the CRC functions'''
         print("Start of CRC Tool")
-#         run_crc_tool(self.seed_val, self.rom_path)
         crc_calc_obj = CRC_Calc_Class(self.master.cwd, self.seed_val)
         crc_calc_obj.calculate_crc()
         crc_calc_obj.set_crc()
@@ -577,7 +555,7 @@ class Progression_GUI_Class():
         self.progress_bar.update_bar(85)
         try:
             self.pb_label.set_text("Mumbo Turn Bear Into Dinosaur...")
-            self._crc_tool()
+            self._crc_calc()
         except Exception:
             self.warning_label.set_text("Uh-Oh...")
             self.pb_label.set_text(f"Recalculating CRC Error:\nPlease Check The ReadMe Under 'Errors'")
@@ -592,7 +570,7 @@ class Progression_GUI_Class():
             raise
         self.progress_bar.update_bar(100)
         self.warning_label.set_text("Oomenacka!")
-        self.pb_label.set_text(f"Mumbo Spell Done! Let Bear And Bird Close Window!")
+        self.pb_label.set_text(f"Mumbo Spell Done! Let Player Close Window!")
 
     def update_mumbo_gif(self, ind):
         '''Updates The Gif Frame'''
