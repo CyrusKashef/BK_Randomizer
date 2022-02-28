@@ -178,6 +178,29 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Remove Extra Files: Removes the compressed and decompressed files extrated from the ROM. Useful for BK modders or debugging an issue.
 * Show Tool Tips: With the feature on, hovering over a Brentilda icon will inform the user what the feature does.
 
+# Premade Configurations
+
+### Default Settings
+Shuffles everything within the worlds. Very easy mode to get your feet wet.
+
+### Basic Shuffle Recommended
+World order shuffle that's beginner friendly.
+
+### Bottles Shuffle Recommended
+World order shuffle made for more veteran players.
+
+### Meme Percent
+420 Notes, 69 Jiggies. Open worlds and removed note doors. Just have fun ^_^
+
+### One Health Mode
+Can you collect everything in the game with just one health and a bunch of other settings to make it even harder?
+
+### Only Hard Grunty Fight
+Skip the entire game and just fight Gruntilda on hard mode.
+
+### Nothing/Everything
+Just made to have a clean slate or check everything. Don't overthink this.
+
 # Common Problems
 
 ### Computer Says Randomizer Is A Virus
