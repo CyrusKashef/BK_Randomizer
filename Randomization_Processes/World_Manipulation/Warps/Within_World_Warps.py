@@ -721,6 +721,7 @@ class Within_World_Warps_Class():
         self._seed_val = seed_val
         self._increment = 0
         self._level_warp_dict = level_warp_dict
+        self._randomized_warp_cheat_sheet_dict = {}
     
     def _choose_from_list(self, original_list):
         '''Selects an option from a list based on the current address and the number of increments, if applicable'''
@@ -772,6 +773,7 @@ class Within_World_Warps_Class():
             warps_to_main.remove(randomized_warp)
             print(f"{randomized_warp.name}   -->   {randomized_warp.warps_name}")
             self._randomized_warp_dict[randomized_warp] = randomized_warp.old_warp_search_strings
+            self._randomized_warp_cheat_sheet_dict[randomized_warp.name] = randomized_warp.warps_name
 
     def _randomize_by_world(self, level_name):
         self._shuffle_warps_within_list(self._level_warp_dict[level_name], shuffle_type="Within World")

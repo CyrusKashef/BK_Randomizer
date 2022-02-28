@@ -321,7 +321,6 @@ class Speech_Manipulation_Class():
         if(isinstance(world_object, list)):
             brentilda_text._replace_line("594f5520574f4e2754", f"CLICK CLOCK WOOD HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
         else:
-            print(f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
             brentilda_text._replace_line("594f5520574f4e2754", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
     def _brentilda_6_1(self, world_object):
@@ -366,7 +365,6 @@ class Speech_Manipulation_Class():
         if(isinstance(world_object, list)):
             brentilda_text._replace_line("5448452044495347555354494e47", f"CLICK CLOCK WOOD HAS {new_move_count} NEW MOVES! ~")
         else:
-            print(f"{(world_object._world_name).upper()} HAS {new_move_count} NEW MOVES! ~")
             brentilda_text._replace_line("5448452044495347555354494e47", f"{(world_object._world_name).upper()} HAS {new_move_count} NEW MOVES! ~")
     
     def _brentilda_7_2(self, world_object):

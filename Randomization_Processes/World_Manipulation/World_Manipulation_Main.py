@@ -36,6 +36,7 @@ from .Generic_World import World
 from .Generic_Setup_File import SetupFile
 from ..Dicts_And_Lists import Structs, Non_Flagged_Objects, Enemies, Flagged_Objects, Sequences, World_Order_Warps
 from ..Dicts_And_Lists.Misc_Dicts_And_Lists import note_door_texture_offsets, note_door_indices
+from ..Dicts_And_Lists.Flagged_Object_Flags import bottles_world_warp_dict, extra_flagged_object_flags
 from Randomization_Processes.World_Manipulation.Warps.Basic_World_Order import World_Order_Basic
 from Randomization_Processes.World_Manipulation.Warps.Bottles_World_Order import World_Order_Bottles
 from ..Common_Functions import leading_zeros, possible_negative, fit_for_hex
@@ -423,6 +424,7 @@ class World_Manipulation_Class():
                     setup_file._locate_item_index(item_search_string, "No_Flagged_Object")
     
     def _gather_specific_non_flagged_objects(self, world_object, dictionary):
+        '''Collects the non-flagged objects listed in the given dictionary (Used for Lit Pots)'''
         for setup_file in world_object._setup_list:
             setup_file.non_flag_object_index_list = []
             setup_file.non_flag_object_info_list = []
@@ -437,7 +439,7 @@ class World_Manipulation_Class():
         self._shuffle_list(self.non_flag_object_info_list, setup_file.setup_address)
     
     def _avoid_main_area_shuffle(self, world_object, main_area_count=0):
-        '''PyDoc'''
+        '''It shuffles a particular item from the main area into subareas (Used for Lit Pots)'''
         for setup_file in world_object._setup_list:
             for non_flag_object_info_list in setup_file.non_flag_object_info_list:
                 self.non_flag_object_info_list.append(non_flag_object_info_list)
@@ -504,7 +506,7 @@ class World_Manipulation_Class():
     ###############
     
     def _adjust_enemy_dicts(self):
-        '''PyDoc'''
+        '''Filters the enemy dicts based on the selected enemies'''
         enemy_filter_list = []
         for enemy in self.grandmaster.enemy_checkbox_dict:
             if(self.grandmaster.enemy_checkbox_dict[enemy].get() == 0):
@@ -512,7 +514,8 @@ class World_Manipulation_Class():
                     enemy_filter_list.append(enemy_id)
         return enemy_filter_list
     
-    def _jiggy_enemy(self, item_search_string, world_name=None):
+    def _skip_enemies(self, item_search_string, world_name=None):
+        '''Does not randomize enemies that provide Jiggies or cause issues'''
         # Sir Slush
         if((item_search_string == "190C0124") and (world_name == "Freezeezy Peak")):
             return False
@@ -529,34 +532,34 @@ class World_Manipulation_Class():
         for setup_file in world_object._setup_list:
             if((self.grandmaster.enemies_var.get() == "Randomize") and (setup_file.setup_name != "Nipper's Shell")):
                 for item_search_string in Enemies.enemy_id_dict["Global"]["Ground"]:
-                    if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Ground_Enemy")
                 for item_search_string in Enemies.additional_search_enemy_id_dict["Ground"]:
-                    if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Ground_Enemy")
                 if("Ground" in Enemies.enemy_id_dict[world_object._world_name]):
                     for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Ground"]:
-                        if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                        if(self._skip_enemies(item_search_string, world_object._world_name)):
                             setup_file._locate_item_index(item_search_string, "Ground_Enemy")
                 for item_search_string in Enemies.enemy_id_dict["Global"]["Wall"]:
-                    if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Wall_Enemy")
                 for item_search_string in Enemies.additional_search_enemy_id_dict["Wall"]:
-                    if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Wall_Enemy")
                 if("Wall" in Enemies.enemy_id_dict[world_object._world_name]):
                     for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Wall"]:
-                        if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                        if(self._skip_enemies(item_search_string, world_object._world_name)):
                             setup_file._locate_item_index(item_search_string, "Wall_Enemy")
                 for item_search_string in Enemies.enemy_id_dict["Global"]["Flying"]:
-                    if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Flying_Enemy")
                 for item_search_string in Enemies.additional_search_enemy_id_dict["Flying"]:
-                    if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Flying_Enemy")
                 if("Flying" in Enemies.enemy_id_dict[world_object._world_name]):
                     for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Flying"]:
-                        if(self._jiggy_enemy(item_search_string, world_object._world_name)):
+                        if(self._skip_enemies(item_search_string, world_object._world_name)):
                             setup_file._locate_item_index(item_search_string, "Flying_Enemy")
     
     def _shuffle_enemies_within_world(self, world_object):
@@ -834,7 +837,7 @@ class World_Manipulation_Class():
                 setup_file._locate_item_index(item_search_string, "Note_Door")
     
     def _810_bottles_cutscene(self):
-        '''PyDoc'''
+        '''Places Bottles at the 810 Note Door because note doors don't open unless you see that cutscene'''
         self.curr_setup_file = self.gruntildas_lair._setup_list[7]
         # Bottles Molehill
         replacement_dict = {
@@ -871,6 +874,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._edit_object("01000E0203", replacement_dict)
 
     def _click_clock_wood_item_count(self, world_object_list):
+        '''Counts the number of items for CCW specifically'''
         note_count = 0
         for world_object in world_object_list:
             for setup_file in world_object._setup_list:
@@ -878,6 +882,7 @@ class World_Manipulation_Class():
         return note_count
 
     def _note_count(self, world_object):
+        '''Checks the note counts per world'''
         if(isinstance(world_object, list)):
             return self._click_clock_wood_item_count(world_object)
         note_count = 0
@@ -890,6 +895,7 @@ class World_Manipulation_Class():
     ### SCALING NOTE DOOR ###
     
     def _scale_note_doors(self):
+        '''Scales the note doors based on world order and how many notes are in each world'''
         if(not self.world_order):
             world_order_list = ["Mumbo's Mountain", "Treasure Trove Cove", "Clanker's Cavern",
                                 "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley",
@@ -952,7 +958,7 @@ class World_Manipulation_Class():
         self._remove_note_doors(note_door_list=Sequences.note_door[-4:])
     
     def _note_doors_main(self):
-        '''PyDoc'''
+        '''Either scales or removes Note Doors'''
         if(self.grandmaster.final_note_door_var.get() == "Final Note Door Only"):
             self._remove_note_doors()
             self._810_bottles_cutscene()
@@ -1211,7 +1217,7 @@ class World_Manipulation_Class():
     
     ### COMMON WORLD ORDER FUNCTIONS ###
     def _gather_all_world_warps(self):
-        '''PyDoc'''
+        '''Locates the index and info of all world warps'''
         gruntildas_lair_warp_setups = [0, 9, 10, 11, 5, 4, 13, 15, 6]
         world_order_count = 1
         for setup_num in gruntildas_lair_warp_setups:
@@ -1222,7 +1228,7 @@ class World_Manipulation_Class():
             world_order_count += 1
     
     def _move_world_order(self, shuffle_type="Simple"):
-        '''PyDoc'''
+        '''Sets the world order'''
         world_order_nums = {
             "Mumbo's Mountain": "1",
             "Treasure Trove Cove": "2",
@@ -1248,12 +1254,10 @@ class World_Manipulation_Class():
             }
             for warp_index in self.curr_setup_file.warp_index_list:
                 self.curr_setup_file._edit_object_index(warp_index, edit_dict)
-            if(shuffle_type == "Bottles"):
-                self._lair_progression_main(curr_world_num)
             curr_world_num += 1
     
     def _gather_all_bottles_mounds(self):
-        '''PyDoc'''
+        '''Gathers the bottles mound info and index'''
         for world_object in self.world_list:
             for setup_file in world_object._setup_list:
                 setup_file.bottles_index_list = []
@@ -1262,7 +1266,7 @@ class World_Manipulation_Class():
                     setup_file._locate_item_index(World_Order_Warps.learnable_moves_dict[bottles_mound], "Bottles_Mound")
     
     def _new_move_camera(self, setup_file, new_move):
-        '''PyDoc'''
+        '''Adjusts cameras in an area with a potential new move'''
         primary_camera = World_Order_Warps.bottles_moves_camera_dict[new_move]["Primary_Camera"]
         secondary_camera = World_Order_Warps.bottles_moves_camera_dict[new_move]["Secondary_Camera"]
         if(not setup_file._does_string_exist(primary_camera)):
@@ -1287,7 +1291,7 @@ class World_Manipulation_Class():
             setup_file._replace_all_in_area("9200000000000000", replacement_dict)
     
     def _add_clankers_cavern_jump_pad(self):
-        '''PyDoc'''
+        '''Adds a Shock Jump Pad to the inside of Clanker in order to make the logic easier and help prevent backtracking'''
         edit_dict ={
             0: 255, # FF
             1: 246, # F6
@@ -1303,7 +1307,7 @@ class World_Manipulation_Class():
         (self.clankers_cavern._setup_list[1])._edit_object("FF1F07EDF8FD190C0354", edit_dict)
     
     def _world_entrance_signs(self, shuffle_type="Simple"):
-        '''PyDoc'''
+        '''Edits the world entrance signs based on world order'''
         # 0x89B0 - 4306E0
         world_texture_dict = {
             "Mumbo's Mountain": 0,
@@ -1328,7 +1332,7 @@ class World_Manipulation_Class():
         texture_obj._rearrange_textures(new_order_dict)
     
     def _brentilda_world_order_hints(self, shuffle_type="Simple"):
-        '''PyDoc'''
+        '''Adjusts Brentilda's hints to give hints for the randomizer'''
         world_object_list = []
         if(shuffle_type == "Simple"):
             world_object_list.append(self.mumbos_mountain)
@@ -1380,12 +1384,12 @@ class World_Manipulation_Class():
     
     ### BASIC SHUFFLE ###
     def _basic_calculate_new_world_order(self):
-        '''PyDoc'''
+        '''Simple world order calculation'''
         self.world_order = World_Order_Basic(self.seed)
         self.world_order._world_order_main()
     
     def _basic_edit_bottles_mound(self):
-        '''PyDoc'''
+        '''Edits bottles mounds for basic shuffle'''
         bottles_info_list = []
         for world_object in self.world_list:
             for setup_file in world_object._setup_list:
@@ -1431,14 +1435,14 @@ class World_Manipulation_Class():
                     
     
     def _basic_world_order_shuffle_main(self):
-        '''PyDoc'''
+        '''Runs the basic world order shuffle functions'''
         self._basic_calculate_new_world_order()
         self._move_world_order(shuffle_type="Simple")
         self._basic_edit_bottles_mound()
     
     ### BOTTLES SHUFFLE ###
     def _bottles_to_1_ups(self):
-        '''PyDoc'''
+        '''Turns all Bottles mounds to 1-Ups to have them shuffle with non-flagged objects'''
         for world_object in self.world_list:
             for setup_file in world_object._setup_list:
                 for bottles_mound in World_Order_Warps.learnable_moves_dict:
@@ -1449,20 +1453,61 @@ class World_Manipulation_Class():
                     setup_file._edit_object(World_Order_Warps.learnable_moves_dict[bottles_mound], replacement_dict)
     
     def _determine_available_move_slots(self):
-        '''PyDoc'''
+        '''Compares 1-Up locations to allowed potential bottles locations'''
         for world_object in self.world_list[:-2]:
             if((world_object._world_name).startswith("Click Clock Wood")):
                 current_world_name = "Click Clock Wood"
             else:
                 current_world_name = world_object._world_name
+            available_bottles = []
             for setup_file in world_object._setup_list:
                 for item_name in World_Order_Warps.possible_bottles_locations[current_world_name]:
                     if(setup_file._does_string_exist(f"{World_Order_Warps.possible_bottles_locations[current_world_name][item_name]}190C0049")):
-                        World_Order_Warps.bottles_world_warp_dict[current_world_name]["Available_Bottles"].append(item_name)
+                        available_bottles.append(item_name)
+            for possible_bottles in list(bottles_world_warp_dict[current_world_name]["Possible_Bottles"]):
+                if(possible_bottles not in available_bottles):
+                    del bottles_world_warp_dict[current_world_name]["Possible_Bottles"][possible_bottles]
     
     def _bottles_new_world_order(self):
-        '''PyDoc'''
-        self.world_order = World_Order_Bottles()
+        '''Determines the new world order that also shuffles bottles around between the worlds'''
+        for world_object in self.world_list[:-2]:
+            if((world_object._world_name).startswith("Click Clock Wood")):
+                world_name = "Click Clock Wood"
+            else:
+                world_name = world_object._world_name
+            for flag_string in bottles_world_warp_dict[world_name]["Flagged_Object_Flags"]:
+                if(flag_string.startswith("*")):
+                    bottles_world_warp_dict[world_name]["Flagged_Object_Flags"][flag_string]["ID"] = flag_string
+                else:
+                    for setup_file in world_object._setup_list:
+                        flag_id = setup_file._obtain_object_id_at_location(flag_string)
+                        if(flag_id != -1):
+                            if((flag_id >= 0x1) and flag_id <= 0x63):
+                                bottles_world_warp_dict[world_name]["Flagged_Object_Flags"][flag_string]["Type"] = "Jiggy"
+                            elif((flag_id >= 0x64) and flag_id <= 0x79):
+                                bottles_world_warp_dict[world_name]["Flagged_Object_Flags"][flag_string]["Type"] = "Empty Honeycomb"
+                            elif((flag_id >= 0xC8) and flag_id <= 0x13A):
+                                bottles_world_warp_dict[world_name]["Flagged_Object_Flags"][flag_string]["Type"] = "Mumbo Token"
+                            bottles_world_warp_dict[world_name]["Flagged_Object_Flags"][flag_string]["ID"] = flag_id
+                            break
+        for world_object in self.world_list[-2:]:
+            world_name = world_object._world_name
+            for flag_string in extra_flagged_object_flags[world_name]:
+                if(flag_string.startswith("*")):
+                    extra_flagged_object_flags[world_name][flag_string]["ID"] = flag_string
+                else:
+                    for setup_file in world_object._setup_list:
+                        flag_id = setup_file._obtain_object_id_at_location(flag_string)
+                        if(flag_id != -1):
+                            if((flag_id >= 0x1) and flag_id <= 0x63):
+                                extra_flagged_object_flags[world_name][flag_string]["Type"] = "Jiggy"
+                            elif((flag_id >= 0x64) and flag_id <= 0x79):
+                                extra_flagged_object_flags[world_name][flag_string]["Type"] = "Empty Honeycomb"
+                            elif((flag_id >= 0xC8) and flag_id <= 0x13A):
+                                extra_flagged_object_flags[world_name][flag_string]["Type"] = "Mumbo Token"
+                            extra_flagged_object_flags[world_name][flag_string]["ID"] = flag_id
+                            break
+        self.world_order = World_Order_Bottles(bottles_world_warp_dict, extra_flagged_object_flags, seed_val=self.seed)
         self.world_order._determine_world_order()
         world_cheat_sheet_str = ""
         for world in self.world_order.world_order_list:
@@ -1474,7 +1519,7 @@ class World_Manipulation_Class():
             world_entrance_cheat_sheet.write(world_cheat_sheet_str)
     
     def _bottles_set_new_moves(self):
-        '''PyDoc'''
+        '''Replaces the 1-Ups with the calculated bottles hill'''
         for world_object in self.world_list[:-2]:
             world_name = world_object._world_name
             if("-" in world_name):
@@ -1494,8 +1539,7 @@ class World_Manipulation_Class():
                         self._new_move_camera(setup_file, new_move)
     
     def _bottles_world_order_shuffle_main(self):
-        '''PyDoc'''
-        # self._bottles_to_1_ups() should be done beforehand
+        '''Runs through the bottles world shuffle functions'''
         self.mumbos_mountain._setup_list[0]._check_for_orange()
         self._determine_available_move_slots()
         self._bottles_new_world_order()
@@ -1503,7 +1547,7 @@ class World_Manipulation_Class():
         self._bottles_set_new_moves()
     
     def _remove_learning_move_warps(self):
-        '''PyDoc'''
+        '''Removes placement warps for BK when a move is learned in TTC or GV'''
         replacement_dict = {
             6: 0x19, 7: 0x0C,
             8: 0x02, 9: 0x68,
@@ -1530,289 +1574,46 @@ class World_Manipulation_Class():
             if(self.grandmaster.skip_furnace_fun_var.get() == 1):
                 self._brentilda_world_order_hints(shuffle_type="Bottles")
 
-    ####################################
-    ### GRUNDILDA'S LAIR PROGRESSION ###
-    ####################################
-    
-    def _lair_progression_floor_1(self):
-        '''PyDoc'''
-        # Only if MM is the first world
-        replacement_dict = {
-            0: 0xFB, 1: 0x82,
-            2: 0x01, 3: 0x45,
-            4: 0xFA, 5: 0xEC,
-            6: 0x19, 7: 0x0C,
-            8: 0x0, 9: 0x0B,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0x64,
-            }
-        self.gruntildas_lair._setup_list[0]._edit_object("FE950000FDFDFA0E000B", replacement_dict)
-        replacement_dict = {
-            0: 0xFB, 1: 0x82,
-            2: 0x02, 3: 0x58,
-            4: 0xF8, 5: 0xF8,
-            6: 0x19, 7: 0x0C,
-            8: 0x0, 9: 0x0B,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0x64,
-            }
-        self.gruntildas_lair._setup_list[0]._edit_object("FCA60030FCB9FA0E000B", replacement_dict)
-        replacement_dict = {
-            0: 0xFB, 1: 0x84,
-            2: 0x03, 3: 0x20,
-            4: 0xF7, 5: 0x7F,
-            6: 0x19, 7: 0x0C,
-            8: 0x0, 9: 0x0B,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0x64,
-            }
-        self.gruntildas_lair._setup_list[0]._edit_object("F6E805E0F438188C0383", replacement_dict)
-        replacement_dict = {
-            0: 0xFA, 1: 0xBA,
-            2: 0x03, 3: 0xE8,
-            4: 0xF5, 5: 0xD8,
-            6: 0x19, 7: 0x0C,
-            8: 0x0, 9: 0x0B,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0x64,
-            }
-        self.gruntildas_lair._setup_list[0]._edit_object("F98105DDF1B8188C0383", replacement_dict)
-    
-    def _lair_progression_floor_2(self):
-        # Only if haven't learned Shock Jump in first two worlds
-        replacement_dict = {
-            2: 0x01, 3: 0x90,
-            }
-        self.gruntildas_lair._setup_list[1]._edit_object("FB0E0064FD27190C000B", replacement_dict)
-    
-    def _lair_progression_cc_entrance_world(self):
-        # Only if haven't learned Beak Buster in the first two worlds
-        replacement_dict = {
-            0: 0x0, 1: 0x0,
-            2: 0x0, 3: 0x0,
-            4: 0x01, 5: 0x2C,
-            6: 0x19, 7: 0x0C,
-            8: 0x02, 9: 0x17,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0xC8,
-            }
-        self.gruntildas_lair._setup_list[10]._edit_object("0360FF3804E5190C0217", replacement_dict)
-        replacement_dict = {
-            0: 0x0, 1: 0x0,
-            2: 0x0, 3: 0x0,
-            4: 0xFE, 5: 0xA2,
-            6: 0x19, 7: 0x0C,
-            8: 0x02, 9: 0x14,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0xC8,
-            }
-        self.gruntildas_lair._setup_list[10]._edit_object("F95D0273FA21190C0214", replacement_dict)
-        replacement_dict = {
-            0: 0x0, 1: 0x0,
-            2: 0x0, 3: 0x0,
-            4: 0xFC, 5: 0x18,
-            6: 0x19, 7: 0x0C,
-            8: 0x02, 9: 0x19,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0xC8,
-            }
-        self.gruntildas_lair._setup_list[10]._edit_object("FCF20000F85D190C0219", replacement_dict)
-    
-    def _lair_progression_cc_entrance_puzzle(self):
-        # Only if haven't learned Beak Buster in first three worlds
-        replacement_dict = {
-            0: 0xF3, 1: 0x0D,
-            2: 0xFD, 3: 0x48,
-            4: 0xFD, 5: 0x44,
-            6: 0x19, 7: 0x0C,
-            8: 0x02, 9: 0x68,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0x01,
-            }
-        self.gruntildas_lair._setup_list[10]._edit_object("F30DFD48FD44190C0213", replacement_dict)
-    
-    def _lair_progression_floor_4_bgs(self):
-        # Only if Talon Trot not in first 3 worlds
-        replacement_dict = {
-            0: 0xF8, 1: 0x66,
-            2: 0xFE, 3: 0x70,
-            4: 0xFE, 5: 0x89,
-            6: 0x19, 7: 0x0C,
-            8: 0x02, 9: 0x15,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0x64,
-            }
-        self.gruntildas_lair._setup_list[3]._edit_object("F18303E8FD83BE0E0000", replacement_dict)
-        replacement_dict = {
-            0: 0xF6, 1: 0x84,
-            2: 0xFF, 3: 0x9C,
-            4: 0xFE, 5: 0xA2,
-            6: 0x19, 7: 0x0C,
-            8: 0x02, 9: 0x15,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0x64,
-            }
-        self.gruntildas_lair._setup_list[3]._edit_object("F18303E8FEAABE0E0000", replacement_dict)
-        replacement_dict = {
-            0: 0xF4, 1: 0x9D,
-            2: 0x0, 3: 0xC8,
-            4: 0xFE, 5: 0x82,
-            6: 0x19, 7: 0x0C,
-            8: 0x02, 9: 0x15,
-            10: 0x0, 11: 0x0,
-            12: 0x0, 13: 0x0,
-            14: 0x0, 15: 0x64,
-            }
-        self.gruntildas_lair._setup_list[3]._edit_object("F18303E8FFB3BE0E0000", replacement_dict)
-    
-    def _lair_progression_floor_4_note_door(self):
-        # Only if Talon Trot not in first 3 worlds
-        replacement_dict = {
-            2: 0x03, 3: 0x20,
-            }
-        self.gruntildas_lair._setup_list[3]._edit_object("08A8022603AE190C000B", replacement_dict)
-    
-    def _lair_progression_mmm_entrance(self):
-        # Only needed if MMM is within last two levels
-        replacement_dict = {
-            0: 0xF1, 1: 0x5E,
-            2: 0x01, 3: 0x57,
-            4: 0xFE, 5: 0x64,
-            6: 0x19, 7: 0x0C,
-            8: 0x02, 9: 0x21,
-            10: 0x0, 11: 0x0,
-            12: 0x2D, 13: 0x0,
-            14: 0x0, 15: 0x64,
-            }
-        self.gruntildas_lair._setup_list[13]._edit_object("F0D4014FFE6C190C01E1", replacement_dict)
-    
-    def _lair_progression_ccw_entrance(self, new_item="Fly"):
-        # Only needed if Talon Trot is learned in the 8th world
-        if(new_item == "Fly"):
-            replacement_dict = {
-                6: 0x19, 7: 0x0C,
-                8: 0x00, 9: 0xE4,
-                10: 0x0, 11: 0x0,
-                12: 0x7B, 13: 0x0,
-                14: 0x0, 15: 0x64,
-                }
-        elif(new_item == "Running_Shoes"):
-            replacement_dict = {
-                6: 0x19, 7: 0x0C,
-                8: 0x00, 9: 0x2C,
-                10: 0x0, 11: 0x0,
-                12: 0x05, 13: 0x0,
-                14: 0x0, 15: 0x64,
-                }
-        elif(new_item == "Wading_Boots"):
-            replacement_dict = {
-                6: 0x19, 7: 0x0C,
-                8: 0x00, 9: 0x65,
-                10: 0x0, 11: 0x0,
-                12: 0x0A, 13: 0x0,
-                14: 0x0, 15: 0x64,
-                }
-        self.gruntildas_lair._setup_list[6]._edit_object("069903200833190C00F7", replacement_dict)
-    
-    def _lair_progression_main(self, world_num):
-        learned_moves = []
-        for world in self.world_order.world_order_list[:world_num]:
-            for bottles_location in self.world_order.world_order_dict[world]["Learned_Moves"]:
-                learned_moves.append(self.world_order.world_order_dict[world]["Learned_Moves"][bottles_location])
-        if((world_num == 1) and ("Talon_Trot" not in learned_moves) and ("Mumbo's Mountain" == self.world_order.world_order_list[0])):
-            self._lair_progression_floor_1()
-            return
-        elif(world_num == 2):
-            if("Shock_Jump_Pad" not in learned_moves):
-                self._lair_progression_floor_2()
-            if("Beak_Buster" not in learned_moves):
-                self._lair_progression_cc_entrance_world()
-            return
-        elif(world_num == 3):
-            if("Beak_Buster" not in learned_moves):
-                self._lair_progression_cc_entrance_puzzle()
-            if("Talon_Trot" not in learned_moves):
-                self._lair_progression_floor_4_bgs()
-            return
-        elif((world_num == 4) and ("Shock_Jump_Pad" not in learned_moves)):
-            self._lair_progression_floor_4_note_door()
-            return
-        elif((world_num == 5) and ("Mad Monster Mansion" not in self.world_order.world_order_list[:world_num])):
-            # Two worlds require Beak Buster (BGS and CCW)
-            # There is no way MMM can be one of those worlds AND Beak Buster isn't learned
-            self._lair_progression_mmm_entrance()
-            return
-        elif((world_num == 8) and ("Talon_Trot" not in learned_moves)):
-            # At least two worlds require either Talon Trot/Running Shoes or Fly
-            # There's no way the last world has all three of these moves
-            # Wading Boots technically works and I think it's funny
-            possible_moves = []
-            for move in ["Fly", "Running_Shoes", "Wading_Boots"]:
-                if(move in learned_moves):
-                    possible_moves.append(move)
-            use_this_move = self._choose_from_list(possible_moves)
-            self._lair_progression_ccw_entrance(use_this_move)
-            return
-
     ##########################
     ### WITHIN WORLD WARPS ###
     ##########################
     
     def _set_world_warps_by_world(self, world_object, randomized_warp_dict):
+        '''Sets the within world warps by world'''
         for warp in randomized_warp_dict:
-            print(f"Old Warp Name: {warp.name} -> New Warp Name: {warp.warps_name}")
-#             warp_id_str = leading_zeros(warp.new_object_id, 4)
             new_warp_string = warp.new_warp_search_strings[0]
             for warp_search_string in randomized_warp_dict[warp]:
-                string_found = False
                 for setup_file in world_object._setup_list:
-#                     if(setup_file._edit_object(warp_search_string, {8: int(warp_id_str[:2], 16), 9: int(warp_id_str[2:], 16)})):
                     if(setup_file._edit_object(warp_search_string, {
-#                             6: int(new_warp_string[12:14], 16),
                         7: int(new_warp_string[14:16], 16),
                         8: int(new_warp_string[16:18], 16), 9: int(new_warp_string[18:20], 16),
                         10: int(new_warp_string[20:22], 16), 11: int(new_warp_string[22:24], 16),
                         12: int(new_warp_string[24:26], 16), 13: int(new_warp_string[26:28], 16),
-#                             14: int(new_warp_string[28:30], 16), 15: int(new_warp_string[30:32], 16),
                         })):
-#                         print("Found")
-                        string_found = True
                         break
-                if(not string_found):
-                    print(f"NOT FOUND: {warp_search_string}")
     
     def _within_world_warps_by_world(self):
+        '''Shuffles the within world warps within each world'''
         within_world_warps_obj = Within_World_Warps.Within_World_Warps_Class(self.seed, Within_World_Warps.Levels)
         for world_object in self.world_list[:-2]:
             within_world_warps_obj._randomize_by_world(world_object._world_name)
             self._set_world_warps_by_world(world_object, within_world_warps_obj._randomized_warp_dict)
+        if(self.grandmaster.cheat_sheet_var.get() == 1):
+            self._generate_within_world_warps_cheat_sheet(within_world_warps_obj._randomized_warp_cheat_sheet_dict)
  
     def _set_world_warps_by_game(self, randomized_warp_dict):
+        '''Sets the within world warps by game'''
         for warp in randomized_warp_dict:
-#             warp_id_str = leading_zeros(warp.new_object_id, 4)
             new_warp_string = warp.new_warp_search_strings[0]
             for warp_search_string in randomized_warp_dict[warp]:
                 string_found = False
                 for world_object in self.world_list[:-2]:
                     for setup_file in world_object._setup_list:
-#                         if(setup_file._edit_object(warp_search_string, {8: int(warp_id_str[:2], 16), 9: int(warp_id_str[2:], 16)})):
                         if(setup_file._edit_object(warp_search_string, {
-#                             6: int(new_warp_string[12:14], 16),
                             7: int(new_warp_string[14:16], 16),
                             8: int(new_warp_string[16:18], 16), 9: int(new_warp_string[18:20], 16),
                             10: int(new_warp_string[20:22], 16), 11: int(new_warp_string[22:24], 16),
                             12: int(new_warp_string[24:26], 16), 13: int(new_warp_string[26:28], 16),
-#                             14: int(new_warp_string[28:30], 16), 15: int(new_warp_string[30:32], 16),
                             })):
                             string_found = True
                             break
@@ -1820,16 +1621,24 @@ class World_Manipulation_Class():
                         break
  
     def _within_world_warps_by_game(self):
+        '''Shuffles the within world warps within all 9 worlds'''
         within_world_warps_obj = Within_World_Warps.Within_World_Warps_Class(self.seed, Within_World_Warps.Levels)
         world_list = []
         for world_object in self.world_list[:-2]:
             world_list.append(world_object._world_name)
         within_world_warps_obj._randomize_by_game(world_list)
         self._set_world_warps_by_game(within_world_warps_obj._randomized_warp_dict)
+        if(self.grandmaster.cheat_sheet_var.get() == 1):
+            self._generate_within_world_warps_cheat_sheet(within_world_warps_obj._randomized_warp_cheat_sheet_dict)
     
-    def _adjust_crocodile_nostril_warps(self):
-        self.bubblegloop_swamp._setup_list[0]._edit_object("FBE70064F346", {0: 0xFB, 1: 0x82, 4: 0xF3, 5:0x80})
-        self.bubblegloop_swamp._setup_list[0]._edit_object("FC7F0082F1B1", {0: 0xFC, 1: 0xAE})
+    def _generate_within_world_warps_cheat_sheet(self, randomized_warp_cheat_sheet_dict):
+        '''Creates a cheat sheet for within world warps'''
+        cheat_sheet_text = "Original Warp -> Actually Goes To\n"
+        for original_warp in randomized_warp_cheat_sheet_dict:
+            cheat_sheet_text += f"{original_warp} -> {randomized_warp_cheat_sheet_dict[original_warp]}\n"
+        config_file = f"{self.grandmaster.cwd}Randomized_ROM/WITHIN_WORLD_WARPS_CHEAT_SHEET_{self.seed}.txt"
+        with open(config_file, "w+") as cheat_sheet_file: 
+            cheat_sheet_file.write(cheat_sheet_text)
     
     def _within_world_warps_main(self):
         '''Runs the within world warps options that are not NONE'''
@@ -1837,7 +1646,6 @@ class World_Manipulation_Class():
             self._within_world_warps_by_world()
         elif(self.grandmaster.within_world_warps_var.get() == "Shuffle By Game"):
             self._within_world_warps_by_game()
-#         self._adjust_crocodile_nostril_warps()
     
     ###################
     ### CHEAT SHEET ###
@@ -1979,8 +1787,7 @@ class World_Manipulation_Class():
             ]
         self.curr_setup_file._replace_each_object_parameters(search_string_list, replacement_dict_list)
     
-    def _final_battle_more_enemies(self):
-        '''PyDoc'''
+    def _final_battle_ground_enemies(self):
         # Enemies
         ground_enemy_string_list = [
             "065F00000122", # +X +Z
@@ -2047,6 +1854,9 @@ class World_Manipulation_Class():
             ground_replacement_dict_list.append(self._choose_from_list(ground_replacement_dict_option_list, increment=enemy_num))
         self.curr_setup_file._replace_each_object_parameters(ground_enemy_string_list, ground_replacement_dict_list)
         self.curr_setup_file._replace_each_object_parameters(ground_enemy_string_list, ground_enemy_location_replacement_dict)
+    
+    def _final_battle_sky_enemies(self):
+        '''PyDoc'''
         sky_enemy_string_list = [
             "011E0004065E", # +X +Z
             "065E0004FEDE", # +X -Z
@@ -2314,7 +2124,7 @@ class World_Manipulation_Class():
     ### GRUNTY SPECIFIC ###
     
     def _final_battle_grunty_size(self, new_size):
-        '''PyDoc'''
+        '''Changes the final battle Gruntilda size'''
         search_string_list = [
             "190C038B", # Grunty
             ]
@@ -2331,53 +2141,19 @@ class World_Manipulation_Class():
     ### CAUSE I'M NICE ###
     
     def _pity_1_up(self):
-        '''PyDoc'''
+        '''Puts a 1-Up where you spawn after failing the Gruntilda Fight'''
         replacement_dict = {
             6: 0x19, 7: 0x0C,
             8: 0x00, 9: 0x49,
             14: 0x0, 15: 0x64,
             }
         self.gruntildas_lair._setup_list[7]._edit_object("0C9201B001DE7D08002A000000000000", replacement_dict)
-    
-    def _early_gold_cauldron(self):
-        '''PyDoc'''
-        replacement_dict = {
-            6: 0x04, 7: 0x8C,
-            8: 0x02, 9: 0x3B,
-            12: 0x42, 13: 0x0,
-            }
-        self.gruntildas_lair._setup_list[0]._edit_object("FD3EFFF10227FA0E000B", replacement_dict)
-    
-    ####################################################
-    ###      THE ODDS OF THIS HAPPENING IS LOW,      ###
-    ### BUT THE LOOKS ON THEIR FACE WILL BE WORTH IT ###
-    ####################################################
-    
-    def _furnace_fun_return(self):
-        # Furnace Fun
-#         self._pull_out_level_model("105d8", "10678")
-        # Final Battle Area
-#         self._pull_out_level_model("10678", "105d8")
-        # A Side
-        self._pull_out_level_model("10680", "10678")
-        self._pull_out_level_model("10678", "10680")
-        # B Side
-#         self._pull_out_level_model("106d0", "10740")
-#         self._pull_out_level_model("10740", "106d0")
-        # Unknown TBH
-#         self._pull_out_level_model("10548", "10678")
-#         self._pull_out_level_model("10678", "10548")
-        # MM and TTC
-#         self._pull_out_level_model("101F0", "103E8")
-#         self._pull_out_level_model("103E8", "101F0")
-        
-    
+
     ### MAIN ###
     
     def _harder_final_battle_main(self, difficulty_level):
-        '''PyDoc'''
+        '''Runs the functions for determining and implementing the final battle changes'''
         # Miscellaneous
-#         self._early_gold_cauldron()
         self._pity_1_up()
         # Regular Harder Battle
         self.curr_setup_file = self.gruntildas_lair._setup_list[-1]
@@ -2391,15 +2167,16 @@ class World_Manipulation_Class():
         if(not final_battle_categories):
             return
         final_battle_category = self._choose_from_list(final_battle_categories)
-        print(f"Final Battle: {final_battle_category}")
+#         print(f"Final Battle: {final_battle_category}")
         # Enemies
         if(final_battle_category == "Enemies"):
             # Layered
             self._final_battle_sir_slush()
+            self._final_battle_whipcrack()
             if(difficulty_level > 1):
-                self._final_battle_whipcrack()
+                self._final_battle_ground_enemies()
             if(difficulty_level > 2):
-                self._final_battle_more_enemies()
+                self._final_battle_sky_enemies()
         # Environment
         elif(final_battle_category == "Floor"):
             # Reverse Layered
@@ -2422,6 +2199,7 @@ class World_Manipulation_Class():
     #########################
     
     def _move_struct(self, item_index, level_collision_dict):
+        '''Moves the structs on the map based on map collision'''
         curr_x = possible_negative(int(leading_zeros(self.curr_setup_file.mm[item_index + 4], 2) + leading_zeros(self.curr_setup_file.mm[item_index + 5], 2), 16))
         curr_y = possible_negative(int(leading_zeros(self.curr_setup_file.mm[item_index + 6], 2) + leading_zeros(self.curr_setup_file.mm[item_index + 7], 2), 16))
         curr_z = possible_negative(int(leading_zeros(self.curr_setup_file.mm[item_index + 8], 2) + leading_zeros(self.curr_setup_file.mm[item_index + 9], 2), 16))
@@ -2447,6 +2225,7 @@ class World_Manipulation_Class():
             self.curr_setup_file.mm[item_index + 9] = int(leading_zeros(new_z, 4)[2:], 16)
     
     def _find_structs(self, level_collision_dict):
+        '''Locates the structs on the map'''
         for struct_search_string in Structs.collectable_struct_id_list:
             item_index = 0
             while(item_index > -1):
@@ -2456,6 +2235,7 @@ class World_Manipulation_Class():
                     item_index = item_index + 1
     
     def _scattered_structs_main(self):
+        '''Runs the functions for having the structs scattered around the map within their original voxels'''
         ttc_level_model = Level_Model_Class(self._file_dir, "101F0")
         ttc_level_model._find_collision_height()
         self.curr_setup_file = self.treasure_trove_cove._setup_list[0]
@@ -2466,7 +2246,7 @@ class World_Manipulation_Class():
     #####################
     
     def _skip_furnace_fun(self):
-        '''Takes a random entry point and turns it into a warp that leads to the next area'''
+        '''Changes the warps after the 765 Note Door and after Furnace Fun to link with each other'''
         # Floor 7 To Floor 8
         self.curr_setup_file = self.gruntildas_lair._setup_list[6]
         replacement_dict = {8: 0x00, 9: 0x77}
@@ -2495,8 +2275,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._edit_object(object_search_string, replacement_dict)
     
     def _tiptup_choir_main(self):
-        '''Increases the size of Mr. Vile. Default size is 0x64 (100)'''
-        print("Tiptup Choir Heads Main")
+        '''Places the tiptup choir in semi-randomly placed positions to make the challenge harder'''
         self.curr_setup_file = self.bubblegloop_swamp._setup_list[2]
         object_search_string_list = ["190C027B", "190C027C", "190C027D", "190C027E", "190C027F", "190C0280"]
         possible_locations = [

@@ -470,3 +470,10 @@ class SetupFile():
             one_up_index = self.mm.find(bytes.fromhex("190C0049"))
             self._edit_object_index(orange_index, {9: 0x49})
             self._edit_object_index(one_up_index, {9: 0x29})
+            
+    def _obtain_object_id_at_location(self, location_string):
+        location_index = self.mm.find(bytes.fromhex(location_string))
+        if(location_index > -1):
+            return self.mm[location_index + 8] * 256 + self.mm[location_index + 9]
+        else:
+            return -1

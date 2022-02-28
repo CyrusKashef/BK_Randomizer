@@ -168,10 +168,8 @@ class Misc_Manipulation_Class():
     def _motzand_keys_main(self):
         seed(a=(self._seed_val))
         pattern_1 = sample(range(0, 23), 5)
-        print(f"Pattern 1: {pattern_1}")
         seed(a=(self._seed_val + 5))
         pattern_2 = sample(range(0, 23), 10)
-        print(f"Pattern 2: {pattern_2}")
         with open(f"{self._file_dir}Randomized_ROM/FA8CE6-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap(decomp_file.fileno(), 0)
             for count, index in enumerate(range(0xD4, 0xD9)):
@@ -382,10 +380,9 @@ class Misc_Manipulation_Class():
             ("YOU WANT TO SEE A MODDED TOOIE?", "THERE'S TONS OF FEATURES ON SNOOIE!"), # Wedarobi (Approved)
             ("YOU SEEM TO BE FULL OF RAGE.", "TRY CALMING DOWN LIKE MONOTONE GAGE!"), # Gage (Approved)
             ("BLAST THAT STUPID NINPALK SKIP!", "I NEED THAT CUTSCENE FOR TIME TO DIP"), # Ninpalk (Approved)
-#             ("YOU HAVEN'T CLIPPED THROUGH THE FLOOR AT LEAST,", "IT SEEMS YOU'RE NO 8 BIT BEAST!"), # The8BitBeast
+            ("YOU HAVEN'T CLIPPED THROUGH THE FLOOR AT LEAST,", "IT SEEMS YOU'RE NO 8 BIT BEAST!"), # The8BitBeast (Approved)
             ("WANNA SEE RUNNERS AT A FAST PACE?", "CHECK OUT THE TWITCH CHANNEL BANJO RACE!"), # GarageDoorOpener (Approved)
             ("LOVEABLE STREAMER, HIS NAME IS DEDE,", "FULL OF CHARM AND HIS SOCKS ARE STINKY!"), # Dedelux (Approved)
-#             ("AZMI HAS WORLD RECORD, BUT HE'S NOT PREPARED,", "TO PLAY THE RANDO, I HAVE HIM SCARED!"), # Azmi
             ("NADE, CHILE, TREP, AND MORE,", "ARE TOO AFRAID OF LOSING THEIR NOTE SCORE!"), # XBOX Players
             # Poking The Community
             ("WE GET IT, YOU CAN STOP, GOGO!", "THE GRUNTY'S REVENGE SCENE WILL NEVER GROW!"), # G0go (Approved)

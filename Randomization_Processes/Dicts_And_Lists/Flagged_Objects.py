@@ -10,19 +10,19 @@ flagged_object_dict = {
         # Empty Honeycombs
         "0076": { # Stump
             "Object": "FA88006312D8190C0047",
-            "Flag": "FA9800A5129B51140076",
+            "Flag":   "FA9800A5129B51140076",
             },
         "0077": { # Waterfall
             "Object": "E5BB0514F8F5190C0047",
-            "Flag": "E5B30514F8F061940077",
+            "Flag":   "E5B30514F8F061940077",
             },
         "0078": { # Underwater
             "Object": "FEF8FE46FD75190C0047",
-            "Flag": "FF00FE29FD7450140078",
+            "Flag":   "FF00FE29FD7450140078",
             },
         "0079": { # Climb Tree
             "Object": "F54005130025190C0047",
-            "Flag": "F54C0582006D5C140079",
+            "Flag":   "F54C0582006D5C140079",
             },
         # Mumbo Tokens
         },
@@ -98,6 +98,10 @@ flagged_object_dict = {
             "Flag":  "2106036FF59638140067", # 21 06 03 6F F5 96 38 14 00 67 00 00 00 00 00 64 0E 00
             },
         # Mumbo Tokens
+        "00CD": {
+            "Object":"0262FE64001F190C002D",
+            "Flag":  "0252FE640014369400CD",
+            },
         "00D0": {
             "Object":"FF2307ED03A1190C002D",
             "Flag":  "FEFE080603B5391400D0",
@@ -187,7 +191,7 @@ flagged_object_dict = {
             "Flag":  "FFBB028EFFFA5594006A",
             },
         # Mumbo Tokens
-        "00D2": {
+        "00DC": {
             "Object":"13B90000EBEA190C002D",
             "Flag":  "13CB0000EBCE431400DC",
             },
@@ -222,6 +226,10 @@ flagged_object_dict = {
         "00E4": {
             "Object":"0000012CF926190C002D",
             "Flag":  "00100142F92B391400E4",
+            },
+        "00E5": {
+            "Object":"00000000FE3E190C002D",
+            "Flag":  "00020000FE3E301400E5",
             },
         },
     "Freezeezy Peak": {
@@ -370,13 +378,13 @@ flagged_object_dict = {
             "Flag":  "FFC91458095B49940074",
             },
         # Mumbo Tokens
-        "00F8": {
-            "Object":"00AD015EF1E6190C002D",
-            "Flag":  "00B0015EF1FE579400FB",
-            },
         "00FA": {
             "Object":"0F6EFF510145190C002D",
             "Flag":  "0F6EFF51015A4D9400FA",
+            },
+        "00FB": {
+            "Object":"00AD015EF1E6190C002D",
+            "Flag":  "00B0015EF1FE579400FB",
             },
         "00FC": { # Church Tower
             "Object":"F51005C3FAAD190C002D",
@@ -478,6 +486,10 @@ flagged_object_dict = {
         "010A": {
             "Object":"E7C800960000190C002D",
             "Flag":  "E7C7009600003F94010A",
+            },
+        "010B": {
+            "Object":"1B8DFC27F978190C002D",
+            "Flag":  "1B85FC27F9924A14010B",
             },
         "010C": {
             "Object":"F31DFE370ED8190C002D",
