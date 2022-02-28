@@ -31,7 +31,7 @@ learnable_moves_dict = {
 #########################
 
 class World_Order_Bottles():
-    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0):
+    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0):
         '''Initializes the World Order Bottles Class'''
         self.bottles_world_warp_dict = bottles_world_warp_dict
         self.extra_flagged_object_flags = extra_flagged_object_flags
@@ -45,6 +45,10 @@ class World_Order_Bottles():
         self.collected_jiggy_list = []
         self.collected_mumbo_token_list = []
         self.increment = 0
+        if(one_hp == 0):
+            self.one_hp = False
+        else:
+            self.one_hp = True
     
     def _progression_requirements(self, world_name):
         '''Calculates the progression requirements for the world number, based on lair progression and Jiggies needed to open the worlds'''
@@ -84,19 +88,25 @@ class World_Order_Bottles():
                         possible_world_found = True
                         break
                 if(possible_world_found):
-                    # Get To Puzzle Without Taking Damage
-                    required_move_list = ["Wading_Boots"]
+                    if(self.one_hp):
+                        # Get To Puzzle Without Taking Damage
+                        required_move_list = ["Wading_Boots"]
                 else:
-                    # Get To 260 Note Door; Get To Puzzle Without Taking Damage
-                    required_move_list = ["Shock_Jump_Pad", "Wading_Boots"]
+                    if(self.one_hp):
+                        required_move_list = ["Shock_Jump_Pad", "Wading_Boots"]
+                    else:
+                        # Get To 260 Note Door; Get To Puzzle Without Taking Damage
+                        required_move_list = ["Shock_Jump_Pad"]
             else:
-                required_move_list = ["Wading_Boots"]
+                if(self.one_hp):
+                    required_move_list = ["Wading_Boots"]
         # Exiting FP -> Going To GV
         elif(world_count == 4):
             required_jiggy_count = 32
             if((world_name != "Gobi's Valley") and ("Gobi's Valley" not in self.world_order_list)):
                 # Get To GV Without Taking Damage
-                required_move_list = ["Wading_Boots"]
+                if(self.one_hp):
+                    required_move_list = ["Wading_Boots"]
         # Exiting GV -> Going To MMM
         elif(world_count == 5):
             required_jiggy_count = 42
