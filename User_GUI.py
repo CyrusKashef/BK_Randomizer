@@ -277,7 +277,7 @@ from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0.20220227"
+BK_RANDO_VERSION = "2.0.20220228"
 
 #######################
 ### ERROR GUI CLASS ###
@@ -708,7 +708,7 @@ class User_GUI_Class():
         '''Sets the recommended defaults for first time users or when an error occurs with a loaded json file'''
         ### ROM and Seed ###
         # ROM
-        self.rom_file_entry.set(self.cwd)
+        self.rom_file_entry.set("")
         # Seed
         self.seed_value.set("")
         ### General Settings ###
@@ -848,15 +848,16 @@ class User_GUI_Class():
                 with open(filename, "r") as json_file:
                     json_data = json.load(json_file)
             except FileNotFoundError:
-                Error_GUI("Last Used Configuration File Not Found.\nImplementing The Default Settings!")
                 self._set_recommended_defaults()
+                Error_GUI("Last Used Configuration File Not Found.\nImplementing The Default Settings!")
                 return
             except Exception:
                 Error_GUI("Error Occurred During Random Configuration.\nLeaving Settings As They Are.")
                 return
         ### ROM and Seed ###
         # ROM
-        self.rom_file_entry.set(json_data["ROM_File"])
+        if(json_data["ROM_File"] != ""):
+            self.rom_file_entry.set(json_data["ROM_File"])
         # Seed
         self.seed_value.set(json_data["Seed"])
         ### General Settings ###
