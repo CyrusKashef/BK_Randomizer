@@ -10,23 +10,23 @@ Created on Oct 9, 2021
 #####################
 
 from mmap import mmap
-from random import seed, choices, shuffle, sample
+from random import seed, choice, choices, shuffle, sample, randint
+import os
 
 ###################
 ### FILE IMPORT ###
 ###################
 
 from Randomization_Processes.Misc_Manipulation.Model_Data.BK_Models import BK_Model_Class
-from Randomization_Processes.Misc_Manipulation.Model_Data.Swap_Models_Main import Swap_Models_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Music_Data.Music_Main import Music_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Skybox_Data.Skybox_Main import Skybox_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Sprite_Data.Sprite_Main import Sprite_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation_Class
-from Randomization_Processes.Misc_Manipulation.Animation_Data.Animation_Main import Swap_Animations_Manipulation
 from Randomization_Processes.Misc_Manipulation.Game_Engine_Data.Game_Engine_Main import Game_Engine_Class
-from Randomization_Processes.Misc_Manipulation.Properties_Data.Properties_Main import Properties_Manipulation_Class
-
+from Randomization_Processes.Misc_Manipulation.Models_Animations_Properties.Models_Animations_Properties_Main import Models_Animations_Properties_Class
+from Randomization_Processes.Common_Functions import leading_zeros
 from Randomization_Processes.Dicts_And_Lists.Misc_Dicts_And_Lists import gv_matching_puzzle_pictures
+from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids, non_softlock_start_level
 
 #################################
 ### MISCELLANEOUS MANIP CLASS ###
@@ -235,45 +235,104 @@ class Misc_Manipulation_Class():
     ### MODELS AND TEXTURES ###
     ###########################
     
+    def _random_hex(self, digit_len, increment=0):
+        '''Randomly generates hex values for the colors in BK'''
+        seed(a=(self._seed_val + increment))
+        max_num = "F" * digit_len
+        random_hex_val = leading_zeros(randint(0, int(max_num, 16)), digit_len).upper()
+        if(digit_len == 4):
+            choices = [str(hex(num))[2:].upper() for num in range(0x1, 0xF, 0x2)]
+            seed(a=(self._seed_val + increment))
+            new_end_val = choice(choices)
+            random_hex_val = random_hex_val[:-1] + new_end_val
+        elif(digit_len == 6):
+            random_hex_val = random_hex_val + "FF"
+        return random_hex_val
+    
     def _bk_model(self, seed_val):
         '''Runs the functions for editing the Banjo Kazooie models'''
         bk_model_obj = BK_Model_Class(self._file_dir, "7900", original_index_start=0xB138)
+        if(self._grandmaster.bk_model_var.get() == "Seed Determined Preset"):
+            bk_model_options = []
+            for item in sorted(self._grandmaster.bk_model_json):
+                bk_model_options.append(item)
+            seed(a=(self._seed_val))
+            bk_model_preset = choice(bk_model_options)
+            banjo_fur = self._grandmaster.bk_model_json[bk_model_preset]["Banjo_Fur"]
+            banjo_skin = self._grandmaster.bk_model_json[bk_model_preset]["Banjo_Skin"]
+            banjo_feet = self._grandmaster.bk_model_json[bk_model_preset]["Banjo_Feet"]
+            kazooie_primary = self._grandmaster.bk_model_json[bk_model_preset]["Kazooie_Primary"]
+            kazooie_secondary = self._grandmaster.bk_model_json[bk_model_preset]["Kazooie_Secondary"]
+            kazooie_wing_primary = self._grandmaster.bk_model_json[bk_model_preset]["Kazooie_Wing_Primary"]
+            kazooie_wing_secondary = self._grandmaster.bk_model_json[bk_model_preset]["Kazooie_Wing_Secondary"]
+            backpack = self._grandmaster.bk_model_json[bk_model_preset]["Backpack"]
+            wading_boots = self._grandmaster.bk_model_json[bk_model_preset]["Wading_Boots"]
+            shorts_vertex = self._grandmaster.bk_model_json[bk_model_preset]["Shorts_Vertex"]
+            shorts_texture = self._grandmaster.bk_model_json[bk_model_preset]["Shorts_Texture"]
+            tooth_necklace = self._grandmaster.bk_model_json[bk_model_preset]["Tooth_Necklace"]
+        else:
+            banjo_fur = self._grandmaster.banjo_fur_var.get()
+            if(banjo_fur == "?"):
+                banjo_fur = self._random_hex(6, increment=0)
+            banjo_skin = self._grandmaster.banjo_skin_var.get()
+            if(banjo_skin == "?"):
+                banjo_skin = self._random_hex(6, increment=1)
+            banjo_feet = self._grandmaster.banjo_feet_var.get()
+            if(banjo_feet == "?"):
+                banjo_feet = self._random_hex(4, increment=2)
+            kazooie_primary = self._grandmaster.kazooie_primary_var.get()
+            if(kazooie_primary == "?"):
+                kazooie_primary = self._random_hex(6, increment=3)
+            kazooie_secondary = self._grandmaster.kazooie_secondary_var.get()
+            if(kazooie_secondary == "?"):
+                kazooie_secondary = self._random_hex(6, increment=4)
+            kazooie_wing_primary = self._grandmaster.kazooie_wing_primary_var.get()
+            if(kazooie_wing_primary == "?"):
+                kazooie_wing_primary = self._random_hex(4, increment=5)
+            kazooie_wing_secondary = self._grandmaster.kazooie_wing_secondary_var.get()
+            if(kazooie_wing_secondary == "?"):
+                kazooie_wing_secondary = self._random_hex(4, increment=6)
+            backpack = self._grandmaster.backpack_var.get()
+            if(backpack == "?"):
+                backpack = self._random_hex(6, increment=7)
+            wading_boots = self._grandmaster.wading_boots_var.get()
+            if(wading_boots == "?"):
+                wading_boots = self._random_hex(6, increment=8)
+            shorts_vertex = self._grandmaster.shorts_vertex_var.get()
+            if(shorts_vertex == "?"):
+                shorts_vertex = self._random_hex(6, increment=9)
+            shorts_texture = self._grandmaster.shorts_texture_var.get()
+            if(shorts_texture == "?"):
+                shorts_texture = self._random_hex(4, increment=10)
+            tooth_necklace = self._grandmaster.tooth_necklace_var.get()
+            if(tooth_necklace == "?"):
+                tooth_necklace = self._random_hex(6, increment=11)
         bk_model_obj._main(
-            banjo_fur=self._grandmaster.banjo_fur_var.get(),
-            banjo_skin=self._grandmaster.banjo_skin_var.get(),
-            banjo_feet=self._grandmaster.banjo_feet_var.get(),
-            kazooie_primary=self._grandmaster.kazooie_primary_var.get(),
-            kazooie_secondary=self._grandmaster.kazooie_secondary_var.get(),
-            kazooie_wing_primary=self._grandmaster.kazooie_wing_primary_var.get(),
-            kazooie_wing_secondary=self._grandmaster.kazooie_wing_secondary_var.get(),
-            backpack=self._grandmaster.backpack_var.get(),
-            wading_boots=self._grandmaster.wading_boots_var.get(),
-            shorts_vertex=self._grandmaster.shorts_vertex_var.get(),
-            shorts_texture=self._grandmaster.shorts_texture_var.get(),
-            tooth_necklace=self._grandmaster.tooth_necklace_var.get()
+            banjo_fur, banjo_skin, banjo_feet,
+            kazooie_primary, kazooie_secondary, kazooie_wing_primary, kazooie_wing_secondary,
+            backpack, wading_boots, shorts_vertex, shorts_texture, tooth_necklace
             )
         bk_model_obj._only_low_poly_bk_model(seed_val)
 
-    def _other_model_shuffle(self, seed_val, file_dir, randomized_rom_path):
-        '''PyDoc'''
-        swap_model_manip = Swap_Models_Manipulation_Class(seed_val, file_dir, randomized_rom_path)
-        swap_model_manip._model_manip_main()
-
-    def _animation_shuffle(self, seed_val, file_dir, randomized_rom_path):
-        '''PyDoc'''
-        swap_animation_manip = Swap_Animations_Manipulation(seed_val, file_dir, randomized_rom_path)
-        swap_animation_manip._animation_manip_main()
-
-    ##################
-    ### PROPERTIES ###
-    ##################
+    ########################################
+    ### MODELS, ANIMATIONS, & PROPERTIES ###
+    ########################################
     
-    def _properties_shuffle(self, seed_val, file_dir):
+    def _models_animations_properties(self, seed_val, file_dir, randomized_rom_path):
         '''PyDoc'''
-        properties_manip_obj = Properties_Manipulation_Class(seed_val, file_dir)
-        properties_manip_obj._swap_properties_main()
-        if(self._grandmaster.cheat_sheet_var.get() == 1):
-            properties_manip_obj._generate_cheat_sheet()
+        selected_json = self._grandmaster.customizable_var.get()
+        if(selected_json == "Random Preset"):
+            seed(a=(self._seed_val))
+            selected_json = choice([file_name.split(".json")[0]
+                            for file_name in os.listdir(f"{file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/")
+                            if(file_name.endswith(".json"))])
+        models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, selected_json, self._grandmaster.cheat_sheet_var.get())
+        if(models_animations_properties_obj._master_dict["Models"]):
+            models_animations_properties_obj._models_main()
+        if(models_animations_properties_obj._master_dict["Animations"]):
+            models_animations_properties_obj._animations_main()
+        if(models_animations_properties_obj._master_dict["Properties"]):
+            models_animations_properties_obj._properties_main()()
 
     ########################
     ### SOUNDS AND MUSIC ###
@@ -308,8 +367,6 @@ class Misc_Manipulation_Class():
     
     def _setup_game_engine_manip(self):
         game_engine_obj = Game_Engine_Class(self._file_dir)
-        if(self._grandmaster.all_starting_moves_var.get()):
-            game_engine_obj._starting_moves()
         if(self._grandmaster.free_transformations_var.get() == 1):
             game_engine_obj._mumbo_transformations_costs()
         if(self._grandmaster.one_health_banjo_var.get() == 1):
@@ -317,7 +374,20 @@ class Misc_Manipulation_Class():
         game_engine_obj._blue_egg_limit(int(self._grandmaster.before_blue_egg_carry_value.get()), int(self._grandmaster.after_blue_egg_carry_value.get()))
         game_engine_obj._red_feather_limit(int(self._grandmaster.before_red_feather_carry_value.get()), int(self._grandmaster.after_red_feather_carry_value.get()))
         game_engine_obj._gold_feather_limit(int(self._grandmaster.before_gold_feather_carry_value.get()), int(self._grandmaster.after_gold_feather_carry_value.get()))
-        game_engine_obj._new_game_start_level(self._grandmaster.new_area_var.get(), self._grandmaster.skip_intro_cutscene_var.get())
+        all_start_moves = self._grandmaster.all_starting_moves_var.get()
+        starting_area = self._grandmaster.new_area_var.get()
+        if(starting_area == "Random Starting Area (Always Safe)"):
+            start_area_list = [option for option in non_softlock_start_level]
+            starting_area = choice(start_area_list)
+            print(f"Random Starting Area: {starting_area}")
+        elif(starting_area == "Random Starting Area (Safe With All Moves)"):
+            start_area_list = [option for option in start_level_ids]
+            starting_area = choice(start_area_list)
+            print(f"Random Starting Area: {starting_area}")
+            all_start_moves = 1
+        game_engine_obj._new_game_start_level(starting_area, self._grandmaster.skip_intro_cutscene_var.get())
+        if(all_start_moves == 1):
+            game_engine_obj._starting_moves()
         game_engine_obj._starting_lives(self._grandmaster.starting_lives_value.get())
 
     ########################

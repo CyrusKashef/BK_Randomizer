@@ -557,7 +557,7 @@ class Speech_Manipulation_Class():
         # GRUNTILDA: I'LL STEAL HER LOOKS AND UGLY SHE'LL BE!
         intro_cutscene_text = Speech_File_Class(self._file_dir, "D178")
         intro_cutscene_text._replace_line("494620544f4f5459", "IF PLAYERS THINK THEY KNOW THE GAME WELL,")
-        intro_cutscene_text._replace_line("49274c4c20535445414c", "I'LL CHANGE THE GAME WITH MY RANDOIZE SPELL!")
+        intro_cutscene_text._replace_line("49274c4c20535445414c", "I'LL CHANGE THE GAME WITH MY RANDOMIZE SPELL!")
     
     def _intro_cutscene_7(self):
         '''PyDoc'''
@@ -855,8 +855,8 @@ class Speech_Manipulation_Class():
         # 0xDAD0 - 5CCD38
         # GRUNTILDA: Hey Banjo, you're looking glum, it must be hard, being so dumb!
         grunty_text = Speech_File_Class(self._file_dir, "DAD0")
-        grunty_text._replace_line("", message1)
-        grunty_text._replace_line("", message2)
+        grunty_text._replace_line("4845592042414E4A4F2C20594F552752", message1)
+        grunty_text._replace_line("4954204D55535420424520484152442C", message2)
     
     def _gruntilda_lair_speech_3(self, message1, message2):
         # 0xDAD8 - 5CCD90
@@ -932,8 +932,8 @@ class Speech_Manipulation_Class():
         # 0xDB28 - 5CD100
         # GRUNTILDA: Monsters chase you, they're a hounding, then you'll get a Grunty pounding!
         grunty_text = Speech_File_Class(self._file_dir, "DB28")
-        grunty_text._replace_line("", message1)
-        grunty_text._replace_line("", message2)
+        grunty_text._replace_line("4D4F4E53544552532043484153452059", message1)
+        grunty_text._replace_line("5448454E20594F55274C4C2047455420", message2)
     
     def _gruntilda_lair_speech_14(self, message1, message2):
         # 0xDB30 - 5CD158
@@ -995,8 +995,8 @@ class Speech_Manipulation_Class():
         # 0xDB70 - 5CD400
         # GRUNTILDA: Grunty admits she's a hog, I really need a big hot dog!
         grunty_text = Speech_File_Class(self._file_dir, "DB70")
-        grunty_text._replace_line("", message1)
-        grunty_text._replace_line("", message2)
+        grunty_text._replace_line("4752554E54592041444D495453205348", message1)
+        grunty_text._replace_line("49205245414C4C59204E454544204120", message2)
     
     def _gruntilda_lair_speech_23(self, message1, message2):
         # 0xDB78 - 5CD450

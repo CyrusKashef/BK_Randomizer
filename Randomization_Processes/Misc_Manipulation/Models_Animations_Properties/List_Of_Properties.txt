@@ -1,0 +1,872 @@
+{
+	"Attackable": {
+		"000300040353": {
+			"Name": "Bigbutt",
+			"Health": 5,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"000400050350": {
+			"Name": "Ticker",
+			"Health": 2,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": "None"
+			},
+		"0005000603C5": {
+			"Name": "Grublin",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": "None"
+			},
+		"00070008035C": {
+			"Name": "Conga",
+			"Health": 1,
+			"Vulnerable To": "Eggs",
+			"Honeycombs On Death": 0,
+			"Note": "Typically has phases, but when applied, it kills everything else"
+			},
+		"001300670358": {
+			"Name": "Snippet",
+			"Health": 1,
+			"Vulnerable To": "Vulnerability: Beak Barge/Wonderwing",
+			"Honeycombs On Death": 2,
+			"Note": "When hit with any other move, the enemy flinches and leaves aggro, but does not take damage"
+			},
+		"001300F5038F": {
+			"Name": "Snippet (Mutie)",
+			"Health": 0,
+			"Vulnerable To": "Normal Vulnerablility: Eggs, Beak Barge; Special Vulnerability: Beak Barge/Wonderwing",
+			"Honeycombs On Death": 1,
+			"Note": "When hit with any other move, the enemy flinches and leaves aggro, but does not take damage"
+			},
+		"0014006803B0": {
+			"Name": "Snacker",
+			"Health": 5,
+			"Vulnerable To": "Eggs, Gold Feathers",
+			"Honeycombs On Death": 3,
+			"Note": "Rat-a-Tap Rap and Beak Barge will bounce you off"
+			},
+		"001500690351": {
+			"Name": "Yum-Yum",
+			"Health": 2,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"0026009D0353": {
+			"Name": "Bigbutt (Cutscene)",
+			"Health": 1,
+			"Vulnerable To": "Beak Bust, Beak Barge",
+			"Honeycombs On Death": 0,
+			"Note": "Can walk through them"
+			},
+		"002901CC0430": {
+			"Name": "Chompa",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": "Takes 2 Eggs"
+			},
+		"0033001E051A": {
+			"Name": "Leaky",
+			"Health": 0,
+			"Vulnerable To": "Beak Barge, Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Didn't take damage to eggs, but after 2 eggs, the game crashed."
+			},
+		"0034002503AE": {
+			"Name": "Cemetary Flower Pot",
+			"Health": 1,
+			"Vulnerable To": "Beak Barge, Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through"
+			},
+		"005000120364": {
+			"Name": "Beehive",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 3,
+			"Note": ""
+			},
+		"0065005603EC": {
+			"Name": "Shrapnel",
+			"Health": 3,
+			"Vulnerable To": "Eggs",
+			"Honeycombs On Death": 2,
+			"Note": "If contact with BK (including Wonderwing), does 2 damage and dies."
+			},
+		"006C00E803EE": {
+			"Name": "Tanktup (Shell + Head?)",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can walk through them."
+			},
+		"006D00E903EF": {
+			"Name": "Tanktup Front Left Leg",
+			"Health": 0,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"006D00EA03F0": {
+			"Name": "Tanktup Back Left Leg",
+			"Health": 0,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"006D00EB03F1": {
+			"Name": "Tanktup Front Right Leg",
+			"Health": 0,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"006D00EC03F2": {
+			"Name": "Tanktup Back Right Leg",
+			"Health": 0,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"006E005B0380": {
+			"Name": "BGS/CCW Pink Egg 1",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"007500A503ED": {
+			"Name": "Buzzbomb (Cutscene)",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster, Beak Barge",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"007D00AD03CA": {
+			"Name": "Nibbly (Cutscene)",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"008600B60457": {
+			"Name": "Grunty On Broomstick",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster, Beak Barge",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"009600C703C9": {
+			"Name": "Ripper",
+			"Health": 5,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"009900CA03CB": {
+			"Name": "Tee-Hee",
+			"Health": 1,
+			"Vulnerable To": "Wonderwing",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"009F010C03D0": {
+			"Name": "Locked Gate",
+			"Health": 2,
+			"Vulnerable To": "Beak Barge, Rat-A-Tap Rap, Eggs, Wonderwing",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through"
+			},
+		"00A5011703D5": {
+			"Name": "Nipper",
+			"Health": "Unknown",
+			"Vulnerable To": "Nothing?",
+			"Honeycombs On Death": "Unknown",
+			"Note": "Probably needs cutscene"
+			},
+		"00AD01200376": {
+			"Name": "Slappa",
+			"Health": 5,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": "Beak buster is a OHKO"
+			},
+		"00B101240377": {
+			"Name": "Sir Slush (No Hat)",
+			"Health": "Unknown",
+			"Vulnerable To": "Nothing?",
+			"Honeycombs On Death": "Unknown",
+			"Note": "Any form of contact bounces BK, and eggs don't work"
+			},
+		"00B201250378": {
+			"Name": "Snowball",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster, Bear Punch",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"00B301260379": {
+			"Name": "Sir Slush's Hat",
+			"Health": 1,
+			"Vulnerable To": "Beak Barge, Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"00B901160421": {
+			"Name": "FP Bullseye",
+			"Health": "Unknown",
+			"Vulnerable To": "Nothing?",
+			"Honeycombs On Death": "Unknown",
+			"Note": "Probably only dies to Beak Bomb, but I didn't test"
+			},
+		"00C101330375": {
+			"Name": "Red Flibbit",
+			"Health": 2,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"00C2013403ED": {
+			"Name": "Buzzbomb",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"00C501370385": {
+			"Name": "Yellow Flibbit",
+			"Health": 3,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"00C9013B0401": {
+			"Name": "Flotsam",
+			"Health": 2,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"00D5000C07D8": {
+			"Name": "BGS Mud Hut",
+			"Health": 0,
+			"Vulnerable To": "Beak Barge, Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"00D600ED0381": {
+			"Name": "BGS Pink Egg 2",
+			"Health": 0,
+			"Vulnerable To": "Rat-A-Tap Rap",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"00D700EE0382": {
+			"Name": "BGS Pink Egg 3",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"00D800EF0383": {
+			"Name": "BGS Orange Egg 4",
+			"Health": 0,
+			"Vulnerable To": "Beak Barge",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"00D900F00384": {
+			"Name": "BGS Orange Egg 5",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"00DB00F4042C": {
+			"Name": "Gold Chest",
+			"Health": 1,
+			"Vulnerable To": "Egg, Rat-A-Tap Rap, Beak Barge, Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Contact bounces instead of damages"
+			},
+		"00DD00F20566": {
+			"Name": "Black Snippet",
+			"Health": 1,
+			"Vulnerable To": "Wonderwing",
+			"Honeycombs On Death": 2,
+			"Note": "Attacking bounces you off"
+			},
+		"0107021D0493": {
+			"Name": "RBB Steel Door To Engine Room",
+			"Health": 2,
+			"Vulnerable To": "Beak Barge, Rat-A-Tap Rap, Eggs",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"0108021C0492": {
+			"Name": "Wooden Door",
+			"Health": 1,
+			"Vulnerable To": "All Except Claw Swipe",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"0109020D04A1": {
+			"Name": "Brick Wall",
+			"Health": 3,
+			"Vulnerable To": "Eggs, Wonderwing, Rat-A-Tap Rap",
+			"Honeycombs On Death": 0,
+			"Note": "When using Rat-A-Tap Rap, you will bouce off."
+			},
+		"011F022504B3": {
+			"Name": "Rareware Box",
+			"Health": 2,
+			"Vulnerable To": "All Except Claw Swipe",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"0127016303CA": {
+			"Name": "Nibbly",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"0128016404EE": {
+			"Name": "Colliwobble (Training)",
+			"Health": 1,
+			"Vulnerable To": "Rat-A-Tap Rap",
+			"Honeycombs On Death": 0,
+			"Note": "All other moves bounce BK"
+			},
+		"0129016504EF": {
+			"Name": "Bawl (Training)",
+			"Health": 1,
+			"Vulnerable To": "Roll",
+			"Honeycombs On Death": 1,
+			"Note": "Contact bounces BK"
+			},
+		"012A016604ED": {
+			"Name": "Topper (Training)",
+			"Health": 1,
+			"Vulnerable To": "Claw Swipe",
+			"Honeycombs On Death": 0,
+			"Note": "Contact bouces BK"
+			},
+		"0135016F042D": {
+			"Name": "Quarrie",
+			"Health": 1,
+			"Vulnerable To": "Egg, Beak Buster, Beak Barge, Wonderwing",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"014602FD03B0": {
+			"Name": "Snacker (Cutscene)",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster, Beak Barge",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"01A102810428": {
+			"Name": "Kaboom 1",
+			"Health": 1,
+			"Vulnerable To": "All Except Claw Swipe",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"01A202820428": {
+			"Name": "Kaboom 2",
+			"Health": 1,
+			"Vulnerable To": "All Except Claw Swipe",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"01A302830428": {
+			"Name": "Kaboom 3",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"01A402840428": {
+			"Name": "Kaboom 4",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+	    "01A602890431": {
+			"Name": "Vent",
+			"Health": "Unknown",
+			"Vulnerable To": "Nothing?",
+			"Honeycombs On Death": "Unknown",
+			"Note": ""
+			},
+		"01AE029B0446": {
+			"Name": "Zubba (Neutral)",
+			"Health": 3,
+			"Vulnerable To": "Beak Barge, Beak Buster, Rat-A-Tap-Rap, Wonderwing",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"01AF029C0446": {
+			"Name": "Zubba (Attacking)",
+			"Health": 1,
+			"Vulnerable To": "Beak Buster",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through them"
+			},
+		"01B2029F0482": {
+			"Name": "Clucker",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": "Take 2 damage when hit, Takes 4 eggs to kill"
+			},
+		"01B702A4048C": {
+			"Name": "TNT 1",
+			"Health": 3,
+			"Vulnerable To": "Anything",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"01B7030D048C": {
+			"Name": "TNT 2",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"01BF02AC0490": {
+			"Name": "Gnawty's Boulder",
+			"Health": "Unknown",
+			"Vulnerable To": "Nothing",
+			"Honeycombs On Death": "Unknown",
+			"Note": "Everything just bounces, Can go through them"
+			},
+		"01E20375052C": {
+			"Name": "Grublin Hood",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+	    "01E6036F04ED": {
+			"Name": "Topper",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": "Jumping on it bounces BK"
+			},
+	    "01E7036E04EF": {
+			"Name": "Bawl",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+	    "01E8036D04EE": {
+			"Name": "Colliwobble",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": "Contact bounces BK off"
+			},
+		"01EA0367054A": {
+			"Name": "Gruntling (Red)",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"01F103C00562": {
+			"Name": "Gruntling (Black)",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"0217034D049E": {
+			"Name": "Bees (2D)",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			},
+		"0218034E04CC": {
+			"Name": "Limbo",
+			"Health": 1,
+			"Vulnerable To": "Wonderwing",
+			"Honeycombs On Death": 1,
+			"Note": "Other attacks bounce off"
+			},
+		"0219034F04C7": {
+			"Name": "Mum-Mum",
+			"Health": 1,
+			"Vulnerable To": "Wonderwing",
+			"Honeycombs On Death": 1,
+			"Note": "All other moves de-aggro the enemy and may bounce BK off"
+			},
+		"021A0350049D": {
+			"Name": "Seaman Grublin",
+			"Health": 2,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"0225023104D5": {
+			"Name": "Big Yellow Cobweb",
+			"Health": 3,
+			"Vulnerable To": "Eggs",
+			"Honeycombs On Death": 0,
+			"Note": "Can move through, but attacking will bounce you back"
+			},
+		"022D026604BA": {
+			"Name": "RBB Window 1",
+			"Health": 1,
+			"Vulnerable To": "Egg, Rat-A-Tap Rap",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through"
+			},
+		"022E026704BB": {
+			"Name": "RBB Window 2",
+			"Health": 1,
+			"Vulnerable To": "Egg, Rat-A-Tap Rap",
+			"Honeycombs On Death": 0,
+			"Note": "Can go through"
+			},
+	    "0250037D0504": {
+			"Name": "Ice Cube (Large)",
+			"Health": 4,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 0,
+			"Note": "Instantly Dies To Rat-A-Tap Rap, Beak Buster, and Beak Barge"
+			},
+		"02530380051B": {
+			"Name": "Scabby",
+			"Health": 1,
+			"Vulnerable To": "Anything",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+		"025403810521": {
+			"Name": "Portrait Chompa",
+			"Health": 1,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": "Takes 3 eggs"
+			},
+		"025F03A00504": {
+			"Name": "Ice Cube (Small)",
+			"Health": 2,
+			"Vulnerable To": "All",
+			"Honeycombs On Death": 1,
+			"Note": ""
+			},
+	    "029503BF0561": {
+			"Name": "Gruntling (Blue)",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": ""
+			}
+		},
+	"Collectable": {
+		"00520046035F": "Jiggy",
+		"005500500363": "Honeycomb",
+		"005A006003C0": "Blue Jinjo (Collectable)",
+		"005B006203C2": "Green Jinjo (Collectable)",
+		"005C005F03BC": "Orange Jinjo (Collectable)",
+		"005D006103C1": "Pink Jinjo (Collectable)",
+		"005E005E03BB": "Yellow Jinjo (Collectable)",
+		"00600052036D": "Blue Egg (Grunty Fight)",
+		"00610049036E": "1-Up",
+		"006B00E70704": "Gloop Bubble",
+		"00B501290580": "Red Feather (Grunty Fight)",
+		"0168025D050C": "SNS Ice Key",
+		"0169025E050D": "SNS Egg",
+		"017001D80547": "Blue Egg Refill Pillow",
+		"017101D90548": "Red Feather Refill Pillow",
+		"017201DA0549": "Gold Feather Refill Pillow",
+		"01E5037006D1": "Gold Feather (Grunty Fight)",
+		"0209033B0480": "Blue Present",
+		"020A033C0481": "Green Present",
+		"020B01F30494": "Red Present"
+		},
+	"Interactable": {
+		"004500E4048A": "Flight Pad",
+		"00AE012103E6": "Jinxy Egg Feeding Statues",
+		"00D4000B0489": "Shock Jump Pad",
+		"00EC013F0400": "Sun Switch",
+		"00F1014403D7": "Star Switch",
+		"00F201450438": "GV Honeycomb Switch",
+		"00F5014E03F5": "BGS Green Jiggy Switch (Central)",
+		"00F901F70422": "Jinxy",
+		"00FC01FA0425": "Croctus",
+		"00FD01FB03F5": "BGS Green Jiggy Switch (Maze)",
+		"00FE01FD043D": "MMM Clock Switch",
+		"0103020404DC": "Witch Switch (MM)",
+		"0104020604DC": "Witch Switch (MMM)",
+		"0105020804DC": "Witch Switch (TTC)",
+		"0106020B04DC": "Witch Switch (RBB)",
+		"011B022104B5": "GL Water Switch 1",
+		"011C022204B2": "GL Water Switch 2",
+		"011D022304B0": "GL Water Switch 3",
+		"0121022704BD": "Witch Switch (CCW)",
+		"015F018F042F": "RBB Honeycomb Switch",
+		"0161025604DC": "Witch Switch (GV)",
+		"0162025704DC": "Witch Switch (BGS)",
+		"016402590507": "Grunty Eye Switch 1",
+		"0165025A0508": "Grunty Eye Switch 2",
+		"0166025B04DC": "Witch Switch (CC)",
+		"016D01D5054F": {
+			"Name": "Cheato 1",
+			"Health": 0,
+			"Vulnerable To": "",
+			"Honeycombs On Death": 0,
+			"Note": "BK bounces off, Wonder wing goes through"
+			},
+		"016E01D6054F": "Cheato 2",
+		"016F01D7054F": "Cheato 3",
+		"018201720402": "RBB Weird Green Ball? (Maybe to activate toll?)",
+		"01E003480539": "Brentilda",
+		"020603380486": "Christmas Tree Switch",
+		"022A023704DC": "Witch Switch (CCW)",
+		"022B023904DC": "Witch Switch (FP)",
+		"023C02450515": "Sarcophagus Switch",
+		"023F02460534": "Flight Pad Switch",
+		"02400247048A": "GL Spawned Flight Pad",
+		"024102480540": "Shock Jump Switch",
+		"0242024902DD": "GL Spawned Shock Jump Pad"
+		},
+	"Special": {
+		"00480039055E": "Napper",
+		"0049003A088C": "Motzand",
+		"0066005702EB": "Orange Pad",
+		"00F4014703E8": "Ancient Ones",
+		"010202030491": "Note Door",
+		"024402DB0450": "Dingpot 3",
+	    "0252037F0519": "Loggo",
+		"026502E4055A": "BK World Entry/Exit Pad",
+		"027A03A20543": "Jinjo Stand"
+		},
+	"Only_Damages": {
+		"000C001402D2": "Orange (Conga Attack)",
+		"00A4015103D4": "Lockup 1",
+		"00F6015203D4": "Lockup 2",
+		"00F7015303D4": "Lockup 3",
+		"00FB01F90424": "Cactus",
+		"018501750403":  {
+			"Name": "Ship Propeller",
+			"Health": 0,
+			"Vulnerable To": "None",
+			"Honeycombs On Death": 0,
+			"Note": "BK instantly dies upon touching it"
+			},
+		"01EF03BB054B": "Fireball 1",
+		"01F901E90440": "Snarebear",
+		"025C03890541": "Fireball 2",
+		"025D038A06C7": "Big Green Blast 1",
+		"028003AA06C9": "Big Green Blast 2",
+		"028403AB0546": "Grunty Barrier Spell"
+		},
+	"Other": {
+		"0006000703C6": "Mumbo",
+		"0009000E0354": "Little Intro Cutscene Bull",
+		"000A000F035D": "Chimpy",
+		"0017008E0355": "Concert BK",	
+		"0018008F03B1": "Concert Mumbo",
+		"0019009003BB": "Yellow Jinjo?",
+		"001A009103BB": "Yellow Jinjo?",
+		"001B0092035A": "Concert Tooty",
+		"001C009303A6": "Nintendo Cube",
+		"001D009403A7": "Rareware Logo",
+		"001E009503BB": "Yellow Jinjo?",
+		"001F009603BB": "Yellow Jinjo?",
+		"0020009703BB": "Yellow Jinjo?",
+		"0021009803BB": "Yellow Jinjo?",
+		"0022009903AA": "Cutscene Unknown?",
+		"0023009A03AB": "Cutscene Unknown?",
+		"0024009B0354": "Concert Bigbutt",
+		"0025009C0369": "Concert Frog",
+		"0027009E053D": "Grunty (Cutscene)",
+		"004B00430890": "Clanker's Screw",
+		"0068005A035E": "Jiggy In Hand",
+		"006F009F03BB": "Yellow Jinjo?",
+		"007000A0034D": "BK Sign",
+		"007100A103AC": "Cutscene Unknown",
+		"007200A203AD": "Fire Sparkle",
+		"007300A303BB": "Yellow Jinjo?",
+		"007400A40433": "Cutscene Unknown",
+		"007600A60398": "Red Yumblie (Cutscene)",
+		"007700A70473": "Mumbo BBQ",
+		"007800A80474": "BBQ 1",
+		"007900A90454": "BBQ 2",
+		"007A00AA0453": "Dingpot 1 (Cutscene)",
+		"007B00AB0452": "Grunty's Arms",
+		"007C00AC0451": "Grunty (Cutscene)",
+		"007E00AE0450": "Dingpot 2 (Cutscene)",
+		"007F00AF044F": "Green Mist",
+		"008000B00387": "Bottles (Cutscene)",
+		"008100B10388": "Bottles Mound",
+		"008200B20347": "Machine Room Door",
+		"008400B4035B": "Tooty",
+		"008500B50456": "Grunty Broomstick",
+		"008700B703BB": "Yellow Jinjo?",
+		"008800B80458": "Banjo Top Half (Probably Sleeping)",
+		"008900B90459": "Nabnut's Bed",
+		"008A00BA03BB": "Yellow Jinjo?",
+		"008B00BB045B": "Kazooie In Backpack Stand",
+		"008E00BE03BB": "Yellow Jinjo?",
+		"008F00BF03BB": "Yellow Jinjo?",
+		"009000C00460": "Kazooie Wing",
+		"009100C10467": "Jiggy Cutout Board",
+		"009200C20468": "Sexy Grunty",
+		"009300C30469": "Ugly Tooty",
+		"009700C8038A": "Boggy On Sled 2",
+		"009B010803BF": "Shadow",
+		"00A0010D03D1": "Gate",
+		"00A1010E03D2": "Wooden Hatch",
+		"00A301150370": "Blubber",
+		"00A601180371": "Grabba",
+		"00A7011903DC": "Magic Carpet 1",
+		"00A8011A033D": "Sarcophagus",
+		"00AA011C03DE": "Histup",
+		"00AF012203E7": "Square Shadow",
+		"00B0012303DC": "Magic Carpet 2",
+		"00B7012B0387": "Bottles (Dupe?)",
+		"00E401950532": "Banjo-Kazooie Lawn Chair/Gameboy/Beer/Sunglasses 1",
+		"00E501960532": "Banjo-Kazooie Lawn Chair/Gameboy/Beer/Sunglasses 2",
+		"00E601970532": "Banjo-Kazooie Lawn Chair/Gameboy/Beer/Sunglasses 3",
+		"00FA01F80423": "GV Unknown?",
+		"010A020E04A2": "MM Entrance Door",
+		"010B020F04B4": "RBB Entrance Door",
+		"010C021004AE": "BGS Entrance Door",
+		"010D021104A3": "TTC Entrance Chest Lid",
+		"010E021204A7": "CC Entrance Big Iron Bars",
+		"010F021304A8": "BGS Puzzle Grate",
+		"0111021504A4": "CC Entrance Tall Pipe 1",
+		"0112021604A5": "CC Entrance Tall Pipe 2",
+		"0113021704A9": "GL Pipe Switch 1",
+		"0114021804A6": "CC Entrance Pipe",
+		"0115021904AA": "GL Pipe Switch 2",
+		"0116021A04AC": "3 Iron Bars?",
+		"0117021B04AD": "Grunty's Hat",
+		"0118021E04B1": "Circular Green Grate",
+		"0119021F04B6": "Circular Brown Grate",
+		"011A022004B7": "RBB Jigsaw Grate",
+		"011E022404AF": "Ice Ball",
+		"0120022604BC": "GV Entrance",
+		"0122022804BE": "Invisible Wall",
+		"01240160038A": "Boggy On Sled",
+		"01250161038B": "Boggy Race Flag 1",
+		"01260162038B": "Boggy Race Flag 2",
+		"012D0169052E": "CCW Lobby Door 1",
+		"012F016B052E": "CCW Lobby Door 2",
+		"0131016D052E": "CCW Lobby Door 3",
+		"013301E3052E": "CCW Lobby Door 4",
+		"013602ED0340": "Machine Room Booth",
+		"013702EE046A": "Klungo 1",
+		"013802EF035B": "Tooty",
+		"013902F00341": "Machine Room Console",
+		"013A02F1046B": "Tooty's Force Field",
+		"013B02F20340": "Machine Room Booth",
+		"013C02F3046D": "Lightning",
+		"014302FA046A": "Klungo 2",
+		"014402FB0532": "Banjo-Kazooie Lawn Chair/Gameboy/Beer/Sunglasses 4",
+		"014502FC03C6": "Mumbo (Cutscene)",
+		"014702FE03BB": "Yellow Jinjo?",
+		"014802FF0461": "Green Smog",
+		"014903000479": "Bikini Girl",
+		"014A03010370": "Blubber (Cutscene)",
+		"014B0302047B": "Rock That Falls On Grunty (Cutscene)",
+		"014C030303BB": "Yellow Jinjo?",
+		"014D030403BB": "Yellow Jinjo?",
+		"014E030503BB": "Yellow Jinjo?",
+		"014F030603BB": "Yellow Jinjo?",
+		"0150030703BB": "Yellow Jinjo?",
+		"0151030803BB": "Yellow Jinjo?",
+		"0152030903BB": "Yellow Jinjo?",
+		"0153030A03BB": "Yellow Jinjo?",
+		"0167025C050A": "Sharkfood Island",
+		"017401DB054C": "Game Over Sign",
+		"017501DC054D": "Banjo Kazooie Sign",
+		"017601DD054E": "Copyright Info (Title Screen)",
+		"017901E0046C": "Jiggy Picture",
+		"017A02B40565": "Banjo's Puzzle Hand",
+		"017C019C056C": "The End Sign",
+		"017D01E10517": "Iron Gate",
+		"019801CA041E": "RBB Rareware Flag Pole",
+	    "01AA0296043B": "RBB Bell Buoy",
+	    "01AB0297043C": "RBB Row Boat",
+		"01D5031E03A9": "Palm Tree",
+		"01DF037A0387": "Bottles (Dupe?)",
+		"01EB03B7048B": "Jiggy Podium 1",
+		"01EB03BC0538": "Jiggy Podium 2",
+	    "01F401E40434": "Toots",
+		"01F801E80439": "Nothing?",
+		"01FA01EA044C": "Moggy",
+		"01FB01EB044D": "Soggy",
+		"01FC01EC044E": "Groggy",
+		"020003320448": "Blue Twinkly",
+		"020103330449": "Green Twinkly",
+		"02020334044A": "Orange Twinkly",
+		"02030335044B": "Red Twinkly",
+		"020403360442": "Twinkly Box",
+		"020503370496": "Twinkly Muncher",
+		"0208033A047F": "Christmas Tree",
+		"020C01F40495": "Jiggy Piece On Side?",
+		"020D033D038A": "Boggy On Sled 3",
+		"020F033F0494": "Wozza",
+		"02110341045D": "Nothing?",
+		"02120342045F": "Fireball (Cutscene)",
+		"021E023303B3": "Mumbo's Hut (CCW?)",
+		"0227023404D6": "CCW Entrance Door",
+		"0228023504D7": "FP Entrance Door 1",
+		"0229023604D8": "FP Entrance Door 2",
+		"022C023A04D9": "FP Entrance Wooden Snow Drift Texture",
+		"022F026304DB": "RBB Safety Boat 1",
+		"0230026404DE": "RBB Safety Boat 2",
+		"0232023C04B8": "GL CCW World Picture Switch",
+		"0235023F04E2": "RBB Skylights",
+		"0236026004F9": "Nabnut's Window Summer",
+		"0237026104FA": "Nabnut's Window Fall",
+		"0238026204FB": "Nabnut's Window Winter",
+		"0239025F04FC": "Nabnut's Window Spring",
+		"023B0244033D": "Sarcophagus Lid",
+		"024302E60533": "Nabnut's Door",
+	    "0251037E0506": "Snarebear (Dead)",
+		"025503820522": "Portrait (Grunty)",
+		"025703840527": "Portrait (Blackeye)",
+		"025803850528": "Portrait (Tower)",
+		"025903860529": "Portrait (Tree Moon)",
+		"025A0387052A": "Portrait (Tee-Hee)",
+		"025B0388052B": "Portrait (Seaman Grublin/Mum-Mum/Limbo)",
+		"026302E70518": "CCW Whipcrack Room Wooden Door",
+		"026602E30563": "World Entrance Sign",
+		"026802E003B6": "TTC Stairs 1",
+		"026902E103B7": "TTC Stairs 2",
+		"026A02DF03BE": "Lighthouse B",
+		"026B02DE0531": "Gnawty's House",
+		"026C02DD053E": "Gnawty's Bed",
+		"026D02DC053F": "Gnawty's Shelves",
+		"026E02D903B4": "Unknown",
+		"027002D803B2": "GL Two Poles",
+		"027603A10545": "Stone Jinjo",
+		"027B03A503BC": "Final Battle Orange Jinjo",
+		"027C03A603C2": "Final Battle Green Jinjo",
+		"027D03A703C1": "Final Battle Pink Jinjo",
+		"027E03A803BB": "Final Battle Yellow Jinjo",
+		"027F03A90544": "Jinjonator Stand",
+		"028503AC0551": "Jinjonator",
+		"028803AF03BF": "Shadow",
+	    "0294019B056D": "Hand (Looks Human?)",
+	    "029A03C4055F": "Washing Machine Cauldron",
+	    "029B03C5053D": "Furnace Fun Gruntilda",
+	    "029D03CA047B": "SM Rock That Lands On Grunty"
+		}
+}

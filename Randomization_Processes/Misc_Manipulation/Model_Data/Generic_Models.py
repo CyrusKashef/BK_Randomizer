@@ -121,8 +121,12 @@ class Model():
             new_color_blue_alpha = int(new_color[2:], 16)
         elif(len(new_color) == 6):
             new_color = self._convert_32_to_16(f"{new_color}FF")
+            new_color_red_green = int(new_color[:2], 16)
+            new_color_blue_alpha = int(new_color[2:], 16)
         elif(len(new_color) == 8):
             new_color = self._convert_32_to_16(new_color)
+            new_color_red_green = int(new_color[:2], 16)
+            new_color_blue_alpha = int(new_color[2:], 16)
         elif(int(new_color, 16) == 0):
             new_color_red_green = 0
             new_color_blue_alpha = 0

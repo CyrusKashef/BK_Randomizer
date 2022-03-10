@@ -72,7 +72,7 @@ class Texture_Class():
             self.mm[text_header_index + 8] = curr_info["X_Length"]
             self.mm[text_header_index + 9] = curr_info["Y_Length"]
             next_texture_start = next_texture_start + (curr_info["X_Length"] * curr_info["Y_Length"])//2 + 0x20
-            with open(f"{self._file_dir}Randomized_ROM\\{self._address}-Texture_{image_num}.bin", "r+b") as texture_file:
+            with open(f"{self._file_dir}Randomized_ROM/{self._address}-Texture_{image_num}.bin", "r+b") as texture_file:
                 mm_texture = mmap(texture_file.fileno(), 0)
                 index_count = 0
                 for index in range(self._texture_list[texture_count]["Texture_Start"], self._texture_list[texture_count]["Texture_Start"] + (curr_info["X_Length"] * curr_info["Y_Length"])//2 + 0x20):
@@ -83,26 +83,26 @@ class Texture_Class():
     def _flip_texture(self, rgba_index_list, x_axis=True, y_axis=True):
         if(x_axis):
             for rgba_index in rgba_index_list:
-                v_value = - int(leading_zeros(self.mm[rgba_index - 2], 2) + leading_zeros(self.mm[rgba_index - 1], 2), 16)
-                v_str = leading_zeros(v_value, 4)
-                self.mm[rgba_index - 2] = int(v_str[:2], 16)
-                self.mm[rgba_index - 1] = int(v_str[2:], 16)
+                v_value = 0x10000 - int(leading_zeros(self.mm[rgba_index + 0xA], 2) + leading_zeros(self.mm[rgba_index + 0xB], 2), 16)
+                if(v_value == 0x10000):
+                    v_str = "0000"
+                else:
+                    v_str = leading_zeros(v_value, 4)
+                self.mm[rgba_index + 0xA] = int(v_str[:2], 16)
+                self.mm[rgba_index + 0xB] = int(v_str[2:], 16)
+#                 self.mm[rgba_index + 0xC] = 0
+#                 self.mm[rgba_index + 0xD] = 0
+#                 self.mm[rgba_index + 0xE] = 0
         if(y_axis):
             for rgba_index in rgba_index_list:
-                v_value = - int(leading_zeros(self.mm[rgba_index - 4], 2) + leading_zeros(self.mm[rgba_index - 3], 2), 16)
-                v_str = leading_zeros(v_value, 4)
-                self.mm[rgba_index - 4] = int(v_str[:2], 16)
-                self.mm[rgba_index - 3] = int(v_str[2:], 16)
+                v_value = 0x10000 - int(leading_zeros(self.mm[rgba_index + 0x8], 2) + leading_zeros(self.mm[rgba_index + 0x9], 2), 16)
+                if(v_value == 0x10000):
+                    v_str = "0000"
+                else:
+                    v_str = leading_zeros(v_value, 4)
+                self.mm[rgba_index + 0x8] = int(v_str[:2], 16)
+                self.mm[rgba_index + 0x9] = int(v_str[2:], 16)
+        
 
 if __name__ == '__main__':
-    texture_obj = Texture_Class("C:/Users/Cyrus/Desktop/N64/ROMs/GEDecompressor_Files/temp/89B0/", "89B0")
-    texture_obj._extract_header_info()
-    texture_obj._extract_texture_setup_info()
-    print(texture_obj._texture_list)
-    new_order_dict = {
-        0: 2,
-        1: 3,
-        2: 0,
-        3: 1,
-        }
-    texture_obj._rearrange_textures(new_order_dict)
+    pass
