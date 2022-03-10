@@ -109,6 +109,7 @@ VARIABLE TEXT:
 ### PYTHON IMPORTS ###
 ######################
 
+from random import seed, randint, choice
 import tkinter as tk
 from tkinter import ttk
 from tkinter import HORIZONTAL
@@ -150,6 +151,7 @@ class Progression_GUI_Class():
         self.progress_bar_window.config(background="#F3E5AB")
         self.progress_bar_value = 0
         self._mumbo_error_message = "Mumbo Get New Stick, This One Not Work Well..."
+        self._hidden_random_values()
     
     class App_Variable_Label():
         '''A text box that can altered after creation'''
@@ -181,6 +183,23 @@ class Progression_GUI_Class():
         def pack_bar(self):
             '''Displays progress bar'''
             self.progressbar.pack(padx=5, pady=5)
+    
+    def _hidden_random_values(self):
+        # Final Note Door
+        if(self.master.final_note_door_value.get() == "?"):
+            seed(a=(self.master.seed_value.get()))
+            if(self.master.struct_var.get() == "All Notes"):
+                self.final_note_door_value = randint(0, 2000)
+            else:
+                self.final_note_door_value = randint(0, 900)
+        else:
+            self.final_note_door_value = int(self.master.final_note_door_value.get())
+        # Final Puzzle
+        if(self.master.final_puzzle_value.get() == "?"):
+            seed(a=(self.master.seed_value.get()))
+            self.final_puzzle_value = randint(0, 99)
+        else:
+            self.final_puzzle_value = int(self.master.final_puzzle_value.get())
     
     def _setup(self):
         '''Creates the randomized ROM folder with a copy of the original ROM file'''
@@ -239,7 +258,7 @@ class Progression_GUI_Class():
             raise
         try:
             self.pb_label.set_text("Mumbo Has Stronger Magic Than Note Door...")
-            world_manip._note_doors_main()
+            world_manip._note_doors_main(self.final_note_door_value)
         except Exception:
             self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
             raise
@@ -338,7 +357,7 @@ class Progression_GUI_Class():
         if(self.master.final_puzzle_var.get() == 1):
             try:
                 self.pb_label.set_text(f"Mumbo Make Traveling Easier...")
-                world_manip._final_world_puzzle()
+                world_manip._final_world_puzzle(self.final_puzzle_value)
             except Exception:
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
@@ -363,8 +382,8 @@ class Progression_GUI_Class():
             raise
         try:
             self.pb_label.set_text("Mumbo Make Bottles Say Silly Words...")
-            misc_manip._bottles_requirements_text(self.master.final_note_door_var.get(), self.master.final_note_door_value.get(),
-                                              self.master.final_puzzle_var.get(), self.master.final_puzzle_value.get())
+            misc_manip._bottles_requirements_text(self.master.final_note_door_var.get(), self.final_note_door_value,
+                                              self.master.final_puzzle_var.get(), self.final_puzzle_value)
         except Exception:
             self.warning_label.set_text("Uh-Oh...")
             self.pb_label.set_text(f"Note & Jiggy Requirement Error:\nPlease Check The ReadMe Under 'Errors'")
@@ -401,21 +420,13 @@ class Progression_GUI_Class():
                 self.warning_label.set_text("Uh-Oh...")
                 self.pb_label.set_text(f"Banjo-Kazooie Color Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
-        if(self.master.other_model_var.get() == 1):
+        if(self.master.customizable_var.get() != "None"):
             try:
-                self.pb_label.set_text("Mumbo's Loincloth All Dirty...")
-                misc_manip._other_model_shuffle(self.seed_val, self.master.cwd, self.rom_path)
+                self.pb_label.set_text("Banjo Must Stand Still Or Spell Go All Funny...")
+                misc_manip._models_animations_properties(self.seed_val, self.master.cwd, self.rom_path)
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"Model Error:\nPlease Check The ReadMe Under 'Errors'")
-                raise
-        if(self.master.animation_var.get() == 1):
-            try:
-                self.pb_label.set_text("Haha Bottles Makes Bear And Bird Do Funny Moves...")
-                misc_manip._animation_shuffle(self.seed_val, self.master.cwd, self.rom_path)
-            except Exception:
-                self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"Animation Error:\nPlease Check The ReadMe Under 'Errors'")
+                self.pb_label.set_text(f"Models/Animations/Properties Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if((self.master.short_sounds_var.get() == 1) or (self.master.jingles_var.get() == 1) or (self.master.music_var.get() == 1)):
             try:
@@ -474,14 +485,6 @@ class Progression_GUI_Class():
             self.warning_label.set_text("Uh-Oh...")
             self.pb_label.set_text(f"Game Engine Error:\nPlease Check The ReadMe Under 'Errors'")
             raise
-        if(self.master.properties_var.get() == 1):
-            try:
-                self.pb_label.set_text("Banjo Must Stand Still Or Spell Go All Funny...")
-                misc_manip._properties_shuffle(self.seed_val, self.master.cwd)
-            except Exception:
-                self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"Properties Error:\nPlease Check The ReadMe Under 'Errors'")
-                raise
         print("End of Misc Options")
     
     def _perform_checksum(self):

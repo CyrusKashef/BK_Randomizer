@@ -277,7 +277,7 @@ from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0.20220228"
+BK_RANDO_VERSION = "2.0.20220309"
 
 #######################
 ### ERROR GUI CLASS ###
@@ -403,16 +403,12 @@ class User_GUI_Class():
     
     def _random_note_value(self):
         '''Randomly selects a note value'''
-        self.final_note_door_var.set("Final Note Door Only")
-        if(self.struct_var.get() == "All Notes"):
-            self.final_note_door_value.set(str(randint(0, 2000)))
-        else:
-            self.final_note_door_value.set(str(randint(0, 900)))
+        self.final_note_door_value.set("?")
     
     def _random_puzzle_value(self):
         '''Randomly selects a puzzle value'''
         self.final_puzzle_var.set(1)
-        self.final_puzzle_value.set(str(randint(0, 99)))
+        self.final_puzzle_value.set("?")
     
     def _random_bk_model_preset(self):
         '''Randomly selects a BK Preset from the JSON file'''
@@ -466,6 +462,19 @@ class User_GUI_Class():
             self.wading_boots_var.set(self.bk_model_json[bk_model_preset]["Wading_Boots"])
             self.shorts_vertex_var.set(self.bk_model_json[bk_model_preset]["Shorts_Vertex"])
             self.shorts_texture_var.set(self.bk_model_json[bk_model_preset]["Shorts_Texture"])
+        else:
+            self.banjo_fur_var.set("?")
+            self.tooth_necklace_var.set("?")
+            self.banjo_skin_var.set("?")
+            self.banjo_feet_var.set("?")
+            self.kazooie_primary_var.set("?")
+            self.kazooie_secondary_var.set("?")
+            self.kazooie_wing_primary_var.set("?")
+            self.kazooie_wing_secondary_var.set("?")
+            self.backpack_var.set("?")
+            self.wading_boots_var.set("?")
+            self.shorts_vertex_var.set("?")
+            self.shorts_texture_var.set("?")
     
     def _select_non_softlock_enemies(self):
         '''Checks the boxes for all non-softlock enemies and unchecks all softlock enemies'''
@@ -503,6 +512,35 @@ class User_GUI_Class():
         self.after_red_feather_carry_value.set(after_red_feather)
         self.before_gold_feather_carry_value.set(before_gold_feather)
         self.after_gold_feather_carry_value.set(after_gold_feather)
+    
+    def _display_map_file_description(self, *args):
+        '''Pulls the description from a Models, Animations, Properties json file'''
+        filename = self.customizable_var.get()
+        file_path = f"{self.cwd}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/{filename}.json"
+        if(filename == "None"):
+            map_file_desc = "No Model/Animation/Properties file selected.\nSelect a preset to check its description!"
+        elif(filename == "Random Preset"):
+            map_file_desc = "Selects a random preset from the list!"
+        elif(os.path.isfile(file_path)):
+            try:
+                property_dict = read_json(file_path)
+            except Exception:
+                Error_GUI(f"Error: Could not open JSON file.\nPlease check for proper formatting!")
+                self.customizable_var.set("None")
+                map_file_desc = "No Model/Animation/Properties file selected.\nSelect a preset to check its description!"
+            if(("Description" in property_dict) and (property_dict["Description"])):
+                map_file_desc = ""
+                desc_len = len(property_dict["Description"])
+                for line_num in range(desc_len):
+                    map_file_desc += property_dict["Description"][str(line_num)]
+                    if(line_num < (desc_len - 1)):
+                        map_file_desc += "\n"
+            else:
+                map_file_desc = "This preset doesn't have a description?"
+        else:
+            map_file_desc = "Select a preset to check its description!"
+        self.customizable_file_description.config(text=map_file_desc)
+        
     
     ################################
     ### RANDOMIZER SETTINGS CODE ###
@@ -564,10 +602,8 @@ class User_GUI_Class():
         for enemy_name in sorted(self.enemy_checkbox_dict):
             self._add_randomizer_settings_to_code(self.enemy_checkbox_dict[enemy_name].get())
         ### Aesthetic Settings ###
-        # Enemy Models
-        self._add_randomizer_settings_to_code(self.other_model_var.get())
-        self._add_randomizer_settings_to_code(self.animation_var.get())
-        self._add_randomizer_settings_to_code(self.properties_var.get())
+        # Models, Animations, Properties
+        self._add_randomizer_settings_to_code((self.customizable_options).index(self.customizable_var.get()), 3)
         ### World Specific ###
         # Gruntilda's Lair
         self._add_randomizer_settings_to_code(self.skip_furnace_fun_var.get())
@@ -663,9 +699,7 @@ class User_GUI_Class():
                 self.enemy_checkbox_dict[enemy_name].set(self._get_randomizer_setting())
             ### Aesthetic Settings ###
             # Enemy Models
-            self.other_model_var.set(self._get_randomizer_setting())
-            self.animation_var.set(self._get_randomizer_setting())
-            self.properties_var.set(self._get_randomizer_setting())
+            self.customizable_var.set(self._get_randomizer_setting(bit_count=3, option_list=self.customizable_options))
             ### World Specific ###
             # Gruntilda's Lair
             self.skip_furnace_fun_var.set(self._get_randomizer_setting())
@@ -765,10 +799,8 @@ class User_GUI_Class():
         self.wading_boots_var.set(self.bk_model_json[self.bk_model_var.get()]["Wading_Boots"])
         self.shorts_vertex_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Vertex"])
         self.shorts_texture_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Texture"])
-        # Enemy Models
-        self.other_model_var.set(0)
-        self.animation_var.set(0)
-        self.properties_var.set(0)
+        # Models, Animations, Properties
+        self.customizable_var.set("None")
         # Sounds/Music
         self.short_sounds_var.set(0)
         self.jingles_var.set(0)
@@ -911,9 +943,7 @@ class User_GUI_Class():
         self.shorts_vertex_var.set(json_data["Shorts_Vertex"])
         self.shorts_texture_var.set(json_data["Shorts_Texture"])
         # Enemy Models
-        self.other_model_var.set(json_data["Other_Model_Option"])
-        self.animation_var.set(json_data["Animation_Option"])
-        self.properties_var.set(json_data["Properties_Option"])
+        self.customizable_var.set(json_data["Models_Animations_Properties"])
         # Sounds/Music
         self.short_sounds_var.set(json_data["Short_Sound_Option"])
         self.jingles_var.set(json_data["Jingle_Option"])
@@ -952,10 +982,7 @@ class User_GUI_Class():
         self.matching_puzzle_var.set(json_data["GV_Matching_Puzzle"])
         # Mad Monster Mansion
         self.lit_pots_var.set(json_data["MMM_Lit_Pots"])
-        try:
-            self.motzand_keys_var.set(json_data["Motzand_Keys"])
-        except Exception:
-            pass
+        self.motzand_keys_var.set(json_data["Motzand_Keys"])
         # Rusty Bucket Bay
         self.buttons_var.set(json_data["RBB_Buttons"])
         # Click Clock Wood
@@ -1001,7 +1028,10 @@ class User_GUI_Class():
         self.within_world_warps_var.set(choice(["None", "Shuffle By World", "Shuffle By Game"]))
         # Starting World
         self.new_area_var.set(choice([option for option in start_level_ids]))
-        self.skip_intro_cutscene_var.set(randint(0, 1))
+        if(self.new_area_var.get() == "SM - Main"):
+            self.skip_intro_cutscene_var.set(randint(0, 1))
+        else:
+            self.skip_intro_cutscene_var.set(1)
         # Enemies
         self.enemies_var.set(choice(["None", "Shuffle", "Randomize"]))
         for enemy_name in self.enemy_checkbox_dict:
@@ -1010,9 +1040,7 @@ class User_GUI_Class():
         # BK Model
         self._random_bk_model_colors()
         # Enemy Models
-        self.other_model_var.set(randint(0, 1))
-        self.animation_var.set(randint(0, 1))
-        self.properties_var.set(randint(0, 1))
+        self.customizable_var.set("Random Preset")
         # Sounds/Music
         self.short_sounds_var.set(randint(0, 1))
         self.jingles_var.set(randint(0, 1))
@@ -1122,9 +1150,7 @@ class User_GUI_Class():
             "Shorts_Vertex": self.shorts_vertex_var.get(),
             "Shorts_Texture": self.shorts_texture_var.get(),
             # Enemy Models
-            "Other_Model_Option": self.other_model_var.get(),
-            "Animation_Option": self.animation_var.get(),
-            "Properties_Option": self.properties_var.get(),
+            "Models_Animations_Properties": self.customizable_var.get(),
             # Sounds/Music
             "Short_Sound_Option": self.short_sounds_var.get(),
             "Jingle_Option": self.jingles_var.get(),
@@ -1227,6 +1253,8 @@ class User_GUI_Class():
     def _check_final_puzzle_value(self):
         '''Verifies the puzzle door limits are digits'''
         final_puzzle_val = self.final_puzzle_value.get()
+        if(final_puzzle_val == "?"):
+            return True
         if(not final_puzzle_val.isdigit()):
             Error_GUI(f"Final Puzzle Value Must Be An Integer: '{str(final_puzzle_val)}'")
             return False
@@ -1242,6 +1270,8 @@ class User_GUI_Class():
     def _check_final_note_door_value(self):
         '''Verifies the note door limits are digits'''
         final_note_door_val = self.final_note_door_value.get()
+        if(final_note_door_val == "?"):
+            return True
         if(not final_note_door_val.isdigit()):
             Error_GUI(f"Final Note Door Value Must Be An Positive Integer: '{str(final_note_door_val)}'")
             return False
@@ -1249,10 +1279,10 @@ class User_GUI_Class():
         if(final_note_door_val < 0):
             Error_GUI("Final Note Door Value Must Be Greater Than Zero.")
             return False
-        if((self.struct_var.get() == 4) and (final_note_door_val > 2000)):
+        if((self.struct_var.get() == "All Notes") and (final_note_door_val > 2000)):
             Error_GUI("Final Note Door Value Must Be Less Than 2000 Under These Settings.")
             return False
-        elif(final_note_door_val > 900):
+        elif((self.struct_var.get() != "All Notes") and (final_note_door_val > 900)):
             Error_GUI("Final Note Door Value Must Be Less Than 900 Under These Settings.")
             return False
         return True
@@ -1292,79 +1322,12 @@ class User_GUI_Class():
         self.shorts_vertex_var.get()
         self.shorts_texture_var.get()
     
-    # CUSTOMIZABLE
-    
-    def _check_model_json(self):
-        '''PyDoc'''
-        try:
-            model_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/Swappable_Models.json")
-        except Exception as e:
-            print(e)
-            Error_GUI("Model JSON file did not open properly. May be formatted incorrectly.")
-            return False
-        for category in model_dict:
-            if("Swap1" in model_dict[category]):
-                for subcategory in model_dict[category]:
-                    if(not subcategory.startswith("Swap")):
-                        Error_GUI("Model JSON file not formatted incorrectly.\nSwap categories need to be labeled properly.")
-                        return False
-                    if(len(model_dict[category][subcategory]) != 1):
-                        Error_GUI("Model JSON file not formatted incorrectly.\nSwap categories need one value per subcategory.")
-                        return False
-            elif(("Original" in model_dict[category]) and ("Replacements" in model_dict[category])):
-                if(len(model_dict[category]["Original"]) > len(model_dict[category]["Replacements"])):
-                    Error_GUI("Model JSON file not formatted incorrectly.\nThere should be the same number or more Originals than Replacements.")
-                    return False
-            elif("Shuffle" not in model_dict[category]):
-                Error_GUI("Model JSON file not formatted incorrectly.")
-                return False
-        return True
-    
-    def _check_animation_json(self):
-        '''PyDoc'''
-        try:
-            animation_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Animation_Data/Swappable_Animations.json")
-        except Exception:
-            Error_GUI("Animation JSON file did not open properly. May be formatted incorrectly.")
-            return False
-        for category in animation_dict:
-            if("Swap1" in animation_dict[category]):
-                for subcategory in animation_dict[category]:
-                    if(not subcategory.startswith("Swap")):
-                        Error_GUI("Model JSON file not formatted incorrectly.\nSwap categories need to be labeled properly.")
-                        return False
-                    if(len(animation_dict[category][subcategory]) != 1):
-                        Error_GUI("Model JSON file not formatted incorrectly.\nSwap categories need one value per subcategory.")
-                        return False
-            elif(("Original" in animation_dict[category]) and ("Replacements" in animation_dict[category])):
-                if(len(animation_dict[category]["Original"]) > len(animation_dict[category]["Replacements"])):
-                    Error_GUI("Model JSON file not formatted incorrectly.\nThere should be the same number or more Original than Replacements.")
-                    return False
-            elif("Shuffle" not in animation_dict[category]):
-                Error_GUI("Animation JSON file not formatted incorrectly.")
-                return False
-        return True
-    
-    def _check_properties_json(self):
-        '''PyDoc'''
-        try:
-            properties_dict = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Properties_Data/Swappable_Properties.json")
-        except Exception:
-            Error_GUI("Properties JSON file did not open properly. May be formatted incorrectly.")
-            return False
-        for category in properties_dict:
-            if(("Original" not in properties_dict[category]) or ("Selection" not in properties_dict[category])):
-                Error_GUI("Properties JSON file not formatted incorrectly.\nEach category needs Original and Selection.")
-                return False
-        return True
-    
     # SUBMIT
     
     def _submit(self):
         '''If all input paramaters meet the requirements, we move onto actually randomizing the game'''
         if(self._check_rom_directory() and self._check_seed_value() and
-           self._check_final_note_door_value() and self._check_final_puzzle_value() and self._check_cheato_values() and self._check_starting_life_count() and
-           self._check_model_json() and self._check_animation_json() and self._check_properties_json()):
+           self._check_final_note_door_value() and self._check_final_puzzle_value() and self._check_cheato_values() and self._check_starting_life_count()):
             print("Everything Checks")
             self._save_current_configuration(button_press=False)
             progression_app = Progression_GUI_Class(self)
@@ -1638,7 +1601,7 @@ class User_GUI_Class():
         self.warp_disclaimer_text = tk.Label(self.within_world_warp_frame, text=warp_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
         self.warp_disclaimer_text.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Starting Area
-        self.starting_area_frame = tk.LabelFrame(self._warps_tab, text="Starting Area", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.starting_area_frame = tk.LabelFrame(self._warps_tab, text="Starting Area:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.starting_area_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.starting_area_ttp_canvas = tk.Label(self.starting_area_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.starting_area_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
@@ -1647,7 +1610,9 @@ class User_GUI_Class():
         self.new_area_text.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.new_area_var = tk.StringVar(self.world_entrance_frame)
         self.starting_area_options = [option for option in start_level_ids]
-        self.new_area_dropdown = ttk.Combobox(self.starting_area_frame, textvariable=self.new_area_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=30)
+        self.starting_area_options.insert(0, "Random Starting Area (Always Safe)")
+        self.starting_area_options.insert(1, "Random Starting Area (Safe With All Moves)")
+        self.new_area_dropdown = ttk.Combobox(self.starting_area_frame, textvariable=self.new_area_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=39)
         self.new_area_dropdown['values'] = self.starting_area_options
         self.new_area_dropdown['state'] = 'readonly'
         self.new_area_dropdown.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
@@ -1661,7 +1626,7 @@ class User_GUI_Class():
 #         self.load_area_label.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.skip_intro_cutscene_var = tk.IntVar()
         self.skip_intro_cutscene_checkbutton = tk.Checkbutton(self.starting_area_frame, text="Skip Intro Cutscene", variable=self.skip_intro_cutscene_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.skip_intro_cutscene_checkbutton.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.skip_intro_cutscene_checkbutton.grid(row=2, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.new_area_var.trace('w', self._skip_intro_cutscene_checkbox)
         ###################
         ### ENEMIES TAB ###
@@ -1710,11 +1675,11 @@ class User_GUI_Class():
         self.bk_model_frame_ttp = self.CreateToolTip(self.bk_model_ttp_canvas, self, tool_tips_dict["BK_COLOR"]["FRAME"])
         self.bk_model_json = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json")
         self.bk_model_var = tk.StringVar(self.bk_model_frame)
-        self.bk_model_options = []
+        self.bk_model_options = ["Seed Determined Preset", "Seed Determined Colors"]
         for item in sorted(self.bk_model_json):
             self.bk_model_options.append(item)
         self.bk_model_var.set(self.bk_model_options[0])
-        self.bk_model_dropdown = ttk.Combobox(self.bk_model_frame, textvariable=self.bk_model_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.bk_model_dropdown = ttk.Combobox(self.bk_model_frame, textvariable=self.bk_model_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=30)
         self.bk_model_dropdown['values'] = self.bk_model_options
         self.bk_model_dropdown['state'] = 'readonly'
         self.bk_model_dropdown.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
@@ -1830,61 +1795,27 @@ class User_GUI_Class():
         ###########################
         self._custom_settings_tab = ttk.Frame(self._tab_control)
         self._tab_control.add(self._custom_settings_tab, text="Customizable")
-        # Models
-        self.other_model_frame = tk.LabelFrame(self._custom_settings_tab, text="Models, Animations, & Properties", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
-        self.other_model_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
-        self.other_model_frame["borderwidth"] = 0
-        self.other_model_frame["highlightthickness"] = 0
-        self.other_model_ttp_canvas = tk.Label(self.other_model_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.other_model_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.other_model_frame_ttp = self.CreateToolTip(self.other_model_ttp_canvas, self, tool_tips_dict["CUSTOMIZABLE"]["MODELS"])
-        self.other_model_var = tk.IntVar(self.other_model_frame)
-        self.other_model_checkbox = tk.Checkbutton(self.other_model_frame, text="Model Manipulation", variable=self.other_model_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.other_model_checkbox.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.open_models_json_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Model.png")
-        self.open_models_json_button = tk.Button(self.other_model_frame, text='Edit Models Json', command=(lambda: self._open_file(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/Swappable_Models.json")), image=self.open_models_json_image, background=self.generic_background_color)
-        self.open_models_json_button.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        # Animations
-        self.animation_ttp_canvas = tk.Label(self.other_model_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.animation_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.animation_frame_ttp = self.CreateToolTip(self.animation_ttp_canvas, self, tool_tips_dict["CUSTOMIZABLE"]["ANIMATIONS"])
-        self.animation_var = tk.IntVar(self.other_model_frame)
-        self.animation_checkbox = tk.Checkbutton(self.other_model_frame, text="Animation Manipulation", variable=self.animation_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.animation_checkbox.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.open_animation_json_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Animation.png")
-        self.open_animation_json_button = tk.Button(self.other_model_frame, text='Edit animation Json', command=(lambda: self._open_file(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Animation_Data/Swappable_Animations.json")), image=self.open_animation_json_image, background=self.generic_background_color)
-        self.open_animation_json_button.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        # Properties
-        self.properties_ttp_canvas = tk.Label(self.other_model_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.properties_ttp_canvas.grid(row=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.properties_frame_ttp = self.CreateToolTip(self.properties_ttp_canvas, self, tool_tips_dict["CUSTOMIZABLE"]["PROPERTIES"])
-        self.properties_var = tk.IntVar(self.other_model_frame)
-        self.properties_checkbox = tk.Checkbutton(self.other_model_frame, text="Properties Manipulation", variable=self.properties_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.properties_checkbox.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.open_properties_json_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Properties.png")
-        self.open_properties_json_button = tk.Button(self.other_model_frame, text='Edit properties Json', command=(lambda: self._open_file(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Properties_Data/Swappable_Properties.json")), image=self.open_properties_json_image, background=self.generic_background_color)
-        self.open_properties_json_button.grid(row=2, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        # Customize Description Frame
-        self.customize_description_frame = tk.LabelFrame(self.other_model_frame, text="How To Customize:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.customize_description_frame.grid(row=3, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
-        self.customize_description_frame["borderwidth"] = 0
-        self.customize_description_frame["highlightthickness"] = 0
-        description_text = (
-            "* Next to each option, there's a button that will open a JSON file.\n" +
-            "* The JSON is broken into sections. The names of the sections don't matter,\n" +
-            "  but they must be distinct from the other sections.\n" +
-            "* Each section may have different subsection types:\n" +
-            "  - Original/Replacements: Each original will be randomly replaced with a\n" +
-            "    replacement. For models and animations, replacements must be the same\n" +
-            "    size or smaller than the original and each replacement will only be used\n" +
-            "    once. For properties, any number of original/replacement files are allowed\n" +
-            "    and each property can be used more than once.\n" +
-            "  - Swap: Swap1 will swap into Swap2, Swap2=>Swap3... Last Swap#=>Swap1.\n" +
-            "  - Shuffle: All items in the subcategory will be shuffled within each other.\n" +
-            "* For more address values, check out Hack64.net under ROM Map."
-            )
-        self.customize_description_text = tk.Label(self.customize_description_frame, text=description_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
-        self.customize_description_text.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.customizable_frame = tk.LabelFrame(self._custom_settings_tab, text="Models, Animations, & Properties", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
+        self.customizable_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
+        self.customizable_frame["borderwidth"] = 0
+        self.customizable_frame["highlightthickness"] = 0
+        self.customizable_ttp_canvas = tk.Label(self.customizable_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.customizable_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.customizable_frame_ttp = self.CreateToolTip(self.customizable_ttp_canvas, self, tool_tips_dict["CUSTOMIZABLE"]["MODELS"])
+        self.customizable_var = tk.StringVar(self.customizable_frame)
+        self.customizable_options = [file_name.split(".json")[0]
+                                     for file_name in os.listdir(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/")
+                                     if(file_name.endswith(".json"))]
+        self.customizable_options.insert(0, "None")
+        self.customizable_options.insert(1, "Random Preset")
+        self.customizable_var.set("None")
+        self.customizable_dropdown = ttk.Combobox(self.customizable_frame, textvariable=self.customizable_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size), width=30)
+        self.customizable_dropdown['values'] = self.customizable_options
+        self.customizable_dropdown['state'] = 'readonly'
+        self.customizable_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.customizable_file_description = tk.Label(self.customizable_frame, text="No Model/Animation/Properties file selected.\nSelect a preset to check its description!", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size), justify=tk.LEFT)
+        self.customizable_file_description.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+        self.customizable_var.trace('w', self._display_map_file_description)
         ##########################
         ### WORLD SPECIFIC TAB ###
         ##########################
