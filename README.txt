@@ -46,7 +46,7 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Select ROM Button (Folder): Click on the folder button to open a file browser and select the BK ROM file.
 * Seed: Allows the player to pick a seed to match other people's randomized ROM.
 * Random Seed Button (Acorn): Randomly generates a seed value.
-* Generate Settings Code: Generates a string of your settings, not including seed, aesthetic changes, and misc options.
+* Generate Settings Code: Generates a string of your settings, not including seed, aesthetic changes, and misc options. PLEASE DOUBLE CHECK AND COMPARE THE SETTINGS WITH A FRIEND. Every time a feature is added or removed, this feature needs changing and mistakes happen. The other option to this is to share the JSON configuration with your friend.
 * Apply Settings Code: Applies a predetermined configuration to your settings, not including seed, aesthetic changes, and misc options.
 * Randomly Select Configurations: Selects a saved configuration in the "Configurations" folder and applies the settings.
 * Randomly Select EVERY Setting: Randomly generates every setting.
@@ -60,14 +60,14 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 ##### Jiggy, Empty Honeycomb, & Mumbo Token Specific
 * Include Abnormalities: Some items have special properties that won't softlock the game, but create weird effects.
 * Include Potential Softlocks: Some items create scenarios that may prevent the player from 100%-ing or finishing the game.
-* Door Of Grunty Only: All worlds will automatically open, and the value for the Door Of Grunty can be set on the side (from 0 to 99).
+* Door Of Grunty Only: All worlds will automatically open, and the value for the Door Of Grunty can be set on the side (from 0 to 99). A value can be chosen at random by pressing the Jiggy button.
 * Free Transformations: All Mumbo transformations won't cost you a single Mumbo Token.
 * One Health Only: You will only have one health the entire game, no matter how many Empty Honeycombs you pick up. Good luck not getting hit or falling!
 ##### Notes, Blue Eggs, Red Feathers, & Gold Feathers
 * Randomize: Based on the number of notes needed to complete the game, the odds of a note appearing will be adjusted.
 * All Notes: All eggs and feathers become notes. Brentildas are replaced with egg and feather refills. The refill at that Brentilda location is random.
 * Scaling Note Doors: Depending on how many notes you set the 810 Note Door Value to, the number of notes needed per proceeding door will be increased/decreased accordingly.
-* Final Note Door Only: Removes all note doors proceeding the 810 Note Door, and sets the value of the 810 Note Door to the desired value.
+* Final Note Door Only: Removes all note doors proceeding the 810 Note Door, and sets the value of the 810 Note Door to the desired value. A random value can be chosen by clicking the Note button.
 * Item Carrying Capacity: Sets the number of each item the player can carry before and after visiting Cheato between 0 and 255, inclusively.
 * Note Door Warning: Before opening any Note Door, the player must talk to Bottles at the 50 Note door. In order to add to the Quality of Life, a bottles is added to the 810 Note Door Location for Final Note Door Only mode.
 * Item Capacity Warning: I'm not sure if the game will break if you set the After Cheato value to a value smaller than the Before Cheato value. Please be weary.
@@ -116,15 +116,14 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 ### Customizable
 
 ##### Models, Animations, & Properties
-* Model Manipulation: Can swap or replace models.
-* Animation Manipulation: Can swap or replace animations.
-* Properties Manipulation: Can replace properties.
-* Buttons: Opens up the JSON files to allow custom editing.
+* Select a preset to change how the game is played.
+* When clicking on a preset, a short description will appear below.
 
 ##### How To Edit The JSON Files
-* Next to each option, there's a button that will open a JSON file.
-* The JSON is broken into sections. The names of the sections don't matter, but they must be distinct from the other sections.
-* Each section may have different subsection types:
+* Go to the directory leading to "BK_Rando_v2.0\Randomization_Processes\Misc_Manipulation\Models_Animations_Properties\".
+* The JSON is broken into 4 sections: Description, Model, Animation, Properties.
+* Each section has 4 subsections. The names of the subsections don't matter, but they must be distinct from the other subsections.
+* Each subsection may have different types:
   - Original/Replacements: Each original will be randomly replaced with a replacement. For models and animations, replacements must be the same size or smaller than the original and each replacement will only be used once. For properties, any number of original/replacement files are allowed and each property can be used more than once.
   - Swap: Swap1 will swap into Swap2, Swap2=>Swap3... Last Swap#=>Swap1.
   - Shuffle: All items in the subcategory will be shuffled within each other.
@@ -144,7 +143,7 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Include Flowers: If the notes/eggs/feathers feature is not set to 'none', the flowers in the level will be included.
 
 ##### Treasure Trove Cove
-* Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear.
+* Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear. (I think as of releasing this, sometimes notes and feathers don't get shuffled, but that's a problem for future me).
 
 ##### Clanker's Cavern
 * Shuffle Clanker Ring Order: Clanker's ring order is shuffled.
@@ -211,6 +210,7 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * ROM file must be a Banjo-Kazooie ROM v1.0 NTSC (.z64). Other formats are currently not supported. Randomizer may work on top of other BK mods, but not guaranteed.
 * Seed, upper bounds, and lower bounds must be positive integers.
 * Python Files, Folders, and GZIP.EXE must be in their original locations with the BK ROM in the main folder.
+* Generating the randomizer settings code and applying it to another's computer will give you similar but slightly wrong settings. If this happens, please message GiantJigglypuff3 which settings are improperly setting. Please double check with your friend before running the seed.
 * While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3.
 
 ### Potential Softlocks
