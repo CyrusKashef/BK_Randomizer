@@ -1,0 +1,93 @@
+{
+	"Description": {
+		"0": "* Model swappings with similar models",
+		"1": "* Property swappings to troll the player",
+		"2": "  > Hint: If the obvious solution was removed,",
+		"3": "    there's a tricky/game knowledge solution"
+	},
+	"Models": {
+	    "Gruntling": {
+	        "Shuffle": {
+	            "0x88E8": "Red_Gruntling",
+	            "0x89A0": "Blue_Gruntling",
+	            "0x89A8": "Black_Gruntling"
+	        }
+	    },
+	    "Yumblies_Grumblies": {
+	    	"Swap1": {
+	    		"0x7E48": "Yumblies"
+	    		},
+	    	"Swap2": {
+	    		"0x7E50": "Grumblies"
+	    		}
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+		"Bubbles": {
+			"Original": {
+				"006B00E70704": "Gloop Bubble"
+			},
+			"Selection": {
+	            "0054": "Random Honeycomb"
+			}
+		},
+	    "Honeycomb": {
+	        "Original": {
+	            "005500500363": "Honeycomb"
+	        },
+	        "Selection": {
+	            "0054": "Random Honeycomb"
+	        }
+	    },
+	    "Rupee Troll 1": {
+	    	"Original": {
+	    		"00AA011C03DE": "Histup"
+	    	},
+	    	"Selection": {
+	    		"0061": "1-Up"
+	    	}
+	    },
+	    "Rupee Troll 2": {
+	    	"Original": {
+	    		"01F401E40434": "Toots"
+	    	},
+	    	"Selection": {
+	    		"0045": "Flight Pad"
+	    	}
+	    },
+	    "Instant Death": {
+	    	"Original": {
+	    		"00A301150370": "Blubber",
+	    		"00FB01F90424": "Cactus",
+	    		"000A000F035D": "Chimpy",
+			    "029A03C4055F": "Washing Machine Cauldron",
+				"026C02DD053E": "Gnawty's Bed",
+				"01FA01EA044C": "Moggy",
+				"01FB01EB044D": "Soggy",
+				"01FC01EC044E": "Groggy"
+	    	},
+	    	"Selection": {
+	    		"0185": "Ship Propeller"
+	    	}
+	    },
+	    "Sun/Star Switch 1": {
+	        "Original": {
+	            "00EC013F0400": "Sun Switch"
+	        },
+	        "Selection": {
+	        	"00F1": "Star Switch"
+	        }
+	    },
+	    "Sun/Star Switch 2": {
+	        "Original": {
+	            "00F1014403D7": "Star Switch"
+	        },
+	        "Selection": {
+	            "00EC": "Sun Switch"
+	        }
+	    }
+	}
+	
+}
