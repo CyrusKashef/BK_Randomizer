@@ -514,7 +514,7 @@ class World_Manipulation_Class():
                     enemy_filter_list.append(enemy_id)
         return enemy_filter_list
     
-    def _skip_enemies(self, item_search_string, world_name=None):
+    def _skip_enemies(self, item_search_string, enemy_option, world_name=None):
         '''Does not randomize enemies that provide Jiggies or cause issues'''
         # Sir Slush
         if((item_search_string == "190C0124") and (world_name == "Freezeezy Peak")):
@@ -522,44 +522,47 @@ class World_Manipulation_Class():
         # Yellow Flibbit
         elif((item_search_string == "190C0137") and (world_name == "Bubblegloop Swamp")):
             return False
+        # Don't shuffle Yum-Yums or Lockups
+        elif((enemy_option == "Shuffle") and (item_search_string in ["050C0153", "190C0152", "190C0069"])):
+            return False
         # Mutie Snippet, Whipcrack, Wiplash, Lockup
         elif(item_search_string in ["190C00F5", "008C00F5", "008C030F", "190C028A", "050C0153", "190C0152"]):
             return False
         return True
     
-    def _gather_enemies(self, world_object):
+    def _gather_enemies(self, world_object, enemy_option):
         '''Collects the enemies per setup for the world'''
         for setup_file in world_object._setup_list:
             if((self.grandmaster.enemies_var.get() == "Randomize") and (setup_file.setup_name != "Nipper's Shell")):
                 for item_search_string in Enemies.enemy_id_dict["Global"]["Ground"]:
-                    if(self._skip_enemies(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Ground_Enemy")
                 for item_search_string in Enemies.additional_search_enemy_id_dict["Ground"]:
-                    if(self._skip_enemies(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Ground_Enemy")
                 if("Ground" in Enemies.enemy_id_dict[world_object._world_name]):
                     for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Ground"]:
-                        if(self._skip_enemies(item_search_string, world_object._world_name)):
+                        if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                             setup_file._locate_item_index(item_search_string, "Ground_Enemy")
                 for item_search_string in Enemies.enemy_id_dict["Global"]["Wall"]:
-                    if(self._skip_enemies(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Wall_Enemy")
                 for item_search_string in Enemies.additional_search_enemy_id_dict["Wall"]:
-                    if(self._skip_enemies(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Wall_Enemy")
                 if("Wall" in Enemies.enemy_id_dict[world_object._world_name]):
                     for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Wall"]:
-                        if(self._skip_enemies(item_search_string, world_object._world_name)):
+                        if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                             setup_file._locate_item_index(item_search_string, "Wall_Enemy")
                 for item_search_string in Enemies.enemy_id_dict["Global"]["Flying"]:
-                    if(self._skip_enemies(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Flying_Enemy")
                 for item_search_string in Enemies.additional_search_enemy_id_dict["Flying"]:
-                    if(self._skip_enemies(item_search_string, world_object._world_name)):
+                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Flying_Enemy")
                 if("Flying" in Enemies.enemy_id_dict[world_object._world_name]):
                     for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Flying"]:
-                        if(self._skip_enemies(item_search_string, world_object._world_name)):
+                        if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                             setup_file._locate_item_index(item_search_string, "Flying_Enemy")
     
     def _shuffle_enemies_within_world(self, world_object):
@@ -665,7 +668,7 @@ class World_Manipulation_Class():
         '''Runs the enemies options that are not NONE'''
         if(self.grandmaster.enemies_var.get() == "Shuffle"):
             for world_object in self.world_list:
-                self._gather_enemies(world_object)
+                self._gather_enemies(world_object, "Shuffle")
                 self._shuffle_enemies_within_world(world_object)
                 self._move_enemies_within_world(world_object)
                 self.ground_enemy_info_list = []
@@ -674,7 +677,7 @@ class World_Manipulation_Class():
         elif(self.grandmaster.enemies_var.get() == "Randomize"):
             enemy_filter_list = self._adjust_enemy_dicts()
             for world_object in self.world_list:
-                self._gather_enemies(world_object)
+                self._gather_enemies(world_object, "Randomize")
                 self._randomize_enemies(world_object, enemy_filter_list)
                 self._move_enemies_within_world(world_object)
                 self.ground_enemy_info_list = []
@@ -894,7 +897,7 @@ class World_Manipulation_Class():
     
     ### SCALING NOTE DOOR ###
     
-    def _scale_note_doors(self):
+    def _scale_note_doors(self, final_note_door_value):
         '''Scales the note doors based on world order and how many notes are in each world'''
         if(not self.world_order):
             world_order_list = ["Mumbo's Mountain", "Treasure Trove Cove", "Clanker's Cavern",
@@ -909,12 +912,10 @@ class World_Manipulation_Class():
                 world_order_note_count[self.world_order.index("Click Clock Wood")] += note_count
             elif(world_object._world_name in world_order_list):
                 world_order_note_count[self.world_order.index(world_object._world_name)] += note_count
-        note_door_scaling = [50/810, 180/810, 260/810, 350/810, 450/810, 640/810, 765/810, 1]#, 0, 0, 0, 0]
-        final_note_door_count = int(self.grandmaster.final_note_door_value.get())
+        note_door_scaling = [50/810, 180/810, 260/810, 350/810, 450/810, 640/810, 765/810, 1, 0, 0, 0, 0]
         note_door_list = []
         for scaling in note_door_scaling:
-            note_door_list.append(round(scaling * final_note_door_count))
-        print(note_door_list)
+            note_door_list.append(round(scaling * final_note_door_value))
         return note_door_list
     
     def _set_note_door_values(self, note_door_list):
@@ -924,47 +925,65 @@ class World_Manipulation_Class():
         # Every 2 are a note door
         # Edit each note door with zeros
         note_door_texture_obj = Texture_Class(self._file_dir, "8320", seed_val=self.seed)
-        with open(f"{self._file_dir}Randomized_ROM\\FCF698-Decompressed.bin", "r+b") as decomp_file:
+        with open(f"{self._file_dir}Randomized_ROM/FCF698-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
             #                                                      0 1 2 3 4 5 6 7 8 91011121314151617181920212223
             note_door_index_start = mm_decomp.find(bytes.fromhex("003200B40104015E01C2028002FD032A033C034E03600372"))
-            for index_add, note_door_val in enumerate(note_door_list):
+            len_note_door_list = len(note_door_list)
+            for note_index in range(len_note_door_list):
                 hundreths = tenths = ones = None
                 # New Note Door Value
-                mm_decomp[note_door_index_start + (index_add * 2)] = int(leading_zeros(note_door_val, 4)[:2], 16)
-                mm_decomp[note_door_index_start + (index_add * 2) + 1] = int(leading_zeros(note_door_val, 4)[2:], 16)
-                if(index_add < 8):
-                    if(note_door_val > 999):
-                        hundreths = tenths = ones = 9
-                    if(index_add > 0):
+                use_this_value = note_door_list[note_index]
+                increment = 0
+                if(note_index < 7):
+                    has_nine = True
+                    while(has_nine):
+                        if("9" in str(use_this_value)):
+                            if(note_index > 0):
+                                seed(a=(self.seed + increment))
+                                increment += 1
+                                use_this_value = randint(note_door_list[note_index - 1], use_this_value)
+                            else:
+                                use_this_value -= 1
+                        else:
+                            has_nine = False
+                    note_door_list[note_index] = use_this_value
+                mm_decomp[note_door_index_start + (note_index * 2)] = int(leading_zeros(use_this_value, 4)[:2], 16)
+                mm_decomp[note_door_index_start + (note_index * 2) + 1] = int(leading_zeros(use_this_value, 4)[2:], 16)
+                if(note_index < 8):
+                    if(use_this_value > 999):
+                        hundreths = tenths = ones = 0
+                    elif((note_index == 0) and (use_this_value > 99)):
+                        hundreths = tenths = ones = 0
+                    if(note_index > 0):
                         if(not hundreths):
-                            hundreths = (note_door_val // 100) % 10
-                        note_door_texture_obj.mm[note_door_indices[index_add][100]["Overlay_Textures"]] = int(note_door_texture_offsets[hundreths][:2], 16)
-                        note_door_texture_obj.mm[note_door_indices[index_add][100]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[hundreths][2:], 16)
+                            hundreths = (use_this_value // 100) % 10
+                        note_door_texture_obj.mm[note_door_indices[note_index][100]["Overlay_Textures"]] = int(note_door_texture_offsets[hundreths][:2], 16)
+                        note_door_texture_obj.mm[note_door_indices[note_index][100]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[hundreths][2:], 16)
                         if(hundreths == 9):
-                            note_door_texture_obj._flip_texture(note_door_indices[index_add][100]["Door_Textures"], x_axis=True, y_axis=True)
+                            note_door_texture_obj._flip_texture(note_door_indices[note_index][100]["Door_Vertices"], x_axis=True, y_axis=True)
                     if(not tenths):
-                        tenths = (note_door_val // 10) % 10
-                    note_door_texture_obj.mm[note_door_indices[index_add][10]["Overlay_Textures"]] = int(note_door_texture_offsets[tenths][:2], 16)
-                    note_door_texture_obj.mm[note_door_indices[index_add][10]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[tenths][2:], 16)
+                        tenths = (use_this_value // 10) % 10
+                    note_door_texture_obj.mm[note_door_indices[note_index][10]["Overlay_Textures"]] = int(note_door_texture_offsets[tenths][:2], 16)
+                    note_door_texture_obj.mm[note_door_indices[note_index][10]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[tenths][2:], 16)
                     if(tenths == 9):
-                        note_door_texture_obj._flip_texture(note_door_indices[index_add][10]["Door_Textures"], x_axis=True, y_axis=True)
+                        note_door_texture_obj._flip_texture(note_door_indices[note_index][10]["Door_Vertices"], x_axis=True, y_axis=True)
                     if(not ones):
-                        ones = note_door_val % 10
-                    note_door_texture_obj.mm[note_door_indices[index_add][1]["Overlay_Textures"]] = int(note_door_texture_offsets[ones][:2], 16)
-                    note_door_texture_obj.mm[note_door_indices[index_add][1]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[ones][2:], 16)
+                        ones = use_this_value % 10
+                    note_door_texture_obj.mm[note_door_indices[note_index][1]["Overlay_Textures"]] = int(note_door_texture_offsets[ones][:2], 16)
+                    note_door_texture_obj.mm[note_door_indices[note_index][1]["Overlay_Textures"] + 1] = int(note_door_texture_offsets[ones][2:], 16)
                     if(ones == 9):
-                        note_door_texture_obj._flip_texture(note_door_indices[index_add][1]["Door_Textures"], x_axis=True, y_axis=True)
+                        note_door_texture_obj._flip_texture(note_door_indices[note_index][1]["Door_Vertices"], x_axis=True, y_axis=True)
         self._remove_note_doors(note_door_list=Sequences.note_door[-4:])
     
-    def _note_doors_main(self):
+    def _note_doors_main(self, final_note_door_value):
         '''Either scales or removes Note Doors'''
         if(self.grandmaster.final_note_door_var.get() == "Final Note Door Only"):
             self._remove_note_doors()
             self._810_bottles_cutscene()
             note_door_list = [0, 0, 0, 0, 0, 0, 0, int(self.grandmaster.final_note_door_value.get()), 0, 0, 0, 0]
         elif(self.grandmaster.final_note_door_var.get() == "Scaling Note Doors"):
-            note_door_list = self._scale_note_doors()
+            note_door_list = self._scale_note_doors(final_note_door_value)
         else:
             note_door_list = [50, 180, 260, 350, 450, 640, 765, 810, 828, 846, 864, 882]
         self._set_note_door_values(note_door_list)
@@ -975,20 +994,19 @@ class World_Manipulation_Class():
     
     ### FINAL WORLD PUZZLE ###
     
-    def _final_world_puzzle(self):
+    def _final_world_puzzle(self, final_puzzle_value):
         '''Sets the requirements of every puzzle to zero except for the puzzle proceeding the final battle'''
         # Find location of world puzzles
         # 00 00 01 01 00 5D 02 02 00 5E 05 03 00 60 07 03 00 63 08 04 00 66 09 04 00 6A 0A 04 00 6E 0C 04 00 72 0F 04 00 76 19 05 00 7A 04 03
         # Every 4 is a note door, with the third value being the one you have to change
-        final_puzzle_score = int(self.grandmaster.final_puzzle_value.get())
         with open(f"{self._file_dir}Randomized_ROM\\FCF698-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
             #                                                      0 1 2 3 4 5 6 7 8 910111213141516171819202122232425262728293031323334353637383940414243
             note_door_index_start = mm_decomp.find(bytes.fromhex("00000101005D0202005E0503006007030063080400660904006A0A04006E0C0400720F0400761905007A0403"))
             for offset in range(0, 37, 4):
                 mm_decomp[note_door_index_start + offset + 2] = 0
-            mm_decomp[note_door_index_start + 38] = final_puzzle_score
-            honeycomb_puzzle_count = 100 - final_puzzle_score
+            mm_decomp[note_door_index_start + 38] = final_puzzle_value
+            honeycomb_puzzle_count = 100 - final_puzzle_value
             if(honeycomb_puzzle_count > 4):
                 honeycomb_puzzle_count = 4
             mm_decomp[note_door_index_start + 42] = honeycomb_puzzle_count
@@ -1509,14 +1527,15 @@ class World_Manipulation_Class():
                             break
         self.world_order = World_Order_Bottles(bottles_world_warp_dict, extra_flagged_object_flags, seed_val=self.seed, one_hp=self.grandmaster.one_health_banjo_var.get())
         self.world_order._determine_world_order()
-        world_cheat_sheet_str = ""
-        for world in self.world_order.world_order_list:
-            world_cheat_sheet_str += f"World: {world}\n"
-            for move_location in self.world_order.world_order_dict[world]['Learned_Moves']:
-                world_cheat_sheet_str += f"Move: {self.world_order.world_order_dict[world]['Learned_Moves'][move_location]}    Location: {move_location}\n"
-            world_cheat_sheet_str += "\n"
-        with open(f"{self.grandmaster.cwd}Randomized_ROM/MOVES_CHEAT_SHEET_{self.seed}.txt", "w+") as world_entrance_cheat_sheet:
-            world_entrance_cheat_sheet.write(world_cheat_sheet_str)
+        if(self.grandmaster.cheat_sheet_var.get() == 1):
+            world_cheat_sheet_str = ""
+            for world in self.world_order.world_order_list:
+                world_cheat_sheet_str += f"World: {world}\n"
+                for move_location in self.world_order.world_order_dict[world]['Learned_Moves']:
+                    world_cheat_sheet_str += f"Move: {self.world_order.world_order_dict[world]['Learned_Moves'][move_location]}    Location: {move_location}\n"
+                world_cheat_sheet_str += "\n"
+            with open(f"{self.grandmaster.cwd}Randomized_ROM/MOVES_CHEAT_SHEET_{self.seed}.txt", "w+") as world_entrance_cheat_sheet:
+                world_entrance_cheat_sheet.write(world_cheat_sheet_str)
     
     def _bottles_set_new_moves(self):
         '''Replaces the 1-Ups with the calculated bottles hill'''

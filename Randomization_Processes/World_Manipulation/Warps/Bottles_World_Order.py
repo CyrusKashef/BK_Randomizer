@@ -114,9 +114,8 @@ class World_Order_Bottles():
         # Exiting MMM -> Going To RBB
         elif(world_count == 6):
             required_jiggy_count = 54
-            if((world_name != "Rusty Bucket Bay") or ("Rusty Bucket Bay" not in self.world_order_list)):
-                # Raise The Water Level
-                required_move_list = ["Beak_Buster"]
+            # Raise The Water Level To Reach Puzzle
+            required_move_list = ["Beak_Buster"]
         # Exiting RBB -> Going To CCW
         elif(world_count == 7):
             required_jiggy_count = 69
@@ -312,7 +311,7 @@ class World_Order_Bottles():
     def _possible_next_worlds(self):
         '''Determines the next possible world list based on learning progressable moves and getting enough Jiggies. Also creates a backup for levels that allow you to progress'''
         possible_world_list = []
-        backup_world_list = []
+#         backup_world_list = []
         for world_name in self.remaining_worlds:
             # Moves
             self.temp_learned_moves[world_name] = {}
@@ -342,9 +341,9 @@ class World_Order_Bottles():
                         possible_total_jiggy_list.append(jiggy_id)
                 if(len(set(possible_total_jiggy_list)) >= required_jiggy_count):
                     possible_world_list.append(world_name)
-                else:
-                    backup_world_list.append(world_name)
-        return possible_world_list, backup_world_list
+#                 else:
+#                     backup_world_list.append(world_name)
+        return possible_world_list#, backup_world_list
 
     def _set_next_world(self, next_world):
         '''Finalizes the selected world and all additional changes'''
@@ -372,6 +371,7 @@ class World_Order_Bottles():
                     
     def _remaining_moves(self):
         '''For each remaining move, assign them to a possible location'''
+        print(f"Remaining Moves: {self.remaining_moves}")
         for remaining_move in self.remaining_moves:
             available_bottles = {}
             for world_name in self.world_order_list:
@@ -389,21 +389,34 @@ class World_Order_Bottles():
             self.increment += 1
             selected_bottles = choice(list(available_bottles))
             self.world_order_dict[available_bottles[selected_bottles]]["Learned_Moves"][selected_bottles] = remaining_move
+    
+    def _restart(self):
+        self.remaining_moves = [move for move in learnable_moves_dict]
+        self.learned_moves = []
+        self.temp_learned_moves = {}
+        self.remaining_worlds = [world for world in self.bottles_world_warp_dict]
+        self.world_order_list = []
+        self.world_order_dict = {}
+        self.collected_jiggy_list = []
+        self.collected_mumbo_token_list = []
 
     def _determine_world_order(self):
         '''Determines the world order based on accessibility'''
         while(self.remaining_worlds):
             # What can be the next world?
-            possible_world_list, backup_world_list = self._possible_next_worlds()
+#             possible_world_list, backup_world_list = self._possible_next_worlds()
+            possible_world_list = self._possible_next_worlds()
             # Select from possible worlds
             seed(a=(self.seed_val + self.increment))
             self.increment += 1
             if(possible_world_list):
                 next_world = choice(possible_world_list)
-            elif(backup_world_list):
-                next_world = choice(backup_world_list)
             else:
-                next_world = choice(self.remaining_worlds)
+                self._restart()
+#             elif(backup_world_list):
+#                 next_world = choice(backup_world_list)
+#             else:
+#                 next_world = choice(self.remaining_worlds)
             # Placed all of the calculations in the dictionary
             self._set_next_world(next_world)
         # Teach any remaining moves
