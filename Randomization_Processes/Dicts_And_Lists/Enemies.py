@@ -60,7 +60,7 @@ enemy_id_dict = {
         },
     "Treasure Trove Cove": {
         "Ground": [
-            "190C0069", # Yum Yum
+#             "190C0069", # Yum Yum
             "190C00F2", # Black Snippet
             "190C0152", # Lockup
             ],
@@ -196,7 +196,7 @@ master_enemy_dict = {
     "Topper": ["190C036F"],
     "Coliwobble": ["190C036D"],
     "Grublin": ["190C0006"],
-    "Yum-Yum": ["190C0069"],
+    "Yum-Yum*": ["190C0069"],
     "Black Snippet": ["190C00F2"],
     "Flibbit (Red)": ["190C0133"],
     "Grublin Hood": ["190C0375"],

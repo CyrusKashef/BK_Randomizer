@@ -71,162 +71,174 @@ note_door_texture_offsets = {
     3: "5040",
     4: "6040",
     5: "7040",
-    6: "8040", 
+    6: "8040",
     7: "9040",
     8: "A040",
     9: "8040",
     }
 
 note_door_indices = {
-    0: {
+    0: { # 50
         10: {
-            "Door_Textures": [0xBE5C, 0xBE6C, 0xBE7C, 0xBE8C],
+            "Door_Vertices": [0xBE50, 0xBE60, 0xBE70, 0xBE80],
             "Overlay_Textures": 0xB2CE,
             },
         1: {
-            "Door_Textures": [0xBE9C, 0xBEAC, 0xBEBC, 0xBECC],
+            "Door_Vertices": [0xBE90, 0xBEA0, 0xBEB0, 0xBEC0],
             "Overlay_Textures": 0xB326,
             },
         },
-    1: {
+    1: { # 180
         100: {
-            "Door_Textures": [0xBEDC, 0xBEEC, 0xBEFC, 0xBF0C],
+            "Door_Vertices": [0xBED0, 0xBEE0, 0xBEF0, 0xBF00],
             "Overlay_Textures": 0xB376,
             },
         10: {
-            "Door_Textures": [0xBF1C, 0xBF2C, 0xBF3C, 0xBF4C],
+            "Door_Vertices": [0xBF10, 0xBF20, 0xBF30, 0xBF40],
             "Overlay_Textures": 0xB3CE,
             },
         1: {
-            "Door_Textures": [0xBF5C, 0xBF6C, 0xBF7C, 0xBF8C],
+            "Door_Vertices": [0xBF50, 0xBF60, 0xBF70, 0xBF80],
             "Overlay_Textures": 0xB3FE,
             },
         },
-    2: {
+    2: { # 260
         100: {
-            "Door_Textures": [0xBF9C, 0xBFAC, 0xBFBC, 0xBFCC],
+            "Door_Vertices": [0xBF90, 0xBFA0, 0xBFB0, 0xBFC0],
             "Overlay_Textures": 0xB44E,
             },
         10: {
-            "Door_Textures": [0xBFDC, 0xBFEC, 0xBFFC, 0xC00C],
+            "Door_Vertices": [0xBFD0, 0xBFE0, 0xBFF0, 0xC000],
             "Overlay_Textures": 0xB4A6,
             },
         1: {
-            "Door_Textures": [0xC01C, 0xC02C, 0xC03C, 0xC04C],
+            "Door_Vertices": [0xC010, 0xC020, 0xC030, 0xC040],
             "Overlay_Textures": 0xB4D6,
             },
         },
-    3: {
+    3: { # 350
         100: {
-            "Door_Textures": [0xC05C, 0xC06C, 0xC07C, 0xC08C],
+            "Door_Vertices": [0xC050, 0xC060, 0xC070, 0xC080],
             "Overlay_Textures": 0xB526,
             },
         10: {
-            "Door_Textures": [0xC09C, 0xC0AC, 0xC0BC, 0xC0CC],
+            "Door_Vertices": [0xC090, 0xC0A0, 0xC0B0, 0xC0C0],
             "Overlay_Textures": 0xB57E,
             },
         1: {
-            "Door_Textures": [0xC0DC, 0xC0EC, 0xC0FC, 0xC10C],
+            "Door_Vertices": [0xC0D0, 0xC0E0, 0xC0F0, 0xC100],
             "Overlay_Textures": 0xB5AE,
             },
         },
-    4: {
+    4: { # 450
         100: {
-            "Door_Textures": [0xC11C, 0xC12C, 0xC13C, 0xC14C],
+            "Door_Vertices": [0xC110, 0xC120, 0xC130, 0xC140],
             "Overlay_Textures": 0xB5FE,
             },
         10: {
-            "Door_Textures": [0xC15C, 0xC16C, 0xC17C, 0xC18C],
+            "Door_Vertices": [0xC150, 0xC160, 0xC170, 0xC180],
             "Overlay_Textures": 0xB656,
             },
         1: {
-            "Door_Textures": [0xC19C, 0xC1AC, 0xC1BC, 0xC1CC],
+            "Door_Vertices": [0xC190, 0xC1A0, 0xC1B0, 0xC1C0],
             "Overlay_Textures": 0xB686,
             },
         },
-    5: {
+    5: { # 640
         100: {
-            "Door_Textures": [0xC1DC, 0xC1EC, 0xC1FC, 0xC20C],
+            "Door_Vertices": [0xC1D0, 0xC1E0, 0xC1F0, 0xC200],
             "Overlay_Textures": 0xB6D6,
             },
         10: {
-            "Door_Textures": [0xC21C, 0xC22C, 0xC23C, 0xC24C],
+            "Door_Vertices": [0xC210, 0xC220, 0xC230, 0xC240],
             "Overlay_Textures": 0xB72E,
             },
         1: {
-            "Door_Textures": [0xC25C, 0xC26C, 0xC27C, 0xC28C],
+            "Door_Vertices": [0xC250, 0xC260, 0xC270, 0xC280],
             "Overlay_Textures": 0xB75E,
             },
         },
-    6: {
+    6: { # 765
         100: {
-            "Door_Textures": [0xC29C, 0xC2AC, 0xC2BC, 0xC2CC],
+            "Door_Vertices": [0xC290, 0xC2A0, 0xC2B0, 0xC2C0],
             "Overlay_Textures": 0xB7AE,
             },
         10: {
-            "Door_Textures": [0xC2DC, 0xC2EC, 0xC2FC, 0xC30C],
+            "Door_Vertices": [0xC2D0, 0xC2E0, 0xC2F0, 0xC300],
             "Overlay_Textures": 0xB806,
             },
         1: {
-            "Door_Textures": [0xC31C, 0xC32C, 0xC33C, 0xC34C],
+            "Door_Vertices": [0xC310, 0xC320, 0xC330, 0xC340],
             "Overlay_Textures": 0xB836,
             },
         },
-    7: {
+    7: { # 810
         100: {
-            "Door_Textures": [0xC35C, 0xC36C, 0xC37C, 0xC38C],
+            "Door_Vertices": [0xC350, 0xC360, 0xC370, 0xC380],
             "Overlay_Textures": 0xB886,
             },
         10: {
-            "Door_Textures": [0xC39C, 0xC40C, 0xC41C, 0xC42C],
+            "Door_Vertices": [0xC390, 0xC3A0, 0xC3B0, 0xC3C0],
             "Overlay_Textures": 0xB8DE,
             },
         1: {
-            "Door_Textures": [0xC43C, 0xC44C, 0xC45C, 0xC46C],
+            "Door_Vertices": [0xC3D0, 0xC3E0, 0xC3F0, 0xC400],
             "Overlay_Textures": 0xB90E,
             },
         },
-    8: {
+    8: { # 828
         100: {
+            "Door_Vertices": [0xC410, 0xC420, 0xC430, 0xC440],
             "Overlay_Textures": 0xB886,
             },
         10: {
+            "Door_Vertices": [0xC450, 0xC460, 0xC470, 0xC480],
             "Overlay_Textures": 0xB8DE,
             },
         1: {
+            "Door_Vertices": [0xC490, 0xC4A0, 0xC4B0, 0xC4C0],
             "Overlay_Textures": 0xB90E,
             },
         },
-    9: {
+    9: { # 846
         100: {
+            "Door_Vertices": [0xC4D0, 0xC4E0, 0xC4F0, 0xC500],
             "Overlay_Textures": 0xB886,
             },
         10: {
+            "Door_Vertices": [0xC510, 0xC520, 0xC530, 0xC540],
             "Overlay_Textures": 0xB8DE,
             },
         1: {
+            "Door_Vertices": [0xC550, 0xC560, 0xC570, 0xC580],
             "Overlay_Textures": 0xB90E,
             },
         },
-    10: {
+    10: { # 864
         100: {
+            "Door_Vertices": [0xC590, 0xC5A0, 0xC5B0, 0xC5C0],
             "Overlay_Textures": 0xB886,
             },
         10: {
+            "Door_Vertices": [0xC5D0, 0xC5E0, 0xC5F0, 0xC600],
             "Overlay_Textures": 0xB8DE,
             },
         1: {
+            "Door_Vertices": [0xC610, 0xC620, 0xC630, 0xC640],
             "Overlay_Textures": 0xB90E,
             },
         },
-    11: {
+    11: { # 882
         100: {
+            "Door_Vertices": [0xC650, 0xC660, 0xC670, 0xC680],
             "Overlay_Textures": 0xB886,
             },
         10: {
+            "Door_Vertices": [0xC690, 0xC6A0, 0xC6B0, 0xC6C0],
             "Overlay_Textures": 0xB8DE,
             },
         1: {
+            "Door_Vertices": [0xC6D0, 0xC6E0, 0xC6F0, 0xC700],
             "Overlay_Textures": 0xB90E,
             },
         },

@@ -79,9 +79,9 @@ start_level_ids = {
     "CCW - Summer Nabnut's House": 0x5F,
     "CCW - Fall Nabnut's House": 0x60,
     "CCW - Winter Nabnut's House": 0x61,
-    "CCW - Winter Nabnut's Attic 2": 0x62,
-    "CCW - Fall Nabnut's Attic 1": 0x63,
-    "CCW - Winter Nabnut's Attic 1": 0x64,
+    "CCW - Winter Nabnut's Water Attic": 0x62,
+    "CCW - Fall Nabnut's Water Attic": 0x63,
+    "CCW - Winter Nabnut's Acorn Attic": 0x64,
     "CCW - Spring Whipcrack Room": 0x65,
     "CCW - Summer Whipcrack Room": 0x66,
     "CCW - Fall Whipcrack Room": 0x67,
@@ -101,7 +101,7 @@ start_level_ids = {
     "GL - 640 Note Door Room": 0x76,
     "GL - RBB Entrance": 0x77,
     "GL - MMM Puzzle": 0x78,
-    "GL - Floor 7": 0x79,
+    "GL - CCW Entrance": 0x79,
     "GL - Coffin Room": 0x7A,
     "GL - Path To Furnace Fun": 0x80,
     "GL - Furnace Fun": 0x8E,
@@ -109,11 +109,13 @@ start_level_ids = {
     "Final Battle": 0x90,
     }
 
-
-
-
-
-
-
-
-
+non_softlock_start_level = [
+    "SM - Main",
+    "MM - Main", "MM - Ticker's Tower", "MM - Mumbo's Skull",
+    "TTC - Main", "TTC - Nipper's Shell",
+    "BGS - Main", "BGS - Tiptup Choir", "BGS - Mumbo's Skull",
+    "FP - Main", "FP - Boggy's Igloo", "FP - Mumbo's Skull", "FP - Christmas Tree",
+    "GV - Gobi's Valley", "GV - King Sandybutt's Tomb", "GV - Rupee", "GV - Jinxy",
+    "GL - MM Puzzle/Entrance Room", "GL - TTC Puzzle Room",
+    "GL - GV Entrance", "GL - FP Entrance", "GL - Grunty Statue Room", "GL - BGS Entrance", "GL - Lava Room",
+    ]

@@ -1125,7 +1125,7 @@ bottles_world_warp_dict = {
                     "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
                     },
                 # Side Of Tree
-                "13E0004314F8": {
+                "086A0A390866": {
                     "Type": None,
                     "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
                     },

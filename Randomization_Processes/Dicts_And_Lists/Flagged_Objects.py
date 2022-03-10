@@ -635,7 +635,7 @@ flagged_object_dict = {
             },
         "004D-Fall": { # Side Of Tree
             "Object":"08A70A38085C190C0046",
-            "Flag":  "13E0004314F81094004D",
+            "Flag":  "086A0A3908664594004D",
             },
         "004F-Fall": { # Whipcrack Room
             "Object":"0000001100E1190C0046",
@@ -810,14 +810,14 @@ abnormal_flagged_object_dict = {
         },
     "Click Clock Wood - Fall": {
         # Jiggies
-        "004A-Fall": { # Gnawty'sJiggy
+        "004A-Fall": { # Gnawty's Jiggy
             "Object":"00F00258004B190C0046",
             "Flag":  "0119025800424294004A",
             },
         },
     "Click Clock Wood - Winter": {
         # Jiggies
-        "004B-Winter": { # Gnawty'sJiggy
+        "004A-Winter": { # Gnawty's Jiggy
             "Object":"00F00258004B190C0046",
             "Flag":  "013C025B004E4F94004A",
             },
@@ -832,20 +832,16 @@ softlock_flagged_object_dict = {
     "Mumbo's Mountain" : {
         # Empty Honeycombs
         "0064": { # Alcove
-            "Object":"03D901E40691190C0047", # 03 D9 01 E4 06 91 19 0C 00 47 00 00 00 00 00 64 12 50
-            "Flag":  "03D2020E069445140064", # 03 D2 02 0E 06 94 45 14 00 64 00 00 00 00 00 64 01 B0
+            "Object":"03D901E40691190C0047",
+            "Flag":  "03D2020E069445140064",
             },
         "0065": { # Juju
-            "Object":"10CE0B54FA2E190C0047", # 10 CE 0B 54 FA 2E 19 0C 00 47 00 00 00 00 00 64 08 50
-            "Flag":  "10ED0B6CFA2B1F140065", # 10 ED 0B 6C FA 2B 1F 14 00 65 00 00 00 00 00 64 03 30
+            "Object":"10CE0B54FA2E190C0047",
+            "Flag":  "10ED0B6CFA2B1F140065",
             },
         },
     "Treasure Trove Cove": {
         # Mumbo Token
-        "00D1": { # Lighthouse Mumbo Token
-            "Object":"02351B05F528190C002D",
-            "Flag":  "02671B05F50C431400D1",
-            },
         "00CE": { # Lockup Token 1
             "Object":"F59C098FE841190C002D",
             "Flag":  "F59D096CE84C229400CE",
@@ -853,6 +849,10 @@ softlock_flagged_object_dict = {
         "00CF": { # Lockup Token 2
             "Object":"F5AA098FE7B1190C002D",
             "Flag":  "F5AE096CE7AD261400CF",
+            },
+        "00D1": { # Lighthouse Mumbo Token
+            "Object":"02351B05F528190C002D",
+            "Flag":  "02671B05F50C431400D1",
             },
         },
     "Clanker's Cavern": {
