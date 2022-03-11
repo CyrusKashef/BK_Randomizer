@@ -192,7 +192,7 @@ possible_bottles_locations = {
             "Water_Pyramid_1_Up": "FF1A12D4EEBB",
             "Yellow_Jinjo": "0BFB01BF281E",
             "Green_Jinjo": "135809EA01B7",
-            "Orange_Jinjo": "081E0462FFCE",
+#             "Orange_Jinjo": "081E0462FFCE",
             },
         "Mad Monster Mansion": {
             "Organ_1_up": "FFFF08D7F277",
@@ -293,7 +293,7 @@ bottles_world_warp_dict = {
                 "Water_Pyramid_1_Up": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
                 "Yellow_Jinjo": [],
                 "Green_Jinjo": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
-                "Orange_Jinjo": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
+#                 "Orange_Jinjo": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
                 }
             },
         "Mad Monster Mansion": {

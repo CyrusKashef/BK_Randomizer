@@ -582,7 +582,7 @@ bottles_world_warp_dict = {
                 "Water_Pyramid_1_Up": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
                 "Yellow_Jinjo": [[]],
                 "Green_Jinjo": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
-                "Orange_Jinjo": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
+#                 "Orange_Jinjo": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
                 },
             "Flagged_Object_Flags": {
                 ### JIGGIES ###
