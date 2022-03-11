@@ -572,7 +572,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.flagged_object_abnormalities_var.get())
         self._add_randomizer_settings_to_code(self.flagged_object_softlock_var.get())
         self._add_randomizer_settings_to_code(self.final_puzzle_var.get())
-        self._add_randomizer_settings_to_code(self.final_puzzle_value.get())
+        self._add_randomizer_settings_to_code(self.final_puzzle_value.get(), 8)
         self._add_randomizer_settings_to_code(self.free_transformations_var.get())
         self._add_randomizer_settings_to_code(self.one_health_banjo_var.get())
         # Non-Flagged Objects
@@ -668,7 +668,7 @@ class User_GUI_Class():
             self.flagged_object_abnormalities_var.set(self._get_randomizer_setting())
             self.flagged_object_softlock_var.set(self._get_randomizer_setting())
             self.final_puzzle_var.set(self._get_randomizer_setting())
-            self.final_puzzle_value.set(self._get_randomizer_setting())
+            self.final_puzzle_value.set(self._get_randomizer_setting(bit_count=8))
             self.free_transformations_var.set(self._get_randomizer_setting())
             self.one_health_banjo_var.set(self._get_randomizer_setting())
             # Non-Flagged Objects
@@ -699,7 +699,7 @@ class User_GUI_Class():
                 self.enemy_checkbox_dict[enemy_name].set(self._get_randomizer_setting())
             ### Aesthetic Settings ###
             # Enemy Models
-            self.customizable_var.set(self._get_randomizer_setting(bit_count=3, option_list=self.customizable_options))
+            self.customizable_var.set(self._get_randomizer_setting(bit_count=3, options_list=self.customizable_options))
             ### World Specific ###
             # Gruntilda's Lair
             self.skip_furnace_fun_var.set(self._get_randomizer_setting())
