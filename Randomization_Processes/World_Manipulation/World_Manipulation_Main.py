@@ -2252,6 +2252,13 @@ class World_Manipulation_Class():
                 if(item_index > -1):
                     self._move_struct(item_index, level_collision_dict)
                     item_index = item_index + 1
+        for struct_search_string in Structs.adjusted_collectable_struct_id_list:
+            item_index = 0
+            while(item_index > -1):
+                item_index = self.curr_setup_file.mm.find(bytes.fromhex(struct_search_string), item_index)
+                if(item_index > -1):
+                    self._move_struct(item_index, level_collision_dict)
+                    item_index = item_index + 1
     
     def _scattered_structs_main(self):
         '''Runs the functions for having the structs scattered around the map within their original voxels'''
