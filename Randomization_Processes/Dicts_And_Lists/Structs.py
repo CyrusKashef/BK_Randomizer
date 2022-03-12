@@ -21,6 +21,15 @@ collectable_struct_id_list = [
     "15F000DF", # Gold Feather F0 DF
     ]
 
+adjusted_collectable_struct_id_list = [
+    "164000A0", # Note
+    "165000A0", # Blue Egg
+    "165700A0", # Blue Egg
+    "00E000A0", # Red Feather
+    "00E700A0", # Red Feather
+    "15F000A0", # Gold Feather
+    ]
+
 abnormal_collectable_struct_id_list = [
     # Unknown Flowers
     "047740A903D00613F7D7", "0460616CE9AAFF380F01", "04607924E9ECFF390E65",
