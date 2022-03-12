@@ -48,17 +48,21 @@ class Warp:
         self.warps_name = other.warps_name
         other.warps_name = temp
         # New Warp From
-        temp = self.warps_from
-        self.warps_from = other.warps_from
-        other.warps_from = temp
+#         temp = self.warps_from
+#         self.warps_from = other.warps_from
+#         other.warps_from = temp
+        # New Warp From
+        temp = self.warps_to
+        self.warps_to = other.warps_to
+        other.warps_to = temp
         # New Can Enter Warp Zone
-        temp = self.can_enter_warp_zone
-        self.can_enter_warp_zone = other.can_enter_warp_zone
-        other.can_enter_warp_zone = temp
+#         temp = self.can_enter_warp_zone
+#         self.can_enter_warp_zone = other.can_enter_warp_zone
+#         other.can_enter_warp_zone = temp
         # New Can Exit Warp Zone
-#         temp = self.can_exit_from_room
-#         self.can_exit_from_room = other.can_exit_from_room
-#         other.can_exit_from_room = temp
+        temp = self.can_exit_from_room
+        self.can_exit_from_room = other.can_exit_from_room
+        other.can_exit_from_room = temp
         # Keep In Same Setup
         temp = self.keep_in_same_setup
         self.keep_in_same_setup = other.keep_in_same_setup
