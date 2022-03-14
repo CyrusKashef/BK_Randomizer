@@ -332,7 +332,7 @@ class Misc_Manipulation_Class():
         if(models_animations_properties_obj._master_dict["Animations"]):
             models_animations_properties_obj._animations_main()
         if(models_animations_properties_obj._master_dict["Properties"]):
-            models_animations_properties_obj._properties_main()()
+            models_animations_properties_obj._properties_main()
 
     ########################
     ### SOUNDS AND MUSIC ###
