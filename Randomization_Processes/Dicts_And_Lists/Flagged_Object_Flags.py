@@ -455,7 +455,7 @@ bottles_world_warp_dict = {
                 "Green_Jinjo": [[]],
                 "Pink_Jinjo": [[]],
                 "Yellow_Jinjo": [[]],
-                "Blue_Present": [["Talon_Trot", "Shock_Jump"], ["Fly"]],
+                "Blue_Present": [["Talon_Trot", "Shock_Jump_Pad"], ["Fly"]],
                 "Red_Present": [[]],
                 "Green_Present": [[]],
                 },
