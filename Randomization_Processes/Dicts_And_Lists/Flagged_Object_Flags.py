@@ -1004,11 +1004,11 @@ bottles_world_warp_dict = {
             },
         "Click Clock Wood": {
             "Possible_Bottles": {
-                "Spring_Whipcrack_Room_Floor_1_Up": [["Talon_Trot", "Shock_Jump_Pad"]],
-                "Summer_Grass_1_Up": [["Shock_Jump_Pad"]],
-                "Winter_Sir_Slush": [["Fly", "Beak_Bomb", "Shock_Jump_Pad"]],
-                "Yellow_Jinjo": [["Shock_Jump_Pad"]],
-                "Orange_Jinjo": [["Talon_Trot", "Shock_Jump_Pad"]],
+                "Spring_Whipcrack_Room_Floor_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Summer_Grass_1_Up": [["Beak_Buster", "Shock_Jump_Pad"]],
+                "Winter_Sir_Slush": [["Beak_Buster", "Fly", "Beak_Bomb", "Shock_Jump_Pad"]],
+                "Yellow_Jinjo": [["Beak_Buster", "Shock_Jump_Pad"]],
+                "Orange_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
                 },
             "Flagged_Object_Flags": {
                 ###### SPRING ######
