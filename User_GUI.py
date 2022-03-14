@@ -277,7 +277,7 @@ from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0.20220312"
+BK_RANDO_VERSION = "2.0.20220313"
 
 #######################
 ### ERROR GUI CLASS ###
