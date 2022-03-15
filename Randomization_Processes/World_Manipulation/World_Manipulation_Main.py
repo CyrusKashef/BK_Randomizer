@@ -514,7 +514,7 @@ class World_Manipulation_Class():
                     enemy_filter_list.append(enemy_id)
         return enemy_filter_list
     
-    def _skip_enemies(self, item_search_string, enemy_option, world_name=None):
+    def _skip_enemies(self, item_search_string, enemy_option, world_name=None, setup_name=None):
         '''Does not randomize enemies that provide Jiggies or cause issues'''
         # Sir Slush
         if((item_search_string == "190C0124") and (world_name == "Freezeezy Peak")):
@@ -528,42 +528,43 @@ class World_Manipulation_Class():
         # Mutie Snippet, Whipcrack, Wiplash, Lockup
         elif(item_search_string in ["190C00F5", "008C00F5", "008C030F", "190C028A", "050C0153", "190C0152"]):
             return False
+        elif(setup_name == "Nipper's Shell"):
+            return False
         return True
     
     def _gather_enemies(self, world_object, enemy_option):
         '''Collects the enemies per setup for the world'''
         for setup_file in world_object._setup_list:
-            if((self.grandmaster.enemies_var.get() == "Randomize") and (setup_file.setup_name != "Nipper's Shell")):
-                for item_search_string in Enemies.enemy_id_dict["Global"]["Ground"]:
+            for item_search_string in Enemies.enemy_id_dict["Global"]["Ground"]:
+                if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
+                    setup_file._locate_item_index(item_search_string, "Ground_Enemy")
+            for item_search_string in Enemies.additional_search_enemy_id_dict["Ground"]:
+                if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
+                    setup_file._locate_item_index(item_search_string, "Ground_Enemy")
+            if("Ground" in Enemies.enemy_id_dict[world_object._world_name]):
+                for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Ground"]:
                     if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Ground_Enemy")
-                for item_search_string in Enemies.additional_search_enemy_id_dict["Ground"]:
-                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
-                        setup_file._locate_item_index(item_search_string, "Ground_Enemy")
-                if("Ground" in Enemies.enemy_id_dict[world_object._world_name]):
-                    for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Ground"]:
-                        if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
-                            setup_file._locate_item_index(item_search_string, "Ground_Enemy")
-                for item_search_string in Enemies.enemy_id_dict["Global"]["Wall"]:
-                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
-                        setup_file._locate_item_index(item_search_string, "Wall_Enemy")
-                for item_search_string in Enemies.additional_search_enemy_id_dict["Wall"]:
+            for item_search_string in Enemies.enemy_id_dict["Global"]["Wall"]:
+                if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
+                    setup_file._locate_item_index(item_search_string, "Wall_Enemy")
+            for item_search_string in Enemies.additional_search_enemy_id_dict["Wall"]:
+                if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
+                    setup_file._locate_item_index(item_search_string, "Wall_Enemy")
+            if("Wall" in Enemies.enemy_id_dict[world_object._world_name]):
+                for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Wall"]:
                     if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Wall_Enemy")
-                if("Wall" in Enemies.enemy_id_dict[world_object._world_name]):
-                    for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Wall"]:
-                        if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
-                            setup_file._locate_item_index(item_search_string, "Wall_Enemy")
-                for item_search_string in Enemies.enemy_id_dict["Global"]["Flying"]:
+            for item_search_string in Enemies.enemy_id_dict["Global"]["Flying"]:
+                if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
+                    setup_file._locate_item_index(item_search_string, "Flying_Enemy")
+            for item_search_string in Enemies.additional_search_enemy_id_dict["Flying"]:
+                if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
+                    setup_file._locate_item_index(item_search_string, "Flying_Enemy")
+            if("Flying" in Enemies.enemy_id_dict[world_object._world_name]):
+                for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Flying"]:
                     if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Flying_Enemy")
-                for item_search_string in Enemies.additional_search_enemy_id_dict["Flying"]:
-                    if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
-                        setup_file._locate_item_index(item_search_string, "Flying_Enemy")
-                if("Flying" in Enemies.enemy_id_dict[world_object._world_name]):
-                    for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Flying"]:
-                        if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
-                            setup_file._locate_item_index(item_search_string, "Flying_Enemy")
     
     def _shuffle_enemies_within_world(self, world_object):
         '''Shuffles the enemies found within the world'''
