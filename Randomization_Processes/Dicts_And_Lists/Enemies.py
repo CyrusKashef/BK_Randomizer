@@ -60,7 +60,7 @@ enemy_id_dict = {
         },
     "Treasure Trove Cove": {
         "Ground": [
-#             "190C0069", # Yum Yum
+            "190C0069", # Yum Yum
             "190C00F2", # Black Snippet
             "190C0152", # Lockup
             ],
