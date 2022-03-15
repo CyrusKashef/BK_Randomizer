@@ -263,6 +263,7 @@ import tkinter.filedialog
 import os
 import json
 from random import randint, choice
+from PIL import ImageTk, Image
 
 ####################
 ### FILE IMPORTS ###
@@ -277,7 +278,7 @@ from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0.20220313"
+BK_RANDO_VERSION = "2.0.20220314"
 
 #######################
 ### ERROR GUI CLASS ###
@@ -462,6 +463,12 @@ class User_GUI_Class():
             self.wading_boots_var.set(self.bk_model_json[bk_model_preset]["Wading_Boots"])
             self.shorts_vertex_var.set(self.bk_model_json[bk_model_preset]["Shorts_Vertex"])
             self.shorts_texture_var.set(self.bk_model_json[bk_model_preset]["Shorts_Texture"])
+            preset_image_path = f"{self.cwd}Pictures/BK_Models/{bk_model_preset}.png"
+            if(os.path.isfile(preset_image_path)):
+                self.bk_model_image = tk.PhotoImage(file=preset_image_path)
+            else:
+                self.bk_model_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Models/Question_Mark.png")
+            self.bk_model_image_label.config(image=self.bk_model_image)
         else:
             self.banjo_fur_var.set("?")
             self.tooth_necklace_var.set("?")
@@ -475,6 +482,8 @@ class User_GUI_Class():
             self.wading_boots_var.set("?")
             self.shorts_vertex_var.set("?")
             self.shorts_texture_var.set("?")
+            self.bk_model_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Models/Question_Mark.png")
+            self.bk_model_image_label.config(image=self.bk_model_image)
     
     def _select_non_softlock_enemies(self):
         '''Checks the boxes for all non-softlock enemies and unchecks all softlock enemies'''
@@ -1685,8 +1694,13 @@ class User_GUI_Class():
         self.bk_model_dropdown.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.random_bk_model_preset_button = tk.Button(self.bk_model_frame, text='Random Preset', command=self._random_bk_model_preset, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
         self.random_bk_model_preset_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='w')
-        self.random_bk_model_colors_button = tk.Button(self.bk_model_frame, text='Random Colors', command=self._random_bk_model_colors, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
-        self.random_bk_model_colors_button.grid(row=0, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        if(self.bk_model_var.get() in ["Seed Determined Preset", "Seed Determined Colors"]):
+            self.bk_model_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Models/Default.png")
+        else:
+            self.bk_model_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Models/{self.bk_model_var.get()}.png")
+        self.bk_model_image_label = tk.Label(self.bk_model_frame, text='Preview', foreground=curr_background_color, background=curr_background_color, font=(self.font_type, self.small_font_size), image=self.bk_model_image)
+        self.bk_model_image_label.grid(row=0, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        
         self.banjo_fur_text = tk.Label(self.bk_model_frame, text="Banjo's Fur", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.banjo_fur_text.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.banjo_fur_var = tk.StringVar(self.bk_model_frame)
