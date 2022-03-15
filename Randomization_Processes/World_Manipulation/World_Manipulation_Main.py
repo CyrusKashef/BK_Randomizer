@@ -328,7 +328,7 @@ class World_Manipulation_Class():
             max_note_count = 2000
         else:
             max_note_count = 900
-        scaled_note_count = min(int(int(self.grandmaster.final_note_door_value.get()) // 0.9), max_note_count)
+        scaled_note_count = min(int(int(self.grandmaster.final_puzzle_val) // 0.9), max_note_count)
         if(scaled_note_count < 10):
             scaled_note_count = 0
         else:
@@ -982,7 +982,7 @@ class World_Manipulation_Class():
         if(self.grandmaster.final_note_door_var.get() == "Final Note Door Only"):
             self._remove_note_doors()
             self._810_bottles_cutscene()
-            note_door_list = [0, 0, 0, 0, 0, 0, 0, int(self.grandmaster.final_note_door_value.get()), 0, 0, 0, 0]
+            note_door_list = [0, 0, 0, 0, 0, 0, 0, int(self.grandmaster.final_note_door_val), 0, 0, 0, 0]
         elif(self.grandmaster.final_note_door_var.get() == "Scaling Note Doors"):
             note_door_list = self._scale_note_doors(final_note_door_value)
         else:
