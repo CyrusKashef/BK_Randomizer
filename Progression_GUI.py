@@ -189,17 +189,17 @@ class Progression_GUI_Class():
         if(self.master.final_note_door_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
             if(self.master.struct_var.get() == "All Notes"):
-                self.final_note_door_value = randint(0, 2000)
+                self.master.final_note_door_val = randint(0, 2000)
             else:
-                self.final_note_door_value = randint(0, 900)
+                self.master.final_note_door_val = randint(0, 900)
         else:
-            self.final_note_door_value = int(self.master.final_note_door_value.get())
+            self.master.final_note_door_val = int(self.master.final_note_door_value.get())
         # Final Puzzle
         if(self.master.final_puzzle_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
-            self.final_puzzle_value = randint(0, 99)
+            self.master.final_puzzle_val = randint(0, 99)
         else:
-            self.final_puzzle_value = int(self.master.final_puzzle_value.get())
+            self.master.final_puzzle_val = int(self.master.final_puzzle_value.get())
     
     def _setup(self):
         '''Creates the randomized ROM folder with a copy of the original ROM file'''
@@ -258,7 +258,7 @@ class Progression_GUI_Class():
             raise
         try:
             self.pb_label.set_text("Mumbo Has Stronger Magic Than Note Door...")
-            world_manip._note_doors_main(self.final_note_door_value)
+            world_manip._note_doors_main(self.master.final_note_door_val)
         except Exception:
             self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
             raise
@@ -357,7 +357,7 @@ class Progression_GUI_Class():
         if(self.master.final_puzzle_var.get() == 1):
             try:
                 self.pb_label.set_text(f"Mumbo Make Traveling Easier...")
-                world_manip._final_world_puzzle(self.final_puzzle_value)
+                world_manip._final_world_puzzle(self.master.final_puzzle_val)
             except Exception:
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
@@ -382,8 +382,8 @@ class Progression_GUI_Class():
             raise
         try:
             self.pb_label.set_text("Mumbo Make Bottles Say Silly Words...")
-            misc_manip._bottles_requirements_text(self.master.final_note_door_var.get(), self.final_note_door_value,
-                                              self.master.final_puzzle_var.get(), self.final_puzzle_value)
+            misc_manip._bottles_requirements_text(self.master.final_note_door_var.get(), self.master.final_note_door_val,
+                                              self.master.final_puzzle_var.get(), self.master.final_puzzle_val)
         except Exception:
             self.warning_label.set_text("Uh-Oh...")
             self.pb_label.set_text(f"Note & Jiggy Requirement Error:\nPlease Check The ReadMe Under 'Errors'")
