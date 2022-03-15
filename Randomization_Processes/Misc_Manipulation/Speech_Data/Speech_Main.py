@@ -26,57 +26,101 @@ class Speech_Manipulation_Class():
             "Mumbo's Mountain": {
                 "Notes": 5,
                 "Jiggies": 6,
+                "Abnormal Jiggies": 0,
+                "Softlock Jiggies": 0,
                 "Empty Honeycombs": 0,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 2,
                 },
             "Treasure Trove Cove": {
                 "Notes": 0,
                 "Jiggies": 4,
+                "Abnormal Jiggies": 1,
+                "Softlock Jiggies": 0,
                 "Empty Honeycombs": 0,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
             "Clanker's Cavern": {
                 "Notes": 0,
                 "Jiggies": 5,
+                "Abnormal Jiggies": 0,
+                "Softlock Jiggies": 0,
                 "Empty Honeycombs": 0,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
             "Bubblegloop Swamp": {
                 "Notes": 5,
                 "Jiggies": 10,
+                "Abnormal Jiggies": 0,
+                "Softlock Jiggies": 0,
                 "Empty Honeycombs": 0,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
             "Freezeezy Peak": {
                 "Notes": 0,
                 "Jiggies": 9,
+                "Abnormal Jiggies": 0,
+                "Softlock Jiggies": 0,
                 "Empty Honeycombs": 0,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
             "Gobi's Valley": {
                 "Notes": 0,
-                "Jiggies": 7,
+                "Jiggies": 6,
+                "Abnormal Jiggies": 0,
+                "Softlock Jiggies": 1,
                 "Empty Honeycombs": 2,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
             "Mad Monster Mansion": {
                 "Notes": 0,
                 "Jiggies": 3,
+                "Abnormal Jiggies": 0,
+                "Softlock Jiggies": 2,
                 "Empty Honeycombs": 0,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 1,
                 },
             "Rusty Bucket Bay": {
                 "Notes": 0,
                 "Jiggies": 3,
+                "Abnormal Jiggies": 1,
+                "Softlock Jiggies": 0,
                 "Empty Honeycombs": 1,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
             "Click Clock Wood": {
                 "Notes": 0,
                 "Jiggies": 4,
+                "Abnormal Jiggies": 1,
+                "Softlock Jiggies": 1,
                 "Empty Honeycombs": 0,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
             "Gruntilda's Lair": {
                 "Notes": 0,
                 "Jiggies": 6,
+                "Abnormal Jiggies": 0,
+                "Softlock Jiggies": 1,
                 "Empty Honeycombs": 0,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
             "Spiral Mountain": {
                 "Notes": 0,
                 "Jiggies": 0,
+                "Abnormal Jiggies": 0,
+                "Softlock Jiggies": 0,
                 "Empty Honeycombs": 2,
+                "Abnormal Empty Honeycombs": 0,
+                "Softlock Empty Honeycombs": 0,
                 },
         }
 
@@ -112,13 +156,27 @@ class Speech_Manipulation_Class():
                     count += setup_file.note_count
             return count
         elif(object_name == "Flagged"):
-            jiggy_count = 0
-            honeycomb_count = 0
-            for world_object in world_object_list:
-                for setup_file in world_object._setup_list:
-                    jiggy_count += setup_file.jiggy_counts
-                    honeycomb_count += setup_file.empty_honeycomb_count
-            return jiggy_count, honeycomb_count
+            if(self._grandmaster.flagged_object_var.get() in ["None", "Shuffle (World)"]):
+                return 10, 2
+            else:
+                jiggy_list = []
+                honeycomb_list = []
+                for world_object in world_object_list:
+                    for setup_file in world_object._setup_list:
+                        for flagged_object in setup_file.flagged_obj_dict:
+                            if(flagged_object.startswith("Jiggy")):
+                                jiggy_list.append(flagged_object)
+                            elif(flagged_object.startswith("Empty Honeycomb")):
+                                honeycomb_list.append(flagged_object)
+                jiggy_count = len(set(jiggy_list)) + self._spawned_count["Click Clock Wood"]["Jiggies"]
+                honeycomb_count = len(set(honeycomb_list)) + self._spawned_count["Click Clock Wood"]["Empty Honeycombs"]
+                if(self._grandmaster.flagged_object_abnormalities_var.get() == 0):
+                    jiggy_count += self._spawned_count["Click Clock Wood"]["Abnormal Jiggies"]
+                    honeycomb_count += self._spawned_count["Click Clock Wood"]["Abnormal Empty Honeycombs"]
+                if(self._grandmaster.flagged_object_softlock_var.get() == 0):
+                    jiggy_count += self._spawned_count["Click Clock Wood"]["Softlock Jiggies"]
+                    honeycomb_count += self._spawned_count["Click Clock Wood"]["Softlock Empty Honeycombs"]
+                return jiggy_count, honeycomb_count
 
     def _item_count(self, world_object, object_name):
         if(isinstance(world_object, list)):
@@ -131,7 +189,7 @@ class Speech_Manipulation_Class():
                         count += 1
             return count
         elif(object_name == "Note"):
-            if(self._grandmaster.struct_var.get() == "None"):
+            if(self._grandmaster.struct_var.get() in ["None", "Shuffle (World)"]):
                 if(world_object._world_name in ["Gruntilda's Lair", "Spiral Mountain"]):
                     return 0
                 return 100
@@ -142,20 +200,31 @@ class Speech_Manipulation_Class():
                 count += self._spawned_count[world_object._world_name]["Notes"]
                 return count
         elif(object_name == "Flagged"):
-            if(self._grandmaster.flagged_object_var.get() == "None"):
+            if(self._grandmaster.flagged_object_var.get() in ["None", "Shuffle (World)"]):
                 if(world_object._world_name == "Spiral Mountain"):
                     return 0, 6
                 elif(world_object._world_name == "Gruntilda's Lair"):
                     return 10, 0
                 return 10, 2
             else:
-                jiggy_count = 0
-                honeycomb_count = 0
+                jiggy_list = []
+                honeycomb_list = []
                 for setup_file in world_object._setup_list:
-                    jiggy_count += setup_file.jiggy_counts
-                    honeycomb_count += setup_file.empty_honeycomb_count
+                    for flagged_object in setup_file.flagged_obj_dict:
+                        if(flagged_object.startswith("Jiggy")):
+                            jiggy_list.append(flagged_object)
+                        elif(flagged_object.startswith("Empty Honeycomb")):
+                            honeycomb_list.append(flagged_object)
+                jiggy_count = len(set(jiggy_list))
+                honeycomb_count = len(set(honeycomb_list))
                 jiggy_count += self._spawned_count[world_object._world_name]["Jiggies"]
                 honeycomb_count += self._spawned_count[world_object._world_name]["Empty Honeycombs"]
+                if(self._grandmaster.flagged_object_abnormalities_var.get() == 0):
+                    jiggy_count += self._spawned_count[world_object._world_name]["Abnormal Jiggies"]
+                    honeycomb_count += self._spawned_count[world_object._world_name]["Abnormal Empty Honeycombs"]
+                if(self._grandmaster.flagged_object_softlock_var.get() == 0):
+                    jiggy_count += self._spawned_count[world_object._world_name]["Softlock Jiggies"]
+                    honeycomb_count += self._spawned_count[world_object._world_name]["Softlock Empty Honeycombs"]
                 return jiggy_count, honeycomb_count
 
     def _brentilda_1_1(self, world_object):
