@@ -278,7 +278,7 @@ from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0.20220314"
+BK_RANDO_VERSION = "2.0.20220315"
 
 #######################
 ### ERROR GUI CLASS ###
@@ -581,7 +581,10 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.flagged_object_abnormalities_var.get())
         self._add_randomizer_settings_to_code(self.flagged_object_softlock_var.get())
         self._add_randomizer_settings_to_code(self.final_puzzle_var.get())
-        self._add_randomizer_settings_to_code(self.final_puzzle_value.get(), 8)
+        if(self.final_puzzle_value.get() == "?"):
+            self._add_randomizer_settings_to_code(100, 8)
+        else:
+            self._add_randomizer_settings_to_code(self.final_puzzle_value.get(), 8)
         self._add_randomizer_settings_to_code(self.free_transformations_var.get())
         self._add_randomizer_settings_to_code(self.one_health_banjo_var.get())
         # Non-Flagged Objects
@@ -591,7 +594,10 @@ class User_GUI_Class():
         # Structs
         self._add_randomizer_settings_to_code(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"].index(self.struct_var.get()), 3)
         self._add_randomizer_settings_to_code(["Scaling Note Doors", "Final Note Door Only"].index(self.final_note_door_var.get()))
-        self._add_randomizer_settings_to_code(self.final_note_door_value.get(), 11)
+        if(self.final_puzzle_value.get() == "?"):
+            self._add_randomizer_settings_to_code(2001, 11)
+        else:
+            self._add_randomizer_settings_to_code(self.final_note_door_value.get(), 11)
         self._add_randomizer_settings_to_code(self.before_blue_egg_carry_value.get(), 9)
         self._add_randomizer_settings_to_code(self.after_blue_egg_carry_value.get(), 9)
         self._add_randomizer_settings_to_code(self.before_red_feather_carry_value.get(), 9)
@@ -604,7 +610,10 @@ class User_GUI_Class():
         # Within World Warps
         self._add_randomizer_settings_to_code(["None", "Shuffle By World", "Shuffle By Game"].index(self.within_world_warps_var.get()), 2)
         # Starting World
-        self._add_randomizer_settings_to_code([option for option in start_level_ids].index(self.new_area_var.get()), 8)
+        starting_world_options = [option for option in start_level_ids]
+        starting_world_options.insert(0, "Random Starting Area (Always Safe)")
+        starting_world_options.insert(1, "Random Starting Area (Safe With All Moves)")
+        self._add_randomizer_settings_to_code(starting_world_options.index(self.new_area_var.get()), 8)
         self._add_randomizer_settings_to_code(self.skip_intro_cutscene_var.get())
         # Enemies
         self._add_randomizer_settings_to_code(["None", "Shuffle", "Randomize"].index(self.enemies_var.get()), 2)
@@ -677,7 +686,11 @@ class User_GUI_Class():
             self.flagged_object_abnormalities_var.set(self._get_randomizer_setting())
             self.flagged_object_softlock_var.set(self._get_randomizer_setting())
             self.final_puzzle_var.set(self._get_randomizer_setting())
-            self.final_puzzle_value.set(self._get_randomizer_setting(bit_count=8))
+            final_puzzle_value = self._get_randomizer_setting(bit_count=8)
+            if(final_puzzle_value == 100):
+                self.final_puzzle_value.set("?")
+            else:
+                self.final_puzzle_value.set(str(final_puzzle_value))
             self.free_transformations_var.set(self._get_randomizer_setting())
             self.one_health_banjo_var.set(self._get_randomizer_setting())
             # Non-Flagged Objects
@@ -687,7 +700,11 @@ class User_GUI_Class():
             # Structs
             self.struct_var.set(self._get_randomizer_setting(bit_count=3, options_list=["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
             self.final_note_door_var.set(self._get_randomizer_setting(options_list=["Scaling Note Doors", "Final Note Door Only"]))
-            self.final_note_door_value.set(self._get_randomizer_setting(bit_count=11))
+            final_note_door_value = self._get_randomizer_setting(bit_count=11)
+            if(final_note_door_value == 2001):
+                self.final_note_door_value.set("?")
+            else:
+                self.final_note_door_value.set(str(final_note_door_value))
             self.before_blue_egg_carry_value.set(self._get_randomizer_setting(bit_count=9))
             self.after_blue_egg_carry_value.set(self._get_randomizer_setting(bit_count=9))
             self.before_red_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
@@ -700,7 +717,10 @@ class User_GUI_Class():
             # Within World Warps
             self.within_world_warps_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle By World", "Shuffle By Game"]))
             # Starting World
-            self.new_area_var.set(self._get_randomizer_setting(bit_count=8, options_list=[option for option in start_level_ids]))
+            starting_world_options = [option for option in start_level_ids]
+            starting_world_options.insert(0, "Random Starting Area (Always Safe)")
+            starting_world_options.insert(1, "Random Starting Area (Safe With All Moves)")
+            self.new_area_var.set(self._get_randomizer_setting(bit_count=8, options_list=starting_world_options))
             self.skip_intro_cutscene_var.set(self._get_randomizer_setting())
             # Enemies
             self.enemies_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle", "Randomize"]))
