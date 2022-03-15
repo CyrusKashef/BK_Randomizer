@@ -772,9 +772,11 @@ class World_Manipulation_Class():
                     if(object_name == "Jiggy"):
                         obj_id = leading_zeros(flag_info['Obj_ID1'], 2) + leading_zeros(flag_info['Obj_ID2'], 2)
                         setup_file.flagged_obj_dict[f"Jiggy (ID {int(obj_id, 16)})"] = f"From {Flagged_Objects.cheat_sheet_dict[obj_id.upper()]}"
+                        setup_file.jiggy_count += 1
                     elif(object_name == "Empty Honeycomb"):
                         obj_id = leading_zeros(flag_info['Obj_ID1'], 2) + leading_zeros(flag_info['Obj_ID2'], 2)
                         setup_file.flagged_obj_dict[f"Empty Honeycomb (ID {int(obj_id, 16)})"] = f"From {Flagged_Objects.cheat_sheet_dict[obj_id.upper()]}"
+                        setup_file.empty_honeycomb_count += 1
                     else:
                         if(object_name not in setup_file.flagged_obj_dict):
                             setup_file.flagged_obj_dict[object_name] = 1
