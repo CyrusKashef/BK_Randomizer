@@ -59,6 +59,7 @@ class Misc_Manipulation_Class():
     def _ttc_sandcastle_code(self):
         # Code: FB1AEB - FB24A0
         # 6B 6E 69 70 36 38 6E 33 36 36 34 6A
+        # B  A  N  J  O  K  A  Z  O  O  I  E
         # Texture: 0x10220 - 60FC30
         pass
     
@@ -449,7 +450,7 @@ class Misc_Manipulation_Class():
             ("YOU'RE OUT OF STYLE, COULDN'T BE LAMER!", "TRY WEARING A HAT, AND BEING A GAMER!"), # HatWearingGamer (Approved)
             ("YOU WANT TO SEE A MODDED TOOIE?", "THERE'S TONS OF FEATURES ON SNOOIE!"), # Wedarobi (Approved)
             ("YOU SEEM TO BE FULL OF RAGE.", "TRY CALMING DOWN LIKE MONOTONE GAGE!"), # Gage (Approved)
-            ("BLAST THAT STUPID NINPALK SKIP!", "I NEED THAT CUTSCENE FOR TIME TO DIP"), # Ninpalk (Approved)
+            ("BLAST THAT STUPID NINPALK SKIP!", "I NEED THAT CUTSCENE FOR TIME TO DIP!"), # Ninpalk (Approved)
             ("YOU HAVEN'T CLIPPED THROUGH THE FLOOR AT LEAST,", "IT SEEMS YOU'RE NO 8 BIT BEAST!"), # The8BitBeast (Approved)
             ("WANNA SEE RUNNERS AT A FAST PACE?", "CHECK OUT THE TWITCH CHANNEL BANJO RACE!"), # GarageDoorOpener (Approved)
             ("LOVEABLE STREAMER, HIS NAME IS DEDE,", "FULL OF CHARM AND HIS SOCKS ARE STINKY!"), # Dedelux (Approved)
