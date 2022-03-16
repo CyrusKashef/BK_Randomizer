@@ -549,7 +549,13 @@ class User_GUI_Class():
         else:
             map_file_desc = "Select a preset to check its description!"
         self.customizable_file_description.config(text=map_file_desc)
-        
+    
+    def _lock_final_puzzle_value(self, *args):
+        if(self.final_puzzle_var.get() == 0):
+            self.final_puzzle_value.set("25")
+            self.final_puzzle_entry.configure(state='disabled')
+        else:
+            self.final_puzzle_entry.configure(state='normal')
     
     ################################
     ### RANDOMIZER SETTINGS CODE ###
@@ -1570,6 +1576,7 @@ class User_GUI_Class():
         self.gold_feather_carry_entry.grid(row=2, column=4, padx=self.padx, pady=self.pady)
         self.random_carry_capacity_button = tk.Button(self.carry_limit_frame, text='Random Carry\nCapacities', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._set_random_carry_capacities)
         self.random_carry_capacity_button.grid(row=1, rowspan=2, column=5, padx=self.padx, pady=self.pady)
+        self.final_puzzle_var.trace('w', self._lock_final_puzzle_value)
         # Non Flagged Objects
         self.non_flagged_object_frame = tk.LabelFrame(self._collectables_tab, text="Jinjos, 1-Ups, & Misc Objects", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.non_flagged_object_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
