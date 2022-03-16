@@ -1253,9 +1253,6 @@ class User_GUI_Class():
     def _check_rom_directory(self):
         '''Checks if ROM file ends in .z64 and is located in the folder with GZIP.EXE'''
         rom_path = self.rom_file_entry.get()
-        if((rom_path == "") or (not os.path.isfile(rom_path))):
-            Error_GUI("Please provide the directory to the ROM.")
-            return False
         if("\\" in rom_path):
             rom_file = rom_path.split("\\")[-1]
         elif("/" in rom_path):
@@ -1263,6 +1260,16 @@ class User_GUI_Class():
         else:
             Error_GUI("Unknown Directory?")
         file_dir = rom_path.replace(rom_file, "")
+        for special_char in ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "{", "}", "[", "]", ";", "'", "\"", "|", "<", ",", "?"]:
+            if(special_char in file_dir):
+                Error_GUI(f"There's a special character in the directory path: {special_char}\nPlease remove it and try again.")
+                return False
+            if(special_char in rom_file):
+                Error_GUI(f"There's a special character in the ROM file name: {special_char}\nPlease remove it and try again.")
+                return False
+        if((rom_path == "") or (not os.path.isfile(rom_path))):
+            Error_GUI("Please provide the directory to the ROM.")
+            return False
         if(" " in file_dir):
             Error_GUI("There's a space (' ') in the directory path. Please remove the space and try again.")
             return False
@@ -1433,6 +1440,9 @@ class User_GUI_Class():
         self.rom_file_entry = tk.StringVar(self.rom_frame)
         self.rom_file_display = tk.Entry(self.rom_frame, textvariable=self.rom_file_entry, state='readonly', width=35, font=(self.font_type, self.medium_font_size))
         self.rom_file_display.grid(row=0, column=2, columnspan=2, padx=10, pady=self.pady)
+        rom_file_disclaimer_text = "Folders and ROM cannot have spaces or these special characters:\n!@#$%^&*(){}[]:;'<>,?|'\"`~-_+="
+        self.rom_file_disclaimer_label = tk.Label(self.rom_frame, text=rom_file_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.rom_file_disclaimer_label.grid(row=1, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         ### Seed ###
         self.seed_frame = tk.LabelFrame(self._general_tab, text="Seed", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.seed_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
@@ -1634,8 +1644,8 @@ class User_GUI_Class():
             "  The 'Shuffle By Game' option has some warps that crash\n"+
             "  and notes do not save. Would not recommend. Use at own risk."
             )
-        self.warp_disclaimer_text = tk.Label(self.within_world_warp_frame, text=warp_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
-        self.warp_disclaimer_text.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.warp_disclaimer_label = tk.Label(self.within_world_warp_frame, text=warp_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.warp_disclaimer_label.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Starting Area
         self.starting_area_frame = tk.LabelFrame(self._warps_tab, text="Starting Area:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.starting_area_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
