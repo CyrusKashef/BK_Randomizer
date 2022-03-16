@@ -31,7 +31,7 @@ learnable_moves_dict = {
 #########################
 
 class World_Order_Bottles():
-    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0):
+    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0, world_order_option=0):
         '''Initializes the World Order Bottles Class'''
         self.bottles_world_warp_dict = bottles_world_warp_dict
         self.extra_flagged_object_flags = extra_flagged_object_flags
@@ -49,6 +49,10 @@ class World_Order_Bottles():
             self.one_hp = False
         else:
             self.one_hp = True
+        if(world_order_option == 0):
+            self._required_jiggies = [3, 8, 15, 23, 32, 42, 54, 69, 0]
+        else:
+            self._required_jiggies = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     def _progression_requirements(self, world_name):
         '''Calculates the progression requirements for the world number, based on lair progression and Jiggies needed to open the worlds'''
@@ -56,19 +60,19 @@ class World_Order_Bottles():
         required_move_list = []
         # Exiting MM -> Going To TTC
         if(world_count == 0):
-            required_jiggy_count = 3
+            required_jiggy_count = self._required_jiggies[0]
             if(world_name == "Mumbo's Mountain"):
                 required_move_list = ["Talon_Trot"]
         # Exiting TTC -> Going To CC
         elif(world_count == 1):
-            required_jiggy_count = 8
+            required_jiggy_count = self._required_jiggies[1]
             if((world_name != "Clanker's Cavern") and ("Clanker's Cavern" not in self.world_order_list)):
                 # You Can Enter World If Leaving It
                 # Shock_Jump_Pad For Puzzle, Beak_Buster For Pipes
                 required_move_list = ["Shock_Jump_Pad", "Beak_Buster"]
         # Exiting CC -> Going To BGS
         elif(world_count == 2):
-            required_jiggy_count = 15
+            required_jiggy_count = self._required_jiggies[2]
             if((world_name == "Bubblegloop Swamp") or ("Bubblegloop Swamp" in self.world_order_list)):
                 # You Can Enter World If Leaving It; Beak_Buster For Puzzle
                 required_move_list = ["Beak_Buster"]
@@ -77,7 +81,7 @@ class World_Order_Bottles():
                 required_move_list = ["Talon_Trot", "Beak_Buster"]
         # Exiting BGS -> Going To FP
         elif(world_count == 3):
-            required_jiggy_count = 23
+            required_jiggy_count = self._required_jiggies[3]
             if((world_name == "Freezeezy Peak") or ("Freezeezy Peak" in self.world_order_list)):
                 # You Can Enter World If Leaving It
                 required_move_list = []
@@ -102,27 +106,27 @@ class World_Order_Bottles():
                     required_move_list = ["Wading_Boots"]
         # Exiting FP -> Going To GV
         elif(world_count == 4):
-            required_jiggy_count = 32
+            required_jiggy_count = self._required_jiggies[4]
             if((world_name != "Gobi's Valley") and ("Gobi's Valley" not in self.world_order_list)):
                 # Get To GV Without Taking Damage
                 if(self.one_hp):
                     required_move_list = ["Wading_Boots"]
         # Exiting GV -> Going To MMM
         elif(world_count == 5):
-            required_jiggy_count = 42
+            required_jiggy_count = self._required_jiggies[5]
             required_move_list = []
         # Exiting MMM -> Going To RBB
         elif(world_count == 6):
-            required_jiggy_count = 54
+            required_jiggy_count = self._required_jiggies[6]
             # Raise The Water Level To Reach Puzzle
             required_move_list = ["Beak_Buster"]
         # Exiting RBB -> Going To CCW
         elif(world_count == 7):
-            required_jiggy_count = 69
+            required_jiggy_count = self._required_jiggies[7]
             # CCW Puzzle Button
             required_move_list = ["Beak_Buster"]
         else:
-            required_jiggy_count = 0
+            required_jiggy_count = self._required_jiggies[8]
         progress_move_list = []
         for required_move in required_move_list:
             if(required_move not in self.learned_moves):
