@@ -31,7 +31,7 @@ learnable_moves_dict = {
 #########################
 
 class World_Order_Bottles():
-    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0, world_order_option=0):
+    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0, final_puzzle_option=0):
         '''Initializes the World Order Bottles Class'''
         self.bottles_world_warp_dict = bottles_world_warp_dict
         self.extra_flagged_object_flags = extra_flagged_object_flags
@@ -49,7 +49,7 @@ class World_Order_Bottles():
             self.one_hp = False
         else:
             self.one_hp = True
-        if(world_order_option == 0):
+        if(final_puzzle_option == 0):
             self._required_jiggies = [3, 8, 15, 23, 32, 42, 54, 69, 0]
         else:
             self._required_jiggies = [0, 0, 0, 0, 0, 0, 0, 0, 0]
