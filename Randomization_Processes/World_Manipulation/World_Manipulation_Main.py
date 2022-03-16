@@ -1528,7 +1528,8 @@ class World_Manipulation_Class():
                                 extra_flagged_object_flags[world_name][flag_string]["Type"] = "Mumbo Token"
                             extra_flagged_object_flags[world_name][flag_string]["ID"] = flag_id
                             break
-        self.world_order = World_Order_Bottles(bottles_world_warp_dict, extra_flagged_object_flags, seed_val=self.seed, one_hp=self.grandmaster.one_health_banjo_var.get())
+        self.world_order = World_Order_Bottles(bottles_world_warp_dict, extra_flagged_object_flags, seed_val=self.seed,
+                                               one_hp=self.grandmaster.one_health_banjo_var.get(), world_order_option=self.grandmaster.world_entrance_var.get())
         self.world_order._determine_world_order()
         if(self.grandmaster.cheat_sheet_var.get() == 1):
             world_cheat_sheet_str = ""
