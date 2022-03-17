@@ -168,7 +168,6 @@ possible_bottles_locations = {
             "Summer_Whipcrack_Room_1_Up": "034101B90085",
             "Fall_Orange_Jinjo": "F9C80384E847",
             "Fall_Acorn_Ledge": "003F0EEB1388",
-            "Fall_Acorn_Nabnut": "FE040201FF39",
             "Winter_Sir_Slush": "F9C00FB310CC",
             },
         }
