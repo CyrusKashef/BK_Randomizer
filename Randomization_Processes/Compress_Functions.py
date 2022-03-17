@@ -142,9 +142,9 @@ class Compressor():
                 comp_file.write(bytes.fromhex(hex_string))
 
     def _compress_file(self, file_name):
-        """Compresses the hex file that was extracted from the main ROM file"""
-        cmd = f"{self._file_dir}GZIP.EXE -c {self._file_dir}Randomized_ROM/{file_name.upper()}-Decompressed.bin > {self._file_dir}Randomized_ROM/{file_name.upper()}-New_Compressed.bin"
-        subprocess.Popen(cmd.split(),shell=True).communicate()
+        '''Compresses the hex file that was extracted from the main ROM file'''
+        cmd = f"\"{self._file_dir}GZIP.EXE\" -c \"{self._file_dir}Randomized_ROM/{file_name.upper()}-Decompressed.bin\" > \"{self._file_dir}Randomized_ROM/{file_name.upper()}-New_Compressed.bin\""
+        subprocess.Popen(cmd, universal_newlines=True, shell=True).communicate()
     
     def _post_compress_operations(self, file_name, header, footer, decomp_len, padding_text="AA"):
         with open(f"{self._file_dir}Randomized_ROM/{file_name}-New_Compressed.bin", "r+b") as comp_file:
