@@ -1012,7 +1012,6 @@ bottles_world_warp_dict = {
                 "Summer_Whipcrack_Room_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
                 "Fall_Orange_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
                 "Fall_Acorn_Ledge": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Fall_Acorn_Nabnut": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
                 "Winter_Sir_Slush": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Fly", "Beak_Bomb"]],
                 },
             "Flagged_Object_Flags": {
