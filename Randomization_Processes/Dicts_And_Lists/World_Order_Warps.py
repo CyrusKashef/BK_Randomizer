@@ -96,54 +96,6 @@ bottles_moves_camera_dict = {
         },
     }
 
-basic_world_warp_dict = {
-        "Mumbo's Mountain": {
-            "Bottles_Count": 3,
-            "Prior_Moves": [],
-            "Must_Learn_Move": "Talon_Trot",
-            },
-        "Treasure Trove Cove": {
-            "Bottles_Count": 2,
-            "Prior_Moves": [],
-            "Must_Learn_Move": [],
-            },
-        "Clanker's Cavern": {
-            "Bottles_Count": 1,
-            "Prior_Moves": ["Fly", "Shock_Jump_Pad"],
-            "Must_Learn_Move": [],
-            },
-        "Bubblegloop Swamp": {
-            "Bottles_Count": 1,
-            "Prior_Moves": [],
-            "Must_Learn_Move": "Beak_Buster",
-            },
-        "Freezeezy Peak": {
-            "Bottles_Count": 1,
-            "Prior_Moves": [],
-            "Must_Learn_Move": "Fly",
-            },
-        "Gobi's Valley": {
-            "Bottles_Count": 1,
-            "Prior_Moves": ["Talon_Trot", "Turbo_Talon_Trot"],
-            "Must_Learn_Move": [],
-            },
-        "Mad Monster Mansion": {
-            "Bottles_Count": 0,
-            "Prior_Moves": [],
-            "Must_Learn_Move": [],
-            },
-        "Rusty Bucket Bay": {
-            "Bottles_Count": 0,
-            "Prior_Moves": [],
-            "Must_Learn_Move": [],
-            },
-        "Click Clock Wood": {
-            "Bottles_Count": 0,
-            "Prior_Moves": ["Beak_Buster"],
-            "Must_Learn_Move": [],
-            },
-        }
-
 possible_bottles_locations = {
         "Mumbo's Mountain": {
             "Beak_Buster": "0F67086BF2A2",
@@ -208,127 +160,15 @@ possible_bottles_locations = {
             "Orange_Jinjo": "22C7FCE0F4B2",
             },
         "Click Clock Wood": {
+            "Spring_Branch_1_Up": "EC7F0B50FC50",
             "Spring_Whipcrack_Room_Floor_1_Up": "FD4B00020210",
             "Summer_Grass_1_Up": "0E140016F054",
+            "Summer_Treehouse_1_Up": "16D810940264",
+            "Summer_Yellow_Jinjo": "F1EE000010AA",
+            "Summer_Whipcrack_Room_1_Up": "034101B90085",
+            "Fall_Orange_Jinjo": "F9C80384E847",
+            "Fall_Acorn_Ledge": "003F0EEB1388",
+            "Fall_Acorn_Nabnut": "FE040201FF39",
             "Winter_Sir_Slush": "F9C00FB310CC",
-            "Yellow_Jinjo": "F1EE000010AA",
-            "Orange_Jinjo": "F9C80384E847",
-            },
-        }
-
-bottles_world_warp_dict = {
-        "Mumbo's Mountain": {
-            "Prior_Moves": [],
-            "In_World_Moves": [],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Beak_Buster": [],
-                "Talon_Trot": [],
-                "Pink_Jinjo": [],
-                "Blue_Jinjo": [],
-                "Orange_Jinjo": [],
-                "Yellow_Jinjo": [],
-                },
-            },
-        "Treasure Trove Cove": {
-            "Prior_Moves": [],
-            "In_World_Moves": [],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Fly": [["Talon_Trot"]],
-                "Shock_Jump_Pad": [],
-                "Ledge_1_Up": [],
-                "Sharkfood_Island_1_Up": [],
-                "Orange_Jinjo": [],
-                "Yellow_Jinjo": [["Fly"]],
-                "Pink_Jinjo": [],
-                }
-            },
-        "Clanker's Cavern": {
-            "Prior_Moves": [],
-            "In_World_Moves": [],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Wonderwing": [["Fly", "Eggs"]],
-                "Platform_1_Up": [],
-                "Alcove_1_Up": [["Shock_Jump_Pad"]],
-                "Yellow_Jinjo": [],
-                "Orange_Jinjo": [["Shock_Jump_Pad", "Beak_Buster"], ["Shock_Jump_Pad", "Eggs"]],
-                }
-            },
-        "Bubblegloop Swamp": {
-            "Prior_Moves": [],
-            "In_World_Moves": ["Beak_Buster"],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Wading_Boots": [],
-                "Green_Jinjo": [["Talon_Trot"]],
-                "Yellow_Jinjo": [],
-                }
-            },
-        "Freezeezy Peak": {
-            "Prior_Moves": [],
-            "In_World_Moves": ["Fly", "Beak_Bomb"],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Beak_Bomb": [],
-                "Finish_Pole_1_Up": [["Talon_Trot", "Fly"]],
-                "Mumbo_Skull_1_Up": [["Fly"]],
-                "Blue_Jinjo": [["Talon_Trot", "Fly"]],
-                "Green_Jinjo": [],
-                "Pink_Jinjo": [],
-                "Yellow_Jinjo": [],
-                "Blue_Present": [["Talon_Trot", "Shock_Jump"], ["Fly"]],
-                "Red_Present": [],
-                "Green_Present": [],
-                }
-            },
-        "Gobi's Valley": {
-            "Prior_Moves": [],
-            "In_World_Moves": [("Talon_Trot", "Turbo_Talon_Trot")],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Turbo_Talon_Trot": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
-                "King_Sandybutt_1_Up": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
-                "Water_Pyramid_1_Up": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
-                "Yellow_Jinjo": [],
-                "Green_Jinjo": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
-#                 "Orange_Jinjo": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
-                }
-            },
-        "Mad Monster Mansion": {
-            "Prior_Moves": [],
-            "In_World_Moves": [],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Organ_1_up": [["Turbo_Talon_Trot", "Shock_Jump_Pad"]],
-                "Church_Secret_Room": [],
-                "Blue_Jinjo": [["Shock_Jump_Pad"]],
-                "Orange_Jinjo": [],
-                "Yellow_Jinjo": [["Turbo_Talon_Trot", "Shock_Jump_Pad"]],
-                }
-            },
-        "Rusty Bucket Bay": {
-            "Prior_Moves": [],
-            "In_World_Moves": [],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Big_Fish_Warehouse_1_Up": [["Shock_Jump_Pad"]],
-                "Engine_Room_1_Up": [],
-                "Blue_Jinjo": [],
-                "Orange_Jinjo": [["Eggs"]],
-                }
-            },
-        "Click Clock Wood": {
-            "Prior_Moves": [["Beak_Buster"]],
-            "In_World_Moves": ["Shock_Jump_Pad"],
-            "Available_Bottles": [],
-            "Possible_Bottles": {
-                "Spring_Whipcrack_Room_Floor_1_Up": [["Talon_Trot", "Shock_Jump_Pad"]],
-                "Summer_Grass_1_Up": [["Shock_Jump_Pad"]],
-                "Winter_Sir_Slush": [["Fly", "Beak_Bomb", "Shock_Jump_Pad"]],
-                "Yellow_Jinjo": [["Shock_Jump_Pad"]],
-                "Orange_Jinjo": [["Talon_Trot", "Shock_Jump_Pad"]],
-                }
             },
         }
