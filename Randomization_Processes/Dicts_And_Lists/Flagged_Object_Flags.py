@@ -1004,11 +1004,16 @@ bottles_world_warp_dict = {
             },
         "Click Clock Wood": {
             "Possible_Bottles": {
+                "Spring_Branch_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
                 "Spring_Whipcrack_Room_Floor_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Summer_Grass_1_Up": [["Beak_Buster", "Shock_Jump_Pad"]],
-                "Winter_Sir_Slush": [["Beak_Buster", "Fly", "Beak_Bomb", "Shock_Jump_Pad"]],
-                "Yellow_Jinjo": [["Beak_Buster", "Shock_Jump_Pad"]],
-                "Orange_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Summer_Grass_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Summer_Treehouse_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Summer_Yellow_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Summer_Whipcrack_Room_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Fall_Orange_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Fall_Acorn_Ledge": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Fall_Acorn_Nabnut": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+                "Winter_Sir_Slush": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Fly", "Beak_Bomb"]],
                 },
             "Flagged_Object_Flags": {
                 ###### SPRING ######
