@@ -42,18 +42,6 @@ def read_json(json_file_dir):
 #     cmd = f"{xdelta_path}xdelta.exe -e -s {old_file_path} {new_file_path} {delta_file_path}"
 #     subprocess.Popen(cmd.split(), shell=True).communicate()
 
-def space_in_directory(filename):
-    # You can use the following to allow spaces in directory names
-    # GZIP.EXE -c temp/"This Is A Test"/646058-Decompressed.bin > temp/"This Is A Test"/646058-Compressed.bin
-    filename_split = filename.split("/")
-    new_filename = ""
-    for split in filename_split:
-        if(" " in split):
-            new_filename += f'"{split}"/'
-        else:
-            new_filename += f'{split}/'
-    return new_filename[:-1]
-
 def possible_negative(int_val):
     '''If value would be a negative hex value (greater than 0x8000), converts to negative. Otherwise returns initial value'''
     if(int_val > 32768):
