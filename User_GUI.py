@@ -1423,7 +1423,7 @@ class User_GUI_Class():
         self.rom_file_entry = tk.StringVar(self.rom_frame)
         self.rom_file_display = tk.Entry(self.rom_frame, textvariable=self.rom_file_entry, state='readonly', width=35, font=(self.font_type, self.medium_font_size))
         self.rom_file_display.grid(row=0, column=2, columnspan=2, padx=10, pady=self.pady)
-        rom_file_disclaimer_text = "Folders and ROM cannot have spaces or these special characters:\n!@#$%^&*(){}[]:;'<>,?|'\"`~-_+="
+        rom_file_disclaimer_text = "ROMs must be v1.0 NTSC of Banjo-Kazooie, ending in .z64"
         self.rom_file_disclaimer_label = tk.Label(self.rom_frame, text=rom_file_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
         self.rom_file_disclaimer_label.grid(row=1, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         ### Seed ###
