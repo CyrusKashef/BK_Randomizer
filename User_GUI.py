@@ -263,14 +263,13 @@ import tkinter.filedialog
 import os
 import json
 from random import randint, choice
-from PIL import ImageTk, Image
 
 ####################
 ### FILE IMPORTS ###
 ####################
 
 from Progression_GUI import Progression_GUI_Class
-from Randomization_Processes.Common_Functions import read_json, space_in_directory, leading_zeros
+from Randomization_Processes.Common_Functions import read_json, leading_zeros
 from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids
 from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 
@@ -278,7 +277,7 @@ from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0.20220315"
+BK_RANDO_VERSION = "2.0.20220316"
 
 #######################
 ### ERROR GUI CLASS ###
@@ -386,8 +385,6 @@ class User_GUI_Class():
         filename = tkinter.filedialog.askopenfilename(initialdir=self.cwd, title="Select The BK ROM File", filetype =(("Rom Files","*.z64"),("all files","*.*")) )
         if(not filename):
             return
-        if(" " in filename):
-            filename = space_in_directory(filename)
         self.rom_file_entry.set(filename)
     
     def _open_file(self, file_to_open):
@@ -1259,22 +1256,8 @@ class User_GUI_Class():
             rom_file = rom_path.split("/")[-1]
         else:
             Error_GUI("Unknown Directory?")
-        file_dir = rom_path.replace(rom_file, "")
-        for special_char in ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "{", "}", "[", "]", ";", "'", "\"", "|", "<", ",", "?"]:
-            if(special_char in file_dir):
-                Error_GUI(f"There's a special character in the directory path: {special_char}\nPlease remove it and try again.")
-                return False
-            if(special_char in rom_file):
-                Error_GUI(f"There's a special character in the ROM file name: {special_char}\nPlease remove it and try again.")
-                return False
         if((rom_path == "") or (not os.path.isfile(rom_path))):
             Error_GUI("Please provide the directory to the ROM.")
-            return False
-        if(" " in file_dir):
-            Error_GUI("There's a space (' ') in the directory path. Please remove the space and try again.")
-            return False
-        if(" " in rom_file):
-            Error_GUI("There's a space (' ') in the rom file name. Please remove the space and try again.")
             return False
         rom_ext = rom_file.split(".")[-1]
         if(rom_ext not in ["z64"]):
