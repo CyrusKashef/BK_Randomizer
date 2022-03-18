@@ -194,12 +194,14 @@ class Progression_GUI_Class():
                 self.master.final_note_door_val = randint(0, 900)
         else:
             self.master.final_note_door_val = int(self.master.final_note_door_value.get())
+        print(f"Final Note Door Val: {self.master.final_note_door_val}")
         # Final Puzzle
         if(self.master.final_puzzle_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
             self.master.final_puzzle_val = randint(0, 99)
         else:
             self.master.final_puzzle_val = int(self.master.final_puzzle_value.get())
+        print(f"Final Puzzle Val: {self.master.final_puzzle_val}")
     
     def _setup(self):
         '''Creates the randomized ROM folder with a copy of the original ROM file'''
@@ -351,6 +353,7 @@ class Progression_GUI_Class():
             try:
                 self.pb_label.set_text("If Bear And Bird Lose, Mumbo Go Get Flower...")
                 world_manip._harder_final_battle_main(self.master.gruntilda_difficulty_var.get())
+#                 world_manip._return_of_furnace_fun()
             except Exception:
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
