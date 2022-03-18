@@ -27,6 +27,7 @@ from random import randint, seed, shuffle, choice
 import json
 import mmap
 from math import ceil, floor
+import shutil
 
 ####################
 ### FILE IMPORTS ###
@@ -324,11 +325,7 @@ class World_Manipulation_Class():
             "Unknown2": 0xB4,
             "Size": 0x0,
             }
-        if(self.grandmaster.struct_var.get() == "All Notes"):
-            max_note_count = 2000
-        else:
-            max_note_count = 900
-        scaled_note_count = min(int(int(self.grandmaster.final_puzzle_val) // 0.9), max_note_count)
+        scaled_note_count = int(int(self.grandmaster.final_note_door_val) // 0.9)
         if(scaled_note_count < 10):
             scaled_note_count = 0
         else:
@@ -532,6 +529,11 @@ class World_Manipulation_Class():
             return False
         return True
     
+    def _remove_yum_yums(self):
+        for setup_file in self.treasure_trove_cove._setup_list:
+            replace_list = {2: 0x00, 3: 0x67}
+            setup_file._replace_all_in_area("190C0069", replace_list)
+    
     def _gather_enemies(self, world_object, enemy_option):
         '''Collects the enemies per setup for the world'''
         for setup_file in world_object._setup_list:
@@ -667,6 +669,8 @@ class World_Manipulation_Class():
 
     def _enemies_main(self):
         '''Runs the enemies options that are not NONE'''
+        if(self.grandmaster.enemy_checkbox_dict["Yum-Yum*"]):
+            self._remove_yum_yums()
         if(self.grandmaster.enemies_var.get() == "Shuffle"):
             for world_object in self.world_list:
                 self._gather_enemies(world_object, "Shuffle")
@@ -1453,7 +1457,6 @@ class World_Manipulation_Class():
                                 leading_zeros(chosen_move['Obj_ID1'], 2) + 
                                 leading_zeros(chosen_move['Obj_ID2'], 2)).upper()
                     self._new_move_camera(setup_file, new_move)
-                    
     
     def _basic_world_order_shuffle_main(self):
         '''Runs the basic world order shuffle functions'''
@@ -1676,9 +1679,11 @@ class World_Manipulation_Class():
     
     def _generate_cheat_sheet(self):
         '''PyDoc'''
+        totals_note_count = 0
         cheat_sheet_dict = {}
         for world_object in self.world_list:
             cheat_sheet_dict[world_object._world_name] = {}
+            world_note_count = 0
             for setup_file in world_object._setup_list:
                 cheat_sheet_dict[world_object._world_name][setup_file.setup_name] = {}
                 if(self.grandmaster.struct_var.get() != "None"):
@@ -1686,6 +1691,8 @@ class World_Manipulation_Class():
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Note_Count"] = setup_file.note_count
                     except AttributeError:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Note_Count"] = 0
+                    world_note_count += setup_file.note_count
+                    totals_note_count += setup_file.note_count
                 if(self.grandmaster.non_flagged_object_var.get() != "None"):
                     try:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Non_Flagged_Object_Dict"] = setup_file.non_flagged_obj_dict
@@ -1696,6 +1703,8 @@ class World_Manipulation_Class():
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Flagged_Object_Dict"] = setup_file.flagged_obj_dict
                     except AttributeError:
                         pass
+            cheat_sheet_dict[world_object._world_name]["World_Note_Count"] = world_note_count
+        cheat_sheet_dict["World_Note_Count"] = totals_note_count
         config_file = f"{self.grandmaster.cwd}Randomized_ROM/OBJECT_CHEAT_SHEET_{self.seed}.json"
         with open(config_file, "w+") as json_file: 
             json.dump(cheat_sheet_dict, json_file, indent=4)
@@ -1703,6 +1712,42 @@ class World_Manipulation_Class():
     ###########################
     ### HARDER FINAL BATTLE ###
     ###########################
+    
+    ### RETURN OF FURNACE FUN ###
+    
+    def _replace_model_files(self):
+        # Furnace Fun: 0x105D8 - A795B8
+        # Final Battle A: 0x10678 - BEA360
+        # Final Battle B: 0x10740 - D22888
+        furnace_fun_bin = f"{self.grandmaster.cwd}Randomization_Processes/World_Manipulation/Level_Model_Manip/A795B8.bin"
+        final_battle_a_bin = f"{self.grandmaster.cwd}Randomization_Processes/World_Manipulation/Level_Model_Manip/BEA360.bin"
+        final_battle_b_bin = f"{self.grandmaster.cwd}Randomization_Processes/World_Manipulation/Level_Model_Manip/D22888.bin"
+        shutil.copy(furnace_fun_bin, f"{self.grandmaster.cwd}Randomized_ROM/10678-Randomized_Compressed.bin")
+        shutil.copy(final_battle_a_bin, f"{self.grandmaster.cwd}Randomized_ROM/105D8-Randomized_Compressed.bin")
+        shutil.copy(final_battle_b_bin, f"{self.grandmaster.cwd}Randomized_ROM/10740-Randomized_Compressed.bin")
+    
+    def _adjust_ff_setup_file(self):
+        final_battle_list = [
+            # GRUNTILDA ACTORS
+            "FFE9009B0A33", "190C0395", "190C0396", "190C0397",
+            # SPRING PAD
+            "FEDE0000065E",
+            # ENTRY
+            "FFFDFF4203FC",
+            ]
+        replacement_dict = [
+            # GRUNTILDA ACTORS
+            {2: 0x00, 3: 0x64}, {2: 0x00, 3: 0x64}, {2: 0x01, 3: 0x2C}, {2: 0x00, 3: 0x64},
+            # SPRING PAD
+            {0: 0xFF, 1: 0x6A, 2: 0xFF, 3: 0xCE, 4: 0x05, 5: 0x78, 8: 0x00, 9: 0x0B},
+            # ENTRY
+            {2: 0x00, 3: 0x00}
+            ]
+        self.gruntildas_lair._setup_list[19]._replace_each_object_parameters(final_battle_list, replacement_dict)
+    
+    def _return_of_furnace_fun(self):
+        self._replace_model_files()
+        self._adjust_ff_setup_file()
     
     ### ENEMIES ###
     
