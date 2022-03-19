@@ -73,6 +73,7 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Item Carrying Capacity: Sets the number of each item the player can carry before and after visiting Cheato between 0 and 255, inclusively.
 * Note Door Warning: Before opening any Note Door, the player must talk to Bottles at the 50 Note door. In order to add to the Quality of Life, a bottles is added to the 810 Note Door Location for Final Note Door Only mode.
 * Item Capacity Warning: I'm not sure if the game will break if you set the After Cheato value to a value smaller than the Before Cheato value. Please be weary.
+* Note Limit Warning: The player can only collect 127 notes in a world while still being able to leave the game file with the game saving properly. If a player collects over 127 notes and either game overs, save and quits, or turns off the console, the note count will be the remainder of their total notes divided by 128. Save states are recommended for emulator.
 ##### Jinjos, 1-Ups, & Misc Objects
 * Include Abnormalities: Some areas have Eggs and Feathers that aren't formatted like regular Eggs and Feathers, so they can be swapped with this category if checked.
 * Starting Life Count: Can be set anywhere from 0 to "technically 255", but I'm not sure what happens if you overflow the value, so please just make it max of 100.
