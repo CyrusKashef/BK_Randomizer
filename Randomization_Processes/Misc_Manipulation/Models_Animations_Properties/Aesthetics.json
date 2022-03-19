@@ -8,19 +8,41 @@
 	},
 	"Models": {
 	    "Bee": {
-	        "Swap1": {
-	            "0x8388": "Regular_Bees"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x8388": "Regular_Bees",
 	            "0x8390": "Glowing_Bees"
 	        }
 	    },
-	    "Crab": {
+	    "Crab_Main": {
 	        "Swap1": {
 	            "0x7958": "Regular_Snippet"
 	        },
 	        "Swap2": {
 	            "0x89C8": "Black_Snippet"
+	        }
+	    },
+	    "Crab_Pincer": {
+	        "Swap1": {
+	            "0x7AF8": "Regular_Snippet_Pincer"
+	        },
+	        "Swap2": {
+	            "0x89E0": "Black_Snippet_Pincer"
+	        }
+	    },
+	    "Crab_Leg": {
+	        "Swap1": {
+	            "0x7B00": "Regular_Snippet_Leg"
+	        },
+	        "Swap2": {
+	            "0x89D8": "Black_Snippet_Leg"
+	        }
+	    },
+	    "Crab_Head": {
+	        "Swap1": {
+	            "0x7B08": "Regular_Snippet_Head"
+	        },
+	        "Swap2": {
+	            "0x89D0": "Black_Snippet_Head"
 	        }
 	    },
 	    "Ghost": {
@@ -64,42 +86,32 @@
 	    	}
 	    },
 	    "Babe": {
-	        "Swap1": {
-	            "0x81D8": "Sexy_Grunty"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x81D8": "Sexy_Grunty",
 	            "0x8260": "Bikini_Girl"
 	        }
 	    },
 	    "Bull": {
-	        "Swap1": {
-	            "0x7938": "Concert_Bull"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x7938": "Concert_Bull",
 	            "0x7930": "Bull"
 	        }
 	    },
 	    "Crocodile": {
-	        "Swap1": {
-	            "0x7A30": "Mr_Vile"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x7A30": "Mr_Vile",
 	            "0x7A38": "Crocodile_BK"
 	        }
 	    },
 	    "Fish": {
-	        "Swap1": {
-	            "0x79F0": "Chump"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x79F0": "Chump",
 	            "0x7A28": "Gloop"
 	        }
 	    },
 	    "Insect_Round": {
-	        "Swap1": {
-	            "0x79A8": "Bee_BK"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x79A8": "Bee_BK",
 	            "0x8770": "Scabby"
 	        }
 	    },
@@ -111,42 +123,32 @@
 	        }
 	    },
 		"Round": {
-	        "Swap1": {
-				"0x7A10": "Pumpkin_BK"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+				"0x7A10": "Pumpkin_BK",
 				"0x8208": "Goldfish_Bowl"
 			}
 		},
 	    "Swimmers":{
-	    	"Swap1": {
-	    		"0x7C18": "Snacker"
-	    	},
-	    	"Swap2": {
+	    	"Shuffle": {
+	    		"0x7C18": "Snacker",
 	    		"0x7F78": "Snorkel"
 	    	}
 	    },
 	    "Termite": {
-	        "Swap1": {
-	            "0x7910": "Termite_BK"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x7910": "Termite_BK",
 	            "0x7918": "Ticker"
 	        }
 	    },
 	    "Walrus": {
-	        "Swap1": {
-	            "0x7960": "Walrus_BK"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x7960": "Walrus_BK",
 	            "0x8338": "Wozza"
 	        }
 	    },
 	    "Winkybunion": {
-	        "Swap1": {
-	            "0x8860": "Brentilda"
-	        },
-	        "Swap2": {
+	        "Shuffle": {
+	            "0x8860": "Brentilda",
 	            "0x8120": "Gruntilda"
 	        }
 	    }
