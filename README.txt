@@ -22,6 +22,8 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 3. Download the zip file called "BK_Randomizer". If your computer is giving you issues about the zip file being a virus, go to the "Common Problems" section of this README for a work around.
 4. Extract the contents of the zip file to a folder.
 5. Place your software copy of the Banjo-Kazooie v1.0 ROM file into the extracted folder.
+6. Select your ROM and desired settings (descriptions below).
+7. Click "Submit" and wait for the progress bar to turn completely blue (Mumbo will say when it's done). The generated seed will be in the "Randomized_ROM" folder labeled "Banjo-Kazooie_Randomized_Seed_<Seed_Number>.z64".
 
 ### Running
 
