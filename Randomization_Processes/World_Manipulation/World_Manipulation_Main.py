@@ -1585,15 +1585,14 @@ class World_Manipulation_Class():
         self.world_order = World_Order_Bottles(bottles_world_warp_dict, extra_flagged_object_flags, seed_val=self.seed,
                                                one_hp=self.grandmaster.one_health_banjo_var.get(), final_puzzle_option=self.grandmaster.final_puzzle_var.get())
         self.world_order._determine_world_order()
-        if(self.grandmaster.cheat_sheet_var.get() == 1):
-            world_cheat_sheet_str = ""
-            for world in self.world_order.world_order_list:
-                world_cheat_sheet_str += f"World: {world}\n"
-                for move_location in self.world_order.world_order_dict[world]['Learned_Moves']:
-                    world_cheat_sheet_str += f"Move: {self.world_order.world_order_dict[world]['Learned_Moves'][move_location]}    Location: {move_location}\n"
-                world_cheat_sheet_str += "\n"
-            with open(f"{self.grandmaster.cwd}Randomized_ROM/MOVES_CHEAT_SHEET_{self.seed}.txt", "w+") as world_entrance_cheat_sheet:
-                world_entrance_cheat_sheet.write(world_cheat_sheet_str)
+        world_cheat_sheet_str = ""
+        for world in self.world_order.world_order_list:
+            world_cheat_sheet_str += f"World: {world}\n"
+            for move_location in self.world_order.world_order_dict[world]['Learned_Moves']:
+                world_cheat_sheet_str += f"Move: {self.world_order.world_order_dict[world]['Learned_Moves'][move_location]}    Location: {move_location}\n"
+            world_cheat_sheet_str += "\n"
+        with open(f"{self.grandmaster.cwd}Randomized_ROM/MOVES_CHEAT_SHEET_{self.seed}.txt", "w+") as world_entrance_cheat_sheet:
+            world_entrance_cheat_sheet.write(world_cheat_sheet_str)
     
     def _bottles_set_new_moves(self):
         '''Replaces the 1-Ups with the calculated bottles hill'''
@@ -1678,8 +1677,7 @@ class World_Manipulation_Class():
         for world_object in self.world_list[:-2]:
             within_world_warps_obj._randomize_by_world(world_object._world_name)
             self._set_world_warps_by_world(world_object, within_world_warps_obj._randomized_warp_dict)
-        if(self.grandmaster.cheat_sheet_var.get() == 1):
-            self._generate_within_world_warps_cheat_sheet(within_world_warps_obj._randomized_warp_cheat_sheet_dict)
+        self._generate_within_world_warps_cheat_sheet(within_world_warps_obj._randomized_warp_cheat_sheet_dict)
  
     def _set_world_warps_by_game(self, randomized_warp_dict):
         '''Sets the within world warps by game'''
@@ -1710,8 +1708,7 @@ class World_Manipulation_Class():
             world_list.append(world_object._world_name)
         within_world_warps_obj._randomize_by_game(world_list)
         self._set_world_warps_by_game(within_world_warps_obj._randomized_warp_dict)
-        if(self.grandmaster.cheat_sheet_var.get() == 1):
-            self._generate_within_world_warps_cheat_sheet(within_world_warps_obj._randomized_warp_cheat_sheet_dict)
+        self._generate_within_world_warps_cheat_sheet(within_world_warps_obj._randomized_warp_cheat_sheet_dict)
     
     def _generate_within_world_warps_cheat_sheet(self, randomized_warp_cheat_sheet_dict):
         '''Creates a cheat sheet for within world warps'''
