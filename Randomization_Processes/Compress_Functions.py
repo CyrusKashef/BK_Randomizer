@@ -323,18 +323,18 @@ class Compressor():
         self._insert_into_rom_by_location(section_dict)
 
     def _main(self):
-        print("Setups")
+        self.master.logger.debug("Setups")
         self._section_compression_main(setup_ids, 0x9780, 0x9C40, skip_these_setup_pointer_list) # Setups
-        print("Intro & Lair Cutscene")
+        self.master.logger.debug("Intro & Lair Cutscene")
         self._section_compression_main(speech_file_ids, 0xD150, 0xD1C8) # Intro & Lair Cutscene
-        print("Bottles Intro")
+        self.master.logger.debug("Bottles Intro")
         self._section_compression_main(speech_file_ids, 0xCE30, 0xCE30) # Bottles Intro
-        print("Bottles Tutorial Confirm")
+        self.master.logger.debug("Bottles Tutorial Confirm")
         self._section_compression_main(speech_file_ids, 0xCF90, 0xCF98) # Bottles Tutorial Confirm & Secret Game Text
-        print("Bottles Move Texts")
+        self.master.logger.debug("Bottles Move Texts")
         self._section_compression_main(speech_file_ids, 0xAFD0, 0xDA00) # Bottles Move Texts
         if(self.master.skip_furnace_fun_var.get() == 1):
-            print("Lair Speeches & Brentilda Hints")
+            self.master.logger.debug("Lair Speeches & Brentilda Hints")
             self._section_compression_main(speech_file_ids, 0xDAC8, 0xFFB8, furnace_fun_questions_pointer_list) # Gruntilda Lair Speeches, Brentilda Hints, Furnace Fun & Whatever Is In Between
 #             self._section_compression_main(speech_file_ids, 0xE2B0, 0xFFB8, furnace_fun_questions_pointer_list) # Brentilda Hints & Furnace Fun & Whatever Is In Between
         else:
@@ -342,23 +342,23 @@ class Compressor():
                (self.master.before_red_feather_carry_value.get() != 50) or (self.master.after_red_feather_carry_value.get() != 100) or
                (self.master.before_gold_feather_carry_value.get() != 10) or (self.master.after_gold_feather_carry_value.get() != 20)):
                 self._section_compression_main(speech_file_ids, 0xDBD8, 0xDBE8, furnace_fun_questions_pointer_list)
-        print("BK Models Through Note Doors")
+        self.master.logger.debug("BK Models Through Note Doors")
         self._section_compression_main(texture_setup_ids, 0x7900, 0x8320) # BK Model - Note Doors
 #         self._section_compression_main(texture_setup_ids, 0x7900, 0x8468, ["8460"]) # BK Model - RBB Window, Skip Beta Jiggy Switch
         if(self.master.world_entrance_var.get() != "None"):
-            print("Level Sign")
+            self.master.logger.debug("Level Sign")
             self._section_compression_main(texture_setup_ids, 0x89B0, 0x89B0) # Level Sign
         if(self.master.matching_puzzle_var.get() == 1):
-            print("GV Matching Puzzle")
+            self.master.logger.debug("GV Matching Puzzle")
             self._section_compression_main(texture_setup_ids, 0x10248, 0x10248) # GV Matching Puzzle
         if(self.master.buttons_var.get() == 1):
-            print("RBB Boat 1")
+            self.master.logger.debug("RBB Boat")
             self._section_compression_main(texture_setup_ids, 0x10418, 0x10418) # RBB Boat 1
-#         if((self.master.gruntilda_difficulty_var.get() == 3) and self.master.skip_furnace_fun_var.get() and ("69" in str(self._seed_val))):
+#         if((self.master.gruntilda_difficulty_var.get() == 3) and self.master.skip_furnace_fun_var.get() and ("64" in str(self._seed_val))):
 #             print("Furnace Fun Returns")
-#             self._section_compression_main({}, 0x10678, 0x10680)
+#             self._section_compression_main({}, 0x10678, 0x10740)
         if(self.master.gruntilda_difficulty_var.get() > 0):
-            print("Typical Harder Grunty")
+            self.master.logger.debug("Typical Harder Grunty")
             self._section_compression_main(level_model_ids, 0x10678, 0x10678) # Final Battle Area 1
-        print("ASM")
+        self.master.logger.debug("ASM")
         self._location_compression_main(asm_setup_ids)
