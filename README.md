@@ -1,3 +1,11 @@
+# Contacting Me
+
+I'm really bad at looking at social media messages, but here are different ways to try to reach me:
+* Twitter: https://twitter.com/GiantJigglypuff
+* YouTube: https://www.youtube.com/channel/UCipn0cYaHIAOtnEAc6NOw8g
+* Twitch: https://www.twitch.tv/giantjigglypuff3
+* BK Rando Server: https://discord.gg/wkbm4jTE5P
+
 # Intro
 
 ### What Is A Randomizer?
@@ -259,12 +267,5 @@ Not-Planned Features:
 * If you'd like to take the source code to use for your own purposes, feel free. If you plan on making your own randomizer from the one I've made, consider the next bullet point or at least giving me credit somewhere.
 * I currently wrote this code in Python, which is simple to pick up if anyone would like to learn. If you'd like to continue working on the Python version or need help creating a randomizer in a different coding language or something, I'll try to provide comments and answer questions as to what I personally did to randomize the ROM. Keep in mind that I'm learning how to randomize Banjo-Kazooie as I go, and might not have all of the answers to your questions.
 * There's a community dedicated to Banjo-Kazooie modding called "Banjo's Backpack". There's a lot of smart people there, though most of us are still trying to learn as we go. Here is an invite: https://discord.gg/KSkN3yf4dt
-
-# Contacting Me
-I'm really bad at looking at social media messages, but here are different ways to try to reach me:
-Twitter: https://twitter.com/GiantJigglypuff
-YouTube: https://www.youtube.com/channel/UCipn0cYaHIAOtnEAc6NOw8g
-Twitch: https://www.twitch.tv/giantjigglypuff3
-BK Rando Server: https://discord.gg/wkbm4jTE5P
 
 If you read all of this, bless your heart.
