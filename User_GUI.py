@@ -166,10 +166,12 @@ tool_tips_dict = {
         "PROPERTIES": "Swaps, shuffles, and randomizes some properties.",
         },
     "SOUNDS_MUSIC": {
-        "SHUFFLE_SOUNDS": "Shuffles short sounds, like ones for eggs, notes, and feathers.",
-        "SHUFFLE_JINGLES": "Shuffles jingles that last a few seconds.",
-        "SHUFFLE_MUSIC": "Shuffles music for levels and minigames.",
-        "INCLUDE_BETA_SOUNDS": "Shuffles the other categories with unused versions.",
+        "FULL_DESCRIPTION":
+            "SHUFFLE_SOUNDS: Shuffles short sounds, like ones for eggs, notes, and feathers.\n" +
+            "SHUFFLE_JINGLES: Shuffles jingles that last a few seconds.\n" +
+            "SHUFFLE_MUSIC: Shuffles music for levels and minigames.\n" +
+            "INCLUDE_BETA_SOUNDS: Shuffles the other categories with unused versions.\n" +
+            "INCLUDE_JARRING_SOUNDS: Includes harsher sounding sounds with the other categories."
         },
     "SPRITES_TEXTURES": {
         "SHUFFLE_SKYBOXES": "Shuffles the skyboxes, including clouds/thunderstorms.",
@@ -519,11 +521,16 @@ class User_GUI_Class():
         self.logger.info("Select Random Starting Area")
         self.new_area_var.set(choice([option for option in start_level_ids]))
     
-    def _skip_intro_cutscene_checkbox(self, *args):
+    def _new_area_option(self, *args):
         '''If the starting area is not the default area, skip the intro cutscene'''
         self.logger.info("Selecting 'Skip Intro Cutscene'")
         if(self.new_area_var.get() != "SM - Main"):
             self.skip_intro_cutscene_var.set(1)
+        if(self.new_area_var.get() == "Random Starting Area (Safe With All Moves)"):
+            self.all_starting_moves_var.set(1)
+            self.all_starting_moves_checkbutton.configure(state='disabled')
+        else:
+            self.all_starting_moves_checkbutton.configure(state='normal')
     
     def _set_random_carry_capacities(self, *args):
         '''Select random capacities for blue eggs, red feathers, and gold feathers'''
@@ -865,11 +872,11 @@ class User_GUI_Class():
         self.jingles_var.set(0)
         self.music_var.set(0)
         self.beta_sounds_var.set(0)
+        self.jarring_sounds_var.set(0)
         # Sprites/Textures
         self.skybox_var.set(0)
         self.talking_sprite_var.set(0)
         ### Misc Settings ###
-        self.cheat_sheet_var.set(1)
         self.remove_files_var.set(1)
         self.tool_tips_var.set(1)
         ### World Specific ###
@@ -1009,11 +1016,11 @@ class User_GUI_Class():
         self.jingles_var.set(json_data["Jingle_Option"])
         self.music_var.set(json_data["Music_Option"])
         self.beta_sounds_var.set(json_data["Beta_Sounds"])
+        self.jarring_sounds_var.set(json_data["Jarring_Sounds"])
         # Sprites/Textures
         self.skybox_var.set(json_data["Skybox_Option"])
         self.talking_sprite_var.set(json_data["Talking_Sprite_Option"])
         ### Misc Settings ###
-        self.cheat_sheet_var.set(json_data["Cheat_Sheet"])
         self.remove_files_var.set(json_data["Remove_Files"])
         self.tool_tips_var.set(json_data["Tool_Tips"])
         ### World Specific ###
@@ -1107,11 +1114,11 @@ class User_GUI_Class():
         self.jingles_var.set(randint(0, 1))
         self.music_var.set(randint(0, 1))
         self.beta_sounds_var.set(randint(0, 1))
+        self.jarring_sounds_var.set(randint(0, 1))
         # Sprites/Textures
         self.skybox_var.set(randint(0, 1))
         self.talking_sprite_var.set(randint(0, 1))
         ### Misc Settings ###
-#         self.cheat_sheet_var.set(randint(0, 1))
 #         self.remove_files_var.set(randint(0, 1))
 #         self.tool_tips_var.set(randint(0, 1))
         ### World Specific ###
@@ -1218,11 +1225,11 @@ class User_GUI_Class():
             "Jingle_Option": self.jingles_var.get(),
             "Music_Option": self.music_var.get(),
             "Beta_Sounds": self.beta_sounds_var.get(),
+            "Jarring_Sounds": self.jarring_sounds_var.get(),
             # Sprites/Textures
             "Skybox_Option": self.skybox_var.get(),
             "Talking_Sprite_Option": self.talking_sprite_var.get(),
             ### Misc Settings ###
-            "Cheat_Sheet": self.cheat_sheet_var.get(),
             "Remove_Files": self.remove_files_var.get(),
             "Tool_Tips": self.tool_tips_var.get(),
             ### World Specific ###
@@ -1677,7 +1684,7 @@ class User_GUI_Class():
         self.skip_intro_cutscene_var = tk.IntVar()
         self.skip_intro_cutscene_checkbutton = tk.Checkbutton(self.starting_area_frame, text="Skip Intro Cutscene", variable=self.skip_intro_cutscene_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.skip_intro_cutscene_checkbutton.grid(row=2, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.new_area_var.trace('w', self._skip_intro_cutscene_checkbox)
+        self.new_area_var.trace('w', self._new_area_option)
         ###################
         ### ENEMIES TAB ###
         ###################
@@ -1807,29 +1814,27 @@ class User_GUI_Class():
         self.sound_music_frame = tk.LabelFrame(self._aesthetic_tab, text="Short Sounds, Fanfare/Jingles, & Looped Music", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.sound_music_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.short_sounds_ttp_canvas = tk.Label(self.sound_music_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.short_sounds_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.short_sounds_checkbutton_ttp = self.CreateToolTip(self.short_sounds_ttp_canvas, self, tool_tips_dict["SOUNDS_MUSIC"]["SHUFFLE_SOUNDS"])
+        self.short_sounds_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.short_sounds_checkbutton_ttp = self.CreateToolTip(self.short_sounds_ttp_canvas, self, tool_tips_dict["SOUNDS_MUSIC"]["FULL_DESCRIPTION"])
         self.short_sounds_var = tk.IntVar()
         self.short_sounds_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Shuffle Sounds", variable=self.short_sounds_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.short_sounds_checkbutton.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.jingle_checkbutton_ttp_canvas = tk.Label(self.sound_music_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.jingle_checkbutton_ttp_canvas.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.jingle_checkbutton_ttp = self.CreateToolTip(self.jingle_checkbutton_ttp_canvas, self, tool_tips_dict["SOUNDS_MUSIC"]["SHUFFLE_JINGLES"])
+        # Jingles
         self.jingles_var = tk.IntVar()
         self.jingle_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Shuffle Jingles", variable=self.jingles_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.jingle_checkbutton.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='w')
-        self.music_checkbutton_ttp_canvas = tk.Label(self.sound_music_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.music_checkbutton_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.music_checkbutton_ttp = self.CreateToolTip(self.music_checkbutton_ttp_canvas, self, tool_tips_dict["SOUNDS_MUSIC"]["SHUFFLE_MUSIC"])
+        # Music
         self.music_var = tk.IntVar()
         self.music_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Shuffle Music", variable=self.music_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.music_checkbutton.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.beta_sounds_checkbutton_ttp_canvas = tk.Label(self.sound_music_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.beta_sounds_checkbutton_ttp_canvas.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.beta_sounds_checkbutton_ttp = self.CreateToolTip(self.beta_sounds_checkbutton_ttp_canvas, self, tool_tips_dict["SOUNDS_MUSIC"]["INCLUDE_BETA_SOUNDS"])
+        self.music_checkbutton.grid(row=0, column=5, padx=self.padx, pady=self.pady, sticky='w')
+        # Beta Sounds
         self.beta_sounds_var = tk.IntVar()
         self.beta_sounds_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Include Beta Sounds", variable=self.beta_sounds_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.beta_sounds_checkbutton.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.beta_sounds_checkbutton.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        # Jarring Sounds
+        self.jarring_sounds_var = tk.IntVar()
+        self.jarring_sounds_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Include Jarring Sounds", variable=self.jarring_sounds_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.jarring_sounds_checkbutton.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')
         # Sprites/Textures
         self.texture_frame = tk.LabelFrame(self._aesthetic_tab, text="Sprites & Textures", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.texture_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
@@ -2090,13 +2095,6 @@ class User_GUI_Class():
         self.misc_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.misc_frame["borderwidth"] = 0
         self.misc_frame["highlightthickness"] = 0
-        # Cheat Sheet
-        self.cheat_sheet_ttp_canvas = tk.Label(self.misc_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.cheat_sheet_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.cheat_sheet_checkbutton_ttp = self.CreateToolTip(self.cheat_sheet_ttp_canvas, self, tool_tips_dict["MISC_OPTIONS"]["CREATE_CHEAT_SHEET"])
-        self.cheat_sheet_var = tk.IntVar()
-        self.cheat_sheet_checkbutton = tk.Checkbutton(self.misc_frame, text="Create Cheat Sheet(s)", variable=self.cheat_sheet_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.cheat_sheet_checkbutton.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Remove Files
         self.remove_files_ttp_canvas = tk.Label(self.misc_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.remove_files_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
