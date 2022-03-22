@@ -360,14 +360,13 @@ class Progression_GUI_Class():
                 self.master.logger.info("Within World Warps Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
-        if(self.master.cheat_sheet_var.get() == 1):
-            try:
-                self.pb_label.set_text("Mumbo Make Cheat Sheet Hehe...")
-                world_manip._generate_cheat_sheet()
-            except Exception:
-                self.master.logger.info("Cheat Sheet Error")
-                self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
-                raise
+        try:
+            self.pb_label.set_text("Mumbo Make Cheat Sheet Hehe...")
+            world_manip._generate_cheat_sheet()
+        except Exception:
+            self.master.logger.info("Cheat Sheet Error")
+            self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
+            raise
         if(self.master.gruntilda_difficulty_var.get() > 0):
             try:
                 self.pb_label.set_text("If Bear And Bird Lose, Mumbo Go Get Flower...")
@@ -456,7 +455,9 @@ class Progression_GUI_Class():
         if((self.master.short_sounds_var.get() == 1) or (self.master.jingles_var.get() == 1) or (self.master.music_var.get() == 1)):
             try:
                 self.pb_label.set_text("Hut Music Best Music...")
-                misc_manip._shuffle_music(self.seed_val, self.master.cwd, self.rom_path, self.master.short_sounds_var.get(), self.master.jingles_var.get(), self.master.music_var.get(), self.master.beta_sounds_var.get())
+                misc_manip._shuffle_music(self.seed_val, self.master.cwd, self.rom_path,
+                                          self.master.short_sounds_var.get(), self.master.jingles_var.get(), self.master.music_var.get(),
+                                          self.master.beta_sounds_var.get(), self.master.jarring_sounds_var.get())
             except Exception:
                 self.pb_label.set_text(f"Sounds Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
