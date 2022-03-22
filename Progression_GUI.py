@@ -600,6 +600,7 @@ class Progression_GUI_Class():
         self.progress_bar.update_bar(100)
         self.warning_label.set_text("Oomenacka!")
         self.pb_label.set_text(f"Mumbo Spell Done! Let Player Close Window!")
+        self.master.logger.info("##### Randomized ROM Creation Complete! #####")
 
     def update_mumbo_gif(self, ind):
         '''Updates The Gif Frame'''
@@ -641,4 +642,3 @@ class Progression_GUI_Class():
         self.progress_bar_window.after(0, self.update_mumbo_gif, 0)
         ### Main Loop ###
         self.progress_bar_window.mainloop()
-        self.master.logger.info("##### Randomized ROM Creation Complete! #####")
