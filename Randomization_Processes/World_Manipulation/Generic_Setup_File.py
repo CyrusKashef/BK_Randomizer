@@ -43,7 +43,7 @@ class SetupFile():
         if(self.setup_address == "97B0"):
             self.adjust_ttc_oob_egg()
         self.note_count = 0
-        self.jiggy_counts = 0
+        self.jiggy_count = 0
         self.empty_honeycomb_count = 0
     
     def _locate_item_index(self, item_search_string, item_type=None, seed=None):
@@ -458,7 +458,7 @@ class SetupFile():
     def _skip_non_ring(self, item_index):
         '''Skips a string pattern that looks like a Clanker ring'''
         if(self.mm[item_index - 1] == 119):
-            print("Skipping Non-Ring")
+#             print("Skipping Non-Ring")
             return False
         return True
     
@@ -469,7 +469,7 @@ class SetupFile():
             print("Moving Orange From Inaccessible Location")
             one_up_index = self.mm.find(bytes.fromhex("190C0049"))
             self._edit_object_index(orange_index, {9: 0x49})
-            self._edit_object_index(one_up_index, {9: 0x29})
+            self._edit_object_index(one_up_index, {3: 0x29})
             
     def _obtain_object_id_at_location(self, location_string):
         location_index = self.mm.find(bytes.fromhex(location_string))
