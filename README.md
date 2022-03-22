@@ -213,7 +213,7 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * ROM file must be a Banjo-Kazooie ROM v1.0 NTSC (.z64). Other formats are currently not supported. Randomizer may work on top of other BK mods, but not guaranteed.
 * All numbers must be positive integers, including seeds.
 * Python Files, Folders, and GZIP.EXE must be in their original locations with the BK ROM in the main folder.
-* While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3.
+* **While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3. Link to the BK Rando Discord server at the bottom**
 
 ### Potential Softlocks
 * When turning on the 'Potential Softlock' features, the game may be put into a state where a collectable cannot be reached or the game cannot be progressed without resetting.
