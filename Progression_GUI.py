@@ -109,14 +109,12 @@ VARIABLE TEXT:
 ### PYTHON IMPORTS ###
 ######################
 
-from random import seed, randint, choice
+from random import seed, randint
 import tkinter as tk
 from tkinter import ttk
 from tkinter import HORIZONTAL
 import threading
 import gc
-import logging
-from logging.handlers import RotatingFileHandler
 
 ####################
 ### FILE IMPORTS ###
@@ -185,6 +183,7 @@ class Progression_GUI_Class():
             self.progressbar.pack(padx=5, pady=5)
     
     def _hidden_random_values(self):
+        self.master.logger.info("Hidden Random Values")
         # Final Note Door
         if(self.master.final_note_door_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
@@ -194,17 +193,18 @@ class Progression_GUI_Class():
                 self.master.final_note_door_val = randint(0, 900)
         else:
             self.master.final_note_door_val = int(self.master.final_note_door_value.get())
-        print(f"Final Note Door Val: {self.master.final_note_door_val}")
+        self.master.logger.debug(f"Final Note Door Val: {self.master.final_note_door_val}")
         # Final Puzzle
         if(self.master.final_puzzle_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
             self.master.final_puzzle_val = randint(0, 99)
         else:
             self.master.final_puzzle_val = int(self.master.final_puzzle_value.get())
-        print(f"Final Puzzle Val: {self.master.final_puzzle_val}")
+        self.master.logger.debug(f"Final Puzzle Val: {self.master.final_puzzle_val}")
     
     def _setup(self):
         '''Creates the randomized ROM folder with a copy of the original ROM file'''
+        self.master.logger.info("Randomization Setup")
         setup_tmp_folder(self.master.cwd)
         self.seed_val = set_seed(self.master.seed_value.get())
         self.randomized_rom_path = make_copy_of_rom(self.seed_val, self.master.cwd, self.rom_path)
@@ -212,17 +212,19 @@ class Progression_GUI_Class():
     
     def _decompress_main(self):
         '''Runs the decompression functions'''
+        self.master.logger.info("Decompress Main")
         decompressor = Decompressor(self.master.cwd, self.randomized_rom_path)
         decompressor._decompress_main()
     
     def _randomize_world(self):
         '''Runs the world manipulation functions, including world specific functions'''
-        print("Start of Randomize World")
+        self.master.logger.info("Start Of Randomize World")
         try:
             self.pb_label.set_text("Mumbo Creating Worlds...")
             world_manip = World_Manipulation_Class(self.master, self.seed_val)
             world_manip._create_worlds()
         except Exception:
+            self.master.logger.info("Creating Worlds Error")
             self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
             raise
         # Specificly needs to go first
@@ -231,6 +233,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Bear And Bird Need Extra Lives...")
                 world_manip._bottles_to_1_ups()
             except Exception:
+                self.master.logger.info("Bottles To 1-Ups Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         # Dropdown Boxes
@@ -238,30 +241,35 @@ class Progression_GUI_Class():
             self.pb_label.set_text("Mumbo Hut Filled With Notes, Eggs, & Feathers...")
             world_manip._structs_main()
         except Exception:
+            self.master.logger.info("Structs Error")
             self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
             raise
         try:
             self.pb_label.set_text("Jinjos Are Good Friends Of Mumbo...")
             world_manip._non_flag_objects_main()
         except Exception:
+            self.master.logger.info("Non-Flag Objects Error")
             self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
             raise
         try:
             self.pb_label.set_text("Me Summon Gold Statue To Kick Baddie Butt!...")
             world_manip._enemies_main()
         except Exception:
+            self.master.logger.info("Enemies Error")
             self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
             raise
         try:
             self.pb_label.set_text("Mumbo Keep Token Or Two...")
             world_manip._flagged_objects_main()
         except Exception:
+            self.master.logger.info("Flagged Objects Error")
             self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
             raise
         try:
             self.pb_label.set_text("Mumbo Has Stronger Magic Than Note Door...")
             world_manip._note_doors_main(self.master.final_note_door_val)
         except Exception:
+            self.master.logger.info("Note Doors Error")
             self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
             raise
         # Checkboxes
@@ -270,6 +278,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Mumbo Make Good Transformation Spells...")
                 world_manip._magic_barrier_main()
             except Exception:
+                self.master.logger.info("Remove Magic Barriers Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.skip_furnace_fun_var.get() == 1):
@@ -277,6 +286,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Furnace Fun No Fun...")
                 world_manip._skip_furnace_fun()
             except Exception:
+                self.master.logger.info("Skip Furnace Fun Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.hard_rings_var.get() == 1):
@@ -284,6 +294,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Mumbo Use Clanker For Parts...")
                 world_manip._shuffle_clanker_rings()
             except Exception:
+                self.master.logger.info("Shuffle Clanker's Rings Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.croctus_var.get() == 1):
@@ -291,6 +302,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Mumbo Need New Boots! Only Kidding...")
                 world_manip._shuffle_croctus()
             except Exception:
+                self.master.logger.info("Shuffle Croctus Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.mr_vile_var.get() == 1):
@@ -298,6 +310,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Mumbo Use Enlarge Spell...")
                 world_manip._bigger_badder_mr_vile_main()
             except Exception:
+                self.master.logger.info("Mr. Vile Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.tiptup_choir_var.get() == 1):
@@ -305,6 +318,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Mumbo Sing Good, Too...")
                 world_manip._tiptup_choir_main()
             except Exception:
+                self.master.logger.info("Tiptup Choir Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.hard_races_var.get() == 1):
@@ -312,6 +326,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("WAHAY!...")
                 world_manip._boggy_race_flags_main()
             except Exception:
+                self.master.logger.info("Boggy Race Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.ancient_ones_var.get() == 1):
@@ -319,6 +334,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Me Thought Ancient Ones Already Random?...")
                 world_manip._shuffle_ancient_ones()
             except Exception:
+                self.master.logger.info("Shuffle Ancient Ones Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.maze_jinxy_heads_var.get() == 1):
@@ -333,6 +349,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Mumbo Lost Way Back To Mountain...")
                 world_manip._world_order_warps_main()
             except Exception:
+                self.master.logger.info("World Order Warps Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.within_world_warps_var.get() != "None"):
@@ -340,6 +357,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Mumbo Lost Way Back To Skull...")
                 world_manip._within_world_warps_main()
             except Exception:
+                self.master.logger.info("Within World Warps Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.cheat_sheet_var.get() == 1):
@@ -347,6 +365,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text("Mumbo Make Cheat Sheet Hehe...")
                 world_manip._generate_cheat_sheet()
             except Exception:
+                self.master.logger.info("Cheat Sheet Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.gruntilda_difficulty_var.get() > 0):
@@ -355,6 +374,7 @@ class Progression_GUI_Class():
                 world_manip._harder_final_battle_main(self.master.gruntilda_difficulty_var.get())
 #                 world_manip._return_of_furnace_fun()
             except Exception:
+                self.master.logger.info("Harder Final Battle Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.final_puzzle_var.get() == 1):
@@ -362,6 +382,7 @@ class Progression_GUI_Class():
                 self.pb_label.set_text(f"Mumbo Make Traveling Easier...")
                 world_manip._final_world_puzzle(self.master.final_puzzle_val)
             except Exception:
+                self.master.logger.info("Final World Puzzle Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if(self.master.scattered_structs_var.get() == 1):
@@ -369,13 +390,14 @@ class Progression_GUI_Class():
                 self.pb_label.set_text(f"Mumbo Better Shaman Than SM64 Modders...")
                 world_manip._scattered_structs_main()
             except Exception:
+                self.master.logger.info("Scattered Struct Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
                 raise
-        print("End of Randomize World")
+        self.master.logger.info("End of Randomize World")
     
     def _misc_options(self):
         '''Runs all non-world functions, such as overlays, models, and speeches'''
-        print("Start of Misc Options")
+        self.master.logger.info("Start of Misc Options")
         try:
             self.pb_label.set_text(f"Mumbo Want To Edit Other Things...")
             misc_manip = Misc_Manipulation_Class(self.master, self.seed_val)
@@ -488,44 +510,45 @@ class Progression_GUI_Class():
             self.warning_label.set_text("Uh-Oh...")
             self.pb_label.set_text(f"Game Engine Error:\nPlease Check The ReadMe Under 'Errors'")
             raise
-        print("End of Misc Options")
+        self.master.logger.info("End of Misc Options")
     
     def _perform_checksum(self):
         '''Runs the checksum functions'''
-        print("Start Checksum")
+        self.master.logger.info("Performing Checksum")
         bk_checksum_obj = BK_Checksum_Class(self.master.cwd, self.seed_val)
         bk_checksum_obj._main()
-        print("End Checksum")
+        self.master.logger.info("Checksum Complete")
     
     def _compress_main(self):
         '''Runs the compression functions'''
-        print("Start Compression")
+        self.master.logger.info("Compressing Main Start")
         compressor = Compressor(self.master, self.seed_val, self.master.cwd)
         compressor._main()
-        print("End Compression")
+        self.master.logger.info("Compression Main End")
     
     def _crc_calc(self):
         '''Runs the CRC functions'''
-        print("Start of CRC Tool")
+        self.master.logger.info("Running CRC Functions")
         crc_calc_obj = CRC_Calc_Class(self.master.cwd, self.seed_val)
         crc_calc_obj.calculate_crc()
         crc_calc_obj.set_crc()
-        print("End of CRC Tool")
+        self.master.logger.info("CRC Functions Complete")
 
     def _clean_up(self):
         '''Runs the cleanup functions, if enabled'''
-        print("Start of Clean Up")
+        self.master.logger.info("Cleaning Up")
         if(self.master.remove_files_var.get() == 1):
             clean_up = CleanUp(self.master.cwd)
             clean_up._remove_bin_files()
         gc.collect()
-        print("End of Clean Up")
+        self.master.logger.info("Cleaning Up Complete")
 
     def _randomization_process(self):
         '''
         Runs through the setup, decompression, world manipulation, misc settings, compression, crc tool, and clean up functions in that order.
         Updates the progress bar after every function runs. Update values are arbitrary.
         '''
+        self.master.logger.info("Setting Up...")
         self.pb_label.set_text("Setting up...")
         self._setup()
         self.progress_bar.update_bar(5)
@@ -618,3 +641,4 @@ class Progression_GUI_Class():
         self.progress_bar_window.after(0, self.update_mumbo_gif, 0)
         ### Main Loop ###
         self.progress_bar_window.mainloop()
+        self.master.logger.info("##### Randomized ROM Creation Complete! #####")
