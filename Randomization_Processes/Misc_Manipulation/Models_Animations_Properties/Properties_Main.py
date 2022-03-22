@@ -53,7 +53,7 @@ class Properties_Manipulation_Class():
                 new_property = self._choice_from_list(list(self._properties_dict[properties_category]["Selection"]), increment)
                 increment += 1
                 self._new_properties_cheat_sheet[self._properties_dict[properties_category]['Original'][search_string]] = self._properties_dict[properties_category]['Selection'][new_property]
-                print(f"Enemy: {self._properties_dict[properties_category]['Original'][search_string]}    New Property: {self._properties_dict[properties_category]['Selection'][new_property]}")
+#                 print(f"Enemy: {self._properties_dict[properties_category]['Original'][search_string]}    New Property: {self._properties_dict[properties_category]['Selection'][new_property]}")
                 for asm_file_address in self._asm_file_address_list:
                     with open(asm_file_address, "r+b") as f:
                         mm = mmap(f.fileno(), 0)
