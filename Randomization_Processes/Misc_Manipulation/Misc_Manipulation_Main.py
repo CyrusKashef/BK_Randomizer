@@ -36,7 +36,7 @@ class Misc_Manipulation_Class():
     '''Miscellaneous setting manipulation class'''
     def __init__(self, grandmaster, seed_val):
         '''Initializes the miscellaneous setting manipulation class'''
-        self._grandmaster = grandmaster
+        self.grandmaster = grandmaster
         self._file_dir = grandmaster.cwd
         self._seed_val = seed_val
         self.world_abbreviations = {"Mumbo's Mountain": "MM", "Treasure Trove Cove": "TTC", "Clanker's Cavern": "CC",
@@ -49,6 +49,7 @@ class Misc_Manipulation_Class():
     #########################
     
     def _bottles_requirements_text(self, final_note_option, final_note_score, final_puzzle_option, final_puzzle_score):
+        self.grandmaster.logger.debug("Bottles Requirements Text")
         self.speech_manip._modify_bottles_unskippable_text(final_note_option, final_note_score, final_puzzle_option, final_puzzle_score)
         self.speech_manip._shorten_bottles_secret_game_text()
     
@@ -74,6 +75,7 @@ class Misc_Manipulation_Class():
     
     def _gv_matching_puzzle_combination(self):
         '''PyDoc'''
+        self.grandmaster.logger.debug("Gobi's Valley Matching Puzzle Combination")
         # FAE27E - FAE860
         # Every 8 bytes is one section of the matching puzzle
         #     COUNT PATRN ?? ?? ?? ??
@@ -91,6 +93,7 @@ class Misc_Manipulation_Class():
         return selectable_values
     
     def _gv_matching_puzzle_textures(self, selectable_values):
+        self.grandmaster.logger.debug("Gobi's Valley Matching Puzzle Textures")
         with open(f"{self._file_dir}Randomized_ROM/10248-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap(decomp_file.fileno(), 0)
             RGBA32_address_dict = {"Jinjo": (0x240, 0x1240), "Egg": (0x2E60, 0x3E60), "Kazooie": (0x4660, 0x5660), "Mumbo": (0xA6C0, 0xB6C0)}
@@ -128,6 +131,7 @@ class Misc_Manipulation_Class():
     
     def _gv_cheat_sheet(self, selectable_values):
         '''PyDoc'''
+        self.grandmaster.logger.debug("Gobi's Valley Cheat Sheet")
         cheat_sheet_dict = {
             0: "___BLACK___", 1: "___BLUE____", 2: "___GREEN___", 3: "___CYAN____",
             4: "____RED____", 5: "__MAGENTA__", 6: "__YELLOW___", 7: "___WHITE___"
@@ -143,6 +147,7 @@ class Misc_Manipulation_Class():
     
     def _gv_puzzle_main(self):
         '''PyDoc'''
+        self.grandmaster.logger.debug("Gobi's Valley Puzzle Main")
         # The count starts in the bottom right corner, bottom to top, then right to left, like so
         #  |--------|--------|--------|--------|
         #  |  019F  |  019B  |  0197  |  0193  |
@@ -159,7 +164,7 @@ class Misc_Manipulation_Class():
         #  |--------|--------|--------|--------|
         selectable_values = self._gv_matching_puzzle_combination()
         self._gv_matching_puzzle_textures(selectable_values)
-        if(self._grandmaster.cheat_sheet_var.get() == 1):
+        if(self.grandmaster.cheat_sheet_var.get() == 1):
             self._gv_cheat_sheet(selectable_values)
     
     ##################
@@ -167,6 +172,7 @@ class Misc_Manipulation_Class():
     ##################
     
     def _motzand_keys_main(self):
+        self.grandmaster.logger.debug("Motzand Keys Main")
         seed(a=(self._seed_val))
         pattern_1 = sample(range(0, 23), 5)
         seed(a=(self._seed_val + 5))
@@ -188,6 +194,7 @@ class Misc_Manipulation_Class():
     
     def _rbb_code_texture(self, button_combo):
         '''Edits the texture of the side of the boat with the button combination'''
+        self.grandmaster.logger.debug("Rusty Bucket Bay Code Texture")
         with open(f"{self._file_dir}Randomized_ROM/10418-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap(decomp_file.fileno(), 0)
             # Clears Number
@@ -216,6 +223,7 @@ class Misc_Manipulation_Class():
     
     def _rbb_combination(self):
         '''Generates a new button combination'''
+        self.grandmaster.logger.debug("Rusty Bucket Bay Combination")
         # FBE5E2 - FBEBE0
         # Search for 33 31 32 31 31 31 00
         with open(f"{self._file_dir}Randomized_ROM/FBE5E2-Decompressed.bin", "r+b") as decomp_file:
@@ -229,6 +237,7 @@ class Misc_Manipulation_Class():
     
     def _rbb_buttons_main(self):
         '''Handles the RBB RANDOM BUTTON COMBO functions'''
+        self.grandmaster.logger.debug("Rusty Bucket Bay Buttons Main")
         button_combo = self._rbb_combination()
         self._rbb_code_texture(button_combo)
 
@@ -238,6 +247,7 @@ class Misc_Manipulation_Class():
     
     def _random_hex(self, digit_len, increment=0):
         '''Randomly generates hex values for the colors in BK'''
+        self.grandmaster.logger.debug("Random Hex")
         seed(a=(self._seed_val + increment))
         max_num = "F" * digit_len
         random_hex_val = leading_zeros(randint(0, int(max_num, 16)), digit_len).upper()
@@ -252,60 +262,61 @@ class Misc_Manipulation_Class():
     
     def _bk_model(self, seed_val):
         '''Runs the functions for editing the Banjo Kazooie models'''
+        self.grandmaster.logger.debug("BK Model")
         bk_model_obj = BK_Model_Class(self._file_dir, "7900", original_index_start=0xB138)
-        if(self._grandmaster.bk_model_var.get() == "Seed Determined Preset"):
+        if(self.grandmaster.bk_model_var.get() == "Seed Determined Preset"):
             bk_model_options = []
-            for item in sorted(self._grandmaster.bk_model_json):
+            for item in sorted(self.grandmaster.bk_model_json):
                 bk_model_options.append(item)
             seed(a=(self._seed_val))
             bk_model_preset = choice(bk_model_options)
-            banjo_fur = self._grandmaster.bk_model_json[bk_model_preset]["Banjo_Fur"]
-            banjo_skin = self._grandmaster.bk_model_json[bk_model_preset]["Banjo_Skin"]
-            banjo_feet = self._grandmaster.bk_model_json[bk_model_preset]["Banjo_Feet"]
-            kazooie_primary = self._grandmaster.bk_model_json[bk_model_preset]["Kazooie_Primary"]
-            kazooie_secondary = self._grandmaster.bk_model_json[bk_model_preset]["Kazooie_Secondary"]
-            kazooie_wing_primary = self._grandmaster.bk_model_json[bk_model_preset]["Kazooie_Wing_Primary"]
-            kazooie_wing_secondary = self._grandmaster.bk_model_json[bk_model_preset]["Kazooie_Wing_Secondary"]
-            backpack = self._grandmaster.bk_model_json[bk_model_preset]["Backpack"]
-            wading_boots = self._grandmaster.bk_model_json[bk_model_preset]["Wading_Boots"]
-            shorts_vertex = self._grandmaster.bk_model_json[bk_model_preset]["Shorts_Vertex"]
-            shorts_texture = self._grandmaster.bk_model_json[bk_model_preset]["Shorts_Texture"]
-            tooth_necklace = self._grandmaster.bk_model_json[bk_model_preset]["Tooth_Necklace"]
+            banjo_fur = self.grandmaster.bk_model_json[bk_model_preset]["Banjo_Fur"]
+            banjo_skin = self.grandmaster.bk_model_json[bk_model_preset]["Banjo_Skin"]
+            banjo_feet = self.grandmaster.bk_model_json[bk_model_preset]["Banjo_Feet"]
+            kazooie_primary = self.grandmaster.bk_model_json[bk_model_preset]["Kazooie_Primary"]
+            kazooie_secondary = self.grandmaster.bk_model_json[bk_model_preset]["Kazooie_Secondary"]
+            kazooie_wing_primary = self.grandmaster.bk_model_json[bk_model_preset]["Kazooie_Wing_Primary"]
+            kazooie_wing_secondary = self.grandmaster.bk_model_json[bk_model_preset]["Kazooie_Wing_Secondary"]
+            backpack = self.grandmaster.bk_model_json[bk_model_preset]["Backpack"]
+            wading_boots = self.grandmaster.bk_model_json[bk_model_preset]["Wading_Boots"]
+            shorts_vertex = self.grandmaster.bk_model_json[bk_model_preset]["Shorts_Vertex"]
+            shorts_texture = self.grandmaster.bk_model_json[bk_model_preset]["Shorts_Texture"]
+            tooth_necklace = self.grandmaster.bk_model_json[bk_model_preset]["Tooth_Necklace"]
         else:
-            banjo_fur = self._grandmaster.banjo_fur_var.get()
+            banjo_fur = self.grandmaster.banjo_fur_var.get()
             if(banjo_fur == "?"):
                 banjo_fur = self._random_hex(6, increment=0)
-            banjo_skin = self._grandmaster.banjo_skin_var.get()
+            banjo_skin = self.grandmaster.banjo_skin_var.get()
             if(banjo_skin == "?"):
                 banjo_skin = self._random_hex(6, increment=1)
-            banjo_feet = self._grandmaster.banjo_feet_var.get()
+            banjo_feet = self.grandmaster.banjo_feet_var.get()
             if(banjo_feet == "?"):
                 banjo_feet = self._random_hex(4, increment=2)
-            kazooie_primary = self._grandmaster.kazooie_primary_var.get()
+            kazooie_primary = self.grandmaster.kazooie_primary_var.get()
             if(kazooie_primary == "?"):
                 kazooie_primary = self._random_hex(6, increment=3)
-            kazooie_secondary = self._grandmaster.kazooie_secondary_var.get()
+            kazooie_secondary = self.grandmaster.kazooie_secondary_var.get()
             if(kazooie_secondary == "?"):
                 kazooie_secondary = self._random_hex(6, increment=4)
-            kazooie_wing_primary = self._grandmaster.kazooie_wing_primary_var.get()
+            kazooie_wing_primary = self.grandmaster.kazooie_wing_primary_var.get()
             if(kazooie_wing_primary == "?"):
                 kazooie_wing_primary = self._random_hex(4, increment=5)
-            kazooie_wing_secondary = self._grandmaster.kazooie_wing_secondary_var.get()
+            kazooie_wing_secondary = self.grandmaster.kazooie_wing_secondary_var.get()
             if(kazooie_wing_secondary == "?"):
                 kazooie_wing_secondary = self._random_hex(4, increment=6)
-            backpack = self._grandmaster.backpack_var.get()
+            backpack = self.grandmaster.backpack_var.get()
             if(backpack == "?"):
                 backpack = self._random_hex(6, increment=7)
-            wading_boots = self._grandmaster.wading_boots_var.get()
+            wading_boots = self.grandmaster.wading_boots_var.get()
             if(wading_boots == "?"):
                 wading_boots = self._random_hex(6, increment=8)
-            shorts_vertex = self._grandmaster.shorts_vertex_var.get()
+            shorts_vertex = self.grandmaster.shorts_vertex_var.get()
             if(shorts_vertex == "?"):
                 shorts_vertex = self._random_hex(6, increment=9)
-            shorts_texture = self._grandmaster.shorts_texture_var.get()
+            shorts_texture = self.grandmaster.shorts_texture_var.get()
             if(shorts_texture == "?"):
                 shorts_texture = self._random_hex(4, increment=10)
-            tooth_necklace = self._grandmaster.tooth_necklace_var.get()
+            tooth_necklace = self.grandmaster.tooth_necklace_var.get()
             if(tooth_necklace == "?"):
                 tooth_necklace = self._random_hex(6, increment=11)
         bk_model_obj._main(
@@ -321,13 +332,14 @@ class Misc_Manipulation_Class():
     
     def _models_animations_properties(self, seed_val, file_dir, randomized_rom_path):
         '''PyDoc'''
-        selected_json = self._grandmaster.customizable_var.get()
+        self.grandmaster.logger.debug("Models Animnations Properties")
+        selected_json = self.grandmaster.customizable_var.get()
         if(selected_json == "Random Preset"):
             seed(a=(self._seed_val))
             selected_json = choice([file_name.split(".json")[0]
                             for file_name in os.listdir(f"{file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/")
                             if(file_name.endswith(".json"))])
-        models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, selected_json, self._grandmaster.cheat_sheet_var.get())
+        models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, selected_json, self.grandmaster.cheat_sheet_var.get())
         if(models_animations_properties_obj._master_dict["Models"]):
             models_animations_properties_obj._models_main()
         if(models_animations_properties_obj._master_dict["Animations"]):
@@ -341,6 +353,7 @@ class Misc_Manipulation_Class():
     
     def _shuffle_music(self, seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var):
         '''Runs the functions for shuffling the music'''
+        self.grandmaster.logger.debug("Shuffle Music")
         music_manip = Music_Manipulation_Class(seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var)
         music_manip._music_manip_main()
     
@@ -350,6 +363,7 @@ class Misc_Manipulation_Class():
     
     def _shuffle_skyboxes(self, seed_val, file_dir, randomized_rom_path):
         '''Runs the functions for shuffling the skyboxes'''
+        self.grandmaster.logger.debug("Shuffle Skyboxes")
         skybox_manip = Skybox_Manipulation_Class(seed_val, file_dir, randomized_rom_path)
         skybox_manip._skybox_manip_main()
     
@@ -359,6 +373,7 @@ class Misc_Manipulation_Class():
     
     def _shuffle_sprites(self, seed_val, file_dir, randomized_rom_path):
         '''Runs the functions for shuffling the sprites'''
+        self.grandmaster.logger.debug("Shuffle Sprites")
         sprite_manip = Sprite_Manipulation_Class(seed_val, file_dir, randomized_rom_path)
         sprite_manip._sprite_manip_main()
 
@@ -367,16 +382,17 @@ class Misc_Manipulation_Class():
     ###################
     
     def _setup_game_engine_manip(self):
+        self.grandmaster.logger.debug("Setup Game Engine Manipulation")
         game_engine_obj = Game_Engine_Class(self._file_dir)
-        if(self._grandmaster.free_transformations_var.get() == 1):
+        if(self.grandmaster.free_transformations_var.get() == 1):
             game_engine_obj._mumbo_transformations_costs()
-        if(self._grandmaster.one_health_banjo_var.get() == 1):
+        if(self.grandmaster.one_health_banjo_var.get() == 1):
             game_engine_obj._max_health()
-        game_engine_obj._blue_egg_limit(int(self._grandmaster.before_blue_egg_carry_value.get()), int(self._grandmaster.after_blue_egg_carry_value.get()))
-        game_engine_obj._red_feather_limit(int(self._grandmaster.before_red_feather_carry_value.get()), int(self._grandmaster.after_red_feather_carry_value.get()))
-        game_engine_obj._gold_feather_limit(int(self._grandmaster.before_gold_feather_carry_value.get()), int(self._grandmaster.after_gold_feather_carry_value.get()))
-        all_start_moves = self._grandmaster.all_starting_moves_var.get()
-        starting_area = self._grandmaster.new_area_var.get()
+        game_engine_obj._blue_egg_limit(int(self.grandmaster.before_blue_egg_carry_value.get()), int(self.grandmaster.after_blue_egg_carry_value.get()))
+        game_engine_obj._red_feather_limit(int(self.grandmaster.before_red_feather_carry_value.get()), int(self.grandmaster.after_red_feather_carry_value.get()))
+        game_engine_obj._gold_feather_limit(int(self.grandmaster.before_gold_feather_carry_value.get()), int(self.grandmaster.after_gold_feather_carry_value.get()))
+        all_start_moves = self.grandmaster.all_starting_moves_var.get()
+        starting_area = self.grandmaster.new_area_var.get()
         if(starting_area == "Random Starting Area (Always Safe)"):
             start_area_list = [option for option in non_softlock_start_level]
             starting_area = choice(start_area_list)
@@ -386,16 +402,17 @@ class Misc_Manipulation_Class():
             starting_area = choice(start_area_list)
             print(f"Random Starting Area: {starting_area}")
             all_start_moves = 1
-        game_engine_obj._new_game_start_level(starting_area, self._grandmaster.skip_intro_cutscene_var.get())
+        game_engine_obj._new_game_start_level(starting_area, self.grandmaster.skip_intro_cutscene_var.get())
         if(all_start_moves == 1):
             game_engine_obj._starting_moves()
-        game_engine_obj._starting_lives(self._grandmaster.starting_lives_value.get())
+        game_engine_obj._starting_lives(self.grandmaster.starting_lives_value.get())
 
     ########################
     ### EDIT OTHER TEXTS ###
     ########################
     
     def _edit_intro_cutscene_text_main(self):
+        self.grandmaster.logger.debug("Edit Intro Cutscene Text Main")
         self.speech_manip._bottles_introduction_text()
         self.speech_manip._intro_cutscene_1()
         self.speech_manip._intro_cutscene_2()
@@ -415,6 +432,7 @@ class Misc_Manipulation_Class():
         self.speech_manip._enter_lair_cutscene()
     
     def _edit_world_order_related_text_main(self):
+        self.grandmaster.logger.debug("Edit World Order Related Text Main")
         self.speech_manip._bottles_50_notes()
         self.speech_manip._bottles_enter_mm_moves()
         self.speech_manip._bottles_learned_mm_moves()
@@ -434,6 +452,7 @@ class Misc_Manipulation_Class():
         pass
     
     def _gruntildas_lair_speeches_main(self):
+        self.grandmaster.logger.debug("Gruntilda Lair Speeches Main")
         grunty_lair_speeches_list = [
             #"TOOTY SAYS SHE'S FINE WITH ME,", "IF YOU GO HOME I'LL SET HER FREE!"
             # Inside Jokes
@@ -511,6 +530,7 @@ class Misc_Manipulation_Class():
         self.speech_manip._gruntilda_lair_speech_31(grunty_lair_speeches_list[30][0], grunty_lair_speeches_list[30][1])
     
     def _adjust_sandcastle_speeches(self):
+        self.grandmaster.logger.debug("Adjust Sandcastle Speeches")
         self.speech_manip._raised_maximum_blue_eggs_speech()
         self.speech_manip._raised_maximum_red_feathers_speech()
         self.speech_manip._raised_maximum_gold_feathers_speech()
