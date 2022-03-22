@@ -375,7 +375,6 @@ class World_Order_Bottles():
                     
     def _remaining_moves(self):
         '''For each remaining move, assign them to a possible location'''
-        print(f"Remaining Moves: {self.remaining_moves}")
         for remaining_move in self.remaining_moves:
             available_bottles = {}
             for world_name in self.world_order_list:
