@@ -775,7 +775,7 @@ class Within_World_Warps_Class():
                     warps_from_main.remove(warp)
                     warps_to_main.append(warp)
             warps_to_main.remove(randomized_warp)
-            print(f"{randomized_warp.name}   -->   {randomized_warp.warps_name}")
+#             print(f"{randomized_warp.name}   -->   {randomized_warp.warps_name}")
             self._randomized_warp_dict[randomized_warp] = randomized_warp.old_warp_search_strings
             self._randomized_warp_cheat_sheet_dict[randomized_warp.name] = randomized_warp.warps_name
 
