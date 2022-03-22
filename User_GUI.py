@@ -338,7 +338,7 @@ class User_GUI_Class():
         self.small_font_size = 10
         ### LOGGER ###
         self.logger = logging.getLogger("Rotating Log")
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
         FORMAT = '[%(levelname)s] %(asctime)-15s - %(funcName)s: %(message)s'
         handler = RotatingFileHandler(f"{self.cwd}\Randomizer_Log_File.log", maxBytes=(512*1024), backupCount=1)
         self.logger.addHandler(handler)
@@ -433,7 +433,6 @@ class User_GUI_Class():
     
     def _random_hex(self, digit_len):
         '''Randomly generates hex values for the colors in BK'''
-        self.logger.info("Select Random Hex")
         max_num = "F" * digit_len
         random_hex_val = leading_zeros(randint(0, int(max_num, 16)), digit_len).upper()
         if(digit_len == 4):
@@ -696,7 +695,6 @@ class User_GUI_Class():
     
     def _get_randomizer_setting(self, bit_count=1, options_list=None):
         '''Generates the randomizer settings code'''
-        self.logger.info("Generate Randomizer Settings Code")
         compare_to_value = (2 ** bit_count) - 1
         set_this_option = self.applied_randomizer_settings_code & compare_to_value
         self.applied_randomizer_settings_code = self.applied_randomizer_settings_code >> bit_count
