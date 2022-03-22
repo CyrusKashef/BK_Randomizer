@@ -24,7 +24,7 @@ from Randomization_Processes.Common_Functions import get_address_endpoints, lead
 
 class Music_Manipulation_Class():
     '''Music manipulation class'''
-    def __init__(self, seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var):
+    def __init__(self, seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var, jarring_sounds_var):
         '''Initializes the music manipulation class'''
         self._file_dir = file_dir
         self._randomized_rom_path = randomized_rom_path
@@ -38,6 +38,7 @@ class Music_Manipulation_Class():
         self._jingles_var = jingles_var
         self._music_var = music_var
         self._beta_sounds_var = beta_sounds_var
+        self._jarring_sounds_var = jarring_sounds_var
         self._music_dict = read_json(f"{self._file_dir}Randomization_Processes\\Misc_Manipulation\\Music_Data\\BK_Sounds.json")
         self._sound_pointer_dict = {}
     
@@ -123,6 +124,8 @@ class Music_Manipulation_Class():
         for category in self._music_dict:
             if((category.startswith("Beta_")) and (self._beta_sounds_var == 1)):
                 continue
+            if((category.startswith("Jarring_")) and (self._jarring_sounds_var == 1)):
+                continue
             # Shuffle Compressed Files
             category_pointer_list = []
             for item in pointer_dict[category]:
@@ -130,6 +133,9 @@ class Music_Manipulation_Class():
             if(category in music_categories):
                 if(self._beta_sounds_var == 1):
                     for item in pointer_dict[f"Beta_{category}"]:
+                        category_pointer_list.append(item)
+                if(self._jarring_sounds_var == 1):
+                    for item in pointer_dict[f"Jarring_{category}"]:
                         category_pointer_list.append(item)
                 category_pointer_list = self._shuffle_list(category_pointer_list)
             # Assign New Files
@@ -139,6 +145,10 @@ class Music_Manipulation_Class():
                 list_counter += 1
             if((self._beta_sounds_var == 1) and (category in music_categories)):
                 for pointer_str in self._music_dict[f"Beta_{category}"]:
+                    self._music_address_dict[pointer_str.lower()] = category_pointer_list[list_counter]
+                    list_counter += 1
+            if((self._jarring_sounds_var == 1) and (category in music_categories)):
+                for pointer_str in self._music_dict[f"Jarring_{category}"]:
                     self._music_address_dict[pointer_str.lower()] = category_pointer_list[list_counter]
                     list_counter += 1
         # Replace Compressed Files Into ROM
