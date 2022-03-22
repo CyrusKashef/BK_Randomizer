@@ -164,8 +164,7 @@ class Misc_Manipulation_Class():
         #  |--------|--------|--------|--------|
         selectable_values = self._gv_matching_puzzle_combination()
         self._gv_matching_puzzle_textures(selectable_values)
-        if(self.grandmaster.cheat_sheet_var.get() == 1):
-            self._gv_cheat_sheet(selectable_values)
+        self._gv_cheat_sheet(selectable_values)
     
     ##################
     ### MMM OPTION ###
@@ -339,7 +338,7 @@ class Misc_Manipulation_Class():
             selected_json = choice([file_name.split(".json")[0]
                             for file_name in os.listdir(f"{file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/")
                             if(file_name.endswith(".json"))])
-        models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, selected_json, self.grandmaster.cheat_sheet_var.get())
+        models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, selected_json)
         if(models_animations_properties_obj._master_dict["Models"]):
             models_animations_properties_obj._models_main()
         if(models_animations_properties_obj._master_dict["Animations"]):
@@ -351,10 +350,10 @@ class Misc_Manipulation_Class():
     ### SOUNDS AND MUSIC ###
     ########################
     
-    def _shuffle_music(self, seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var):
+    def _shuffle_music(self, seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var, jarring_sounds_var):
         '''Runs the functions for shuffling the music'''
         self.grandmaster.logger.info("Shuffle Music")
-        music_manip = Music_Manipulation_Class(seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var)
+        music_manip = Music_Manipulation_Class(seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var, jarring_sounds_var)
         music_manip._music_manip_main()
     
     ################
@@ -396,11 +395,11 @@ class Misc_Manipulation_Class():
         if(starting_area == "Random Starting Area (Always Safe)"):
             start_area_list = [option for option in non_softlock_start_level]
             starting_area = choice(start_area_list)
-            print(f"Random Starting Area: {starting_area}")
+            self.grandmaster.logger.info(f"Random Starting Area: {starting_area}")
         elif(starting_area == "Random Starting Area (Safe With All Moves)"):
             start_area_list = [option for option in start_level_ids]
             starting_area = choice(start_area_list)
-            print(f"Random Starting Area: {starting_area}")
+            self.grandmaster.logger.info(f"Random Starting Area: {starting_area}")
             all_start_moves = 1
         game_engine_obj._new_game_start_level(starting_area, self.grandmaster.skip_intro_cutscene_var.get())
         if(all_start_moves == 1):
