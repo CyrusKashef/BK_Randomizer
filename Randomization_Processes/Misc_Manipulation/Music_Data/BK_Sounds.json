@@ -26,17 +26,7 @@
         "0x10BA0": "Strum",
         "0x10BD8": "Gruntys_Spell",
         "0x10BF8": "Pick_Up_Puzzle_Piece",
-        "0x10C00": "Put_Puzzle_Piece_Down",
-        "0x10C18": "Jinjonator_Hitting_Grunty1",
-        "0x10C20": "Jinjonator_Hitting_Grunty2",
-        "0x10C28": "Jinjonator_Hitting_Grunty3",
-        "0x10C30": "Jinjonator_Hitting_Grunty4",
-        "0x10C38": "Jinjonator_Hitting_Grunty5",
-        "0x10C40": "Jinjonator_Hitting_Grunty6",
-        "0x10C48": "Jinjonator_Hitting_Grunty7",
-        "0x10C50": "Jinjonator_Hitting_Grunty8",
-        "0x10C58": "Jinjonator_Hitting_Grunty9",
-        "0x10C60": "Jinjonator_Hitting_Grunty10"
+        "0x10C00": "Put_Puzzle_Piece_Down"
     },
     "Jingle": {
         "0x10768": "MMM_Church_Door_Opens",
@@ -163,6 +153,22 @@
     "Beta_Loops": {
         "0x10910": "Beta_Song_DKesque",
         "0x109B0": "Beta_MM"
+    },
+    "Jarring_Short": {
+        "0x10C18": "Jinjonator_Hitting_Grunty1",
+        "0x10C20": "Jinjonator_Hitting_Grunty2",
+        "0x10C28": "Jinjonator_Hitting_Grunty3",
+        "0x10C30": "Jinjonator_Hitting_Grunty4",
+        "0x10C38": "Jinjonator_Hitting_Grunty5",
+        "0x10C40": "Jinjonator_Hitting_Grunty6",
+        "0x10C48": "Jinjonator_Hitting_Grunty7",
+        "0x10C50": "Jinjonator_Hitting_Grunty8",
+        "0x10C58": "Jinjonator_Hitting_Grunty9",
+        "0x10C60": "Jinjonator_Hitting_Grunty10"
+    },
+    "Jarring_Jingle": {
+    },
+    "Jarring_Loops": {
     },
     "Dont_Swap/Misc/What?": {
         "0x10788": "Intro_Music",
