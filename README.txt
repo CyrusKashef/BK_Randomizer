@@ -84,6 +84,7 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Basic Shuffle: Simplified shuffling to guarantee a solution. Mumbo's Mountain is always the first level, with the moves Talon Trot, Shock Jump Pad, and Beak Buster. All other world and moves are random.
 * Bottles Shuffle: More complicated shuffle. Worlds are placed in a logical order so that the previous worlds will give the needed moves to progress the game. Logic might not work if worlds are skipped. Bottles mounds are shuffled with Jinjos, Extra Lives, and Miscellaneous Object locations to promote more exploration.
 * Start Game With All Moves: You start the game with all of the moves, though you won't be given Eggs and Feathers to start with.
+* Note: Some jump pads and flight pads are always active. This was not a randomizer feature; these pads are always active in the base game as well.
 ##### Within World Warps
 * None: Skips the setting
 * Shuffle By World: All warps within a level are shuffled, barring some constraints. Excludes transformation warps.
