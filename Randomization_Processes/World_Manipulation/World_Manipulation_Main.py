@@ -91,14 +91,14 @@ class World_Manipulation_Class():
     def _create_worlds(self):
         '''Creates every world using the generic world and generic setup file classes, including individual seasons for click clock wood, if applicable'''
         # MUMBOS MOUNTAIN
-        self.grandmaster.logger.debug("Creating Worlds: Mumbo's Mountain")
+        self.grandmaster.logger.info("Creating Worlds: Mumbo's Mountain")
         self.mumbos_mountain = World("Mumbo's Mountain")
         self.mumbos_mountain._add_setup_file(SetupFile("9788", self.grandmaster.cwd, "Main Area"))
         self.mumbos_mountain._add_setup_file(SetupFile("97D8", self.grandmaster.cwd, "Ticker's Tower"))
         self.mumbos_mountain._add_setup_file(SetupFile("97E8", self.grandmaster.cwd, "Mumbo's Skull"))
         self.world_list.append(self.mumbos_mountain)
         # TREASURE TROVE COVE
-        self.grandmaster.logger.debug("Creating Worlds: Treasure Trove Cove")
+        self.grandmaster.logger.info("Creating Worlds: Treasure Trove Cove")
         self.treasure_trove_cove = World("Treasure Trove Cove")
         self.treasure_trove_cove._add_setup_file(SetupFile("97B0", self.grandmaster.cwd, "Main Area"))
         self.treasure_trove_cove._add_setup_file(SetupFile("97A0", self.grandmaster.cwd, "Blubber's Ship"))
@@ -106,7 +106,7 @@ class World_Manipulation_Class():
         self.treasure_trove_cove._add_setup_file(SetupFile("97C8", self.grandmaster.cwd, "Sandcastle"))
         self.world_list.append(self.treasure_trove_cove)
         # CLANKER'S CAVERN
-        self.grandmaster.logger.debug("Creating Worlds: Clanker's Cavern")
+        self.grandmaster.logger.info("Creating Worlds: Clanker's Cavern")
         self.clankers_cavern = World("Clanker's Cavern")
         self.clankers_cavern._add_setup_file(SetupFile("97D0", self.grandmaster.cwd, "Main Area"))
         self.clankers_cavern._add_setup_file(SetupFile("9888", self.grandmaster.cwd, "Inside Clanker Mouth And Belly"))
@@ -114,7 +114,7 @@ class World_Manipulation_Class():
         self.clankers_cavern._add_setup_file(SetupFile("9890", self.grandmaster.cwd, "Inside Clanker Gold Feather Room"))
         self.world_list.append(self.clankers_cavern)
         # BUBBLEGLOOP SWAMP
-        self.grandmaster.logger.debug("Creating Worlds: Bubblegloop Swamp")
+        self.grandmaster.logger.info("Creating Worlds: Bubblegloop Swamp")
         self.bubblegloop_swamp = World("Bubblegloop Swamp")
         self.bubblegloop_swamp._add_setup_file(SetupFile("97E0", self.grandmaster.cwd, "Main Area"))
         self.bubblegloop_swamp._add_setup_file(SetupFile("97F8", self.grandmaster.cwd, "Mr Vile"))
@@ -122,7 +122,7 @@ class World_Manipulation_Class():
         self.bubblegloop_swamp._add_setup_file(SetupFile("99B0", self.grandmaster.cwd, "Mumbo's Skull"))
         self.world_list.append(self.bubblegloop_swamp)
         # FREEZEEZY PEAK
-        self.grandmaster.logger.debug("Creating Worlds: Freezeezy Peak")
+        self.grandmaster.logger.info("Creating Worlds: Freezeezy Peak")
         self.freezeezy_peak = World("Freezeezy Peak")
         self.freezeezy_peak._add_setup_file(SetupFile("98B0", self.grandmaster.cwd, "Main Area"))
         self.freezeezy_peak._add_setup_file(SetupFile("9980", self.grandmaster.cwd, "Boggy's Igloo"))
@@ -131,7 +131,7 @@ class World_Manipulation_Class():
         self.freezeezy_peak._add_setup_file(SetupFile("9B70", self.grandmaster.cwd, "Wozza's Cave"))
         self.world_list.append(self.freezeezy_peak)
         # GOBI'S VALLEY
-        self.grandmaster.logger.debug("Creating Worlds: Gobi's Valley")
+        self.grandmaster.logger.info("Creating Worlds: Gobi's Valley")
         self.gobis_valley = World("Gobi's Valley")
         self.gobis_valley._add_setup_file(SetupFile("9808", self.grandmaster.cwd, "Main Area"))
         self.gobis_valley._add_setup_file(SetupFile("9810", self.grandmaster.cwd, "Puzzle Room"))
@@ -141,7 +141,7 @@ class World_Manipulation_Class():
         self.gobis_valley._add_setup_file(SetupFile("9848", self.grandmaster.cwd, "Jinxy"))
         self.world_list.append(self.gobis_valley)
         # MAD MONSTER MANSION
-        self.grandmaster.logger.debug("Creating Worlds: Mad Monster Mansion")
+        self.grandmaster.logger.info("Creating Worlds: Mad Monster Mansion")
         self.mad_monster_mansion = World("Mad Monster Mansion")
         self.mad_monster_mansion._add_setup_file(SetupFile("9850", self.grandmaster.cwd, "Main Area"))
         self.mad_monster_mansion._add_setup_file(SetupFile("9BE0", self.grandmaster.cwd, "Septic Tank (Inside Loggo)"))
@@ -161,7 +161,7 @@ class World_Manipulation_Class():
         self.mad_monster_mansion._add_setup_file(SetupFile("98F8", self.grandmaster.cwd, "Mumbo's Skull"))
         self.world_list.append(self.mad_monster_mansion)
         # RUSTY BUCKET BAY
-        self.grandmaster.logger.debug("Creating Worlds: Rusty Bucket Bay")
+        self.grandmaster.logger.info("Creating Worlds: Rusty Bucket Bay")
         self.rusty_bucket_bay = World("Rusty Bucket Bay")
         self.rusty_bucket_bay._add_setup_file(SetupFile("9900", self.grandmaster.cwd, "Main Area"))
         self.rusty_bucket_bay._add_setup_file(SetupFile("9BD0", self.grandmaster.cwd, "Anchor Room"))
@@ -180,11 +180,11 @@ class World_Manipulation_Class():
         self.world_list.append(self.rusty_bucket_bay)
         # CLICK CLOCK WOOD - Seasons
         if(self.grandmaster.ccw_var.get() == "Season"):
-            self.grandmaster.logger.debug("Creating Worlds: Click Clock Wood - Lobby")
+            self.grandmaster.logger.info("Creating Worlds: Click Clock Wood - Lobby")
             self.click_clock_wood_lobby = World("Click Clock Wood - Lobby")
             self.click_clock_wood_lobby._add_setup_file(SetupFile("9978", self.grandmaster.cwd, "Lobby"))
             self.world_list.append(self.click_clock_wood_lobby)
-            self.grandmaster.logger.debug("Creating Worlds: Click Clock Wood - Spring")
+            self.grandmaster.logger.info("Creating Worlds: Click Clock Wood - Spring")
             self.click_clock_wood_spring = World("Click Clock Wood - Spring")
             self.click_clock_wood_spring._add_setup_file(SetupFile("9990", self.grandmaster.cwd, "Spring Main Area"))
             self.click_clock_wood_spring._add_setup_file(SetupFile("99C8", self.grandmaster.cwd, "Spring Mumbo's Skull"))
@@ -192,7 +192,7 @@ class World_Manipulation_Class():
             self.click_clock_wood_spring._add_setup_file(SetupFile("9A68", self.grandmaster.cwd, "Spring Nabnut's House"))
             self.click_clock_wood_spring._add_setup_file(SetupFile("9AA0", self.grandmaster.cwd, "Spring Whipcrack Room"))
             self.world_list.append(self.click_clock_wood_spring)
-            self.grandmaster.logger.debug("Creating Worlds: Click Clock Wood - Summer")
+            self.grandmaster.logger.info("Creating Worlds: Click Clock Wood - Summer")
             self.click_clock_wood_summer = World("Click Clock Wood - Summer")
             self.click_clock_wood_summer._add_setup_file(SetupFile("9998", self.grandmaster.cwd, "Summer Main Area"))
             self.click_clock_wood_summer._add_setup_file(SetupFile("99D0", self.grandmaster.cwd, "Summer Mumbo's Skull"))
@@ -200,7 +200,7 @@ class World_Manipulation_Class():
             self.click_clock_wood_summer._add_setup_file(SetupFile("9A70", self.grandmaster.cwd, "Summer Nabnut's House"))
             self.click_clock_wood_summer._add_setup_file(SetupFile("9AA8", self.grandmaster.cwd, "Summer Whipcrack Room"))
             self.world_list.append(self.click_clock_wood_summer)
-            self.grandmaster.logger.debug("Creating Worlds: Click Clock Wood - Fall")
+            self.grandmaster.logger.info("Creating Worlds: Click Clock Wood - Fall")
             self.click_clock_wood_fall = World("Click Clock Wood - Fall")
             self.click_clock_wood_fall._add_setup_file(SetupFile("99A0", self.grandmaster.cwd, "Fall Main Area"))
             self.click_clock_wood_fall._add_setup_file(SetupFile("99D8", self.grandmaster.cwd, "Fall Mumbo's Skull"))
@@ -209,7 +209,7 @@ class World_Manipulation_Class():
             self.click_clock_wood_fall._add_setup_file(SetupFile("9A90", self.grandmaster.cwd, "Fall Nabnut's Attic"))
             self.click_clock_wood_fall._add_setup_file(SetupFile("9AB0", self.grandmaster.cwd, "Fall Whipcrack Room"))
             self.world_list.append(self.click_clock_wood_fall)
-            self.grandmaster.logger.debug("Creating Worlds: Click Clock Wood - Winter")
+            self.grandmaster.logger.info("Creating Worlds: Click Clock Wood - Winter")
             self.click_clock_wood_winter = World("Click Clock Wood - Winter")
             self.click_clock_wood_winter._add_setup_file(SetupFile("99A8", self.grandmaster.cwd, "Winter Main Area"))
             self.click_clock_wood_winter._add_setup_file(SetupFile("99E0", self.grandmaster.cwd, "Winter Mumbo's Skull"))
@@ -220,7 +220,7 @@ class World_Manipulation_Class():
             self.world_list.append(self.click_clock_wood_winter)
         # CLICK CLOCK WOOD - All
         elif(self.grandmaster.ccw_var.get() == "Within World"):
-            self.grandmaster.logger.debug("Creating Worlds: Click Clock Wood")
+            self.grandmaster.logger.info("Creating Worlds: Click Clock Wood")
             self.click_clock_wood = World("Click Clock Wood")
             self.click_clock_wood._add_setup_file(SetupFile("9978", self.grandmaster.cwd, "Lobby"))
             self.click_clock_wood._add_setup_file(SetupFile("9990", self.grandmaster.cwd, "Spring Main Area"))
@@ -247,7 +247,7 @@ class World_Manipulation_Class():
             self.click_clock_wood._add_setup_file(SetupFile("9AB8", self.grandmaster.cwd, "Winter Whipcrack Room"))
             self.world_list.append(self.click_clock_wood)
         # GRUNTILDA'S LAIR
-        self.grandmaster.logger.debug("Creating Worlds: Gruntilda's Lair")
+        self.grandmaster.logger.info("Creating Worlds: Gruntilda's Lair")
         self.gruntildas_lair = World("Gruntilda's Lair")
         self.gruntildas_lair._add_setup_file(SetupFile("9AC0", self.grandmaster.cwd, "Floor 1 MM Puzzle And Entrance"))
         self.gruntildas_lair._add_setup_file(SetupFile("9AC8", self.grandmaster.cwd, "Floor 2 TTC and CC Puzzles"))
@@ -272,7 +272,7 @@ class World_Manipulation_Class():
         self.gruntildas_lair._add_setup_file(SetupFile("9BF8", self.grandmaster.cwd, "Gruntilda Boss Fight"))
         self.world_list.append(self.gruntildas_lair)
         # SPIRAL MOUNTAIN
-        self.grandmaster.logger.debug("Creating Worlds: Spiral Mountain")
+        self.grandmaster.logger.info("Creating Worlds: Spiral Mountain")
         self.spiral_mountain = World("Spiral Mountain")
         self.spiral_mountain._add_setup_file(SetupFile("9780", self.grandmaster.cwd, "Main Area"))
         self.spiral_mountain._add_setup_file(SetupFile("9BD8", self.grandmaster.cwd, "Banjo's House"))
@@ -399,7 +399,7 @@ class World_Manipulation_Class():
 
     def _structs_main(self):
         '''Runs the struct options that are not NONE'''
-        self.grandmaster.logger.debug("Structs Main")
+        self.grandmaster.logger.info("Structs Main")
         if(self.grandmaster.struct_var.get() == "Shuffle (World)"):
             for world_object in self.world_list:
                 self._gather_structs(world_object)
@@ -516,7 +516,7 @@ class World_Manipulation_Class():
 
     def _non_flag_objects_main(self):
         '''Runs the non-flagged objects options that are not NONE'''
-        self.grandmaster.logger.debug("Non-Flag Objects Main")
+        self.grandmaster.logger.info("Non-Flag Objects Main")
         if(self.grandmaster.non_flagged_object_var.get() == "Shuffle (World)"):
             for world_object in self.world_list:
                 self._gather_non_flag_objects(world_object)
@@ -705,7 +705,7 @@ class World_Manipulation_Class():
 
     def _enemies_main(self):
         '''Runs the enemies options that are not NONE'''
-        self.grandmaster.logger.debug("Enemies Main")
+        self.grandmaster.logger.info("Enemies Main")
         if(self.grandmaster.enemy_checkbox_dict["Yum-Yum*"]):
             self._remove_yum_yums()
         if(self.grandmaster.enemies_var.get() == "Shuffle"):
@@ -832,7 +832,7 @@ class World_Manipulation_Class():
     
     def _flagged_objects_main(self):
         '''Runs the flagged objects options that are not NONE'''
-        self.grandmaster.logger.debug("Flagged Objects Main")
+        self.grandmaster.logger.info("Flagged Objects Main")
         if(self.grandmaster.flagged_object_var.get() == "Shuffle (World)"):
             for world_object in self.world_list:
                 self._gather_flagged_objects(world_object)
@@ -1035,7 +1035,7 @@ class World_Manipulation_Class():
     
     def _note_doors_main(self, final_note_door_value):
         '''Either scales or removes Note Doors'''
-        self.grandmaster.logger.debug("Note Doors Main")
+        self.grandmaster.logger.info("Note Doors Main")
         if(self.grandmaster.final_note_door_var.get() == "Final Note Door Only"):
             self._remove_note_doors()
             self._810_bottles_cutscene()
@@ -1054,7 +1054,7 @@ class World_Manipulation_Class():
     
     def _final_world_puzzle(self, final_puzzle_value):
         '''Sets the requirements of every puzzle to zero except for the puzzle proceeding the final battle'''
-        self.grandmaster.logger.debug("Final World Puzzle")
+        self.grandmaster.logger.info("Final World Puzzle")
         # Find location of world puzzles
         # 00 00 01 01 00 5D 02 02 00 5E 05 03 00 60 07 03 00 63 08 04 00 66 09 04 00 6A 0A 04 00 6E 0C 04 00 72 0F 04 00 76 19 05 00 7A 04 03
         # Every 4 is a note door, with the third value being the one you have to change
@@ -1076,7 +1076,7 @@ class World_Manipulation_Class():
     
     def _magic_barrier_main(self):
         '''Removes the note doors for the setting FINAL NOTE DOOR'''
-        self.grandmaster.logger.debug("Magic Barrier Main")
+        self.grandmaster.logger.info("Magic Barrier Main")
         for setup_file in self.gruntildas_lair._setup_list:
             for item_search_string in Non_Flagged_Objects.magic_barriers:
                 setup_file._locate_item_index(item_search_string, "Magic_Barrier")
@@ -1249,7 +1249,7 @@ class World_Manipulation_Class():
     
     def _shuffle_clanker_rings(self):
         '''Gathers, shuffles, and configures new Clanker ring order'''
-        self.grandmaster.logger.debug("Shuffle Clanker Rings")
+        self.grandmaster.logger.info("Shuffle Clanker Rings")
         self.curr_setup_file = self.clankers_cavern._setup_list[1]
         self._gather_sequence(Sequences.clanker_rings_list, "Clanker_Rings")
         self._shuffle_sequences_within_area()
@@ -1257,7 +1257,7 @@ class World_Manipulation_Class():
 
     def _shuffle_croctus(self):
         '''Gathers, shuffles, and configures new Croctus order'''
-        self.grandmaster.logger.debug("Shuffle Croctus")
+        self.grandmaster.logger.info("Shuffle Croctus")
         self.curr_setup_file = self.bubblegloop_swamp._setup_list[0]
         self._gather_camera_sequence(Sequences.croctus_dict)
         self._shuffle_camera_sequences_within_area()
@@ -1265,7 +1265,7 @@ class World_Manipulation_Class():
     
     def _boggy_race_flags_main(self):
         '''Gathers, calculates new location, and configures new Clanker ring order'''
-        self.grandmaster.logger.debug("Hard Boggy Race Main")
+        self.grandmaster.logger.info("Hard Boggy Race Main")
         self.curr_setup_file = self.freezeezy_peak._setup_list[0]
         self._gather_sequence_tuple(Sequences.boggy_race_flags)
         self._harder_boggy_race()
@@ -1273,7 +1273,7 @@ class World_Manipulation_Class():
     
     def _shuffle_ancient_ones(self):
         '''Gathers, shuffles, and configures new Ancient Ones order'''
-        self.grandmaster.logger.debug("Shuffle Ancient Ones")
+        self.grandmaster.logger.info("Shuffle Ancient Ones")
         self.curr_setup_file = self.gobis_valley._setup_list[0]
         self._gather_camera_sequence(Sequences.ancient_ones_dict)
         self._shuffle_camera_sequences_within_area()
@@ -1281,7 +1281,7 @@ class World_Manipulation_Class():
     
     def _shuffle_jinxy_heads(self):
         '''Gathers, shuffles, and configures new King Sandybutt Jinxy Heads order'''
-        self.grandmaster.logger.debug("Shuffle Jinxy Heads")
+        self.grandmaster.logger.info("Shuffle Jinxy Heads")
         self.curr_setup_file = self.gobis_valley._setup_list[0]
         self._gather_camera_sequence(Sequences.jinxy_head_dict)
         self._shuffle_camera_sequences_within_area()
@@ -1636,7 +1636,7 @@ class World_Manipulation_Class():
     ### WORLD ORDER WARPS MAIN ###
     def _world_order_warps_main(self):
         '''Runs the world order warps options that are not NONE'''
-        self.grandmaster.logger.debug("World Order Warps Main")
+        self.grandmaster.logger.info("World Order Warps Main")
         self._gather_all_world_warps()
         self._gather_all_bottles_mounds()
         if(self.grandmaster.world_entrance_var.get() == "Basic Shuffle"):
@@ -1725,7 +1725,7 @@ class World_Manipulation_Class():
     
     def _within_world_warps_main(self):
         '''Runs the within world warps options that are not NONE'''
-        self.grandmaster.logger.debug("Within World Warps Main")
+        self.grandmaster.logger.info("Within World Warps Main")
         if(self.grandmaster.within_world_warps_var.get() == "Shuffle By World"):
             self._within_world_warps_by_world()
         elif(self.grandmaster.within_world_warps_var.get() == "Shuffle By Game"):
@@ -1737,7 +1737,7 @@ class World_Manipulation_Class():
     
     def _generate_cheat_sheet(self):
         '''PyDoc'''
-        self.grandmaster.logger.debug("Generate Object/Struct Cheat Sheet")
+        self.grandmaster.logger.info("Generate Object/Struct Cheat Sheet")
         totals_note_count = 0
         cheat_sheet_dict = {}
         for world_object in self.world_list:
@@ -1775,7 +1775,7 @@ class World_Manipulation_Class():
     ### RETURN OF FURNACE FUN ###
     
     def _replace_model_files(self):
-        self.grandmaster.logger.debug("Replace Model Files")
+        self.grandmaster.logger.info("Replace Model Files")
         # Furnace Fun: 0x105D8 - A795B8
         # Final Battle A: 0x10678 - BEA360
         # Final Battle B: 0x10740 - D22888
@@ -1807,7 +1807,7 @@ class World_Manipulation_Class():
         self.gruntildas_lair._setup_list[19]._replace_each_object_parameters(final_battle_list, replacement_dict)
     
     def _return_of_furnace_fun(self):
-        self.grandmaster.logger.debug("Return Of Furnace Fun")
+        self.grandmaster.logger.info("Return Of Furnace Fun")
         self._replace_model_files()
         self._adjust_ff_setup_file()
     
@@ -2292,7 +2292,7 @@ class World_Manipulation_Class():
     
     def _harder_final_battle_main(self, difficulty_level):
         '''Runs the functions for determining and implementing the final battle changes'''
-        self.grandmaster.logger.debug("Harder Final Battle Main")
+        self.grandmaster.logger.info("Harder Final Battle Main")
         # Miscellaneous
         self._pity_1_up()
         # Regular Harder Battle
