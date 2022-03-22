@@ -405,25 +405,24 @@ class World_Order_Bottles():
 
     def _determine_world_order(self):
         '''Determines the world order based on accessibility'''
-        while(self.remaining_worlds):
-            # What can be the next world?
-#             possible_world_list, backup_world_list = self._possible_next_worlds()
-            possible_world_list = self._possible_next_worlds()
-            # Select from possible worlds
-            seed(a=(self.seed_val + self.increment))
-            self.increment += 1
-            if(possible_world_list):
-                next_world = choice(possible_world_list)
-            else:
-                self._restart()
-#             elif(backup_world_list):
-#                 next_world = choice(backup_world_list)
-#             else:
-#                 next_world = choice(self.remaining_worlds)
-            # Placed all of the calculations in the dictionary
-            self._set_next_world(next_world)
-        # Teach any remaining moves
-        self._remaining_moves()
+        try:
+            while(self.remaining_worlds):
+                # What can be the next world?
+                possible_world_list = self._possible_next_worlds()
+                # Select from possible worlds
+                seed(a=(self.seed_val + self.increment))
+                self.increment += 1
+                if(possible_world_list):
+                    next_world = choice(possible_world_list)
+                else:
+                    self._restart()
+                # Placed all of the calculations in the dictionary
+                self._set_next_world(next_world)
+            # Teach any remaining moves
+            self._remaining_moves()
+        except IndexError:
+            self._restart()
+            self._determine_world_order()
 
 if __name__ == '__main__':
     pass
