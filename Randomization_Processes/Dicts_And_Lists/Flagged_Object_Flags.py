@@ -578,7 +578,7 @@ bottles_world_warp_dict = {
         "Gobi's Valley": {
             "Possible_Bottles": {
                 "Turbo_Talon_Trot": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
-                "King_Sandybutt_1_Up": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
+                "King_Sandybutt_1_Up": [["Eggs", "Turbo_Talon_Trot", "Wading_Boots"]],
                 "Water_Pyramid_1_Up": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
                 "Yellow_Jinjo": [[]],
                 "Green_Jinjo": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
