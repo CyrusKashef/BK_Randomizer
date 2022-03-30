@@ -1253,7 +1253,7 @@ extra_flagged_object_flags = {
         # Floor 4: BGS Witch Switch
         "FFFA00000002": {
             "Type": None,
-            "Requirements": [["Beak_Buster", "Bubblegloop Swamp", "Gobi's Valley"], ["Beak_Buster", "Bubblegloop Swamp", "Freezeezy Peak"], ["Beak_Buster", "Bubblegloop Swamp", "Mad Monster Mansion"], ["Beak_Buster", "Bubblegloop Swamp", "Rusty Bucket Bay"], ["Beak_Buster", "Bubblegloop Swamp", "Click Clock Wood"]],
+            "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Bubblegloop Swamp", "Gobi's Valley"], ["Beak_Buster", "Shock_Jump_Pad", "Bubblegloop Swamp", "Freezeezy Peak"], ["Beak_Buster", "Shock_Jump_Pad", "Bubblegloop Swamp", "Mad Monster Mansion"], ["Beak_Buster", "Shock_Jump_Pad", "Bubblegloop Swamp", "Rusty Bucket Bay"], ["Beak_Buster", "Shock_Jump_Pad", "Bubblegloop Swamp", "Click Clock Wood"]],
             },
         # Floor 6: FP Witch Switch
         "103B0948199C": {
@@ -1263,7 +1263,7 @@ extra_flagged_object_flags = {
         # Floor 5: GV Witch Switch
         "FAF601FDFCED": {
             "Type": None,
-            "Requirements": [["Beak_Buster", "Shock_Jump_Pad"]],
+            "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Gobi's Valley"], ["Beak_Buster", "Shock_Jump_Pad", "Freezeezy Peak"], ["Beak_Buster", "Shock_Jump_Pad", "Mad Monster Mansion"], ["Beak_Buster", "Shock_Jump_Pad", "Rusty Bucket Bay"], ["Beak_Buster", "Shock_Jump_Pad", "Click Clock Wood"],],
             },
         # Floor 1: MM Witch Switch
         "*MM Witch Switch": {
@@ -1314,7 +1314,7 @@ extra_flagged_object_flags = {
         # CC Entrance
         "000D0352F680": {
             "Type": None,
-            "Requirements": [["Treasure Trove Cove"], ["Clanker's Cavern"], ["Bubblegloop Swamp"], ["Freezeezy Peak"], ["Gobi's Valley"], ["Mad Monster Mansion"], ["Rusty Bucket Bay"], ["Click Clock Wood"]],
+            "Requirements": [["Beak_Buster", "Treasure Trove Cove"], ["Clanker's Cavern"], ["Beak_Buster", "Bubblegloop Swamp"], ["Beak_Buster", "Freezeezy Peak"], ["Beak_Buster", "Gobi's Valley"], ["Beak_Buster", "Mad Monster Mansion"], ["Beak_Buster", "Rusty Bucket Bay"], ["Beak_Buster", "Click Clock Wood"]],
             },
         # Sarcophagus
         "FA310000FC78": {
@@ -1345,6 +1345,166 @@ extra_flagged_object_flags = {
         "FB8502C3079E": {
             "Type": None,
             "Requirements": [["Rusty Bucket Bay"], ["Click Clock Wood"]],
+            },
+        },
+    "Spiral Mountain": {
+        ### EMPTY HONEYCOMBS ###
+        # Stump
+        "FA9800A5129B": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Waterfall
+        "E5B30514F8F0": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Underwater
+        "FF00FE29FD74": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Climb Tree
+        "F54C0582006D": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Colliwobble
+#         "*Colliwobble": {
+#             "Type": "Empty Honeycomb",
+#             "Requirements": [[]],
+#             },
+        # Quarrie
+#         "*Quarrie": {
+#             "Type": "Empty Honeycomb",
+#             "Requirements": [[]],
+#             },
+        },
+    }
+
+extra_flagged_object_flags_adjusted = {
+    "Gruntilda's Lair": {
+        ### JIGGIES ###
+        # The First Jiggy
+        "FA290258007F": {
+            "Type": None,
+            "Requirements": [[]],
+            "World_Count": 0,
+            },
+        # Floor 4: BGS Witch Switch
+        "FFFA00000002": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Bubblegloop Swamp"]],
+            "World_Count": 4,
+            },
+        # Floor 6: FP Witch Switch
+        "103B0948199C": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Turbo_Talon_Trot", "Fly", "Freezeezy Peak"]],
+            "World_Count": 4,
+            },
+        # Floor 5: GV Witch Switch
+        "FAF601FDFCED": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Gobi's Valley"]],
+            "World_Count": 4,
+            },
+        # Floor 1: MM Witch Switch
+        "*MM Witch Switch": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Mumbo's Mountain"]],
+            "World_Count": 0,
+            },
+        # TTC Entrance: TTC Witch Switch
+        "*TTC Witch Switch": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Treasure Trove Cove"]],
+            "World_Count": 1,
+            },
+        # Floor 2: CC Witch Switch
+        "*CC Witch Switch": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Clanker's Cavern"]],
+            "World_Count": 1,
+            },
+        # Floor 6: MMM Witch Switch
+        "*MMM Witch Switch": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Mad Monster Mansion"]],
+            "World_Count": 4,
+            },
+        # 640 Note Door: RBB Witch Switch
+        "*RBB Witch Switch": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Rusty Bucket Bay"]],
+            "World_Count": 7,
+            },
+        # CCW Entrance: CCW Witch Switch
+        "*CCW Witch Switch": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Click Clock Wood", "Bee"]],
+            "World_Count": 8,
+            },
+        ### MUMBO TOKENS ###
+        # First Pink Cauldron
+        "0091FD121202": {
+            "Type": None,
+            "Requirements": [[]],
+            "World_Count": 1,
+            },
+        # CCW Puzzle
+        "1347FE270111": {
+            "Type": None,
+            "Requirements": [[]],
+            "World_Count": 1,
+            },
+        # Pipe Room
+        "FF42015FFD15": {
+            "Type": None,
+            "Requirements": [[]],
+            "World_Count": 1,
+            },
+        # CC Entrance
+        "000D0352F680": {
+            "Type": None,
+            "Requirements": [["Beak_Buster"]],
+            "World_Count": 1,
+            },
+        # Sarcophagus
+        "FA310000FC78": {
+            "Type": None,
+            "Requirements": [[]],
+            "World_Count": 4,
+            },
+        # FP Entrance
+        "104805CD186B": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            "World_Count": 4,
+            },
+        # Coffin Room
+        "05BB00FA0000": {
+            "Type": None,
+            "Requirements": [["Pumpkin"]],
+            "World_Count": 6,
+            },
+        # 640 Note Door
+        "04DC0A16000E": {
+            "Type": None,
+            "Requirements": [[]],
+            "World_Count": 8,
+            },
+        # RBB Entrance
+        "06EFFA88FB96": {
+            "Type": None,
+            "Requirements": [[]],
+            "World_Count": 6,
+            },
+        # MMM Puzzle
+        "FB8502C3079E": {
+            "Type": None,
+            "Requirements": [[]],
+            "World_Count": 6,
             },
         },
     "Spiral Mountain": {
