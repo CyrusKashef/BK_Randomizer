@@ -14,7 +14,8 @@ class Models_Animations_Properties_Class():
         self.seed_val = seed_val
         self.file_dir = file_dir
         self.randomized_rom_path = randomized_rom_path
-        self._master_dict = read_json(f"{self.file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/JSON_Files/{selected_json}.json")
+        self.selected_json = selected_json
+        self._master_dict = read_json(f"{self.file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/JSON_Files/{self.selected_json}.json")
     
     def _models_main(self):
         models_dict = self._master_dict["Models"]
@@ -28,6 +29,6 @@ class Models_Animations_Properties_Class():
     
     def _properties_main(self):
         properties_dict = self._master_dict["Properties"]
-        properties_manip_obj = Properties_Manipulation_Class(self.seed_val, self.file_dir, properties_dict)
+        properties_manip_obj = Properties_Manipulation_Class(self.seed_val, self.file_dir, properties_dict, self.selected_json)
         properties_manip_obj._swap_properties_main()
         properties_manip_obj._generate_cheat_sheet()
