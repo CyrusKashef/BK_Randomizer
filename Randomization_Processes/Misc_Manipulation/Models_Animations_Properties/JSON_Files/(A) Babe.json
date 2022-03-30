@@ -1,0 +1,25 @@
+{
+	"Models": {
+	    "Babe": {
+	        "Swap1": {
+	            "0x81D8": "Sexy_Grunty"
+	        },
+	        "Swap2": {
+	            "0x8260": "Bikini_Girl"
+	        }
+	    }
+	},
+	"Animations": {
+		"Babe Walking": {
+			"Swap1": {
+				"0x6E68": "Sexy Grunty Walking"
+			},
+			"Swap2": {
+				"0x7380": "Melon Babe Walking"
+			}
+		}
+	},
+	"Properties": {
+	}
+	
+}

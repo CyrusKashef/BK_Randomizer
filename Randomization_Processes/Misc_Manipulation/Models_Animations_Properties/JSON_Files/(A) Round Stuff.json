@@ -1,0 +1,23 @@
+{
+	"Models": {
+		"Round 1": {
+	        "Shuffle": {
+				"0x7A10": "Pumpkin_BK",
+				"0x8208": "Roysten",
+				"0x8308": "Acorn"
+			}
+		},
+		"Round 2": {
+	        "Shuffle": {
+				"0x7920": "Yum-Yum",
+				"0x7DF8": "Shrapnel",
+				"0x8610": "Bawl"
+			}
+		}
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

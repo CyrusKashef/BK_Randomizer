@@ -1,0 +1,49 @@
+{
+	"Models": {
+	    "Insect_Thin": {
+	        "Swap1": {
+	            "0x7E00": "Buzzbomb"
+	        },
+	        "Swap2": {
+	            "0x80C8": "Zubba"
+	        }
+	    }
+	},
+	"Animations": {
+	    "Buzzbomb Zubba Swap1": {
+	        "Swap1": {
+	            "0x6660": "Buzzbomb Flying"
+	        },
+	        "Swap2": {
+	            "0x6A18": "Zubba Flying"
+	        }
+	    },
+	    "Buzzbomb Zubba Swap2": {
+	        "Swap1": {
+	            "0x6710": "Buzzbomb Charging"
+	        },
+	        "Swap2": {
+	            "0x6A10": "Zubba Flying Moving"
+	        }
+	    },
+	    "Buzzbomb Zubba Swap3": {
+	        "Swap1": {
+	            "0x6718": "Buzzbomb Falling From Sky"
+	        },
+	        "Swap2": {
+	            "0x6A20": "Zubba Falling"
+	        }
+	    },
+	    "Buzzbomb Zubba Swap4": {
+	        "Swap1": {
+	            "0x6720": "Buzzbomb Dying"
+	        },
+	        "Swap2": {
+	            "0x6A28": "Zubba Landing"
+	        }
+	    }
+	},
+	"Properties": {
+	}
+	
+}

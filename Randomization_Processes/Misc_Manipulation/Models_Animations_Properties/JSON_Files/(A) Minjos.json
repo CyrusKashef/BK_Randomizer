@@ -1,0 +1,65 @@
+{
+	"Models": {
+	    "Minjos": {
+	        "Original": {
+	            "0x7CC0": "Grublin",
+	            "0x8380": "Seaman Grublin",
+	            "0x84D0": "Mum-Mum",
+	            "0x84F8": "Limbo",
+	            "0x87F8": "Grublin-Hood"
+	        },
+	        "Replacements": {
+	            "0x7C70": "Yellow Jinjo",
+	            "0x7C78": "Orange Jinjo",
+	            "0x7C98": "Blue Jinjo",
+	            "0x7CA0": "Purple Jinjo",
+	            "0x7CA8": "Green Jinjo"
+	        }
+	    }
+	},
+	"Animations": {
+		"Grublin Idle": {
+			"Original": {
+				"0x61A8": "Grublin Idle"
+			},
+			"Replacements": {
+				"0x6000": "Jinjo Idle"
+			}
+		},
+		"Seaman Grublin Idle": {
+			"Original": {
+				"0x6258": "Snacker Swimming"
+			},
+			"Replacements": {
+				"0x6000": "Jinjo Idle"
+			}
+		},
+		"Mum-Mum Idle": {
+			"Original": {
+				"0x6258": "Snacker Swimming"
+			},
+			"Replacements": {
+				"0x6000": "Jinjo Idle"
+			}
+		},
+		"Limbo Idle": {
+			"Original": {
+				"0x6258": "Snacker Swimming"
+			},
+			"Replacements": {
+				"0x6000": "Jinjo Idle"
+			}
+		},
+		"Grublin-Hood Idle": {
+			"Original": {
+				"0x70B0": "Grublin-Hood Idle"
+			},
+			"Replacements": {
+				"0x6000": "Jinjo Idle"
+			}
+		}
+	},
+	"Properties": {
+	}
+	
+}

@@ -1,0 +1,16 @@
+{
+	"Models": {
+	    "Frog": {
+	        "Shuffle": {
+	            "0x79E0": "Concert_Frog",
+	            "0x7A40": "Red_Flibbit",
+	            "0x7AC0": "Yellow_Flibbit"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

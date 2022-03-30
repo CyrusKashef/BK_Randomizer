@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Crocodile": {
+	        "Swap1": {
+	            "0x7A30": "Mr_Vile"
+	        },
+	        "Swap2": {
+	            "0x7A38": "Crocodile_BK"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

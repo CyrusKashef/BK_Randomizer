@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Winkybunion": {
+	        "Swap1": {
+	            "0x8860": "Brentilda"
+	        },
+	        "Swap2": {
+	            "0x8120": "Gruntilda"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

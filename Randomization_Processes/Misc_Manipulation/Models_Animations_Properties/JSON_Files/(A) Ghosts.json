@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Ghost": {
+	        "Swap1": {
+	    		"0x7CF0": "Tee-Hee"
+	    	},
+	    	"Swap2": {
+	    		"0x89B8": "Purple_Tee-Hee"
+	    	}
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

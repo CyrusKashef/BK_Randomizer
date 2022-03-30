@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Walrus": {
+	        "Swap1": {
+	            "0x7960": "Walrus_BK"
+	        },
+	        "Swap2": {
+	            "0x8338": "Wozza"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

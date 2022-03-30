@@ -1,0 +1,102 @@
+{
+	"Models": {
+	},
+	"Animations": {
+	},
+	"Properties": {
+		"Beehive": {
+			"Original": {
+	            "005000120364": "Beehive"
+		    },
+	        "Selection": {
+	            "0050": "Beehive",
+	        	"0054": "Random Honeycomb"
+	        }
+	    },
+		"Basic": {
+			"Original": {
+	        	"000400050350": "Ticker",
+	        	"0005000603C5": "Grublin",
+	    		"002901CC0430": "Chompa",
+		    	"007500A503ED": "Buzzbomb (Cutscene)",
+		    	"007D00AD03CA": "Nibbly (Cutscene)",
+	    		"00AD01200376": "Slappa",
+	            "00C101330375": "Red Flibbit",
+	    		"00C2013403ED": "Buzzbomb",
+	    		"0127016303CA": "Nibbly",
+	            "01E20375052C": "Grublin Hood",
+		    	"01EA0367054A": "Gruntling (Red)",
+		    	"029503BF0561": "Gruntling (Blue)",
+	            "021A0350049D": "Seaman Grublin",
+	            "02530380051B": "Scabby",
+	            "025403810521": "Portrait Chompa"
+	        },
+	        "Selection": {
+	            "0014": "Snacker",
+	    		"0096": "Ripper",
+	    		"00AD": "Slappa",
+	        	"00C5": "Yellow Flibbit",
+	        	"00DB": "Gold Chest",
+	            "0135": "Quarrie",
+	            "0129": "Training Topper",
+	            "012A": "Training Bawl",
+	            "0225": "Big Yellow Cobweb",
+	            "0250": "Ice Cube (Large)",
+	            "0254": "Portrait Chompa",
+	            "025F": "Ice Cube (Small)"
+	        }
+		},
+		"Hard": {
+			"Original": {
+	        	"000300040353": "Bigbutt",
+	    		"001300670358": "Snippet",
+	    		"0014006803B0": "Snacker",
+	    		"0065005603EC": "Shrapnel",
+	    		"009600C703C9": "Ripper",
+	            "009900CA03CB": "Tee-hee",
+	            "00C501370385": "Yellow Flibbit",
+	    		"00C9013B0401": "Flotsam",
+	            "014602FD03B0": "Snacker (Cutscene)",
+	    		"01B2029F0482": "Clucker",
+	    		"01B702A4048C": "TNT 1",
+	    		"01B7030D048C": "TNT 2",
+		    	"01F103C00562": "Gruntling (Black)",
+	            "0218034E04CC": "Limbo",
+	            "0219034F04C7": "Mum-mum",
+	            "0250037D0504": "Ice Cube (Large)",
+	    		"025F03A00504": "Ice Cube (Small)"
+	        },
+	        "Selection": {
+	        	"0003": "Bigbutt",
+	        	"0013": "Snippet",
+	        	"00DD": "Black Snippet",
+	            "0065": "Shrapnel",
+	            "00B2": "Snowball",
+	            "0109": "Brick Wall",
+	            "01B2": "Clucker",
+	    		"01B7": "TNT 1",
+	            "01F1": "Black Gruntling",
+	            "0219": "Mum-mum"
+	        }
+		},
+		"Bosses": {
+			"Original": {
+	    		"001300F5038F": "Snippet (Mutie)",
+	    		"00DD00F20566": "Black Snippet",
+	            "01A102810428": "Kaboom 1",
+	            "01A202820428": "Kaboom 2",
+	            "01A302830428": "Kaboom 3",
+	            "01A402840428": "Kaboom 4",
+		    	"01AE029B0446": "Zubba (Neutral)",
+		    	"01AF029C0446": "Zubba (Attacking)"
+	        },
+	        "Selection": {
+	        	"0003": "Bigbutt",
+	        	"0007": "Conga",
+	            "00A5": "Nipper",
+	            "01B7": "TNT",
+	            "0099": "Tee-hee"
+	        }
+		}
+	}
+}

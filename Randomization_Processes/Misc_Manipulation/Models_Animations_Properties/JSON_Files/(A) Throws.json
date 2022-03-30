@@ -1,0 +1,25 @@
+{
+	"Models": {
+	},
+	"Animations": {
+	    "Hard Throw": {
+	        "Original": {
+	            "0x5FE8": "Kazooie Shooting Egg"
+	        },
+	        "Replacements": {
+	            "0x63A8": "Conga Hard Throwing"
+	        }
+	    },
+	    "Soft Throw": {
+	        "Original": {
+	            "0x5FF0": "Kazooie Pooping Egg"
+	        },
+	        "Replacements": {
+	            "0x6138": "Conga Soft Throwing"
+	        }
+	    }
+	},
+	"Properties": {
+	}
+	
+}

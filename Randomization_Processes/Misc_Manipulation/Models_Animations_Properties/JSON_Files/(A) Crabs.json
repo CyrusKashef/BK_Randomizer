@@ -1,0 +1,41 @@
+{
+	"Models": {
+	    "Crab_Main": {
+	        "Swap1": {
+	            "0x7958": "Regular_Snippet"
+	        },
+	        "Swap2": {
+	            "0x89C8": "Black_Snippet"
+	        }
+	    },
+	    "Crab_Pincer": {
+	        "Swap1": {
+	            "0x7AF8": "Regular_Snippet_Pincer"
+	        },
+	        "Swap2": {
+	            "0x89E0": "Black_Snippet_Pincer"
+	        }
+	    },
+	    "Crab_Leg": {
+	        "Swap1": {
+	            "0x7B00": "Regular_Snippet_Leg"
+	        },
+	        "Swap2": {
+	            "0x89D8": "Black_Snippet_Leg"
+	        }
+	    },
+	    "Crab_Head": {
+	        "Swap1": {
+	            "0x7B08": "Regular_Snippet_Head"
+	        },
+	        "Swap2": {
+	            "0x89D0": "Black_Snippet_Head"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

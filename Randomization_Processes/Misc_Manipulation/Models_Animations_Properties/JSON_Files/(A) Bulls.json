@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Bull": {
+	        "Swap1": {
+	            "0x7938": "Concert_Bull"
+	        },
+	        "Swap2": {
+	            "0x7930": "Bull"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

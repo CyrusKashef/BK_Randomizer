@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Swimmers": {
+	        "Swap1": {
+	            "0x79F0": "Chump"
+	        },
+	        "Swap2": {
+	            "0x7A28": "Gloop"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

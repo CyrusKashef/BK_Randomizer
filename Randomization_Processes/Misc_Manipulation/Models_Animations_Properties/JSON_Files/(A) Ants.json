@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Termite": {
+	        "Swap1": {
+	            "0x7910": "Termite_BK"
+	        },
+	        "Swap2": {
+	            "0x7918": "Ticker"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

@@ -1,0 +1,33 @@
+{
+	"Models": {
+	    "Insect_Round": {
+	        "Swap1": {
+	            "0x79A8": "Bee_BK"
+	        },
+	        "Swap2": {
+	            "0x8770": "Scabby"
+	        }
+	    }
+	},
+	"Animations": {
+		"Flying": {
+			"Swap1": {
+				"0x6D78": "Bee Banjo Flying"
+			},
+			"Swap2": {
+				"0x7068": "Scabby Fly"
+			}
+		},
+		"Dying": {
+			"Swap1": {
+				"0x6DA0": "Bee Banjo Dying"
+			},
+			"Swap2": {
+				"0x7080": "Scabby Fly Dying"
+			}
+		}
+	},
+	"Properties": {
+	}
+	
+}

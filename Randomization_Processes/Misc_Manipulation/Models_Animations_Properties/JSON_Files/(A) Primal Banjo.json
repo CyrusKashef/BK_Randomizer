@@ -1,0 +1,41 @@
+{
+	"Models": {
+	},
+	"Animations": {
+	    "Banjo Jumping": {
+	        "Original": {
+				"0x5ED8": "Banjo Jumping"
+	        },
+	        "Replacements": {
+				"0x6170": "Chimpy Hopping"
+	        }
+	    },
+	    "Banjo Roll Attack": {
+	        "Original": {
+				"0x6110": "Banjo Roll Attack"
+	        },
+	        "Replacements": {
+	        	"0x5EC0": "Banjo Punching"
+	        }
+	    },
+	    "Banjo Running": {
+	        "Original": {
+	            "0x5EF8": "Banjo Running"
+	        },
+	        "Replacements": {
+	            "0x6180": "Chimpy Walking"
+	        }
+	    },
+	    "Banjo Walking": {
+	        "Original": {
+	            "0x5EB0": "Banjo Walking"
+	        },
+	        "Replacements": {
+	            "0x6180": "Chimpy Walking"
+	        }
+	    }
+	},
+	"Properties": {
+	}
+	
+}

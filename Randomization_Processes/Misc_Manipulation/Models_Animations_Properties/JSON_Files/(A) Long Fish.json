@@ -1,0 +1,25 @@
+{
+	"Models": {
+	    "Swimmers": {
+	        "Swap1": {
+	    		"0x7C18": "Snacker"
+	        },
+	        "Swap2": {
+	    		"0x7F78": "Snorkel"
+	        }
+	    }
+	},
+	"Animations": {
+		"Swimming": {
+			"Swap1": {
+				"0x6258": "Snacker Swimming"
+			},
+			"Swap2": {
+				"0x6888": "Snorkel Swimming"
+			}
+		}
+	},
+	"Properties": {
+	}
+	
+}

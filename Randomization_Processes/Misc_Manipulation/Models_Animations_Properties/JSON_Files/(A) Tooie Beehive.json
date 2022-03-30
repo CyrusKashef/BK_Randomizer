@@ -1,0 +1,33 @@
+{
+	"Models": {
+	    "Tooie Attacking Beehive": {
+	    	"Original": {
+	    		"0x7CE0": "Ripper"
+	    	},
+	    	"Replacements": {
+	    		"0x79B8": "Beehive"
+	    	}
+	    }
+	},
+	"Animations": {
+	    "Idle": {
+	    	"Original": {
+	    		"0x6368": "Ripper Idle"
+	    	},
+	    	"Replacements": {
+	    		"0x69C0": "Beehive Idle"
+	    	}
+	    },
+	    "Dying": {
+	    	"Original": {
+	    		"0x6E08": "Ripper Dying"
+	    	},
+	    	"Replacements": {
+	    		"0x61C0": "Beehive Dying"
+	    	}
+	    }
+	},
+	"Properties": {
+	}
+	
+}

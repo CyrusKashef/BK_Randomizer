@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Bee": {
+	        "Swap1": {
+	            "0x8388": "Regular_Bees"
+	        },
+	        "Swap2": {
+	            "0x8390": "Glowing_Bees"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}
