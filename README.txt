@@ -45,6 +45,10 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Miscellaneous Features: None of these affect gameplay, but may prove useful.
 
 # Feature Details
+
+If you don't feel like reading all of this, I made a video a while back, though I need to update it:
+https://www.youtube.com/watch?v=eIVAZJl08N4
+
 ### Overall Buttons
 * Load Config: Reads a JSON file to configure the settings automatically.
 * Save Config: Writes a JSON file for future use. See LOAD CONFIG.
@@ -73,8 +77,9 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Door Of Grunty Only: All worlds will automatically open, and the value for the Door Of Grunty can be set on the side (from 0 to 99). A value can be chosen at random by pressing the Jiggy button.
 * Free Transformations: All Mumbo transformations won't cost you a single Mumbo Token.
 * One Health Only: You will only have one health the entire game, no matter how many Empty Honeycombs you pick up. Good luck not getting hit or falling!
+* Remove Floating Jiggies: Any non-spawning Jiggy gets removed from the game, limiting the number of Jiggies to 56 (the randomizer will only allow 55 to allow double health).
 ##### Notes, Blue Eggs, Red Feathers, & Gold Feathers
-* Randomize: Based on the number of notes needed to complete the game, the odds of a note appearing will be adjusted.
+* Randomize: Based on the number of notes needed to complete the game, the odds of a note appearing will be adjusted. Adds another dropdown to have the exact number of notes or have 1.1 times more than required.
 * All Notes: All eggs and feathers become notes. Brentildas are replaced with egg and feather refills. The refill at that Brentilda location is random.
 * Scaling Note Doors: Depending on how many notes you set the 810 Note Door Value to, the number of notes needed per proceeding door will be increased/decreased accordingly.
 * Final Note Door Only: Removes all note doors proceeding the 810 Note Door, and sets the value of the 810 Note Door to the desired value. A random value can be chosen by clicking the Note button.
@@ -91,6 +96,7 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * None: Skips the setting.
 * Basic Shuffle: Simplified shuffling to guarantee a solution. Mumbo's Mountain is always the first level, with the moves Talon Trot, Shock Jump Pad, and Beak Buster. All other world and moves are random.
 * Bottles Shuffle: More complicated shuffle. Worlds are placed in a logical order so that the previous worlds will give the needed moves to progress the game. Logic might not work if worlds are skipped. Bottles mounds are shuffled with Jinjos, Extra Lives, and Miscellaneous Object locations to promote more exploration.
+* You can now select whether BK Warp pads send you to the entrance you entered from or the entrance the world normally has, affecting the warp logic.
 * Start Game With All Moves: You start the game with all of the moves, though you won't be given Eggs and Feathers to start with.
 * Note: Some jump pads and flight pads are always active. This was not a randomizer feature; these pads are always active in the base game as well.
 ##### Within World Warps
@@ -125,16 +131,17 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Shuffle Skyboxes: Shuffles the skies and the clouds of the levels.
 * Shuffle Talking Sprites: Shuffles the head sprites used in conversations.
 
-### Customizable
+### MAP Config
 
 ##### Models, Animations, & Properties
-* Select a preset to change how the game is played.
-* When clicking on a preset, a short description will appear below.
+* Select a checkbox to swap aesthetics (A) or death properties (P)
+* Aesthetic changes mean model and animation swapping
+* Death properties change the user interacts with the object and how that object interacts when BK makes contact. Example: What an enemy is weak to, how many honeycombs the enemy drops upon dying, what the enemy is weak to, etc.
 
 ##### How To Edit The JSON Files
-* Go to the directory leading to "BK_Rando_v2.0\Randomization_Processes\Misc_Manipulation\Models_Animations_Properties\".
-* The JSON is broken into 4 sections: Description, Model, Animation, Properties.
-* Each section has 4 subsections. The names of the subsections don't matter, but they must be distinct from the other subsections.
+* Go to the directory leading to "BK_Rando_v2.0\Randomization_Processes\Misc_Manipulation\Models_Animations_Properties\JSON_Files\".
+* The JSON is broken into 3 sections: Model, Animation, Properties.
+* Each section has subsections. The names of the subsections don't matter, but they must be distinct from the other subsections.
 * Each subsection may have different types:
   - Original/Replacements: Each original will be randomly replaced with a replacement. For models and animations, replacements must be the same size or smaller than the original and each replacement will only be used once. For properties, any number of original/replacement files are allowed and each property can be used more than once.
   - Swap: Swap1 will swap into Swap2, Swap2=>Swap3... Last Swap#=>Swap1.
@@ -221,7 +228,7 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * ROM file must be a Banjo-Kazooie ROM v1.0 NTSC (.z64). Other formats are currently not supported. Randomizer may work on top of other BK mods, but not guaranteed.
 * All numbers must be positive integers, including seeds.
 * Python Files, Folders, and GZIP.EXE must be in their original locations with the BK ROM in the main folder.
-* **While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3. Link to the BK Rando Discord server at the bottom**
+* **While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3. Link to the BK Rando Discord server at the top**
 
 ### Potential Softlocks
 * When turning on the 'Potential Softlock' features, the game may be put into a state where a collectable cannot be reached or the game cannot be progressed without resetting.
