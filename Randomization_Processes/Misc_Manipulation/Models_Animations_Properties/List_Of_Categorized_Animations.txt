@@ -1,97 +1,201 @@
 {
-	"Just Banjo": {
-		"0x5EA0": "Banjo Ducking",
-		"0x5EA8": "Banjo Walking (Slow)",
+	"Banjo-Kazooie": {
+		"0x5EE0": "BK Dying",
+		"0x5F08": "BK Skidding", # Quickly turning around animation
+		"0x5F10": "BK Collision Backflip (Bounce Off Enemy No Damage)",
+		"0x6008": "BK Jiggy Jig",
+		"0x6018": "BK Gripped Jiggy Jig (Main)", # Jiggy Jig Without Feet Used?
+		"0x6210": "BK Idle (Looking Around And Kazooie Popping Out)",
+		"0x6248": "BK Gripped Jiggy Jig (Start)",
+		"0x6250": "BK Lose Minigame",
+		"0x6340": "BK Idle (Kazooie Taunting Banjo)",
+		"0x6418": "BK Falling (Safe Height)",
+		"0x6528": "BK Getting Up After Falling",
+		"0x6648": "BK Idle (Banjo Punishing Kazooie)",
+		"0x68E8": "BK Listening",
+		"0x6B70": "BK Transforming",
+		"0x72A8": "BK Unlocking Note Door"
+	},
+	"Banjo": {
+		"0x5EA8": "Banjo Sneak",
 		"0x5EB0": "Banjo Walking",
 		"0x5EC0": "Banjo Punching",
 		"0x5ED8": "Banjo Jumping",
-		"0x5EE0": "Banjo Dying",
-		"0x5EE8": "Banjo Climbing",
+		"0x5EE8": "Banjo Climbing (Going Up)",
+		"0x5EF0": "Banjo Sneaking W/ Kazooie Out (Unused)", # Put In Hack 64
 		"0x5EF8": "Banjo Running",
-		"0x5F08": "Banjo Skidding",
-		"0x5F10": "Banjo Damaged",
-		"0x6060": "Banjo Swimming (Surface)",
-		"0x6078": "Banjo Diving",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": ""
-	},
-	"Banjo-Kazooie": {
-		"0x5ED0": "Kazooie Leaving Talon Trot",
-		"0x5F20": "Banjo Running (Wonderwing)",
-		"0x5F40": "Kazooie Walking (Talon Trot)",
-		"0x5F48": "Kazooie Entering Talon Trot",
-		"0x5F50": "Kazooie Flutter",
-		"0x5F58": "Kazooie Feathery Flap",
-		"0x5F60": "Kazooie Rat-A-Tat Rap (Loop)",
-		"0x5F68": "Kazooie Rat-A-Tat Rap (Start)",
-		"0x5F70": "Banjo Jumping (Wonderwing)",
-		"0x5F78": "Kazooie Beak Barge",
-		"0x5F80": "Kazooie Beak Buster",
-		"0x5FA8": "Banjo Entering Wonderwing",
-		"0x5FB0": "Banjo (Wonderwing)",
-		"0x5FC8": "Kazooie (Talon Trot)",
-		"0x5FD0": "Kazooie Jumping (Talon Trot)",
-		"0x5FE8": "Kazooie Shooting Egg",
-		"0x5FF0": "Kazooie Pooping Egg",
-		"0x6008": "Banjo Jiggy Jig",
-		"0x6018": "Gripped Jiggy Jig",
-		"0x6058": "Banjo Flying",
-		"0x6080": "Banjo Shock Spring",
-		"0x6088": "Banjo Fly Crash",
-		"0x6090": "Kazooie Swimming (Underwater)",
-		"0x6098": "Kazooie Wading Boots (Start)",
-		"0x60A0": "Kazooie Wading Boots",
-		"0x60A8": "Kazooie Wading Boots Walking",
-		"0x60B0": "Kazooie Starting Beakbomb",
-		"0x60B8": "Kazooie Turbo Trainers",
-		"0x60C0": "Kazooie Taking Flight",
-		"0x60D0": "Kazooie Beak Bomb",
-		"0x60D8": "Kazooie Shock Spring Start",
-		"0x60E0": "Kazooie Shock Sprint Jump",
-		"0x60F0": "Banjo Backflip",
-		"0x60F8": "Banjo Backflip Transition",
 		"0x6100": "Banjo Hurt",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": ""
+		"0x6110": "Banjo Roll Attack",
+		"0x6160": "Banjo Sliding (On Butt)",
+		"0x6168": "Banjo Sliding (On Belly)",
+		"0x6CD0": "Banjo Sleeping",
+		"0x6CD8": "Banjo Waking Up",
+		"0x61D8": "Banjo Falling (Unsafe Height)",
+		"0x61E0": "Banjo Riding Tumblar",
+		"0x6228": "Banjo Holding Item (Idle)",
+		"0x6230": "Banjo Holding Item (Walking)",
+		"0x6420": "Banjo Climbing (Idle Looking Around)",
+		"0x6428": "Banjo Climbing (Idle Frozen?)",
+		"0x6770": "Banjo Throwing Item",
+		"0x68E0": "Banjo Landing (Damaging)",
+	},
+	"BK Cutscene": {
+		"0x6268": "Banjo Concert Angry",
+		"0x6270": "Banjo Concert Play",
+		"0x6278": "Banjo Concert End",
+		"0x6288": "Banjo Concert Start",
+		"0x6990": "Concert Banjo Before Start (Keeps him off screen)",
+		"0x69D0": "Banjo/MoveVeryLittle (used in small cutscenes)",
+		"0x7330": "Banjo Drinking",
+		"0x7368": "Banjo Drunk",
+		"0x7370": "Kazooie Hits Banjo"
+	},
+	"BK Beak Barge": {
+		"0x5F78": "BK Beak Barge"
+	},
+	"BK Beak Bomb": {
+		"0x60B0": "BK Beak Bomb (Start Up)",
+		"0x60D0": "BK Beak Bomb (Charge Attack)",
+		"0x6530": "BK Beak Bomb (Collision With Wall)",
+		"0x6700": "BK Beak Bomb (After Hitting Something You're Supposed To)"
+	},
+	"BK Beak Buster": {
+		"0x5F80": "BK Beak Buster"
+	},
+	"BK Ducking": {
+		"0x5EA0": "Banjo Ducking (Entering)",
+		"0x66F8": "Banjo Ducking (Turn Waddling)",
+		"0x6748": "Banjo Ducking (Idle)"
+	},
+	"BK Egg Firing": {
+		"0x5FE8": "BK Egg Firing (Forward)",
+		"0x5FF0": "BK Egg Firing (Backward)",
+	},
+	"BK Feather Flap": {
+		"0x5F50": "BK Feathery Flap (Loop)",
+		"0x5F58": "BK Feathery Flap (Start)",
+	},
+	"BK Flight": {
+		"0x6058": "BK Flight",
+		"0x6088": "BK Flight (Collision Tumble)",
+		"0x60C0": "BK Flight (Take Off)",
+	},
+	"BK Flip Flap": {
+		"0x60F0": "BK Flip Flap (Action)",
+		"0x60F8": "BK Flip Flap (Transition To Parachute)",
+		"0x61A0": "BK Flip Flap (Kazooie Returns To Backpack)",
+		"0x64F8": "BK Flap Flip (Parachute Down)"
+	},
+	"BK Game Select": {
+		"0x70E8": "Banjo Game Select (Cooking Idle)",
+		"0x70F0": "Banjo Game Select (Cooking Selected)",
+		"0x70F8": "Banjo Game Select (Cooking Flip)",
+		"0x7100": "Banjo Game Select (Sleeping Idle)",
+		"0x7108": "Banjo Game Select (Sleeping Selected)",
+		"0x7110": "Banjo Game Select (Sleeping Springpad)",
+		"0x7118": "Banjo Game Select (Playing Idle)",
+		"0x7120": "Banjo Game Select (Playing Selected)",
+		"0x7128": "Banjo Game Select (Playing Springpad)"
+	},
+	"BK Rat-a-Tap Rap": {
+		"0x5F60": "BK Rat-A-Tat Rap (Loop)",
+		"0x5F68": "BK Rat-A-Tat Rap (Start)",
+	},
+	"BK Talon Trot": {
+		"0x5ED0": "BK Talon Trot (Leaving)",
+		"0x5F40": "BK Talon Trot (Walking)",
+		"0x5F48": "BK Talon Trot (Entering)",
+		"0x5FC8": "BK Talon Trot (Idle)",
+		"0x5FD0": "BK Talon Trot (Jumping)",
+		"0x61C8": "BK Talon Trot (Damaged)"
+	},
+	"BK Turbo Talon Trot": {
+		"0x60B8": "BK Turbo Tralon Trot (Running)"
+	},
+	"BK Shock Jump": {
+		"0x6080": "BK Shock Jump (?)",
+		"0x60D8": "BK Shock Jump (Start And Cancel)",
+		"0x60E0": "BK Shock Jump (?)",
+	},
+	"BK Stilt Stride": {
+		"0x6098": "BK Stilt Stride (Entering)",
+		"0x60A0": "BK Stilt Stride (Idle)",
+		"0x60A8": "BK Stilt Stride (Walking)",
+	},
+	"BK Swimming": {
+		"0x6060": "Banjo Swimming (Surface)",
+		"0x6078": "BK Swimming (Diving Underwater)",
+		"0x6090": "BK Swimming (Underwater Kazooie Swim)",
+		"0x6150": "Banjo Swimming (Surface Idle Slow)",
+		"0x6158": "Banjo Swimming (Surface Idle Fast)",
+		"0x6218": "BK Swimming (Underwater Idle)",
+		"0x6220": "BK Swimming (Underwater Banjo Swim)",
+		"0x6460": "BK Drowning"
+	},
+	"BK Wonderwing": {
+		"0x5F20": "BK Wonderwing (Running)",
+		"0x5F70": "BK Wonderwing (Jumping)",
+		"0x5FA8": "BK Wonderwing (Entering)",
+		"0x5FB0": "BK Wonderwing (Idle)"
+	},
+	### TRANSFORMATIONS ###
+	"Banjo Bee": {
+		"0x6D78": "Bee Banjo Flying",
+		"0x6D80": "Bee Banjo Walking",
+		"0x6D88": "Bee Banjo Idle",
+		"0x6D90": "Bee Banjo Tiny Hop",
+		"0x6D98": "Bee Banjo Hurt",
+		"0x6DA0": "Bee Banjo Dying",
+		"0x6DA8": "Bee Banjo Big Jump"
+	},
+	"Banjo Crocodile": {
+		"0x6598": "Crocodile Banjo Walking",
+		"0x65A0": "Crocodile Banjo Idle",
+		"0x6778": "Crocodile Banjo Jumping",
+		"0x6780": "Crocodile Banjo Hurt",
+		"0x6788": "Crocodile Banjo Dying",
+		"0x67A8": "Crocodile Banjo Biting",
+		"0x67B0": "Crocodile Banjo Grossed Out"
 	},
 	"Banjo Termite": {
 		"0x5FD8": "Banjo Termite Hurt",
 		"0x5FE0": "Banjo Termite Dying",
-		"": "",
-		"": "",
-		"": ""
+		"0x6198": "Banjo Termite Jumping"
+	},
+	"Banjo Pumpkin": {
+		"0x6398": "Pumpkin Banjo, Walking, Bouncing",
+		"0x63A0": "Pumpkin Banjo Jumping",
+		"0x6AD8": "Pumpkin Banjo Dying",
+		"0x7048": "Pumpkin Banjo Hurt"
+	},
+	"Banjo Walrus": {
+		"0x6790": "Walrus Banjo",
+		"0x6798": "Walrus Banjo Hopping",
+		"0x67A0": "Walrus Banjo Jumping",
+		"0x6B78": "Walrus Banjo Hurt",
+		"0x6B80": "Walrus Banjo Dying",
+		"0x6B88": "Walrus Banjo On Sled",
+		"0x6B90": "Walrus Banjo Before Lose Race",
+		"0x6BE0": "Banjo Walrus Lost Race
+	},
+	"Banjo Wishy Washy": {
+		"0x72A0": "Wishy-Washy-Banjo 'Doooohh…'"
+	},
+	##### OBJECTS #####
+	"Anchor": {
+		"0x68A0": "Anchor On Snorkel",
+		"0x68A8": "Anchor Rising"
+	},
+	"Ancient Ones": {
+		"0x6600": "Ancient Ones Leave (And appear?)"
+	},
+	"Bawl": {
+		"0x6FC8": "Bawl",
+		"0x6FD0": "Bawl Dying"
+	},
+	"Beehive": {
+		"0x61C0": "Beehive Dying",
+		"0x69C0": "Beehive"
 	},
 	"Bigbutt": {
 		"0x5F18": "Bigbutt Charging",
@@ -101,76 +205,779 @@
 		"0x6038": "Bigbutt Kill",
 		"0x6040": "Bigbutt Alerted",
 		"0x6048": "Bigbutt Walking",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": ""
+		"0x7130": "Big Butt Hit",
+		"0x7138": "Big Butt Fall",
+		"0x7140": "Big Butt Get Up"
+	},
+	"Bikini Girl": {
+		"0x7380": "Melon Babe Walking"
+	},
+	"Blubber": {
+		"0x6440": "Blubber Walking",
+		"0x6448": "Blubber Crying",
+		"0x6450": "Blubber Dancing",
+		"0x6458": "Blubber Running",
+		"0x7388": "Blubber On Jetski",
+		"0x7390": "Blubber Cheering on JetSki",
+	},
+	"Boggy": {
+		"0x68F8": "Boggy",
+		"0x6900": "Boggy Hit",
+		"0x6908": "Boggy Laying Down",
+		"0x6910": "Boggy Running",
+		"0x6918": "Boggy On Sled",
+		"0x6A60": "Boggy Signaling (Speed up slowpoke!)",
+		"0x6A68": "Boggy Lookingback (On sled)",
+		"0x6A80": "Spawn of Boggy Happy",
+		"0x6A88": "Spawn of Boggy Sad",
+		"0x6BE8": "Boggy Won Race",
+		"0x6BF0": "Boggy Lost Race",
+		"0x6FA8": "Boggy Sleeping"
+	},
+	"Boss Boombox": {
+		"0x68C8": "Boss Boombox Appearing",
+		"0x68D0": "Boombox Hopping",
+		"0x68D8": "Boombox Exploding"
+	},
+	"Bottles": {
+		"0x6860": "Bottles Disappearing",
+		"0x6868": "Bottles Appearing",
+		"0x6870": "Bottles Scratching",
+		"0x6878": "Bottles' Molehill", # Dupe?
+		"0x6880": "Bottles' Molehill", # Dupe?
+		"0x6E58": "Bottles PointAtGrunty",
+		"0x7348": "Bottles Eating Corn",
+		"0x7360": "Bottles Falling Off Chair",
+		"0x7428": "Bottles Eating watermelon"
+	},
+	"Brentilda": {
+		"0x71F0": "Brentilda",
+		"0x71F8": "Brentilda Hands on Hips"
+	},
+	"Buzzbomb": {
+		"0x6660": "Buzzbomb Flying",
+		"0x6708": "Buzzbomb Prepare Charge",
+		"0x6710": "Buzzbomb Charging",
+		"0x6718": "Buzzbomb Falling From Sky",
+		"0x6720": "Buzzbomb Dying",
+		"0x69B0": "Cutscene Buzzbomb Smack"
+	},
+	"Carpet": {
+		"0x64E0": "Carpet", # Dupe?
+		"0x6620": "Carpet" # Dupe?
+	},
+	"Cauldron": {
+		"0x6F28": "Cauldron Activating",
+		"0x6F30": "Cauldron Sleeping",
+		"0x6F38": "Cauldron Activated",
+		"0x6F40": "Cauldron Teleporting",
+		"0x6F48": "Cauldron Rejected"
+	},
+	"Cheato": {
+		"0x7228": "Cheato"
+	},
+	"Chimpy": {
+		"0x6170": "Chimpy Hopping",
+		"0x6178": "Chimpy",
+		"0x6180": "Chimpy Walking"
+	},
+	"Chompa": {
+		"0x6430": "Chompa",
+		"0x6438": "Chompa Chomping",
+		"0x6968": "Grille Chompa Attack",
+		"0x6970": "Grille Chompa Dying"
+	},
+	"Chompa (Portrait)": {
+		"0x7088": "Portrait Chompa (Picture Monster)",
+	},
+	"Chump": {
+		"0x7498": "Piranha Dying"
+	},
+	"Clanker": {
+		"0x64B0": "Clanker",
+		"0x64B8": "Clanker Mouth Open"
+	},
+	"Clucker": {
+		"0x6AB8": "Big Clucker Attacking (Short)",
+		"0x6AC0": "Big Clucker Attacking (Long)",
+		"0x6AC8": "Big Clucker Dying"
+	},
+	"Colliwobble": {
+		"0x6FC0": "Colliwobble"
+	},
+	"Conga": {
+		"0x6120": "Conga",
+		"0x6128": "Conga Hurt",
+		"0x6130": "Conga Defeated",
+		"0x6138": "Conga Throwing (Soft)",
+		"0x6140": "Conga Beating Chest",
+		"0x6148": "Conga Raising Arms",
+		"0x63A8": "Conga Throwing (Hard)"
+	},
+	"Croctus": {
+		"0x68F0": "Croctus"
+	},
+	"Dingpot": {
+		"0x6EC0": "Dingpot wap",
+		"0x6EC8": "Dingpot",
+		"0x7310": "Dingpot",
+		"0x7318": "Dingpot Shooting"
+	},
+	"Eyrie": {
+		"0x6B08": "Spring Eyrie Yawn To Sleep",
+		"0x6B18": "Spring Eyrie Baby Sleeping",
+		"0x6B20": "Summer Eyrie Waiting For Food",
+		"0x6B28": "Summer Eyrie Finished Eating To Grow",
+		"0x6B30": "Summer Eyrie Yawn Fall To Ground",
+		"0x6B38": "Summer Eyrie Sleeping",
+		"0x6B40": "Fall Eyrie Waiting For Food",
+		"0x6B48": "Fall Eyrie Finished Eating To Grow",
+		"0x6B50": "Fall Eyrie Yawn Fall To Ground",
+		"0x6B58": "Fall Eyrie Sleeping",
+		"0x6B60": "Winter Eyrie Tweet-Tweet",
+		"0x6B68": "Winter Eyire Tweet To Flying",
+		"0x6F68": "Eyrie Eating (Summer)",
+		"0x6F70": "Eyrie Eating (Autumn)",
+		"0x6F80": "Eyrie Flying",
+		"0x6F88": "Eyrie Pooping Jiggy"
+	},
+	"Flibbit": {
+		"0x6570": "Flibbit Hopping",
+		"0x6668": "Flibbit",
+		"0x6670": "Flibbit Turning",
+		"0x6728": "Flibbit Dying (Start)",
+		"0x6730": "Flibbit Dying (Finish)",
+		"0x72D8": "Flibbit Hurt"
+	},
+	"Flotsam": {
+		"0x6828": "Floatsam Bouncing",
+		"0x6AE0": "Floatsam Dying"
+	},
+	"Flower": {
+		"0x6A30": "Flower Sprouting (Spring)",
+		"0x6A38": "Flower Sprouting (Summer)",
+		"0x6A40": "Flower Sprouting (Autumn)",
+		"0x6AA0": "Flower (Spring)",
+		"0x6AA8": "Flower (Summer)",
+		"0x6AB0": "Flower (Fall)"
+	},
+	"Gloop": {
+		"0x64E8": "Gloop Swimming",
+		"0x64F0": "Gloop Blowing Bubble"
+	},
+	"Gnawty": {
+		"0x6BC8": "Gnawty",
+		"0x6BD0": "Gnawty Happy",
+		"0x6BD8": "Gnawty Walking",
+		"0x72E0": "Gnawty Swimming"
+	},
+	"Grabba": {
+		"0x64C0": "Grabba Appearing",
+		"0x64C8": "Grabba Hiding",
+		"0x64D0": "Grabba",
+		"0x64D8": "Grabba Defeated"
+	},
+	"Grabba Shadow": {
+		"0x65C0": "Grabba Shadow Spawning",
+		"0x65C8": "Grabba Shadow",
+		"0x65D0": "Grabba Shadow Hiding",
+		"0x65D8": "Grabba Shadow Defeated"
+	},
+	"Grimlet": {
+		"0x6850": "Grimlet Attacking"
+	},
+	"Grublin": {
+		"0x61A8": "Grublin",
+		"0x61B0": "Grublin Sneaking",
+		"0x61B8": "Grublin Jumping",
+		"0x6338": "Grublin Dying",
+		"0x6D48": "Grublin Walking",
+		"0x6D50": "Grublin Alerted",
+		"0x6D58": "Grublin Chasing",
+		"0x6D60": "Grublin Dying"
+	},
+	"Grublin-Hood": {
+		"0x70B0": "Grublin-Hood",
+		"0x70B8": "Grublin-Hood Alerted",
+		"0x70C0": "Grublin-Hood Chasing",
+		"0x70C8": "Grublin-Hood Dying"
+	},
+	"Grumblie": {
+		"0x67D8": "Yellow Grumblie Spawning",
+		"0x67E0": "Yellow Grumblie Leaving",
+		"0x67E8": "Yellow Grumblie"
+	},
+	"Gruntilda": {
+		"0x6C60": "Grunty (Intro)",
+		"0x6C70": "Grunty Picking Nose",
+		"0x6C80": "Grunty Angry at Dingpot",
+		"0x6C88": "Grunty Throwing Booger",
+		"0x6C90": "Grunty Shocked To Confused",
+		"0x6C98": "Grunty Walking",
+		"0x6CC0": "Grunty Flying",
+		"0x6EB8": "Grunty Falling", # Dupe?
+		"0x6ED0": "Grunty Crammed in Machine",
+		"0x6EF0": "Grunty Falling",
+		"0x7158": "Grunty Hurt", # Dupe?
+		"0x7160": "Grunty Hurt", # Dupe?
+		"0x7168": "Grunty Fireball Spell", # Dupe?
+		"0x7170": "Nabnut Acorn Bouncing",
+		"0x7178": "Grunty Phase 1 Swooping",
+		"0x7180": "Grunty Entring Final Phase",
+		"0x7188": "Grunty Phase 1 Vulnerable",
+		"0x7190": "Grunty",
+		"0x7198": "Grunty Fireball Spell", # Dupe?
+		"0x71A0": "Grunty Green Spell",
+		"0x71B0": "Grunty Fall off Broom",
+		"0x7260": "Grunty JawDrop To Shiver",
+		"0x7268": "Grunty Hurt By Jinjonator",
+		"0x72B0": "Grunty Chattering Teeth",
+		"0x72F0": "Grunty", # Maybe furnace fun?
+		"0x7300": "Grunty Walking", # Maybe furnace fun?
+		"0x73F8": "Grunty Upset",
+		"0x7400": "Grunty Looking",
+		"0x74C0": "Grunty Preparing Charge"
+	},
+	"Gruntilda (Sexy)": {
+		"0x6E68": "Sexy Grunty Walking",
+		"0x6E70": "Sexy Grunty Checking Herself Out"
+	},
+	"Gruntling": {
+		"0x7200": "Gruntling",
+		"0x7208": "Gruntling Alerted",
+		"0x7210": "Gruntling Chasing",
+		"0x7218": "Gruntling Dying"
+	},
+	"Gobi": {
+		"0x6560": "Gobi",
+		"0x6568": "Gobi Pulling Back",
+		"0x6578": "Gobi's Rope Pulling",
+		"0x6580": "Gobi's Rope",
+		"0x6638": "Gobi Relaxing", # Dupe?
+		"0x6650": "Gobi Happy",
+		"0x6658": "Gobi Running",
+		"0x6678": "Gobi Giving Water",
+		"0x6680": "Gobi Getting Up",
+		"0x6A48": "Gobi Yawning",
+		"0x6A50": "Gobi Sleeping",
+		"0x70A8": "Gobi Relaxing" # Dupe?
+	},
+	"Histup": {
+		"0x6510": "Histup Raised",
+		"0x6518": "Histup Rising",
+		"0x65A8": "Histup Peeking
+	},
+	"Ice Cube": {
+		"0x7030": "Chinker"
 	},
 	"Jinjo": {
 		"0x6000": "Jinjo",
 		"0x6010": "Jinjo Help",
-		"6020": "Jinjo Hopping",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": ""
+		"0x6020": "Jinjo Hopping",
+		"0x6818": "Jinjo Circling (Start)",
+		"0x6820": "Jinjo Circling (End)",
+		"0x7378": "Yellow Jinjo Waving & Whistling",
+	},
+	"Jinjonator": {
+		"0x7240": "Jinjonator Activating",
+		"0x7248": "Jinjonator Charging",
+		"0x7258": "Jinjonator Recoil",
+		"0x7270": "Jinjonator? (spin spin spin, stop far way, shake)",
+		"0x7278": "Jinjonator Charging",
+		"0x7280": "Jinjonator Final Hit",
+		"0x7288": "Jinjonator Taking Flight",
+		"0x7290": "Jinjonator Circling",
+		"0x7298": "Jinjonator Attacking",
+	},
+	"Jinxy": {
+		"0x68B8": "Jinxy Sniffing",
+		"0x68C0": "Jinxy Sneezing"
+	},
+	"Jinxy (Mini)": {
+		"0x6618": "Mini-Jinxy Eating"
+	},
+	"Kazooie": {
+		"0x7468": "Kazooie Talking"
+	},
+	"Klungo": {
+		"0x6EA0": "Klungo Limping",
+		"0x6EA8": "Klungo Pushing Button",
+		"0x6F00": "Klungo Lever Down",
+		"0x6F10": "Klungo Laughing",
+		"0x7448": "Klungo Pushing Rock",
+		"0x7450": "Klungo Tired",
+	},
+	"Leaky": {
+		"0x7060": "Leaky Hop"
+	},
+	"Limbo": {
+		"0x6DB8": "Limbo",
+		"0x6DC0": "Limbo Alerted",
+		"0x6DC8": "Limbo Chasing",
+		"0x6DD0": "Limbo Breaking",
+		"0x6DD8": "Limbo Rising"
+	},
+	"Lockup": {
+		"0x6478": "Lockup"
+	},
+	"Lockup (Little Gold)": {
+		"0x6930": "Gold Chest Spawning",
+		"0x69C8": "Gold Chest Bouncing"
+	},
+	"Loggo": {
+		"0x7058": "Loggo Hop",
+		"0x7098": "Loggo Flush"
+	},
+	"MM Hut": {
+		"0x6108": "MM Hut Smashing",
+	},
+	"Mr. Vile": {
+		"0x67B8": "Mr. Vile Eating"
+	},
+	"Motzand": {
+		"0x63D0": "Motzhand",
+		"0x63D8": "Motzhand Playing"
+	},
+	"Mum-Mum": {
+		"0x6DE0": "Mum-Mum",
+		"0x6DE8": "Mum-Mum Curling",
+		"0x6DF0": "Mum-Mum Uncurling"
+	},
+	"Mumbo": {
+		"0x61E8": "Mumbo Sleeping",
+		"0x61F0": "Mumbo Waking",
+		"0x61F8": "Mumbo",
+		"0x6200": "Mumbo Transforming",
+		"0x6208": "Mumbo Unknown (0x6E)", # Check This?
+		"0x6260": "Mumbo Concert Playing Instrument",
+		"0x62A8": "Mumbo Concert Dance",
+		"0x6A08": "Mumbo Reclining",
+		"0x6A90": "Mumbo Sweeping",
+		"0x6A98": "Mumbo Rotating",
+		"0x7320": "Mumbo Flipping Food",
+		"0x7338": "Mumbo Screaming",
+		"0x7350": "Mumbo Skidding/Giving Flower",
+		"0x7410": "Mumbo Sliding Down Tree",
+		"0x7418": "Mumbo On Tree (Waving Pictures)",
+		"0x7420": "Mumbo Falling From Tree",
+		"0x7430": "Mumbo Hit By Coconuts",
+		"0x7438": "Mumbo Shake Head Sitting Down",
+		"0x7440": "Mumbo Jumping To Running",
+		"0x7470": "Mumbo Running After Melon Babe",
+		"0x7478": "Mumbo Talking"
+	},
+	"Nabnut": {
+		"0x6BA8": "Nabnut Sleeping",
+		"0x6BB0": "Nabnut",
+		"0x6BB8": "Nabnut Eating",
+		"0x6FF0": "Nabnut Fat",
+		"0x6FF8": "Nabnut Crying",
+		"0x7000": "Nabnut Happy",
+		"0x7008": "Nabnut",
+		"0x7010": "Nabnut Running",
+		"0x7018": "Mrs. Nanbut Sleeping",
+		"0x7020": "Nabnut's Bedsheets"
+	},
+	"Napper": {
+		"0x63B0": "Napper Sleeping",
+		"0x63B8": "Napper Looking Around",
+		"0x63C0": "Napper Waking",
+		"0x63C8": "Napper Alerted"
+	},
+	"Nibbly": {
+		"0x6380": "Nibbly Chasing",
+		"0x6400": "Nibbly Taking Flight",
+		"0x6408": "Nibbly",
+		"0x73E0": "Nibbly Falling",
+		"0x73E8": "Nibbly Dying"
+	},
+	"Nipper": {
+		"0x6480": "Nipper Vulnerable",
+		"0x6488": "Nipper Hurt",
+		"0x6490": "Nipper Attacking,
+		"0x6498": "Nipper",
+		"0x6830": "Nipper Dying"
+	},
+	"Nintendo Logo": {
+		"0x6310": "Nintendo Logo Walking",
+		"0x6318": "Nintendo Logo Shrugging"
+	},
+	"Pot?": {
+		"0x63E0": "Pot"
+	},
+	"Present": {
+		"0x6AE8": "Present"
+	},
+	"Race Flag": {
+		"0x6920": "Race Flag Hit",
+		"0x6928": "Race Flag"
+	},
+	"Rareware Logo": {
+		"0x62F8": "Rareware Logo Falling"
+	},
+	"Ripper": {
+		"0x6368": "Ripper",
+		"0x6370": "Ripper Chasing",
+		"0x6E00": "Ripper Damaged",
+		"0x6E08": "Ripper Dying"
+	},
+	"Rubee": {
+		"0x6508": "Rubee", # Dupe?
+		"0x65B0": "Rubee", # Dupe?
+		"0x65B8": "Rubee Playing"
+	},
+	"Rubee's Pot": {
+		"0x6520": "Rubee's Pot"
+	},
+	"Scabby": {
+		"0x7068": "Scabby Fly",
+		"0x7070": "Scabby Fly Prepare Attack",
+		"0x7078": "Scabby Fly Charge",
+		"0x7080": "Scabby Fly Dying"
+	},
+	"Shrapnel": {
+		"0x6328": "Shrapnel Chasing",
+		"0x6E38": "Shrapnel"
+	},
+	"Sir Slush": {
+		"0x66D8": "Sir Slush", # Dupe
+		"0x66E0": "Sir Slush Attacking",
+		"0x6F98": "Sir Slush" # Dupe
+	},
+	"Slappa": {
+		"0x65E0": "Slappa Appearing",
+		"0x65E8": "Slappa Moving",
+		"0x65F0": "Slappa Slapping",
+		"0x65F8": "Slappa Getting Up",
+		"0x6608": "Slappa Dying",
+		"0x6610": "Slappa Hurt"
+	},
+	"Sled": {
+		"0x6BA0": "Sled"
+	},
+	"Snacker": {
+		"0x6258": "Snacker Swimming",
+		"0x6938": "Snacker Eating",
+		"0x7230": "Snacker Hurt",
+		"0x7238": "Snacker Dying"
+	},
+	"Snare-Bear": {
+		"0x69F0": "Snare-Bear Snapping",
+		"0x69F8": "Snare-Bear"
+	},
+	"Snare-Bear": {
+		"0x7038": "Snare-Bear (Winter)"
 	},
 	"Snippet": {
 		"0x5FF8": "Snippet Walking",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": ""
+		"0x6348": "Snippet Recovering",
+		"0x6350": "Snippet Dying",
+		"0x6940": "Snippet Get Up",
+		"0x6D68": "Snippet"
+	},
+	"Snippet (Mutie)": {
+		"0x6948": "Mutie Snippet Walking",
+		"0x6950": "Mutie Snippet Flip Upside Down",
+		"0x6958": "Mutie Snippet Stuck Upside Down",
+		"0x6960": "Mutie Snippet Get Up",
+		"0x6D70": "Mutie Snippet"
+	},
+	"Snorkel": {
+		"0x6888": "Snorkel Swimming",
+		"0x6890": "Snorkel Stuck"
+	},
+	"Tanktup": {
+		"0x66A0": "Tanktup's Head",
+		"0x66A8": "Tanktup's Head Pounded",
+		"0x66B0": "Tanktup's Back Left Leg Hit",
+		"0x66B8": "Tanktup's Front Left Leg Hit",
+		"0x66C0": "Tanktup's Front Right Leg Hit,
+		"0x66C8": "Tanktup's Back Right Leg Hit",
+		"0x66D0": "Tanktup Spawning Jiggy"
+	},
+	"Tee-Hee": {
+		"0x6388": "Tee-Hee",
+		"0x6390": "Tee-Hee Alerted",
+		"0x63F8": "Tee-Hee Chasing",
+		"0x73F0": "Tee-Hee Dying"
+	},
+	"Ticker": {
+		"0x6188": "Ticker",
+		"0x6190": "Ticker Walking"
+	},
+	"Tiptup": {
+		"0x67F0": "Tiptup looking around, shrugging",
+		"0x67F8": "Tiptup Tapping"
+	},
+	"Tiptup Choir": {
+		"0x6800": "Choir",
+		"0x6808": "Choir Singing",
+		"0x6810": "Choir Hurt"
+	},
+	"Toots": {
+		"0x6590": "Rubee Petting Toots",
+		"0x69A8": "Toots"
+	},
+	"Tooty": {
+		"0x6280": "Tooty Concert Start",
+		"0x62B0": "Tooty Concert Dance",
+		"0x62B8": "Tooty Hopping",
+		"0x6330": "Tooty Running (Concert)".
+		"0x6D18": "Tooty Hopping",
+		"0x6D40": "Tooty Chattering Teeth",
+		"0x6E60": "Tooty Confused",
+		"0x7308": "Tooty Looking Around",
+		"0x7458": "Tooty Drinking",
+	},
+	"Tooty (Ugly)": {
+		"0x6E78": "Ugly Tooty Walking",
+		"0x6E80": "Ugly Tooty Punching"
+	},
+	"Trunker": {
+		"0x6688": "Trunker Short",
+		"0x6690": "Trunker Growing"
+	},
+	"Topper": {
+		"0x6FB0": "Topper",
+		"0x6FB8": "Topper Dying"
+	},
+	"Turbo Trainers": {
+		"0x6540": "Turbo Trainers"
+	},
+	"Twinkly": {
+		"0x6A00": "Twinkly Present Opening",
+		"0x6A58": "Twinkly Spawning",
+		"0x6A78": "Twinkly Twinkling",
+		"0x7050": "Twinkly Present"
+	},
+	"Twinkly Muncher": {
+		"0x6C10": "Twinkly Muncher Dying",
+		"0x6C18": "Twinkly Muncher Appearing",
+		"0x6C20": "Twinkly Muncher",
+		"0x6C28": "Twinkly Muncher Munching"
+	},
+	"Wading Boots": {
+		"0x61D0": "Wading Boots"
+	},
+	"Cobweb": {
+		"0x6E18": "Web (Floor)",
+		"0x6E20": "Web Dying (Floor)",
+		"0x6E28": "Web (Wall)",
+		"0x6E30": "Web Dying (Wall)"
+	},
+	"Whipcrack": {
+		"0x6FE0": "Whipcrack Attacking",
+		"0x6FE8": "Whipcrack"
+	},
+	"Whiplash": {
+		"0x6978": "Whiplash",
+		"0x6980": "Whiplash Attack"
+	},
+	"Wozza": {
+		"0x6BF8": "Wozza Holding Jiggy",
+		"0x6C00": "Wozza Handing Jiggy",
+		"0x6C08": "Wozza Hopping Away",
+		"0x6C30": "Wozza Before Stop",
+		"0x6C38": "Wozza Bodyblocking",
+		"0x6C40": "Wozza Giving Jiggy",
+		"0x6C48": "Wozza Throwing…Freezehalfway",
+		"0x6FA0": "Wozza (in cave)"
 	},
 	"Yum-Yum": {
 		"0x5FB8": "Yum-Yum Hopping",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
-		"": ""
+		"0x63E8": "Yum-Yum",
+		"0x63F0": "Yum-Yum Eating"
 	},
-	"Copy_Paste_This": {
-		"": "",
-		"": ""
+	"Yumblie": {
+		"0x67C0": "Red Yumblie Spawning",
+		"0x67C8": "Red Yumblie Leaving",
+		"0x67D0": "Red Yumblie"
+	},
+	"Zubba": {
+		"0x6A10": "Zubba Flying Moving",
+		"0x6A18": "Zubba Flying",
+		"0x6A20": "Zubba Falling",
+		"0x6A28": "Zubba Landing"
+	},
+	##### MISC #####
+	"Cutscene Misc": {
+		"0x6290": "Concert Cutscene",
+		"0x6298": "Concert Timer",
+		"0x62A0": "Concert Unknown (0x81)",
+		"0x6320": "Frog Hopping (Concert)",
+		"0x6998": "Concert Bug Crawling",
+		"0x6C50": "Green Mist (Intro)",
+		"0x6C58": "Door Opening (Intro)",
+		"0x6CA8": "Door Closing",
+		"0x6CB8": "Grunty's Broomstick Flying",
+		"0x6CE0": "Bedsheets Banjo Sleeping",
+		"0x6CE8": "Bedsheets Banjo Awake",
+		"0x6CF0": "Kazooie Appearing",
+		"0x6D00": "Kazooie Inside Backpack",
+		"0x6D08": "Curtain",
+		"0x6D10": "Kazooie Uneasy",
+		"0x6D30": "Kazooie Waking Banjo",
+		"0x6D38": "Kazooie Falling",
+		"0x6E50": "Kazooie Feathers Poof (End intro)"
+		"0x6E88": "Machine Door Opening",
+		"0x6E90": "Machine Door Closing",
+		"0x6E98": "Static Machine Door Up",
+		"0x6F08": "Machine Lever Down",
+		"0x6F18": "Machine",
+		"0x71C8": "Grunty/Falling Down Tower"
+	},
+	"Other Misc": {
+		"0x64A0": "Littlebounce",
+		"0x64A8": "Wobblybounce",
+		"0x6500": "Green Grate near RBB… (4B1)",
+		"0x6538": "Switch Down",
+		"0x6540": "Switch Up",
+		"0x6750": "Jellyfish (Unknown) 0x117",
+		"0x6858": "Text Shadow Animation",
+		"0x68B0": "Button",
+		"0x6B98": "Unknown Dying (0x1A0)",
+		"0x6DB0": "GV Brick Wall Smashing",
+		"0x6E40": "Jiggy Transition",
+		"0x6ED8": "Roysten",
+		"0x6EE0": "Cuckoo Clock",
+		"0x6EE8": "Cuckoo Clock Chiming",
+		"0x6F50": "Transform Pad",
+		"0x7040": "Sarcophagus (GV Lobby)",
+		"0x7090": "Portrait",
+		"0x7150": "Grunty Green Spell (flying)",
+		"0x71A8": "Jinjo Statue Rising",
+		"0x71B8": "Jinjo Statue Activating",
+		"0x71C0": "Jinjo Statue",
+		"0x71D8": "Big Blue Egg",
+		"0x71E0": "Big Red Feather",
+		"0x71E8": "Big Gold Feather",
+		"0x7220": "Door of Grunty",
+		"0x72B8": "PRESS START Appearing",
+		"0x72C0": "PRESS START",
+		"0x72C8": "NO CONTROLLER Appearing",
+		"0x72D0": "NO CONTROLLER",
+		"0x72E8": "Grunty's Washing Machine",
+		"0x72F8": "Grunty Doll",
+		"0x7328": "Food Flipping",
+		"0x7340": "Banjo's Chair Breaking",
+		"0x7398": "Curtains (Bottles Bonus)",
+		"0x73A0": "Banjo's Hand Dropping Jiggy",
+		"0x73A8": "Banjo's Hand",
+		"0x73B0": "Banjo's Hand Turning Jiggy (Right)",
+		"0x73B8": "Banjo's Hand Turning Jiggy (Left)",
+		"0x73C0": "Banjo's Hand Grabbing Jiggy",
+		"0x73C8": "Banjo's Hand Thumbs Up",
+		"0x73D0": "Banjo's Hand Placing Jiggy",
+		"0x73D8": "Banjo's Hand Thumbs Down",
+		"0x7408": "Tree Shaking (Mumbo)",
+		"0x7460": "Grunty's Rock",
+		"0x74C8": "Mumbo's Hand",
+		"0x74D0": "Mumbo's Hand Appearing",
+		"0x74D8": "Mumbo's Hand Leaving"
 	},
 	"Unknown": [
 		"0x5E98",
-		"0x5EF0"
+		"0x6248",
+		"0x62C0",
+		"0x6358",
+		"0x6550",
+		"0x6558",
+		"0x6640",
+		"0x6698",
+		"0x66F0",
+		"0x6838",
+		"0x6840",
+		"0x6848",
+		"0x6898",
+		"0x6988",
+		"0x69A0",
+		"0x69B8",
+		"0x69D8",
+		"0x69E0",
+		"0x69E8",
+		"0x6A70",
+		"0x6AD0",
+		"0x6B00",
+		"0x6B08",
+		"0x6C68", # Probably intro cutscene stuff
+		"0x6C78", # Probably intro cutscene stuff
+		"0x6CA0", # Probably intro cutscene stuff
+		"0x6CB0", # Probably intro cutscene stuff
+		"0x6CC8", # Probably intro cutscene stuff
+		"0x6CF8", # Probably intro cutscene stuff
+		"0x6D20", # Probably intro cutscene stuff
+		"0x6D28", # Probably intro cutscene stuff
+		"0x6DF8",
+		"0x6E10",
+		"0x6E48",
+		"0x6EF8",
+		"0x6F20",
+		"0x6F58",
+		"0x6F60",
+		"0x6F78", # Probably something for eyrie
+		"0x6FD8",
+		"0x70A0",
+		"0x70D0",
+		"0x70D8",
+		"0x70E0",
+		"0x7148",
+		"0x71D0",
+		"0x7250",
+		"0x7358",
+		"0x7480",
+		"0x7488",
+		"0x7490",
+		"0x74A0",
+		"0x74A8",
+		"0x74B0",
+		"0x74B8"
+	],
+	"Empty": [
+		"0x5EB8",
+		"0x5EC8",
+		"0x5F00",
+		"0x5F28",
+		"0x5F30",
+		"0x5F38",
+		"0x5F88",
+		"0x5F90",
+		"0x5F98",
+		"0x5FC0",
+		"0x6050",
+		"0x6068",
+		"0x6070",
+		"0x60C8",
+		"0x60E8",
+		"0x6118",
+		"0x6238",
+		"0x6240",
+		"0x62C8",
+		"0x62D0",
+		"0x62D8",
+		"0x62E0",
+		"0x62E8",
+		"0x62F0",
+		"0x6300",
+		"0x6308",
+		"0x6360",
+		"0x6378",
+		"0x6410",
+		"0x6468",
+		"0x6470",
+		"0x6588",
+		"0x6628",
+		"0x6630",
+		"0x66E8",
+		"0x6738",
+		"0x6740",
+		"0x6758",
+		"0x6760",
+		"0x6768",
+		"0x6AF0",
+		"0x6AF8",
+		"0x6BC0",
+		"0x6EB0",
+		"0x6F90",
+		"0x7028"
 	]
 }
