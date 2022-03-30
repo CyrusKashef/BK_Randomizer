@@ -401,6 +401,7 @@ class Misc_Manipulation_Class():
         if(all_start_moves == 1):
             game_engine_obj._starting_moves()
         game_engine_obj._starting_lives(self.grandmaster.starting_lives_value.get())
+        game_engine_obj._patch_ttc_yumyum_crashfix()
 
     ########################
     ### EDIT OTHER TEXTS ###
