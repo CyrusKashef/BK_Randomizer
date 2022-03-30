@@ -267,6 +267,7 @@ import json
 from random import randint, choice
 import logging
 from logging.handlers import RotatingFileHandler
+from mmap import mmap
 
 ####################
 ### FILE IMPORTS ###
@@ -277,11 +278,7 @@ from Randomization_Processes.Common_Functions import read_json, leading_zeros
 from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids
 from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 
-#################
-### VARIABLES ###
-#################
 
-BK_RANDO_VERSION = "2.0.20220322"
 
 #######################
 ### ERROR GUI CLASS ###
@@ -322,11 +319,12 @@ def Error_GUI(error_msg):
 
 class User_GUI_Class():
     '''Creates a GUI where users give the directory of the ROM file, select options for the randomization, and optionally provide a seed value'''
-    def __init__(self):
+    def __init__(self, BK_RANDO_VERSION):
         '''Creates the Tkinter GUI'''
+        self.BK_RANDO_VERSION = BK_RANDO_VERSION
         self.cwd = os.getcwd() + "/"
         self.app_window = tk.Tk()
-        self.app_window.winfo_toplevel().title(f"Banjo-Kazooie Randomizer v{BK_RANDO_VERSION}")
+        self.app_window.winfo_toplevel().title(f"Banjo-Kazooie Randomizer v{self.BK_RANDO_VERSION}")
         self.padx = 3
         self.pady = 1
         self.white = "#FFFFFF"
@@ -398,6 +396,34 @@ class User_GUI_Class():
         if(not filename):
             return
         self.rom_file_entry.set(filename)
+        self._verify_rom_file(filename)
+    
+    def _verify_rom_file(self, filename):
+        '''PyDoc'''
+        rom_version_dict = {
+            "NTSC-U v1.0": [0xA4, 0xBF, 0x93, 0x06, 0xBF, 0x0C, 0xDF, 0xD1],
+            "NTSC-U v1.1": [0xCD, 0x75, 0x59, 0xAC, 0xB2, 0x6C, 0xF5, 0xAE],
+            "PAL v1.0":    [0x3F, 0x73, 0xB1, 0xCC, 0x48, 0x44, 0xF9, 0x92],
+            "NTSC-J v1.1": [0x68, 0x51, 0x20, 0xD5, 0x5F, 0xCA, 0x0D, 0xCD]
+            }
+        with open(filename, "r+b") as rom_file:
+            mm_rom = mmap(rom_file.fileno(), 0)
+            rom_checksum = []
+            for index in range(0x10, 0x18):
+                rom_checksum.append(mm_rom[index])
+            version = "Ellie Bobellie"
+            for rom_version in rom_version_dict:
+                if(rom_version_dict[rom_version] == rom_checksum):
+                    version = rom_version
+                    break
+            if(version == "NTSC-U v1.0"):
+                return True
+            elif(version in ["NTSC-U v1.1", "PAL v1.0", "NTSC-J v1.1"]):
+                Error_GUI(f"The selected ROM is '{version}'.\nThis version is not supported by the Randomizer.\nPlease use a NTSC-U v1.0 BK ROM.")
+                return False
+            else:
+                Error_GUI(f"You're using either a modded game\n or a non-BK ROM ending in z64.\nPlease use a NTSC-U v1.0 BK ROM.")
+                return False
     
     def _open_file(self, file_to_open):
         '''Generic open file button. If they use this for the README, bless their hearts'''
@@ -516,6 +542,39 @@ class User_GUI_Class():
         for enemy_name in self.enemy_checkbox_dict:
             self.enemy_checkbox_dict[enemy_name].set(0)
     
+    def _all_custom_aesthetics(self):
+        '''PyDoc'''
+        self.logger.info("Select All Custom Aesthetic")
+        for custom_name in self.customizable_checkbox_dict:
+            if(custom_name.startswith("(A)")):
+                self.customizable_checkbox_dict[custom_name].set(1)
+    
+    def _no_customization(self):
+        '''PyDoc'''
+        self.logger.info("Removing Customizations")
+        for custom_name in self.customizable_checkbox_dict:
+            self.customizable_checkbox_dict[custom_name].set(0)
+    
+    def _random_customization(self):
+        '''PyDoc'''
+        self.logger.info("Random Customization")
+        if(self.hiding_customization):
+            self.logger.info("Hiding Customization")
+            for custom_name in self.customizable_checkbox_dict:
+                self.customizable_checkbox_dict[custom_name].set(2)
+            self.random_customization_button.configure(text='Random By Seed\nAnd Hide Options')
+            for checkbutton_count, checkbutton in enumerate(self.customization_checkbuttons):
+                checkbutton.grid(row=(checkbutton_count // 4) + 1, column=(checkbutton_count % 4), padx=self.padx, pady=self.pady, sticky='w')
+            self.hiding_customization = False
+        else:
+            for custom_name in self.customizable_checkbox_dict:
+                self.customizable_checkbox_dict[custom_name].set(randint(0, 1))
+            self.logger.info("Re-Adding Customization")
+            self.random_customization_button.configure(text='Show Customize\nCheckboxes')
+            for checkbutton in self.customization_checkbuttons:
+                checkbutton.grid_remove()
+            self.hiding_customization = True
+    
     def _random_starting_area(self):
         '''Selects a random starting area'''
         self.logger.info("Select Random Starting Area")
@@ -582,8 +641,19 @@ class User_GUI_Class():
         if(self.final_puzzle_var.get() == 0):
             self.final_puzzle_value.set("25")
             self.final_puzzle_entry.configure(state='disabled')
+            self.remove_floating_jiggies_var.set(0)
+            self.remove_floating_jiggies_checkbox.grid_remove()
         else:
             self.final_puzzle_entry.configure(state='normal')
+            self.remove_floating_jiggies_checkbox.grid(row=3, column=4, padx=self.padx, pady=self.pady, sticky='w')
+    
+    def _lock_struct_options(self, *args):
+        self.logger.info("Lock Struct Options")
+        if(self.struct_var.get() == "Randomize"):
+            self.struct_note_count_dropdown.grid(row=0, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        else:
+            self.struct_note_count_var.set("Produce Extra Notes")
+            self.struct_note_count_dropdown.grid_remove()
     
     ################################
     ### RANDOMIZER SETTINGS CODE ###
@@ -622,12 +692,14 @@ class User_GUI_Class():
             self._add_randomizer_settings_to_code(self.final_puzzle_value.get(), 8)
         self._add_randomizer_settings_to_code(self.free_transformations_var.get())
         self._add_randomizer_settings_to_code(self.one_health_banjo_var.get())
+        self._add_randomizer_settings_to_code(self.remove_floating_jiggies_var.get())
         # Non-Flagged Objects
         self._add_randomizer_settings_to_code(["None", "Shuffle (World)"].index(self.non_flagged_object_var.get()))
         self._add_randomizer_settings_to_code(self.non_flagged_object_abnormalities_var.get())
         self._add_randomizer_settings_to_code(self.starting_lives_value.get(), 8)
         # Structs
         self._add_randomizer_settings_to_code(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"].index(self.struct_var.get()), 3)
+        self._add_randomizer_settings_to_code(["Produce Extra Notes", "Produce Exactly Enough Notes"].index(self.struct_note_count_var.get()))
         self._add_randomizer_settings_to_code(["Scaling Note Doors", "Final Note Door Only"].index(self.final_note_door_var.get()))
         if(self.final_puzzle_value.get() == "?"):
             self._add_randomizer_settings_to_code(2001, 11)
@@ -641,6 +713,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.after_gold_feather_carry_value.get(), 9)
         # World Entrances
         self._add_randomizer_settings_to_code(["None", "Basic Shuffle", "Bottles Shuffle"].index(self.world_entrance_var.get()), 2)
+        self._add_randomizer_settings_to_code(["Exit From World You Were Just In", "Exit From Entrance You Entered From"].index(self.world_exit_var.get()))
         self._add_randomizer_settings_to_code(self.all_starting_moves_var.get())
         # Within World Warps
         self._add_randomizer_settings_to_code(["None", "Shuffle By World", "Shuffle By Game"].index(self.within_world_warps_var.get()), 2)
@@ -729,12 +802,14 @@ class User_GUI_Class():
                 self.final_puzzle_value.set(str(final_puzzle_value))
             self.free_transformations_var.set(self._get_randomizer_setting())
             self.one_health_banjo_var.set(self._get_randomizer_setting())
+            self.remove_floating_jiggies_var.set(self._get_randomizer_setting())
             # Non-Flagged Objects
             self.non_flagged_object_var.set(self._get_randomizer_setting(options_list=["None", "Shuffle (World)"]))
             self.non_flagged_object_abnormalities_var.set(self._get_randomizer_setting())
             self.starting_lives_value.set(self._get_randomizer_setting(bit_count=8))
             # Structs
             self.struct_var.set(self._get_randomizer_setting(bit_count=3, options_list=["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
+            self.struct_note_count_var.set(self._get_randomizer_setting(options_list=["Produce Extra Notes", "Produce Exactly Enough Notes"]))
             self.final_note_door_var.set(self._get_randomizer_setting(options_list=["Scaling Note Doors", "Final Note Door Only"]))
             final_note_door_value = self._get_randomizer_setting(bit_count=11)
             if(final_note_door_value == 2001):
@@ -749,6 +824,7 @@ class User_GUI_Class():
             self.after_gold_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
             # World Entrances
             self.world_entrance_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Basic Shuffle", "Bottles Shuffle"]))
+            self.world_exit_var.set(self._get_randomizer_setting(options_list=["Exit From World You Were Just In", "Exit From Entrance You Entered From"]))
             self.all_starting_moves_var.set(self._get_randomizer_setting())
             # Within World Warps
             self.within_world_warps_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle By World", "Shuffle By Game"]))
@@ -820,12 +896,14 @@ class User_GUI_Class():
         self.final_puzzle_value.set(25)
         self.free_transformations_var.set(0)
         self.one_health_banjo_var.set(0)
+        self.remove_floating_jiggies_var.set(0)
         # Non-Flagged Objects
         self.non_flagged_object_var.set("Shuffle (World)")
         self.non_flagged_object_abnormalities_var.set(0)
         self.starting_lives_value.set(3)
         # Structs
         self.struct_var.set("Shuffle (World)")
+        self.struct_note_count_var.set("Produce Extra Notes")
         self.final_note_door_var.set("Scaling Note Doors")
         self.final_note_door_value.set(810)
         self.before_blue_egg_carry_value.set(100)
@@ -836,6 +914,7 @@ class User_GUI_Class():
         self.after_gold_feather_carry_value.set(20)
         # World Entrances
         self.world_entrance_var.set("Basic Shuffle")
+        self.world_exit_var.set("Exit From World You Were Just In")
         self.all_starting_moves_var.set(0)
         # Within World Warps
         self.within_world_warps_var.set("Shuffle By World")
@@ -866,7 +945,8 @@ class User_GUI_Class():
         self.shorts_vertex_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Vertex"])
         self.shorts_texture_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Texture"])
         # Models, Animations, Properties
-        self.customizable_var.set("None")
+        for custom_name in self.customizable_checkbox_dict:
+            self.customizable_checkbox_dict[custom_name].set(0)
         # Sounds/Music
         self.short_sounds_var.set(0)
         self.jingles_var.set(0)
@@ -914,6 +994,7 @@ class User_GUI_Class():
     def _load_configuration(self, button_press=True, random_file=False):
         '''Opens a chosen JSON file and sets the parameters to match those'''
         self.logger.info("Load Configuration")
+        setting_not_found = []
         if(random_file):
             try:
                 list_of_files = os.listdir(f"{self.cwd}Configurations/")
@@ -958,102 +1039,412 @@ class User_GUI_Class():
         if(json_data["ROM_File"] != ""):
             self.rom_file_entry.set(json_data["ROM_File"])
         # Seed
-        self.seed_value.set(json_data["Seed"])
+        try:
+            self.seed_value.set(json_data["Seed"])
+        except KeyError:
+            setting_not_found.append("Seed")
+            self.seed_value.set("")
         ### General Settings ###
         # Flagged Objects
-        self.flagged_object_var.set(json_data["Flagged_Objects_Option"])
-        self.flagged_object_abnormalities_var.set(json_data["Flagged_Objects_Abnormalities"])
-        self.flagged_object_softlock_var.set(json_data["Flagged_Objects_Softlock"])
-        self.final_puzzle_var.set(json_data["Final_Puzzle"])
-        self.final_puzzle_value.set(json_data["Final_Puzzle_Value"])
-        self.free_transformations_var.set(json_data["Free_Transformations"])
-        self.one_health_banjo_var.set(json_data["One_Health_Only"])
+        try:
+            self.flagged_object_var.set(json_data["Flagged_Objects_Option"])
+        except KeyError:
+            setting_not_found.append("Flagged_Objects_Option")
+            self.flagged_object_var.set("Shuffle (World)")
+        try:
+            self.flagged_object_abnormalities_var.set(json_data["Flagged_Objects_Abnormalities"])
+        except KeyError:
+            setting_not_found.append("Flagged_Objects_Abnormalities")
+            self.flagged_object_abnormalities_var.set(0)
+        try:
+            self.flagged_object_softlock_var.set(json_data["Flagged_Objects_Softlock"])
+        except KeyError:
+            setting_not_found.append("Flagged_Objects_Softlock")
+            self.flagged_object_softlock_var.set(0)
+        try:
+            self.final_puzzle_var.set(json_data["Final_Puzzle"])
+        except KeyError:
+            setting_not_found.append("Final_Puzzle")
+            self.final_puzzle_var.set(0)
+        try:
+            self.final_puzzle_value.set(json_data["Final_Puzzle_Value"])
+        except KeyError:
+            setting_not_found.append("Final_Puzzle_Value")
+            self.final_puzzle_value.set(25)
+        try:
+            self.free_transformations_var.set(json_data["Free_Transformations"])
+        except KeyError:
+            setting_not_found.append("Free_Transformations")
+            self.free_transformations_var.set(0)
+        try:
+            self.one_health_banjo_var.set(json_data["One_Health_Only"])
+        except KeyError:
+            setting_not_found.append("One_Health_Only")
+            self.one_health_banjo_var.set(0)
+        try:
+            self.remove_floating_jiggies_var.set(json_data["Remove_Floating_Jiggies"])
+        except Exception:
+            setting_not_found.append("Remove_Floating_Jiggies")
+            self.remove_floating_jiggies_var.set(0)
         # Non-Flagged Objects
-        self.non_flagged_object_var.set(json_data["Non_Flagged_Objects_Option"])
-        self.non_flagged_object_abnormalities_var.set(json_data["Non_Flagged_Objects_Abnormalities"])
-        self.starting_lives_value.set(json_data["Starting_Lives"])
+        try:
+            self.non_flagged_object_var.set(json_data["Non_Flagged_Objects_Option"])
+        except KeyError:
+            setting_not_found.append("Non_Flagged_Objects_Option")
+            self.non_flagged_object_var.set("Shuffle (World)")
+        try:
+            self.non_flagged_object_abnormalities_var.set(json_data["Non_Flagged_Objects_Abnormalities"])
+        except KeyError:
+            setting_not_found.append("Non_Flagged_Objects_Abnormalities")
+            self.non_flagged_object_abnormalities_var.set(0)
+        try:
+            self.starting_lives_value.set(json_data["Starting_Lives"])
+        except KeyError:
+            setting_not_found.append("Starting_Lives")
+            self.starting_lives_value.set(3)
         # Structs
-        self.struct_var.set(json_data["Struct_Option"])
-        self.final_note_door_var.set(json_data["Final_Note_Door"])
-        self.final_note_door_value.set(json_data["Final_Note_Door_Value"])
-        self.before_blue_egg_carry_value.set(json_data["Before_Cheato_Blue_Eggs"]),
-        self.after_blue_egg_carry_value.set(json_data["After_Cheato_Blue_Eggs"]),
-        self.before_red_feather_carry_value.set(json_data["Before_Cheato_Red_Feathers"]),
-        self.after_red_feather_carry_value.set(json_data["After_Cheato_Red_Feathers"]),
-        self.before_gold_feather_carry_value.set(json_data["Before_Cheato_Gold_Feathers"]),
-        self.after_gold_feather_carry_value.set(json_data["After_Cheato_Gold_Feathers"]),
+        try:
+            self.struct_var.set(json_data["Struct_Option"])
+        except KeyError:
+            setting_not_found.append("Struct_Option")
+            self.struct_var.set("Shuffle (World)")
+        try:
+            self.struct_note_count_var.set(json_data["Struct_Note_Count"])
+        except KeyError:
+            setting_not_found.append("Struct_Note_Count")
+            self.struct_note_count_var.set("Produce Extra Notes")
+        try:
+            self.final_note_door_var.set(json_data["Final_Note_Door"])
+        except KeyError:
+            setting_not_found.append("Final_Note_Door")
+            self.final_note_door_var.set("Scaling Note Doors")
+        try:
+            self.final_note_door_value.set(json_data["Final_Note_Door_Value"])
+        except KeyError:
+            setting_not_found.append("Final_Note_Door_Value")
+            self.final_note_door_value.set(810)
+        try:
+            self.before_blue_egg_carry_value.set(json_data["Before_Cheato_Blue_Eggs"])
+        except KeyError:
+            setting_not_found.append("Before_Cheato_Blue_Eggs")
+            self.before_blue_egg_carry_value.set(100)
+        try:
+            self.after_blue_egg_carry_value.set(json_data["After_Cheato_Blue_Eggs"])
+        except KeyError:
+            setting_not_found.append("After_Cheato_Blue_Eggs")
+            self.after_blue_egg_carry_value.set(200)
+        try:
+            self.before_red_feather_carry_value.set(json_data["Before_Cheato_Red_Feathers"])
+        except KeyError:
+            setting_not_found.append("Before_Cheato_Red_Feathers")
+            self.before_red_feather_carry_value.set(50)
+        try:
+            self.after_red_feather_carry_value.set(json_data["After_Cheato_Red_Feathers"])
+        except KeyError:
+            setting_not_found.append("After_Cheato_Red_Feathers")
+            self.after_red_feather_carry_value.set(100)
+        try:
+            self.before_gold_feather_carry_value.set(json_data["Before_Cheato_Gold_Feathers"])
+        except KeyError:
+            setting_not_found.append("Before_Cheato_Gold_Feathers")
+            self.before_gold_feather_carry_value.set(10)
+        try:
+            self.after_gold_feather_carry_value.set(json_data["After_Cheato_Gold_Feathers"])
+        except KeyError:
+            setting_not_found.append("After_Cheato_Gold_Feathers")
+            self.after_gold_feather_carry_value.set(20)
         # World Entrances
-        self.world_entrance_var.set(json_data["World_Entrance_Option"])
-        self.all_starting_moves_var.set(json_data["All_Moves"])
+        try:
+            self.world_entrance_var.set(json_data["World_Entrance_Option"])
+        except KeyError:
+            setting_not_found.append("World_Entrance_Option")
+            self.world_entrance_var.set("Basic Shuffle")
+        try:
+            self.world_exit_var.set(json_data["World_Exit"])
+        except KeyError:
+            setting_not_found.append("World_Exit")
+            self.world_exit_var.set("Exit From World You Were Just In")
+        try:
+            self.all_starting_moves_var.set(json_data["All_Moves"])
+        except KeyError:
+            setting_not_found.append("All_Moves")
+            self.all_starting_moves_var.set(0)
         # Within World Warps
-        self.within_world_warps_var.set(json_data["Within_World_Warps_Option"])
+        try:
+            self.within_world_warps_var.set(json_data["Within_World_Warps_Option"])
+        except KeyError:
+            setting_not_found.append("Within_World_Warps_Option")
+            self.within_world_warps_var.set("Shuffle By World")
         # Starting World
-        self.new_area_var.set(json_data["Starting_Area"])
-        self.skip_intro_cutscene_var.set(json_data["Skip_Intro_Cutscene"])
+        try:
+            self.new_area_var.set(json_data["Starting_Area"])
+        except KeyError:
+            setting_not_found.append("Starting_Area")
+            self.new_area_var.set("SM - Main")
+        try:
+            self.skip_intro_cutscene_var.set(json_data["Skip_Intro_Cutscene"])
+        except KeyError:
+            setting_not_found.append("Skip_Intro_Cutscene")
+            self.skip_intro_cutscene_var.set(0)
         # Enemies
-        self.enemies_var.set(json_data["Enemies_Option"])
+        try:
+            self.enemies_var.set(json_data["Enemies_Option"])
+        except KeyError:
+            setting_not_found.append("Enemies_Option")
+            self.enemies_var.set("Randomize")
         for enemy_name in self.enemy_checkbox_dict:
-            self.enemy_checkbox_dict[enemy_name].set(json_data[f"Include {enemy_name}"])
+            try:
+                self.enemy_checkbox_dict[enemy_name].set(json_data[f"Include {enemy_name}"])
+            except KeyError:
+                setting_not_found.append(f"Include {enemy_name}")
+                for enemy_name in self.enemy_checkbox_dict:
+                    if("*" in enemy_name):
+                        self.enemy_checkbox_dict[enemy_name].set(0)
+                    else:
+                        self.enemy_checkbox_dict[enemy_name].set(1)
         ### Aesthetic Settings ###
         # BK Model
-        self.bk_model_var.set(json_data["BK_Model_Option"])
-        self.banjo_fur_var.set(json_data["Banjo_Fur"])
-        self.tooth_necklace_var.set(json_data["Tooth_Necklace"])
-        self.banjo_skin_var.set(json_data["Banjo_Skin"])
-        self.banjo_feet_var.set(json_data["Banjo_Feet"])
-        self.kazooie_primary_var.set(json_data["Kazooie_Primary"])
-        self.kazooie_secondary_var.set(json_data["Kazooie_Secondary"])
-        self.kazooie_wing_primary_var.set(json_data["Kazooie_Wing_Primary"])
-        self.kazooie_wing_secondary_var.set(json_data["Kazooie_Wing_Secondary"])
-        self.backpack_var.set(json_data["Backpack"])
-        self.wading_boots_var.set(json_data["Wading_Boots"])
-        self.shorts_vertex_var.set(json_data["Shorts_Vertex"])
-        self.shorts_texture_var.set(json_data["Shorts_Texture"])
+        try:
+            self.bk_model_var.set(json_data["BK_Model_Option"])
+        except KeyError:
+            setting_not_found.append("BK_Model_Option")
+            self.bk_model_var.set("Default")
+        try:
+            self.banjo_fur_var.set(json_data["Banjo_Fur"])
+        except KeyError:
+            setting_not_found.append("Banjo_Fur")
+            self.banjo_fur_var.set(self.bk_model_json[self.bk_model_var.get()]["Banjo_Fur"])
+        try:
+            self.tooth_necklace_var.set(json_data["Tooth_Necklace"])
+        except KeyError:
+            setting_not_found.append("Tooth_Necklace")
+            self.tooth_necklace_var.set(self.bk_model_json[self.bk_model_var.get()]["Tooth_Necklace"])
+        try:
+            self.banjo_skin_var.set(json_data["Banjo_Skin"])
+        except KeyError:
+            setting_not_found.append("Banjo_Skin")
+            self.banjo_skin_var.set(self.bk_model_json[self.bk_model_var.get()]["Banjo_Skin"])
+        try:
+            self.banjo_feet_var.set(json_data["Banjo_Feet"])
+        except KeyError:
+            setting_not_found.append("Banjo_Feet")
+            self.banjo_feet_var.set(self.bk_model_json[self.bk_model_var.get()]["Banjo_Feet"])
+        try:
+            self.kazooie_primary_var.set(json_data["Kazooie_Primary"])
+        except KeyError:
+            setting_not_found.append("Kazooie_Primary")
+            self.kazooie_primary_var.set(self.bk_model_json[self.bk_model_var.get()]["Kazooie_Primary"])
+        try:
+            self.kazooie_secondary_var.set(json_data["Kazooie_Secondary"])
+        except KeyError:
+            setting_not_found.append("Kazooie_Secondary")
+            self.kazooie_secondary_var.set(self.bk_model_json[self.bk_model_var.get()]["Kazooie_Secondary"])
+        try:
+            self.kazooie_wing_primary_var.set(json_data["Kazooie_Wing_Primary"])
+        except KeyError:
+            setting_not_found.append("Kazooie_Wing_Primary")
+            self.kazooie_wing_primary_var.set(self.bk_model_json[self.bk_model_var.get()]["Kazooie_Wing_Primary"])
+        try:
+            self.kazooie_wing_secondary_var.set(json_data["Kazooie_Wing_Secondary"])
+        except KeyError:
+            setting_not_found.append("Kazooie_Wing_Secondary")
+            self.kazooie_wing_secondary_var.set(self.bk_model_json[self.bk_model_var.get()]["Kazooie_Wing_Secondary"])
+        try:
+            self.backpack_var.set(json_data["Backpack"])
+        except KeyError:
+            setting_not_found.append("Backpack")
+            self.backpack_var.set(self.bk_model_json[self.bk_model_var.get()]["Backpack"])
+        try:
+            self.wading_boots_var.set(json_data["Wading_Boots"])
+        except KeyError:
+            setting_not_found.append("Wading_Boots")
+            self.wading_boots_var.set(self.bk_model_json[self.bk_model_var.get()]["Wading_Boots"])
+        try:
+            self.shorts_vertex_var.set(json_data["Shorts_Vertex"])
+        except KeyError:
+            setting_not_found.append("Shorts_Vertex")
+            self.shorts_vertex_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Vertex"])
+        try:
+            self.shorts_texture_var.set(json_data["Shorts_Texture"])
+        except KeyError:
+            setting_not_found.append("Shorts_Texture")
+            self.shorts_texture_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Texture"])
         # Enemy Models
-        self.customizable_var.set(json_data["Models_Animations_Properties"])
+        for custom_name in self.customizable_checkbox_dict:
+            try:
+                self.customizable_checkbox_dict[custom_name].set(json_data[f"Include {custom_name}"])
+            except KeyError:
+                setting_not_found.append(f"Include {custom_name}")
+                self.customizable_checkbox_dict[custom_name].set(0)
         # Sounds/Music
-        self.short_sounds_var.set(json_data["Short_Sound_Option"])
-        self.jingles_var.set(json_data["Jingle_Option"])
-        self.music_var.set(json_data["Music_Option"])
-        self.beta_sounds_var.set(json_data["Beta_Sounds"])
-        self.jarring_sounds_var.set(json_data["Jarring_Sounds"])
+        try:
+            self.short_sounds_var.set(json_data["Short_Sound_Option"])
+        except KeyError:
+            setting_not_found.append("Short_Sound_Option")
+            self.short_sounds_var.set(0)
+        try:
+            self.jingles_var.set(json_data["Jingle_Option"])
+        except KeyError:
+            setting_not_found.append("Jingle_Option")
+            self.jingles_var.set(0)
+        try:
+            self.music_var.set(json_data["Music_Option"])
+        except KeyError:
+            setting_not_found.append("Music_Option")
+            self.music_var.set(0)
+        try:
+            self.beta_sounds_var.set(json_data["Beta_Sounds"])
+        except KeyError:
+            setting_not_found.append("Beta_Sounds")
+            self.beta_sounds_var.set(0)
+        try:
+            self.jarring_sounds_var.set(json_data["Jarring_Sounds"])
+        except KeyError:
+            setting_not_found.append("Jarring_Sounds")
+            self.jarring_sounds_var.set(0)
         # Sprites/Textures
-        self.skybox_var.set(json_data["Skybox_Option"])
-        self.talking_sprite_var.set(json_data["Talking_Sprite_Option"])
+        try:
+            self.skybox_var.set(json_data["Skybox_Option"])
+        except KeyError:
+            setting_not_found.append("Skybox_Option")
+            self.skybox_var.set(0)
+        try:
+            self.talking_sprite_var.set(json_data["Talking_Sprite_Option"])
+        except KeyError:
+            setting_not_found.append("Talking_Sprite_Option")
+            self.talking_sprite_var.set(0)
         ### Misc Settings ###
-        self.remove_files_var.set(json_data["Remove_Files"])
-        self.tool_tips_var.set(json_data["Tool_Tips"])
+        try:
+            self.remove_files_var.set(json_data["Remove_Files"])
+        except KeyError:
+            setting_not_found.append("Remove_Files")
+            self.remove_files_var.set(1)
+        try:
+            self.tool_tips_var.set(json_data["Tool_Tips"])
+        except KeyError:
+            setting_not_found.append("Tool_Tips")
+            self.tool_tips_var.set(1)
         ### World Specific ###
         # Gruntilda's Lair
-        self.skip_furnace_fun_var.set(json_data["Furnace_Fun_Skip"])
-        self.remove_magic_barriers_var.set(json_data["Remove_Magic_Barriers"])
-        self.gruntilda_difficulty_var.set(json_data["Final_Battle_Difficulty"])
-        self.monster_house_var.set(json_data["Monster_House"])
-        self.what_floor_var.set(json_data["What_Floor"])
-        self.grunty_size_var.set(json_data["Mini_Me"])
+        try:
+            self.skip_furnace_fun_var.set(json_data["Furnace_Fun_Skip"])
+        except KeyError:
+            setting_not_found.append("Furnace_Fun_Skip")
+            self.skip_furnace_fun_var.set(0)
+        try:
+            self.remove_magic_barriers_var.set(json_data["Remove_Magic_Barriers"])
+        except KeyError:
+            setting_not_found.append("Remove_Magic_Barriers")
+            self.remove_magic_barriers_var.set(0)
+        try:
+            self.gruntilda_difficulty_var.set(json_data["Final_Battle_Difficulty"])
+        except KeyError:
+            setting_not_found.append("Final_Battle_Difficulty")
+            self.gruntilda_difficulty_var.set(0)
+        try:
+            self.monster_house_var.set(json_data["Monster_House"])
+        except KeyError:
+            setting_not_found.append("Monster_House")
+            self.monster_house_var.set(1)
+        try:
+            self.what_floor_var.set(json_data["What_Floor"])
+        except KeyError:
+            setting_not_found.append("What_Floor")
+            self.what_floor_var.set(1)
+        try:
+            self.grunty_size_var.set(json_data["Mini_Me"])
+        except KeyError:
+            setting_not_found.append("Mini_Me")
+            self.grunty_size_var.set(1)
         # Mumbo's Mountain
-        self.flowers_var.set(json_data["MM_Flowers"])
+        try:
+            self.flowers_var.set(json_data["MM_Flowers"])
+        except KeyError:
+            setting_not_found.append("MM_Flowers")
+            self.flowers_var.set(0)
         # Treasure Trove Cove
-        self.scattered_structs_var.set(json_data["Scattered_Notes_Eggs_Feathers"])
+        try:
+            self.scattered_structs_var.set(json_data["Scattered_Notes_Eggs_Feathers"])
+        except KeyError:
+            setting_not_found.append("Scattered_Notes_Eggs_Feathers")
+            self.scattered_structs_var.set(0)
         # Clanker's Cavern
-        self.hard_rings_var.set(json_data["CC_Hard_Rings"])
+        try:
+            self.hard_rings_var.set(json_data["CC_Hard_Rings"])
+        except KeyError:
+            setting_not_found.append("CC_Hard_Rings")
+            self.hard_rings_var.set(0)
         # Bubblegloop Swamp
-        self.croctus_var.set(json_data["BGS_Croctus"])
-        self.mr_vile_var.set(json_data["BGS_Mr_Vile"])
-        self.tiptup_choir_var.set(json_data["BGS_Tiptup_Choir"])
+        try:
+            self.croctus_var.set(json_data["BGS_Croctus"])
+        except KeyError:
+            setting_not_found.append("BGS_Croctus")
+            self.croctus_var.set(0)
+        try:
+            self.mr_vile_var.set(json_data["BGS_Mr_Vile"])
+        except KeyError:
+            setting_not_found.append("BGS_Mr_Vile")
+            self.mr_vile_var.set(0)
+        try:
+            self.tiptup_choir_var.set(json_data["BGS_Tiptup_Choir"])
+        except KeyError:
+            setting_not_found.append("BGS_Tiptup_Choir")
+            self.tiptup_choir_var.set(0)
         # Freezeezy Peak
-        self.hard_races_var.set(json_data["FP_Hard_Races"])
+        try:
+            self.hard_races_var.set(json_data["FP_Hard_Races"])
+        except KeyError:
+            setting_not_found.append("FP_Hard_Races")
+            self.hard_races_var.set(0)
         # Gobi's Valley
-        self.ancient_ones_var.set(json_data["GV_Ancient_Ones"])
-        self.maze_jinxy_heads_var.set(json_data["GV_Maze_Jinxy_Heads"])
-        self.matching_puzzle_var.set(json_data["GV_Matching_Puzzle"])
+        try:
+            self.ancient_ones_var.set(json_data["GV_Ancient_Ones"])
+        except KeyError:
+            setting_not_found.append("GV_Ancient_Ones")
+            self.ancient_ones_var.set(0)
+        try:
+            self.maze_jinxy_heads_var.set(json_data["GV_Maze_Jinxy_Heads"])
+        except KeyError:
+            setting_not_found.append("GV_Maze_Jinxy_Heads")
+            self.maze_jinxy_heads_var.set(0)
+        try:
+            self.matching_puzzle_var.set(json_data["GV_Matching_Puzzle"])
+        except KeyError:
+            setting_not_found.append("GV_Matching_Puzzle")
+            self.matching_puzzle_var.set(0)
         # Mad Monster Mansion
-        self.lit_pots_var.set(json_data["MMM_Lit_Pots"])
-        self.motzand_keys_var.set(json_data["Motzand_Keys"])
+        try:
+            self.lit_pots_var.set(json_data["MMM_Lit_Pots"])
+        except KeyError:
+            setting_not_found.append("MMM_Lit_Pots")
+            self.lit_pots_var.set(0)
+        try:
+            self.motzand_keys_var.set(json_data["Motzand_Keys"])
+        except KeyError:
+            setting_not_found.append("Motzand_Keys")
+            self.motzand_keys_var.set(0)
         # Rusty Bucket Bay
-        self.buttons_var.set(json_data["RBB_Buttons"])
+        try:
+            self.buttons_var.set(json_data["RBB_Buttons"])
+        except KeyError:
+            setting_not_found.append("RBB_Buttons")
+            self.buttons_var.set(0)
         # Click Clock Wood
-        self.ccw_var.set(json_data["CCW_Option"])
+        try:
+            self.ccw_var.set(json_data["CCW_Option"])
+        except KeyError:
+            setting_not_found.append("CCW_Option")
+            self.ccw_var.set("Season")
+        if(setting_not_found):
+            if(len(setting_not_found) < 6):
+                error_msg = "Error: The Following Settings Weren't Set!\n"
+                for error in setting_not_found:
+                    error_msg += error + "\n"
+                error_msg += "Please manually set those settings."
+                Error_GUI(error_msg)
+            else:
+                Error_GUI(f"Error: {len(setting_not_found)} Settings Weren't Set!\nPlease manually set your settings.")
+            return
     
     def _set_random_settings(self):
         '''Opens a chosen JSON file and sets the parameters to match those'''
@@ -1072,12 +1463,14 @@ class User_GUI_Class():
         self.final_puzzle_value.set(randint(0, 99))
         self.free_transformations_var.set(randint(0, 1))
         self.one_health_banjo_var.set(randint(0, 1))
+        self.remove_floating_jiggies_var.set(0),
         # Non-Flagged Objects
         self.non_flagged_object_var.set(choice(["None", "Shuffle (World)"]))
         self.non_flagged_object_abnormalities_var.set(randint(0, 1))
         self.starting_lives_value.set(randint(0, 69))
         # Structs
         self.struct_var.set(choice(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
+        self.struct_note_count_var.set(choice(["Produce Extra Notes", "Produce Exactly Enough Notes"]))
         self.final_note_door_var.set(choice(["Scaling Note Doors", "Final Note Door Only"]))
         if(self.struct_var.get() == "All Notes"):
             self.final_note_door_value.set(randint(0, 2000))
@@ -1091,6 +1484,7 @@ class User_GUI_Class():
         self.after_gold_feather_carry_value.set(randint(int(self.before_gold_feather_carry_value.get()), 255))
         # World Entrances
         self.world_entrance_var.set(choice(["None", "Basic Shuffle", "Bottles Shuffle"]))
+        self.world_exit_var.set(choice(["Exit From World You Were Just In", "Exit From Entrance You Entered From"]))
         self.all_starting_moves_var.set(randint(0, 1))
         # Within World Warps
         self.within_world_warps_var.set(choice(["None", "Shuffle By World", "Shuffle By Game"]))
@@ -1108,7 +1502,8 @@ class User_GUI_Class():
         # BK Model
         self._random_bk_model_colors()
         # Enemy Models
-        self.customizable_var.set("Random Preset")
+        for custom_name in self.customizable_checkbox_dict:
+            self.customizable_checkbox_dict[custom_name].set(randint(0, 1))
         # Sounds/Music
         self.short_sounds_var.set(randint(0, 1))
         self.jingles_var.set(randint(0, 1))
@@ -1179,12 +1574,14 @@ class User_GUI_Class():
             "Final_Puzzle_Value": self.final_puzzle_value.get(),
             "Free_Transformations": self.free_transformations_var.get(),
             "One_Health_Only": self.one_health_banjo_var.get(),
+            "Remove_Floating_Jiggies": self.remove_floating_jiggies_var.get(),
             # Non-Flagged Objects
             "Non_Flagged_Objects_Option": self.non_flagged_object_var.get(),
             "Non_Flagged_Objects_Abnormalities": self.non_flagged_object_abnormalities_var.get(),
             "Starting_Lives": self.starting_lives_value.get(),
             # Structs
             "Struct_Option": self.struct_var.get(),
+            "Struct_Note_Count": self.struct_note_count_var.get(),
             "Final_Note_Door": self.final_note_door_var.get(),
             "Final_Note_Door_Value": self.final_note_door_value.get(),
             "Before_Cheato_Blue_Eggs": self.before_blue_egg_carry_value.get(),
@@ -1195,6 +1592,7 @@ class User_GUI_Class():
             "After_Cheato_Gold_Feathers": self.after_gold_feather_carry_value.get(),
             # World Entrances
             "World_Entrance_Option": self.world_entrance_var.get(),
+            "World_Exit": self.world_exit_var.get(),
             "All_Moves": self.all_starting_moves_var.get(),
             # Within World Warps
             "Within_World_Warps_Option": self.within_world_warps_var.get(),
@@ -1219,7 +1617,6 @@ class User_GUI_Class():
             "Shorts_Vertex": self.shorts_vertex_var.get(),
             "Shorts_Texture": self.shorts_texture_var.get(),
             # Enemy Models
-            "Models_Animations_Properties": self.customizable_var.get(),
             # Sounds/Music
             "Short_Sound_Option": self.short_sounds_var.get(),
             "Jingle_Option": self.jingles_var.get(),
@@ -1267,6 +1664,9 @@ class User_GUI_Class():
         # Enemies
         for enemy_name in master_enemy_dict:
             current_config[f"Include {enemy_name}"] = self.enemy_checkbox_dict[enemy_name].get()
+        # Enemies
+        for custom_name in self.customizable_checkbox_dict:
+            current_config[f"Include {custom_name}"] = self.customizable_checkbox_dict[custom_name].get()
         if(button_press):
             try:
                 json_file = tkinter.filedialog.asksaveasfile(filetypes=(("Json Files","*.json"),("all files","*.*")), defaultextension=json)
@@ -1301,7 +1701,7 @@ class User_GUI_Class():
         if(rom_ext not in ["z64"]):
             Error_GUI(f"Rom Extention is not allowed: {rom_ext}")
             return False
-        return True
+        return self._verify_rom_file(rom_path)
     
     def _check_seed_value(self):
         '''Verifies the seed value is either blank or only consists of digits'''
@@ -1325,10 +1725,13 @@ class User_GUI_Class():
             return False
         final_puzzle_val= int(final_puzzle_val)
         if(final_puzzle_val < 0):
-            Error_GUI("Final Puzzle Value Must Be Greater Than Zero.")
+            Error_GUI("Final Puzzle Value Must Be Greater Than Or Equal To Zero.")
             return False
         elif(final_puzzle_val > 100):
             Error_GUI("Final Puzzle Value Must Be Less Than 100 Under These Settings.")
+            return False
+        elif((self.remove_floating_jiggies_var.get() == 1) and (final_puzzle_val > 55)):
+            Error_GUI("Final Puzzle Value Must Be Less Than 56 When Removing Floating Jiggies.")
             return False
         return True
     
@@ -1529,6 +1932,10 @@ class User_GUI_Class():
         self.one_health_banjo_var = tk.IntVar()
         self.one_health_banjo_checkbox = tk.Checkbutton(self.flagged_object_frame, text="One Health Only", variable=self.one_health_banjo_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.one_health_banjo_checkbox.grid(row=3, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.remove_floating_jiggies_var = tk.IntVar()
+        self.remove_floating_jiggies_checkbox = tk.Checkbutton(self.flagged_object_frame, text="No Floating Jiggies", variable=self.remove_floating_jiggies_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.remove_floating_jiggies_checkbox.grid(row=3, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.final_puzzle_var.trace('w', self._lock_final_puzzle_value)
         # Structs
         self.struct_frame = tk.LabelFrame(self._collectables_tab, text="Notes, Blue Eggs, Red Feathers, & Gold Feathers", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.struct_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
@@ -1541,6 +1948,12 @@ class User_GUI_Class():
         self.struct_dropdown['values'] = self.struct_options
         self.struct_dropdown['state'] = 'readonly'
         self.struct_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.struct_note_count_var = tk.StringVar(self.struct_frame)
+        self.struct_note_count_options = ["Produce Extra Notes", "Produce Exactly Enough Notes"]
+        self.struct_note_count_dropdown = ttk.Combobox(self.struct_frame, textvariable=self.struct_note_count_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=26)
+        self.struct_note_count_dropdown['values'] = self.struct_note_count_options
+        self.struct_note_count_dropdown['state'] = 'readonly'
+        self.struct_note_count_dropdown.grid(row=0, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.final_note_door_ttp_canvas = tk.Label(self.struct_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.final_note_door_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.final_note_door_checkbox_ttp = self.CreateToolTip(self.final_note_door_ttp_canvas, self, tool_tips_dict["GRUNTILDAS_LAIR"]["FINAL_NOTE_DOOR"])
@@ -1597,7 +2010,7 @@ class User_GUI_Class():
         self.gold_feather_carry_entry.grid(row=2, column=4, padx=self.padx, pady=self.pady)
         self.random_carry_capacity_button = tk.Button(self.carry_limit_frame, text='Random Carry\nCapacities', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._set_random_carry_capacities)
         self.random_carry_capacity_button.grid(row=1, rowspan=2, column=5, padx=self.padx, pady=self.pady)
-        self.final_puzzle_var.trace('w', self._lock_final_puzzle_value)
+        self.struct_var.trace('w', self._lock_struct_options)
         # Non Flagged Objects
         self.non_flagged_object_frame = tk.LabelFrame(self._collectables_tab, text="Jinjos, 1-Ups, & Misc Objects", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.non_flagged_object_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
@@ -1635,6 +2048,12 @@ class User_GUI_Class():
         self.world_entrance_dropdown['values'] = self.world_entrance_options
         self.world_entrance_dropdown['state'] = 'readonly'
         self.world_entrance_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.world_exit_var = tk.StringVar(self.world_entrance_frame)
+        self.world_exit_options = ["Exit From World You Were Just In", "Exit From Entrance You Entered From"]
+        self.world_exit_dropdown = ttk.Combobox(self.world_entrance_frame, textvariable=self.world_exit_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=33)
+        self.world_exit_dropdown['values'] = self.world_exit_options
+        self.world_exit_dropdown['state'] = 'readonly'
+        self.world_exit_dropdown.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.all_starting_moves_var = tk.IntVar()
         self.all_starting_moves_checkbutton = tk.Checkbutton(self.world_entrance_frame, text="Start Game With All Moves", variable=self.all_starting_moves_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.all_starting_moves_checkbutton.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='sw')
@@ -1854,7 +2273,7 @@ class User_GUI_Class():
         ### CUSTOM SETTINGS TAB ###
         ###########################
         self._custom_settings_tab = ttk.Frame(self._tab_control)
-        self._tab_control.add(self._custom_settings_tab, text="Customizable")
+        self._tab_control.add(self._custom_settings_tab, text="MAP Config")
         self.customizable_frame = tk.LabelFrame(self._custom_settings_tab, text="Models, Animations, & Properties", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.customizable_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.customizable_frame["borderwidth"] = 0
@@ -1862,20 +2281,25 @@ class User_GUI_Class():
         self.customizable_ttp_canvas = tk.Label(self.customizable_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.customizable_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.customizable_frame_ttp = self.CreateToolTip(self.customizable_ttp_canvas, self, tool_tips_dict["CUSTOMIZABLE"]["MODELS"])
-        self.customizable_var = tk.StringVar(self.customizable_frame)
-        self.customizable_options = [file_name.split(".json")[0]
-                                     for file_name in os.listdir(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/")
-                                     if(file_name.endswith(".json"))]
-        self.customizable_options.insert(0, "None")
-        self.customizable_options.insert(1, "Random Preset")
-        self.customizable_var.set("None")
-        self.customizable_dropdown = ttk.Combobox(self.customizable_frame, textvariable=self.customizable_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size), width=30)
-        self.customizable_dropdown['values'] = self.customizable_options
-        self.customizable_dropdown['state'] = 'readonly'
-        self.customizable_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.customizable_file_description = tk.Label(self.customizable_frame, text="No Model/Animation/Properties file selected.\nSelect a preset to check its description!", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size), justify=tk.LEFT)
-        self.customizable_file_description.grid(row=1, column=1, padx=self.padx, pady=self.pady)
-        self.customizable_var.trace('w', self._display_map_file_description)
+        self.all_aesthetics_button = tk.Button(self.customizable_frame, text='Select All\nCustom Aesthetic', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._all_custom_aesthetics()))
+        self.all_aesthetics_button.grid(row=0, column=1, padx=self.padx, pady=self.pady)
+        self.no_customization_button = tk.Button(self.customizable_frame, text='Uncheck All\nCustom Options', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._no_customization()))
+        self.no_customization_button.grid(row=0, column=2, padx=self.padx, pady=self.pady)
+        self.random_customization_button = tk.Button(self.customizable_frame, text='Random Customs\nAnd Hide Options', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._random_customization()), width=15)
+        self.random_customization_button.grid(row=0, column=3, padx=self.padx, pady=self.pady)
+        self.customizable_checklist_frame = tk.LabelFrame(self.customizable_frame, text="(A) = Aesthetical Only; (P) = Contains Property Changes", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.customizable_checklist_frame.grid(row=1, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
+        self.customizable_checklist_frame["borderwidth"] = 0
+        self.customizable_checklist_frame["highlightthickness"] = 0
+        self.customizable_checkbox_dict = {}
+        self.hiding_customization = False
+        self.customization_checkbuttons = []
+        for json_count, json_name in enumerate(sorted(os.listdir(f"{self.cwd}/Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/JSON_Files/"))):
+            display_name = json_name.split(".json")[0]
+            self.customizable_checkbox_dict[display_name] = tk.IntVar()
+            custom_checkbutton = tk.Checkbutton(self.customizable_checklist_frame, text=display_name, variable=self.customizable_checkbox_dict[display_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=13, anchor="w")
+            custom_checkbutton.grid(row=(json_count // 4) + 1, column=(json_count % 4), padx=self.padx, pady=self.pady, sticky='w')
+            self.customization_checkbuttons.append(custom_checkbutton)
         ##########################
         ### WORLD SPECIFIC TAB ###
         ##########################
