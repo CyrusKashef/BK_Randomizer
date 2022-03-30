@@ -37,7 +37,7 @@ from .Generic_World import World
 from .Generic_Setup_File import SetupFile
 from ..Dicts_And_Lists import Structs, Non_Flagged_Objects, Enemies, Flagged_Objects, Sequences, World_Order_Warps
 from ..Dicts_And_Lists.Misc_Dicts_And_Lists import note_door_texture_offsets, note_door_indices
-from ..Dicts_And_Lists.Flagged_Object_Flags import bottles_world_warp_dict, extra_flagged_object_flags
+from ..Dicts_And_Lists.Flagged_Object_Flags import bottles_world_warp_dict, extra_flagged_object_flags, extra_flagged_object_flags_adjusted
 from Randomization_Processes.World_Manipulation.Warps.Basic_World_Order import World_Order_Basic
 from Randomization_Processes.World_Manipulation.Warps.Bottles_World_Order import World_Order_Bottles
 from ..Common_Functions import leading_zeros, possible_negative, fit_for_hex
@@ -1576,24 +1576,28 @@ class World_Manipulation_Class():
                                 bottles_world_warp_dict[world_name]["Flagged_Object_Flags"][flag_string]["Type"] = "Mumbo Token"
                             bottles_world_warp_dict[world_name]["Flagged_Object_Flags"][flag_string]["ID"] = flag_id
                             break
+        if(self.grandmaster.world_exit_var.get() == "Exit From World You Were Just In"):
+            use_this_dict = extra_flagged_object_flags_adjusted
+        else:
+            use_this_dict = extra_flagged_object_flags
         for world_object in self.world_list[-2:]:
             world_name = world_object._world_name
-            for flag_string in extra_flagged_object_flags[world_name]:
+            for flag_string in use_this_dict[world_name]:
                 if(flag_string.startswith("*")):
-                    extra_flagged_object_flags[world_name][flag_string]["ID"] = flag_string
+                    use_this_dict[world_name][flag_string]["ID"] = flag_string
                 else:
                     for setup_file in world_object._setup_list:
                         flag_id = setup_file._obtain_object_id_at_location(flag_string)
                         if(flag_id != -1):
                             if((flag_id >= 0x1) and flag_id <= 0x63):
-                                extra_flagged_object_flags[world_name][flag_string]["Type"] = "Jiggy"
+                                use_this_dict[world_name][flag_string]["Type"] = "Jiggy"
                             elif((flag_id >= 0x64) and flag_id <= 0x79):
-                                extra_flagged_object_flags[world_name][flag_string]["Type"] = "Empty Honeycomb"
+                                use_this_dict[world_name][flag_string]["Type"] = "Empty Honeycomb"
                             elif((flag_id >= 0xC8) and flag_id <= 0x13A):
-                                extra_flagged_object_flags[world_name][flag_string]["Type"] = "Mumbo Token"
-                            extra_flagged_object_flags[world_name][flag_string]["ID"] = flag_id
+                                use_this_dict[world_name][flag_string]["Type"] = "Mumbo Token"
+                            use_this_dict[world_name][flag_string]["ID"] = flag_id
                             break
-        self.world_order = World_Order_Bottles(bottles_world_warp_dict, extra_flagged_object_flags, seed_val=self.seed,
+        self.world_order = World_Order_Bottles(bottles_world_warp_dict, use_this_dict, seed_val=self.seed,
                                                one_hp=self.grandmaster.one_health_banjo_var.get(), final_puzzle_option=self.grandmaster.final_puzzle_var.get(),
                                                world_exit_option=self.grandmaster.world_exit_var.get(), removed_detransformations=self.grandmaster.remove_magic_barriers_var.get())
         self.world_order._determine_world_order()
