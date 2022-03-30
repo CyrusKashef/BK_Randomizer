@@ -14,7 +14,7 @@ class Models_Animations_Properties_Class():
         self.seed_val = seed_val
         self.file_dir = file_dir
         self.randomized_rom_path = randomized_rom_path
-        self._master_dict = read_json(f"{self.file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/{selected_json}.json")
+        self._master_dict = read_json(f"{self.file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/JSON_Files/{selected_json}.json")
     
     def _models_main(self):
         models_dict = self._master_dict["Models"]
