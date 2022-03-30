@@ -345,13 +345,16 @@ class World_Manipulation_Class():
             "Unknown2": 0xB4,
             "Size": 0x0,
             }
-        scaled_note_count = int(int(self.grandmaster.final_note_door_val) // 0.9)
-        if(scaled_note_count < 10):
-            scaled_note_count = 0
+        if(self.grandmaster.struct_note_count_var.get() == "Produce Extra Notes"):
+            note_count = int(int(self.grandmaster.final_note_door_val) // 0.9)
         else:
-            scaled_note_count -= 10
-        self.struct_info_list = [note_info] * scaled_note_count
-        for struct_count in range(struct_count - scaled_note_count):
+            note_count = int(self.grandmaster.final_note_door_val)
+        if(note_count < 10):
+            note_count = 0
+        else:
+            note_count -= 10
+        self.struct_info_list = [note_info] * note_count
+        for struct_count in range(struct_count - note_count):
             struct_info = self._choose_from_list(struct_list, struct_count)
             self.struct_info_list.append(struct_info)
         self._shuffle_list(self.struct_info_list)
@@ -650,14 +653,8 @@ class World_Manipulation_Class():
             flying_enemy_list = ["190C0268"]
         for setup_file in world_object._setup_list:
             for item_count in range(len(setup_file.ground_enemy_info_list)):
-                reroll = True
                 additional_increase = 0
-                while(reroll):
-                    new_enemy = self._choose_from_list(ground_enemy_list, setup_file.setup_address, increment=(item_count+additional_increase))
-                    if((setup_file.setup_name == "Nipper's Shell") and (new_enemy == "190C0069")):
-                        additional_increase += 69
-                    else:
-                        reroll = False
+                new_enemy = self._choose_from_list(ground_enemy_list, setup_file.setup_address, increment=(item_count+additional_increase))
                 new_enemy_info = {
                     "Script1": int(new_enemy[:2], 16),
                     "Script2": int(new_enemy[2:4], 16),
@@ -780,13 +777,18 @@ class World_Manipulation_Class():
             setup_file.jiggy_count = 0
             setup_file.empty_honeycomb_count = 0
             for list_index in range(len(setup_file.flagged_object_index_list)):
+                object_name = Flagged_Objects.obj_flagged_id_dict[leading_zeros(self.flagged_object_info_list[list_index_start + list_index][0]["Obj_ID2"], 4).upper()]
                 obj_index = setup_file.flagged_object_index_list[list_index][0]
                 flag_index = setup_file.flagged_object_index_list[list_index][1]
+                if((self.grandmaster.remove_floating_jiggies_var.get() == 1) and (object_name == "Jiggy")):
+                    self.flagged_object_info_list[list_index+list_index_start][0]["Obj_ID1"] = 0x02
+                    self.flagged_object_info_list[list_index+list_index_start][0]["Obj_ID2"] = 0x68
                 obj_info = self.flagged_object_info_list[list_index+list_index_start][0]
                 flag_info = self.flagged_object_info_list[list_index+list_index_start][1]
                 setup_file._set_flagged_object(obj_index, obj_info, flag_index, flag_info)
-                object_name = Flagged_Objects.obj_flagged_id_dict[leading_zeros(self.flagged_object_info_list[list_index_start + list_index][0]["Obj_ID2"], 4).upper()]
-                if(object_name == "Jiggy"):
+                if((self.grandmaster.remove_floating_jiggies_var.get() == 1) and (object_name == "Jiggy")):
+                    pass
+                elif(object_name == "Jiggy"):
                     obj_id = leading_zeros(flag_info['Obj_ID1'], 2) + leading_zeros(flag_info['Obj_ID2'], 2)
                     setup_file.flagged_obj_dict[f"Jiggy (ID {int(obj_id, 16)})"] = f"From {Flagged_Objects.cheat_sheet_dict[obj_id.upper()]}"
                     setup_file.jiggy_count += 1
@@ -809,13 +811,18 @@ class World_Manipulation_Class():
             for setup_file in world_object._setup_list:
                 setup_file.flagged_obj_dict = {}
                 for list_index in range(len(setup_file.flagged_object_index_list)):
+                    object_name = Flagged_Objects.obj_flagged_id_dict[leading_zeros(self.flagged_object_info_list[list_index_start + list_index][0]["Obj_ID2"], 4).upper()]
                     obj_index = setup_file.flagged_object_index_list[list_index][0]
                     flag_index = setup_file.flagged_object_index_list[list_index][1]
+                    if((self.grandmaster.remove_floating_jiggies_var.get() == 1) and (object_name == "Jiggy")):
+                        self.flagged_object_info_list[list_index+list_index_start][0]["Obj_ID1"] = 0x02
+                        self.flagged_object_info_list[list_index+list_index_start][0]["Obj_ID2"] = 0x68
                     obj_info = self.flagged_object_info_list[list_index+list_index_start][0]
                     flag_info = self.flagged_object_info_list[list_index+list_index_start][1]
                     setup_file._set_flagged_object(obj_index, obj_info, flag_index, flag_info)
-                    object_name = Flagged_Objects.obj_flagged_id_dict[leading_zeros(self.flagged_object_info_list[list_index_start + list_index][0]["Obj_ID2"], 4).upper()]
-                    if(object_name == "Jiggy"):
+                    if((self.grandmaster.remove_floating_jiggies_var.get() == 1) and (object_name == "Jiggy")):
+                        pass
+                    elif(object_name == "Jiggy"):
                         obj_id = leading_zeros(flag_info['Obj_ID1'], 2) + leading_zeros(flag_info['Obj_ID2'], 2)
                         setup_file.flagged_obj_dict[f"Jiggy (ID {int(obj_id, 16)})"] = f"From {Flagged_Objects.cheat_sheet_dict[obj_id.upper()]}"
                         setup_file.jiggy_count += 1
@@ -830,16 +837,27 @@ class World_Manipulation_Class():
                             setup_file.flagged_obj_dict[object_name] += 1
                 list_index_start += len(setup_file.flagged_object_index_list)
     
+    def _remove_floating_jiggies(self):
+        replacement_dict = {
+            2: 0x02,
+            3: 0x68
+            }
+        for world_object in self.world_list:
+            for setup_file in world_object._setup_list:
+                setup_file._replace_all_in_area("190C0046", replacement_dict)
+    
     def _flagged_objects_main(self):
         '''Runs the flagged objects options that are not NONE'''
         self.grandmaster.logger.info("Flagged Objects Main")
-        if(self.grandmaster.flagged_object_var.get() == "Shuffle (World)"):
+        if((self.grandmaster.flagged_object_var.get() == "None") and (self.grandmaster.remove_floating_jiggies_var.get() == 1)):
+            self._remove_floating_jiggies()
+        elif(self.grandmaster.flagged_object_var.get() == "Shuffle (World)"):
             for world_object in self.world_list:
                 self._gather_flagged_objects(world_object)
                 self._shuffle_flagged_objects_within_world(world_object)
                 self._move_flagged_objects_within_world(world_object)
                 self.flagged_object_info_list = []
-        if(self.grandmaster.flagged_object_var.get() == "Shuffle (Game)"):
+        elif(self.grandmaster.flagged_object_var.get() == "Shuffle (Game)"):
             for world_object in self.world_list:
                 self._gather_flagged_objects(world_object)
             self._shuffle_flagged_objects_within_game()
@@ -1317,9 +1335,6 @@ class World_Manipulation_Class():
             "Click Clock Wood": "9"
         }
         gruntildas_lair_warp_setups = [0, 9, 10, 11, 5, 4, 13, 15, 6]
-        if(shuffle_type == "Simple"):
-            world_order_nums.pop("Mumbo's Mountain")
-            gruntildas_lair_warp_setups.pop(0)
         curr_world_num = 0
         for setup_num in gruntildas_lair_warp_setups:
             self.curr_setup_file = self.gruntildas_lair._setup_list[setup_num]
@@ -1382,7 +1397,7 @@ class World_Manipulation_Class():
             }
         (self.clankers_cavern._setup_list[1])._edit_object("FF1F07EDF8FD190C0354", edit_dict)
     
-    def _world_entrance_signs(self, shuffle_type="Simple"):
+    def _world_entrance_signs(self):
         '''Edits the world entrance signs based on world order'''
         # 0x89B0 - 4306E0
         world_texture_dict = {
@@ -1396,8 +1411,6 @@ class World_Manipulation_Class():
             "Rusty Bucket Bay": 14,
             "Click Clock Wood": 16,
             }
-        if(shuffle_type == "Simple"):
-            self.world_order.world_order_list.insert(0, "Mumbo's Mountain")
         new_order_dict = {}
         for curr_index in range(len(world_texture_dict)):
             new_order_dict[curr_index * 2] = world_texture_dict[self.world_order.world_order_list[curr_index]]
@@ -1407,11 +1420,9 @@ class World_Manipulation_Class():
         texture_obj._extract_texture_setup_info()  
         texture_obj._rearrange_textures(new_order_dict)
     
-    def _brentilda_world_order_hints(self, shuffle_type="Simple"):
+    def _brentilda_world_order_hints(self):
         '''Adjusts Brentilda's hints to give hints for the randomizer'''
         world_object_list = []
-        if(shuffle_type == "Simple"):
-            world_object_list.append(self.mumbos_mountain)
         for world_name in self.world_order.world_order_list:
             if(world_name == "Click Clock Wood"):
                 if(self.grandmaster.ccw_var.get() == "Season"):
@@ -1461,7 +1472,7 @@ class World_Manipulation_Class():
     ### BASIC SHUFFLE ###
     def _basic_calculate_new_world_order(self):
         '''Simple world order calculation'''
-        self.world_order = World_Order_Basic(self.seed)
+        self.world_order = World_Order_Basic(self.seed, self.grandmaster.world_exit_var.get())
         self.world_order._world_order_main()
     
     def _basic_edit_bottles_mound(self):
@@ -1583,7 +1594,8 @@ class World_Manipulation_Class():
                             extra_flagged_object_flags[world_name][flag_string]["ID"] = flag_id
                             break
         self.world_order = World_Order_Bottles(bottles_world_warp_dict, extra_flagged_object_flags, seed_val=self.seed,
-                                               one_hp=self.grandmaster.one_health_banjo_var.get(), final_puzzle_option=self.grandmaster.final_puzzle_var.get())
+                                               one_hp=self.grandmaster.one_health_banjo_var.get(), final_puzzle_option=self.grandmaster.final_puzzle_var.get(),
+                                               world_exit_option=self.grandmaster.world_exit_var.get(), removed_detransformations=self.grandmaster.remove_magic_barriers_var.get())
         self.world_order._determine_world_order()
         world_cheat_sheet_str = ""
         for world in self.world_order.world_order_list:
@@ -1640,16 +1652,45 @@ class World_Manipulation_Class():
         self._gather_all_bottles_mounds()
         if(self.grandmaster.world_entrance_var.get() == "Basic Shuffle"):
             self._basic_world_order_shuffle_main()
-            self._world_entrance_signs(shuffle_type="Simple")
-            if(self.grandmaster.skip_furnace_fun_var.get() == 1):
-                self._brentilda_world_order_hints(shuffle_type="Simple")
             self._add_clankers_cavern_jump_pad()
         elif(self.grandmaster.world_entrance_var.get() == "Bottles Shuffle"):
             self._bottles_world_order_shuffle_main()
-            self._world_entrance_signs(shuffle_type="Bottles")
             self._remove_learning_move_warps()
+        if(self.grandmaster.world_entrance_var.get() != "None"):
+            self._world_entrance_signs()
             if(self.grandmaster.skip_furnace_fun_var.get() == 1):
-                self._brentilda_world_order_hints(shuffle_type="Bottles")
+                self._brentilda_world_order_hints()
+            if(self.grandmaster.world_exit_var.get() == "Exit From Entrance You Entered From"):
+                self._world_exits()
+
+    def _world_exits(self):
+        with open(f"{self._file_dir}Randomized_ROM/F9CAE0-Decompressed.bin", "r+b") as decomp_file:
+            mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
+            exit_indices_dict = {
+                "Mumbo's Mountain": 0x8FD0,
+                "Treasure Trove Cove": 0x8FD4,
+                "Clanker's Cavern": 0x8FD8,
+                "Bubblegloop Swamp": 0x8FDC,
+                "Freezeezy Peak": 0x8FE0,
+                "Gobi's Valley": 0x8FE8,
+                "Mad Monster Mansion": 0x8FF4,
+                "Rusty Bucket Bay": 0x8FF0,
+                "Click Clock Wood": 0x8FEC,
+                }
+            world_exit_dict = {
+                0: [0x00, 0x69, 0x00, 0x02],
+                1: [0x00, 0x6D, 0x00, 0x04],
+                2: [0x00, 0x70, 0x00, 0x02],
+                3: [0x00, 0x72, 0x00, 0x02],
+                4: [0x00, 0x6F, 0x00, 0x06],
+                5: [0x00, 0x6E, 0x00, 0x03],
+                6: [0x00, 0x75, 0x00, 0x02],
+                7: [0x00, 0x77, 0x00, 0x02],
+                8: [0x00, 0x79, 0x00, 0x06],
+                }
+            for world_count, world_name in enumerate(self.world_order.world_order_list):
+                for index_add in range(4):
+                    mm_decomp[exit_indices_dict[world_name] + index_add] = world_exit_dict[world_count][index_add]
 
     ##########################
     ### WITHIN WORLD WARPS ###
