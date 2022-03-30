@@ -197,7 +197,10 @@ class Progression_GUI_Class():
         # Final Puzzle
         if(self.master.final_puzzle_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
-            self.master.final_puzzle_val = randint(0, 99)
+            if(self.master.remove_floating_jiggies_var.get() == 1):
+                self.master.final_puzzle_val = randint(0, 55)
+            else:
+                self.master.final_puzzle_val = randint(0, 99)
         else:
             self.master.final_puzzle_val = int(self.master.final_puzzle_value.get())
         self.master.logger.debug(f"Final Puzzle Val: {self.master.final_puzzle_val}")
