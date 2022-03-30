@@ -444,7 +444,14 @@ class Progression_GUI_Class():
                 self.warning_label.set_text("Uh-Oh...")
                 self.pb_label.set_text(f"Banjo-Kazooie Color Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
-        if(self.master.customizable_var.get() != "None"):
+        customization_option = False
+        for custom_count, custom_name in enumerate(self.master.customizable_checkbox_dict):
+            if(self.master.customizable_checkbox_dict[custom_name].get() == 2):
+                seed(a=(self.seed_val + custom_count))
+                self.master.customizable_checkbox_dict[custom_name].set(randint(0, 1))
+            if(self.master.customizable_checkbox_dict[custom_name].get() == 1):
+                customization_option = True
+        if(customization_option):
             try:
                 self.pb_label.set_text("Banjo Must Stand Still Or Spell Go All Funny...")
                 misc_manip._models_animations_properties(self.seed_val, self.master.cwd, self.rom_path)
