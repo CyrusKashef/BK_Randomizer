@@ -31,7 +31,7 @@ learnable_moves_dict = {
 #########################
 
 class World_Order_Bottles():
-    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0, final_puzzle_option=0):
+    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0, final_puzzle_option=0, world_exit_option="Exit From World You Were Just In", removed_detransformations=0):
         '''Initializes the World Order Bottles Class'''
         self.bottles_world_warp_dict = bottles_world_warp_dict
         self.extra_flagged_object_flags = extra_flagged_object_flags
@@ -53,6 +53,8 @@ class World_Order_Bottles():
             self._required_jiggies = [3, 8, 15, 23, 32, 42, 54, 69, 0]
         else:
             self._required_jiggies = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.world_exit_option = world_exit_option
+        self.removed_detransformations = removed_detransformations
     
     def _progression_requirements(self, world_name):
         '''Calculates the progression requirements for the world number, based on lair progression and Jiggies needed to open the worlds'''
@@ -61,56 +63,68 @@ class World_Order_Bottles():
         # Exiting MM -> Going To TTC
         if(world_count == 0):
             required_jiggy_count = self._required_jiggies[0]
-            if(world_name == "Mumbo's Mountain"):
+            if(self.world_exit_option == "Exit From World You Were Just In"):
+                if(world_name == "Mumbo's Mountain"):
+                    required_move_list = ["Talon_Trot"]
+            else:
                 required_move_list = ["Talon_Trot"]
         # Exiting TTC -> Going To CC
         elif(world_count == 1):
             required_jiggy_count = self._required_jiggies[1]
-            if((world_name != "Clanker's Cavern") and ("Clanker's Cavern" not in self.world_order_list)):
-                # You Can Enter World If Leaving It
-                # Shock_Jump_Pad For Puzzle, Beak_Buster For Pipes
+            if(self.world_exit_option == "Exit From World You Were Just In"):
+                if((world_name != "Clanker's Cavern") and ("Clanker's Cavern" not in self.world_order_list)):
+                    # You Can Enter World If Leaving It
+                    # Shock_Jump_Pad For Puzzle, Beak_Buster For Pipes
+                    required_move_list = ["Shock_Jump_Pad", "Beak_Buster"]
+            else:
                 required_move_list = ["Shock_Jump_Pad", "Beak_Buster"]
         # Exiting CC -> Going To BGS
         elif(world_count == 2):
             required_jiggy_count = self._required_jiggies[2]
-            if((world_name == "Bubblegloop Swamp") or ("Bubblegloop Swamp" in self.world_order_list)):
-                # You Can Enter World If Leaving It; Beak_Buster For Puzzle
-                required_move_list = ["Beak_Buster"]
-            else:
-                # Talon_Trot To Get To BGS; Beak_Buster For Puzzle
-                required_move_list = ["Talon_Trot", "Beak_Buster"]
+            if(self.world_exit_option == "Exit From World You Were Just In"):
+                if((world_name == "Bubblegloop Swamp") or ("Bubblegloop Swamp" in self.world_order_list)):
+                    # You Can Enter World If Leaving It; Beak_Buster For Puzzle
+                    required_move_list = ["Beak_Buster"]
+                else:
+                    # Talon_Trot To Get To BGS; Beak_Buster For Puzzle
+                    required_move_list = ["Talon_Trot", "Beak_Buster"]
         # Exiting BGS -> Going To FP
         elif(world_count == 3):
             required_jiggy_count = self._required_jiggies[3]
-            if((world_name == "Freezeezy Peak") or ("Freezeezy Peak" in self.world_order_list)):
-                # You Can Enter World If Leaving It
-                required_move_list = []
-            elif(world_name not in ["Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood"]):
-                possible_world_found = False
-                for possible_world in ["Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood"]:
-                    if(possible_world in self.world_order_list):
-                        possible_world_found = True
-                        break
-                if(possible_world_found):
-                    if(self.one_hp):
-                        # Get To Puzzle Without Taking Damage
-                        required_move_list = ["Wading_Boots"]
+            if(self.world_exit_option == "Exit From World You Were Just In"):
+                if((world_name == "Freezeezy Peak") or ("Freezeezy Peak" in self.world_order_list)):
+                    # You Can Enter World If Leaving It
+                    required_move_list = []
+                elif(world_name not in ["Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood"]):
+                    possible_world_found = False
+                    for possible_world in ["Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood"]:
+                        if(possible_world in self.world_order_list):
+                            possible_world_found = True
+                            break
+                    if(possible_world_found):
+                        if(self.one_hp):
+                            # Get To Puzzle Without Taking Damage
+                            required_move_list = ["Wading_Boots"]
+                    else:
+                        if(self.one_hp):
+                            required_move_list = ["Shock_Jump_Pad", "Wading_Boots"]
+                        else:
+                            # Get To 260 Note Door; Get To Puzzle Without Taking Damage
+                            required_move_list = ["Shock_Jump_Pad"]
                 else:
                     if(self.one_hp):
-                        required_move_list = ["Shock_Jump_Pad", "Wading_Boots"]
-                    else:
-                        # Get To 260 Note Door; Get To Puzzle Without Taking Damage
-                        required_move_list = ["Shock_Jump_Pad"]
+                        required_move_list = ["Wading_Boots"]
             else:
                 if(self.one_hp):
                     required_move_list = ["Wading_Boots"]
         # Exiting FP -> Going To GV
         elif(world_count == 4):
             required_jiggy_count = self._required_jiggies[4]
-            if((world_name != "Gobi's Valley") and ("Gobi's Valley" not in self.world_order_list)):
-                # Get To GV Without Taking Damage
-                if(self.one_hp):
-                    required_move_list = ["Wading_Boots"]
+            if(self.world_exit_option == "Exit From World You Were Just In"):
+                if((world_name != "Gobi's Valley") and ("Gobi's Valley" not in self.world_order_list)):
+                    # Get To GV Without Taking Damage
+                    if(self.one_hp):
+                        required_move_list = ["Wading_Boots"]
         # Exiting GV -> Going To MMM
         elif(world_count == 5):
             required_jiggy_count = self._required_jiggies[5]
@@ -119,12 +133,14 @@ class World_Order_Bottles():
         elif(world_count == 6):
             required_jiggy_count = self._required_jiggies[6]
             # Raise The Water Level To Reach Puzzle
-            required_move_list = ["Beak_Buster"]
+            if(self.world_exit_option == "Exit From World You Were Just In"):
+                required_move_list = ["Beak_Buster"]
         # Exiting RBB -> Going To CCW
         elif(world_count == 7):
             required_jiggy_count = self._required_jiggies[7]
             # CCW Puzzle Button
-            required_move_list = ["Beak_Buster"]
+            if(self.world_exit_option == "Exit From World You Were Just In"):
+                required_move_list = ["Beak_Buster"]
         else:
             required_jiggy_count = self._required_jiggies[8]
         progress_move_list = []
@@ -284,6 +300,8 @@ class World_Order_Bottles():
                                     transformation_jiggies.append(object_id)
                                 can_obtain = False
                                 break
+                        if((self.world_exit_option == 1) and ((len(self.world_order_list) + 1) < self.extra_flagged_object_flags[area_name][object_flag]["World_Count"])):
+                            can_obtain = False
                         if(can_obtain):
                             self.temp_learned_moves[area_name]["New_Jiggies"].append(object_id)
                 if((object_type == "Mumbo Token") and
@@ -298,6 +316,8 @@ class World_Order_Bottles():
                                     transformation_tokens.append(object_id)
                                 can_obtain = False
                                 break
+                        if((self.world_exit_option == 1) and ((len(self.world_order_list) + 1) < self.extra_flagged_object_flags[area_name][object_flag]["World_Count"])):
+                            can_obtain = False
                         if(can_obtain):
                             self.temp_learned_moves[area_name]["New_Mumbo_Tokens"].append(object_id)
     
@@ -409,6 +429,23 @@ class World_Order_Bottles():
             while(self.remaining_worlds):
                 # What can be the next world?
                 possible_world_list = self._possible_next_worlds()
+                if((self.world_exit_option == "Exit From Entrance You Entered From")):
+                    if(self.removed_detransformations == 0):
+                        if(len(self.world_order_list) == 6):
+                            if("Mad Monster Mansion" in possible_world_list):
+                                next_world = "Mad Monster Mansion"
+                            else:
+                                self._restart()
+                        elif("Mad Monster Mansion" in possible_world_list):
+                            possible_world_list.remove("Mad Monster Mansion")
+                    if(self.removed_detransformations == 1):
+                        if((len(self.world_order_list) == 6) and ("Mad Monster Mansion" not in self.world_order_list)):
+                            if("Mad Monster Mansion" in possible_world_list):
+                                next_world = "Mad Monster Mansion"
+                            else:
+                                self._restart()
+                        elif((len(self.world_order_list) in [1, 2]) and ("Mad Monster Mansion" in possible_world_list)):
+                            possible_world_list.remove("Mad Monster Mansion")
                 # Select from possible worlds
                 seed(a=(self.seed_val + self.increment))
                 self.increment += 1
@@ -421,6 +458,9 @@ class World_Order_Bottles():
             # Teach any remaining moves
             self._remaining_moves()
         except IndexError:
+            self._restart()
+            self._determine_world_order()
+        except KeyError:
             self._restart()
             self._determine_world_order()
 
