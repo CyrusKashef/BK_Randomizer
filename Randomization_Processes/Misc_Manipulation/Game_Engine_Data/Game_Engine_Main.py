@@ -146,3 +146,29 @@ class Game_Engine_Class():
         ## Lower Health Total?
         # 00 03 20 [C0]
         self.mm[0xBF157] = 0x00
+
+    def _patch_ttc_yumyum_crashfix(self):
+        """
+        Fixes a vanilla bug: when a yumyum in TTC tries to eat a sprite in a cube,
+        the game treats it as an actor, derefs an invalid pointer, and segfaults.
+
+        Added by @wed, with <3
+        """
+        ovl_ttc_offset        = "FAE860"
+        ovl_core2_data_offset = "F9CAE0"
+
+        with open(f"{self._file_dir}Randomized_ROM/{ovl_ttc_offset}-Decompressed.bin", "r+b") as f:
+            ovl_ttc = mmap.mmap(f.fileno(), 0)
+
+            # Set hook in yumyum eat update func
+            ovl_ttc.seek(0xC90)
+            ovl_ttc.write((0x080DDDD0).to_bytes(4, "big"))
+
+        with open(f"{self._file_dir}Randomized_ROM/{ovl_core2_data_offset}-Decompressed.bin", "r+b") as f:
+            core2_data = mmap.mmap(f.fileno(), 0)
+
+            # Write fix handler over vanilla debug strings
+            core2_data.seek(0x141B0)
+            core2_data.write((0x00084E0234010080552100083C098000012848263C0100400121482A11200003).to_bytes(32, "big"))
+            core2_data.write((0x00000000080E1C2200000000080E1C2800000000).to_bytes(20, "big"))
+
