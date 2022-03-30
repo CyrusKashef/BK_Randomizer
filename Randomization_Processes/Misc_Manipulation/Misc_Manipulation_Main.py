@@ -332,19 +332,15 @@ class Misc_Manipulation_Class():
     def _models_animations_properties(self, seed_val, file_dir, randomized_rom_path):
         '''PyDoc'''
         self.grandmaster.logger.info("Models Animnations Properties")
-        selected_json = self.grandmaster.customizable_var.get()
-        if(selected_json == "Random Preset"):
-            seed(a=(self._seed_val))
-            selected_json = choice([file_name.split(".json")[0]
-                            for file_name in os.listdir(f"{file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/")
-                            if(file_name.endswith(".json"))])
-        models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, selected_json)
-        if(models_animations_properties_obj._master_dict["Models"]):
-            models_animations_properties_obj._models_main()
-        if(models_animations_properties_obj._master_dict["Animations"]):
-            models_animations_properties_obj._animations_main()
-        if(models_animations_properties_obj._master_dict["Properties"]):
-            models_animations_properties_obj._properties_main()
+        for custom_json_name in self.grandmaster.customizable_checkbox_dict:
+            if(self.grandmaster.customizable_checkbox_dict[custom_json_name].get() == 1):
+                models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, custom_json_name)
+                if(models_animations_properties_obj._master_dict["Models"]):
+                    models_animations_properties_obj._models_main()
+                if(models_animations_properties_obj._master_dict["Animations"]):
+                    models_animations_properties_obj._animations_main()
+                if(models_animations_properties_obj._master_dict["Properties"]):
+                    models_animations_properties_obj._properties_main()
 
     ########################
     ### SOUNDS AND MUSIC ###
