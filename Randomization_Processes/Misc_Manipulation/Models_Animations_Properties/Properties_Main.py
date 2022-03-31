@@ -24,12 +24,11 @@ from Randomization_Processes.Common_Functions import read_json
 
 class Properties_Manipulation_Class():
     '''Properties manipulation class'''
-    def __init__(self, seed_val, file_dir, properties_dict, selected_json):
+    def __init__(self, seed_val, file_dir, properties_dict):
         '''Initializes the properties manipulation class'''
         self._file_dir = file_dir
         self._seed_val = seed_val
         self._properties_dict = properties_dict
-        self._file_name = (selected_json.replace(" ", "_")).upper()
         asm_file_address_list = [
             "F19250", "F362EB", "F37F90", "F9CAE0", "FC4810", "FC6C0F",
             "FB24A0", "FB42D9", "FAE860", "FB1AEB", "FA3FD0", "FA5D96",
@@ -65,7 +64,7 @@ class Properties_Manipulation_Class():
                             break
     
     def _generate_cheat_sheet(self):
-        cheat_sheet_file = f"{self._file_dir}Randomized_ROM/PROPERTIES_CHEAT_SHEET_{self._file_name}_{self._seed_val}.json"
+        cheat_sheet_file = f"{self._file_dir}Randomized_ROM/PROPERTIES_CHEAT_SHEET_{self._seed_val}.json"
         with open(cheat_sheet_file, "w+") as json_file: 
             json.dump(self._new_properties_cheat_sheet, json_file, indent=4)
 
