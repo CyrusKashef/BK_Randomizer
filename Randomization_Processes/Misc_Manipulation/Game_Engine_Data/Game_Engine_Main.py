@@ -158,6 +158,7 @@ class Game_Engine_Class():
         Added by @wed, with <3
         """
         ovl_ttc        = "FAE860"
+        ovl_core1_text = "F19250"
         ovl_core2_data = "F9CAE0"
 
         with self._open_df(ovl_ttc) as f:
@@ -165,13 +166,14 @@ class Game_Engine_Class():
 
             # Set hook in yumyum eat update func
             m.seek(0xC90)
-            m.write((0x080DDDD0).to_bytes(4, "big"))
+            m.write((0x08096C05).to_bytes(4, "big"))
 
-        with self._open_df(ovl_core2_data) as f:
+        with self._open_df(ovl_core1_text) as f:
             m = mmap.mmap(f.fileno(), 0)
 
             # Write fix handler over vanilla debug strings
-            m.seek(0x141B0)
+            m.seek(0x1D5EC)
+            m.write((0x03E0000800000000).to_bytes(8, "big"))
             m.write((0x1100000D000000008D0A0000000A4E0234010080552100083C098000012A4826).to_bytes(32, "big"))
             m.write((0x3C0100400121482A1120000300000000080E1C2200000000080E1C2800000000).to_bytes(32, "big"))
 
@@ -189,18 +191,6 @@ class Game_Engine_Class():
         ovl_cc         = "FA3FD0"
         ovl_bgs        = "FB44E0"
         ovl_gv         = "FA9150"
-
-        with self._open_df(ovl_core2_text) as f:
-            m = mmap.mmap(f.fileno(), 0)
-
-            m[0xADF44] = 0x00
-            m[0xADF45] = 0x00
-            m[0xADF46] = 0x00
-            m[0xADF47] = 0x00
-            m[0x7E83C] = 0x00
-            m[0x7E83D] = 0x00
-            m[0x7E83E] = 0x00
-            m[0x7E83F] = 0x00
 
         with self._open_df(ovl_core1_text) as f:
             m = mmap.mmap(f.fileno(), 0)
