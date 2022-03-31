@@ -147,6 +147,9 @@ class Game_Engine_Class():
         # 00 03 20 [C0]
         self.mm[0xBF157] = 0x00
 
+    def _open_df(self, offset: str):
+        return open(f"{self._file_dir}Randomized_ROM/{offset}-Decompressed.bin", "r+b")
+
     def _patch_ttc_yumyum_crashfix(self):
         """
         Fixes a vanilla bug: when a yumyum in TTC tries to eat a sprite in a cube,
@@ -154,21 +157,51 @@ class Game_Engine_Class():
 
         Added by @wed, with <3
         """
-        ovl_ttc_offset        = "FAE860"
-        ovl_core2_data_offset = "F9CAE0"
+        ovl_ttc        = "FAE860"
+        ovl_core2_data = "F9CAE0"
 
-        with open(f"{self._file_dir}Randomized_ROM/{ovl_ttc_offset}-Decompressed.bin", "r+b") as f:
-            ovl_ttc = mmap.mmap(f.fileno(), 0)
+        with self._open_df(ovl_ttc) as f:
+            m = mmap.mmap(f.fileno(), 0)
 
             # Set hook in yumyum eat update func
-            ovl_ttc.seek(0xC90)
-            ovl_ttc.write((0x080DDDD0).to_bytes(4, "big"))
+            m.seek(0xC90)
+            m.write((0x080DDDD0).to_bytes(4, "big"))
 
-        with open(f"{self._file_dir}Randomized_ROM/{ovl_core2_data_offset}-Decompressed.bin", "r+b") as f:
-            core2_data = mmap.mmap(f.fileno(), 0)
+        with self._open_df(ovl_core2_data) as f:
+            m = mmap.mmap(f.fileno(), 0)
 
             # Write fix handler over vanilla debug strings
-            core2_data.seek(0x141B0)
-            core2_data.write((0x00084E0234010080552100083C098000012848263C0100400121482A11200003).to_bytes(32, "big"))
-            core2_data.write((0x00000000080E1C2200000000080E1C2800000000).to_bytes(20, "big"))
+            m.seek(0x141B0)
+            m.write((0x00084E0234010080552100083C098000012848263C0100400121482A11200003).to_bytes(32, "big"))
+            m.write((0x00000000080E1C2200000000080E1C2800000000).to_bytes(20, "big"))
+
+    def _patch_antiantitamper(self):
+        """
+        Try and patch out some vanilla antitamper checks so Jiggly doesn't have
+        to fix his checksum code. :^)
+
+        Added by @wed, with </3
+        """
+        ovl_core1_text = "F19250"
+        ovl_sm         = "FC4810"
+
+        with self._open_df(ovl_core1_text) as f:
+            m = mmap.mmap(f.fileno(), 0)
+
+            m[0x10A1C] = 0x00
+            m[0x10A1D] = 0x00
+            m[0x10A1E] = 0x00
+            m[0x10A1F] = 0x00
+            m[0x10A30] = 0x10
+            m[0x10A31] = 0x00
+
+        with self._open_df(ovl_sm) as f:
+            m = mmap.mmap(f.fileno(), 0)
+
+            m[0x1D4] = 0x10
+            m[0x1D5] = 0x00
+            m[0x1EC] = 0x10
+            m[0x1ED] = 0x00
+            m[0x204] = 0x10
+            m[0x205] = 0x00
 
