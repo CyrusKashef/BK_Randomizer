@@ -223,7 +223,7 @@ class Game_Engine_Class():
             m[0x1B7C] = 0x10
             m[0x1B7D] = 0x00
 
-        with self._open_df(ovl_tcc) as f:
+        with self._open_df(ovl_ttc) as f:
             m = mmap.mmap(f.fileno(), 0)
 
             m[0x31B4] = 0x00
