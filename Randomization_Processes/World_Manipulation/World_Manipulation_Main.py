@@ -849,9 +849,7 @@ class World_Manipulation_Class():
     def _flagged_objects_main(self):
         '''Runs the flagged objects options that are not NONE'''
         self.grandmaster.logger.info("Flagged Objects Main")
-        if((self.grandmaster.flagged_object_var.get() == "None") and (self.grandmaster.remove_floating_jiggies_var.get() == 1)):
-            self._remove_floating_jiggies()
-        elif(self.grandmaster.flagged_object_var.get() == "Shuffle (World)"):
+        if(self.grandmaster.flagged_object_var.get() == "Shuffle (World)"):
             for world_object in self.world_list:
                 self._gather_flagged_objects(world_object)
                 self._shuffle_flagged_objects_within_world(world_object)
@@ -863,6 +861,8 @@ class World_Manipulation_Class():
             self._shuffle_flagged_objects_within_game()
             self._move_flagged_objects_within_game()
             self.flagged_object_info_list = []
+        if(self.grandmaster.remove_floating_jiggies_var.get() == 1):
+            self._remove_floating_jiggies()
     
     ###############
     ### REFILLS ###
