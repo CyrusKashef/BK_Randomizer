@@ -7,15 +7,13 @@ Created on Mar 8, 2022
 from Randomization_Processes.Misc_Manipulation.Models_Animations_Properties.Swap_Models_Main import Swap_Models_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Models_Animations_Properties.Properties_Main import Properties_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Models_Animations_Properties.Animation_Main import Swap_Animations_Manipulation
-from ...Common_Functions import read_json
 
 class Models_Animations_Properties_Class():
-    def __init__(self, seed_val, file_dir, randomized_rom_path, selected_json):
+    def __init__(self, seed_val, file_dir, randomized_rom_path, master_dict):
         self.seed_val = seed_val
         self.file_dir = file_dir
         self.randomized_rom_path = randomized_rom_path
-        self.selected_json = selected_json
-        self._master_dict = read_json(f"{self.file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/JSON_Files/{self.selected_json}.json")
+        self._master_dict = master_dict
     
     def _models_main(self):
         models_dict = self._master_dict["Models"]
@@ -29,6 +27,6 @@ class Models_Animations_Properties_Class():
     
     def _properties_main(self):
         properties_dict = self._master_dict["Properties"]
-        properties_manip_obj = Properties_Manipulation_Class(self.seed_val, self.file_dir, properties_dict, self.selected_json)
+        properties_manip_obj = Properties_Manipulation_Class(self.seed_val, self.file_dir, properties_dict)
         properties_manip_obj._swap_properties_main()
         properties_manip_obj._generate_cheat_sheet()
