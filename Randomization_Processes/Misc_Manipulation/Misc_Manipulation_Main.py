@@ -24,7 +24,7 @@ from Randomization_Processes.Misc_Manipulation.Sprite_Data.Sprite_Main import Sp
 from Randomization_Processes.Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Game_Engine_Data.Game_Engine_Main import Game_Engine_Class
 from Randomization_Processes.Misc_Manipulation.Models_Animations_Properties.Models_Animations_Properties_Main import Models_Animations_Properties_Class
-from Randomization_Processes.Common_Functions import leading_zeros
+from Randomization_Processes.Common_Functions import leading_zeros, read_json
 from Randomization_Processes.Dicts_And_Lists.Misc_Dicts_And_Lists import gv_matching_puzzle_pictures
 from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids, non_softlock_start_level
 
@@ -332,15 +332,21 @@ class Misc_Manipulation_Class():
     def _models_animations_properties(self, seed_val, file_dir, randomized_rom_path):
         '''PyDoc'''
         self.grandmaster.logger.info("Models Animnations Properties")
+        master_map_dict = {"Models": {}, "Animations": {}, "Properties": {}}
         for custom_json_name in self.grandmaster.customizable_checkbox_dict:
             if(self.grandmaster.customizable_checkbox_dict[custom_json_name].get() == 1):
-                models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, custom_json_name)
-                if(models_animations_properties_obj._master_dict["Models"]):
-                    models_animations_properties_obj._models_main()
-                if(models_animations_properties_obj._master_dict["Animations"]):
-                    models_animations_properties_obj._animations_main()
-                if(models_animations_properties_obj._master_dict["Properties"]):
-                    models_animations_properties_obj._properties_main()
+                selected_json_dict = read_json(f"{self._file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/JSON_Files/{custom_json_name}.json")
+                for category in selected_json_dict:
+                    if(selected_json_dict[category]):
+                        for swap_these in selected_json_dict[category]:
+                            master_map_dict[category][f"{custom_json_name} - {swap_these}"] = selected_json_dict[category][swap_these]
+        models_animations_properties_obj = Models_Animations_Properties_Class(seed_val, file_dir, randomized_rom_path, master_map_dict)
+        if(models_animations_properties_obj._master_dict["Models"]):
+            models_animations_properties_obj._models_main()
+        if(models_animations_properties_obj._master_dict["Animations"]):
+            models_animations_properties_obj._animations_main()
+        if(models_animations_properties_obj._master_dict["Properties"]):
+            models_animations_properties_obj._properties_main()
 
     ########################
     ### SOUNDS AND MUSIC ###
