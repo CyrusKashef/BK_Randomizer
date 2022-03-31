@@ -183,7 +183,24 @@ class Game_Engine_Class():
         Added by @wed, with </3
         """
         ovl_core1_text = "F19250"
+        ovl_core2_text = "F37F90"
         ovl_sm         = "FC4810"
+        ovl_mm         = "FB24A0"
+        ovl_cc         = "FA3FD0"
+        ovl_bgs        = "FB44E0"
+        ovl_gv         = "FA9150"
+
+        with self._open_df(ovl_core2_text) as f:
+            m = mmap.mmap(f.fileno(), 0)
+
+            m[0xADF44] = 0x00
+            m[0xADF45] = 0x00
+            m[0xADF46] = 0x00
+            m[0xADF47] = 0x00
+            m[0x7E83C] = 0x00
+            m[0x7E83D] = 0x00
+            m[0x7E83E] = 0x00
+            m[0x7E83F] = 0x00
 
         with self._open_df(ovl_core1_text) as f:
             m = mmap.mmap(f.fileno(), 0)
@@ -198,10 +215,38 @@ class Game_Engine_Class():
         with self._open_df(ovl_sm) as f:
             m = mmap.mmap(f.fileno(), 0)
 
-            m[0x1D4] = 0x10
-            m[0x1D5] = 0x00
-            m[0x1EC] = 0x10
-            m[0x1ED] = 0x00
-            m[0x204] = 0x10
-            m[0x205] = 0x00
+            m[0x1D4]  = 0x10
+            m[0x1D5]  = 0x00
+            m[0x1EC]  = 0x10
+            m[0x1ED]  = 0x00
+            m[0x204]  = 0x10
+            m[0x205]  = 0x00
+            m[0x3FA4] = 0x00
+            m[0x3FA5] = 0x00
+            m[0x3FA6] = 0x00
+            m[0x3FA7] = 0x00
+
+        with self._open_df(ovl_mm) as f:
+            m = mmap.mmap(f.fileno(), 0)
+
+            m[0x1B7C] = 0x10
+            m[0x1B7D] = 0x00
+
+        with self._open_df(ovl_cc) as f:
+            m = mmap.mmap(f.fileno(), 0)
+
+            m[0x1984] = 0x10
+            m[0x1985] = 0x00
+
+        with self._open_df(ovl_bgs) as f:
+            m = mmap.mmap(f.fileno(), 0)
+
+            m[0x86C0] = 0x10
+            m[0x86C1] = 0x00
+
+        with self._open_df(ovl_gv) as f:
+            m = mmap.mmap(f.fileno(), 0)
+
+            m[0x3B8C] = 0x10
+            m[0x3B8D] = 0x00
 
