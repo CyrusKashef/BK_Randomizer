@@ -172,8 +172,8 @@ class Game_Engine_Class():
 
             # Write fix handler over vanilla debug strings
             m.seek(0x141B0)
-            m.write((0x00084E0234010080552100083C098000012848263C0100400121482A11200003).to_bytes(32, "big"))
-            m.write((0x00000000080E1C2200000000080E1C2800000000).to_bytes(20, "big"))
+            m.write((0x1100000D000000008D0A0000000A4E0234010080552100083C098000012A4826).to_bytes(32, "big"))
+            m.write((0x3C0100400121482A1120000300000000080E1C2200000000080E1C2800000000).to_bytes(32, "big"))
 
     def _patch_antiantitamper(self):
         """
