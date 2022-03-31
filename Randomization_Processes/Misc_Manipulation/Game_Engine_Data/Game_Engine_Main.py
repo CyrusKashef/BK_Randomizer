@@ -197,10 +197,8 @@ class Game_Engine_Class():
             m[0xADF45] = 0x00
             m[0xADF46] = 0x00
             m[0xADF47] = 0x00
-            m[0x7E83C] = 0x00
+            m[0x7E83C] = 0x10
             m[0x7E83D] = 0x00
-            m[0x7E83E] = 0x00
-            m[0x7E83F] = 0x00
 
         with self._open_df(ovl_core1_text) as f:
             m = mmap.mmap(f.fileno(), 0)
