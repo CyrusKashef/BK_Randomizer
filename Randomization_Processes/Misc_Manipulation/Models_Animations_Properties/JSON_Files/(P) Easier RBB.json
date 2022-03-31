@@ -1,0 +1,21 @@
+{
+	"Models": {
+	},
+	"Animations": {
+	},
+	"Properties": {
+	    "Blades": {
+	        "Original": {
+	            "019101BB040F": "Engine Room Propeller 1",
+	            "019201BC0410": "Engine Room Propeller 2",
+	            "019301BD0411": "Engine Room Propeller 3",
+	            "018501750403": "Back Propellers"
+	        },
+	        "Selection": {
+	            "0061": "1-Up",
+	            "0055": "Honeycomb"
+	        }
+	    }
+	}
+	
+}

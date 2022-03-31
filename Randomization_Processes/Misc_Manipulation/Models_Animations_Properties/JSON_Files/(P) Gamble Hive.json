@@ -1,0 +1,16 @@
+{
+	"Models": {
+	},
+	"Animations": {
+	},
+	"Properties": {
+		"Beehive": {
+			"Original": {
+	            "005000120364": "Beehive"
+		    },
+	        "Selection": {
+	        	"0054": "Random Honeycomb"
+	        }
+	    }
+	}
+}
