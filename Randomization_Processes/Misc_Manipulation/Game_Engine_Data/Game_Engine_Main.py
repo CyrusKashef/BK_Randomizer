@@ -188,6 +188,7 @@ class Game_Engine_Class():
         ovl_core2_text = "F37F90"
         ovl_sm         = "FC4810"
         ovl_mm         = "FB24A0"
+        ovl_ttc        = "FAE860"
         ovl_cc         = "FA3FD0"
         ovl_bgs        = "FB44E0"
         ovl_gv         = "FA9150"
@@ -221,6 +222,14 @@ class Game_Engine_Class():
 
             m[0x1B7C] = 0x10
             m[0x1B7D] = 0x00
+
+        with self._open_df(ovl_tcc) as f:
+            m = mmap.mmap(f.fileno(), 0)
+
+            m[0x31B4] = 0x00
+            m[0x31B5] = 0x00
+            m[0x31B6] = 0x00
+            m[0x31B7] = 0x00
 
         with self._open_df(ovl_cc) as f:
             m = mmap.mmap(f.fileno(), 0)
