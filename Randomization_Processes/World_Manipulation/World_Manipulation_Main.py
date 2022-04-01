@@ -563,11 +563,11 @@ class World_Manipulation_Class():
             return False
         return True
     
-    def _remove_yum_yums(self):
-        self.grandmaster.logger.debug("Remove Yum-Yums")
-        for setup_file in self.treasure_trove_cove._setup_list:
-            replace_list = {2: 0x00, 3: 0x67}
-            setup_file._replace_all_in_area("190C0069", replace_list)
+#     def _remove_yum_yums(self):
+#         self.grandmaster.logger.debug("Remove Yum-Yums")
+#         for setup_file in self.treasure_trove_cove._setup_list:
+#             replace_list = {2: 0x00, 3: 0x67}
+#             setup_file._replace_all_in_area("190C0069", replace_list)
     
     def _gather_enemies(self, world_object, enemy_option):
         '''Collects the enemies per setup for the world'''
@@ -703,8 +703,8 @@ class World_Manipulation_Class():
     def _enemies_main(self):
         '''Runs the enemies options that are not NONE'''
         self.grandmaster.logger.info("Enemies Main")
-        if(self.grandmaster.enemy_checkbox_dict["Yum-Yum*"]):
-            self._remove_yum_yums()
+#         if(self.grandmaster.enemy_checkbox_dict["Yum-Yum*"]):
+#             self._remove_yum_yums()
         if(self.grandmaster.enemies_var.get() == "Shuffle"):
             for world_object in self.world_list:
                 self._gather_enemies(world_object, "Shuffle")
@@ -1083,7 +1083,10 @@ class World_Manipulation_Class():
             for offset in range(0, 37, 4):
                 mm_decomp[note_door_index_start + offset + 2] = 0
             mm_decomp[note_door_index_start + 38] = final_puzzle_value
-            honeycomb_puzzle_count = 100 - final_puzzle_value
+            if(self.grandmaster.remove_floating_jiggies_var.get() == 1):
+                honeycomb_puzzle_count = 51 - final_puzzle_value
+            else:
+                honeycomb_puzzle_count = 100 - final_puzzle_value
             if(honeycomb_puzzle_count > 4):
                 honeycomb_puzzle_count = 4
             mm_decomp[note_door_index_start + 42] = honeycomb_puzzle_count
