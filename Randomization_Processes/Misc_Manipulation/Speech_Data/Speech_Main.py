@@ -156,6 +156,8 @@ class Speech_Manipulation_Class():
                     count += setup_file.note_count
             return count
         elif(object_name == "Flagged"):
+            if(self._grandmaster.remove_floating_jiggies_var.get() == 1):
+                return self._spawned_count["Click Clock Wood"]["Jiggies"], self._spawned_count["Click Clock Wood"]["Empty Honeycombs"]
             if(self._grandmaster.flagged_object_var.get() in ["None", "Shuffle (World)"]):
                 return 10, 2
             else:
@@ -200,6 +202,8 @@ class Speech_Manipulation_Class():
                 count += self._spawned_count[world_object._world_name]["Notes"]
                 return count
         elif(object_name == "Flagged"):
+            if(self._grandmaster.remove_floating_jiggies_var.get() == 1):
+                return self._spawned_count[world_object._world_name]["Jiggies"], self._spawned_count[world_object._world_name]["Empty Honeycombs"]
             if(self._grandmaster.flagged_object_var.get() in ["None", "Shuffle (World)"]):
                 if(world_object._world_name == "Spiral Mountain"):
                     return 0, 6
@@ -1160,7 +1164,7 @@ class Speech_Manipulation_Class():
         # 0x0000 - 000000
         # GRUNTILDA: When you open a world door, baddies escape and roam once more!
         grunty_text = Speech_File_Class(self._file_dir, "")
-        grunty_text._replace_line("", "WORLDS ARE NOT THE ONLY CHANGE, IN MY LAIR, THINGS ARE STRANGE!")
+        grunty_text._replace_line("", "WORLDS ARE NOT THE ONLY CHANGE, IN MY LAIR, THINGS GET STRANGE!")
     
     def _gruntilda_lair_speech_37(self):
         # 0x0000 - 000000
