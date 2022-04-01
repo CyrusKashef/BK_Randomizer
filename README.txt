@@ -50,7 +50,7 @@ If you don't feel like reading all of this, I made a video a while back, though 
 https://www.youtube.com/watch?v=eIVAZJl08N4
 
 ### Overall Buttons
-* Load Config: Reads a JSON file to configure the settings automatically.
+* Load Config: Reads a JSON file to configure the settings automatically. If settings are changed between versions, a warning will appear letting you know how much has changed.
 * Save Config: Writes a JSON file for future use. See LOAD CONFIG.
 * Open README: Opens the README.txt file (If you're reading this, bless your heart).
 * Submit: Runs the randomizer with the current features, barring everything is set correctly. If not, a window should appear telling you what is incorrect/missing.
@@ -70,14 +70,13 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * None: Skips the setting.
 * Shuffle (World): Takes all items of that set and swaps the Object IDs within the world (can be overriden for Click Clock Wood; see World Specific Features).
 * Shuffle (Game): Takes all items of that set and swaps the Object IDs within all worlds/lair. This will override the World Specific Feature for Click Clock Wood.
-* Randomize: For every item in the world, randomly assign a new Object ID.
 ##### Jiggy, Empty Honeycomb, & Mumbo Token Specific
 * Include Abnormalities: Some items have special properties that won't softlock the game, but create weird effects.
-* Include Potential Softlocks: Some items create scenarios that may prevent the player from 100%-ing or finishing the game.
+* Include Potential Softlocks: Some items create scenarios that may prevent the player from 100%-ing or finishing the seed.
 * Door Of Grunty Only: All worlds will automatically open, and the value for the Door Of Grunty can be set on the side (from 0 to 99). A value can be chosen at random by pressing the Jiggy button.
 * Free Transformations: All Mumbo transformations won't cost you a single Mumbo Token.
 * One Health Only: You will only have one health the entire game, no matter how many Empty Honeycombs you pick up. Good luck not getting hit or falling!
-* Remove Floating Jiggies: Any non-spawning Jiggy gets removed from the game, limiting the number of Jiggies to 56 (the randomizer will only allow 55 to allow double health).
+* Remove Floating Jiggies: Any non-spawning Jiggy gets removed from the game, limiting the number of Jiggies to 56 (the randomizer will only allow 50 jiggies to be required to allow for double health and possible softlock features).
 ##### Notes, Blue Eggs, Red Feathers, & Gold Feathers
 * Randomize: Based on the number of notes needed to complete the game, the odds of a note appearing will be adjusted. Adds another dropdown to have the exact number of notes or have 1.1 times more than required.
 * All Notes: All eggs and feathers become notes. Brentildas are replaced with egg and feather refills. The refill at that Brentilda location is random.
@@ -96,7 +95,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * None: Skips the setting.
 * Basic Shuffle: Simplified shuffling to guarantee a solution. Mumbo's Mountain is always the first level, with the moves Talon Trot, Shock Jump Pad, and Beak Buster. All other world and moves are random.
 * Bottles Shuffle: More complicated shuffle. Worlds are placed in a logical order so that the previous worlds will give the needed moves to progress the game. Logic might not work if worlds are skipped. Bottles mounds are shuffled with Jinjos, Extra Lives, and Miscellaneous Object locations to promote more exploration.
-* You can now select whether BK Warp pads send you to the entrance you entered from or the entrance the world normally has, affecting the warp logic.
+* You can select whether BK Warp pads at the start of the level send you to the entrance you entered from or the entrance the world normally has, affecting the warp logic.
 * Start Game With All Moves: You start the game with all of the moves, though you won't be given Eggs and Feathers to start with.
 * Note: Some jump pads and flight pads are always active. This was not a randomizer feature; these pads are always active in the base game as well.
 ##### Within World Warps
@@ -106,6 +105,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 ##### Starting Area
 * New Game Start Area: Starting a new game will start you here. Loading a game may start you here depending on what flags you hit, but I'm not entirely sure.
 * Skip Intro Cutscene: Skips the cutscene when starting a new game, but not the one where the player enters the lair for the first time.
+* Please watch the intro cutscene at least once. I worked hard on making custom dialog...
 
 ### Enemies
 * None: Skips the setting.
@@ -114,6 +114,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Select All Non-Softlock Enemies: Checks all of the non-softlock enemy boxes.
 * Remove All Enemies: Unchecks all of the enemy boxes.
 * Checkboxes: Select the enemies you want to appear when using the Randomize option. Must select at least 1 generic Ground, Wall, and Flying enemy each. Enemies with an asterisks may softlock/crash the game. If no enemy is checked for a category, no enemy will appear.
+* Warning: A recent fix for Yum-Yums were put into the game. If your game crashes in TTC, please contact GiantJigglypuff3.
 
 ### Aesthetics
 
@@ -127,6 +128,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Shuffle Jingles: Jingles last a few seconds. This includes the Jiggy Jig, successfully finishing a task, etc.
 * Shuffle Music: Music is typically long and potentially loops. This includes level background music, mini games music, and ambient noises.
 * Include Beta Sounds: Some songs not used in the final game but are present in the data are including in shuffling for all checked categories.
+* Include Jarring Sounds: Some noises are painful to listen to repeatedly. Use this feature at your own risk.
 ##### Sprites & Textures
 * Shuffle Skyboxes: Shuffles the skies and the clouds of the levels.
 * Shuffle Talking Sprites: Shuffles the head sprites used in conversations.
@@ -134,7 +136,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 ### MAP Config
 
 ##### Models, Animations, & Properties
-* Select a checkbox to swap aesthetics (A) or death properties (P)
+* Select a checkbox to swap aesthetics (A) or death properties (P). Some changes are guaranteed while some may randomly return to the base game status.
 * Aesthetic changes mean model and animation swapping
 * Death properties change the user interacts with the object and how that object interacts when BK makes contact. Example: What an enemy is weak to, how many honeycombs the enemy drops upon dying, what the enemy is weak to, etc.
 
@@ -154,12 +156,12 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Skip Furnace: Going past the 765 Note Door will skip the Furnace Fun pad area and lead straight to the 810 Note Door room. Also changes Brentilda's text to potentially give useful hints.
 * No Detransformations: Removes all transformation barriers in the lair. Warning: Some areas may softlock the transformations.
 * Final Battle Difficulty: On a scale of 1 to 3, it adds effects to the grunty fight. Zero turns off the feature.
-* Monster House: Replaces some items with enemies.
-* What Floor?: Removes collision with the floor. Shock Jump Pads are placed on the field to help move around, and the pillars will still have collision.
-* Mini Me: Gruntilda shrinks in size, making her harder to hit.
+* Monster House: Replaces some items with enemies. Each level adds a layer of enemies.
+* What Floor?: Removes collision with the floor. Shock Jump Pads are placed on the field to help move around, and the pillars will still have collision. Each level removes Shock Jump Pads.
+* Mini Me: Gruntilda shrinks in size, making her harder to hit. Each level makes her smaller.
 
 ##### Mumbo's Mountain
-* Include Flowers: If the notes/eggs/feathers feature is not set to 'none', the flowers in the level will be included.
+* Include Flowers: If the notes/eggs/feathers feature is not set to 'none', the flowers in the level will be included in shuffling.
 
 ##### Treasure Trove Cove
 * Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear. (I think as of releasing this, sometimes notes and feathers don't get shuffled, but that's a problem for future me).
@@ -170,7 +172,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 ##### Bubblegloop Swamp
 * Shuffle Croctus Order: Croctus spawn order is shuffled.
 * Mr. Vile Bigger, Badder Crocodile: Makes Mr. Vile appear larger. He still moves at the same speed and eats at the same distance, but it's harder to see where the Yumblies and Grumblies spawn.
-* Tiptup Choir: The turtles are scattered across the room, with their heads barely appearing above the floor.
+* Tiptup Choir: The turtles are scattered across the room, with their heads barely appearing above the floor. One may be off-screen; this is intentional.
 
 ##### Freezeezy Peak
 * Boggy Races Moved Flags: Flag poles for the Boggy race are either tighter left, tighter right, lowered to the floor to make harder to see, or rotated.
@@ -198,26 +200,35 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 
 # Premade Configurations
 
-### Default Settings
-Shuffles everything within the worlds. Very easy mode to get your feet wet.
+The configurations will have a value at the front to display approximate difficulty.
 
-### Basic Shuffle Recommended
-World order shuffle that's beginner friendly.
+### 01 Basic Settings
+Shuffles all items within each world and randomizes enemies. Includes minor aesthetic changes. Very easy mode to get your feet wet.
 
-### Bottles Shuffle Recommended
-World order shuffle made for more veteran players.
+### 02 Basic World Shuffle
+World order shuffle that's beginner friendly. Only required to obtain 35 Jiggies and 400 Notes, with all worlds and note doors being opened with the exception of the final ones.
 
-### Meme Percent
+### 03 Meme Percent
 420 Notes, 69 Jiggies. Open worlds and removed note doors. Just have fun ^_^
 
-### One Health Mode
-Can you collect everything in the game with just one health and a bunch of other settings to make it even harder?
+### 03 One Floating Note
+There are 5 notes in Mumbo's Mountain's huts, 5 notes in Bubblegloop Swamp's huts, and 1 note floating somewhere in the game. Good luck finding it!
+(If you're having trouble, talk to Brentilda).
 
-### Only Hard Grunty Fight
-Skip the entire game and just fight Gruntilda on hard mode.
+### 04 World Order Shuffle (Advanced)
+World order shuffle made for more veteran players. You'll need the base game number of Jiggies and Notes while still having to deal with random world order.
+
+### 04 No Floating Jiggies
+The only Jiggies available are the ones that are spawned. All of the world specific settings are also on, so they will be tougher to obtain.
+
+### 04 Only Hard Grunty Fight
+This warps you to the end of the game with all of the moves. Gruntilda's altered final battles will be at their hardest. Good luck!
+
+### 06 One Health Mode
+I skipped 5 because this is extremely hard. Can you collect everything in the game with just one health and a bunch of other settings? Kudos if you do.
 
 ### Nothing/Everything
-Just made to have a clean slate or check everything. Don't overthink this.
+Just made to have a clean slate or check everything for developer purposes. Don't overthink this. REALLY don't recommend "Everything".
 
 # Common Problems
 
@@ -225,7 +236,7 @@ Just made to have a clean slate or check everything. Don't overthink this.
 If you go to virustotal.com and upload the BK Randomizer, it will tell you that about 10% (this value changes) of Anti-Virus softwares will claim this is a virus. This is a common issue when using pyinstaller to turn the python code into an exectuable file. I will have my code in a GitHub repository if anyone would like to check to see that the BK Randomizer is not doing anything malicious. If you trust me that the randomizer is not a virus, there is a work around to the Windows Defender Anti-Virus, demonstrated in the following YouTube video: https://www.youtube.com/watch?v=_5gbWPEcHZs
 
 ### GUI Errors/Warnings
-* ROM file must be a Banjo-Kazooie ROM v1.0 NTSC (.z64). Other formats are currently not supported. Randomizer may work on top of other BK mods, but not guaranteed.
+* ROM file must be a Banjo-Kazooie ROM v1.0 NTSC (.z64). Other formats are currently not supported. Randomizer WILL NOT work on top of other BK mods.
 * All numbers must be positive integers, including seeds.
 * Python Files, Folders, and GZIP.EXE must be in their original locations with the BK ROM in the main folder.
 * **While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3. Link to the BK Rando Discord server at the top**
@@ -242,6 +253,7 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * In Mad Monster Mansion, Napper may be indefinetly awake and guarding a Jiggy. The reason is unknown, but should only occur with potential softlocks checked on.
 * In Click Clock Wood, there is an occasional glitch where the player can collect 11/10 Jiggies when items are only shuffled within the world. The reason is unknown, but may only occur with abnormal or potential softlock Jiggies/Tokens/Honeycombs.
 * Randomizing the warps within worlds by game may result in warps that crash the game.
+* Some of the Model/Animation/Properties features may crash the credits.
 
 # FAQ
 
