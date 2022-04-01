@@ -728,7 +728,8 @@ class User_GUI_Class():
             self._add_randomizer_settings_to_code(self.enemy_checkbox_dict[enemy_name].get())
         ### Aesthetic Settings ###
         # Models, Animations, Properties
-        self._add_randomizer_settings_to_code((self.customizable_options).index(self.customizable_var.get()), 3)
+        for custom_name in sorted(self.customizable_checkbox_dict):
+            self._add_randomizer_settings_to_code(self.customizable_checkbox_dict[custom_name].get())
         ### World Specific ###
         # Gruntilda's Lair
         self._add_randomizer_settings_to_code(self.skip_furnace_fun_var.get())
@@ -838,8 +839,8 @@ class User_GUI_Class():
             for enemy_name in sorted(self.enemy_checkbox_dict):
                 self.enemy_checkbox_dict[enemy_name].set(self._get_randomizer_setting())
             ### Aesthetic Settings ###
-            # Enemy Models
-            self.customizable_var.set(self._get_randomizer_setting(bit_count=3, options_list=self.customizable_options))
+            for custom_name in sorted(self.customizable_checkbox_dict):
+                self.customizable_checkbox_dict[custom_name].set(self._get_randomizer_setting())
             ### World Specific ###
             # Gruntilda's Lair
             self.skip_furnace_fun_var.set(self._get_randomizer_setting())
