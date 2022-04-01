@@ -26,17 +26,9 @@
 				"0x6000": "Jinjo Idle"
 			}
 		},
-		"Seaman Grublin Idle": {
-			"Original": {
-				"0x6258": "Snacker Swimming"
-			},
-			"Replacements": {
-				"0x6000": "Jinjo Idle"
-			}
-		},
 		"Mum-Mum Idle": {
 			"Original": {
-				"0x6258": "Snacker Swimming"
+				"0x6DE0": "Mum-Mum Idle"
 			},
 			"Replacements": {
 				"0x6000": "Jinjo Idle"
@@ -44,7 +36,7 @@
 		},
 		"Limbo Idle": {
 			"Original": {
-				"0x6258": "Snacker Swimming"
+				"0x6DB8": "Limbo Idle"
 			},
 			"Replacements": {
 				"0x6000": "Jinjo Idle"
