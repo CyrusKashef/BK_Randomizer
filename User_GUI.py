@@ -2072,7 +2072,8 @@ class User_GUI_Class():
         warp_disclaimer_text = (
             "WARNING:\n" +
             "  The 'Shuffle By Game' option has some warps that crash\n"+
-            "  and notes do not save. Would not recommend. Use at own risk."
+            "  and notes do not save between warps. Logic not suited for\n"+
+            "  world entrance shuffle. Would not recommend. Use at own risk."
             )
         self.warp_disclaimer_label = tk.Label(self.within_world_warp_frame, text=warp_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
         self.warp_disclaimer_label.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
