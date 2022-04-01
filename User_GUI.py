@@ -101,7 +101,8 @@ tool_tips_dict = {
             "    Recommended using FINAL NOTE DOOR feature.\n" +
             "RANDOMIZE:\n" +
             "    For every item in the world, randomly assign a new Object ID.\n" +
-            "    Recommended using FINAL NOTE DOOR feature.\n" +
+            "    Recommended using FINAL NOTE DOOR feature. You can set whether\n" +
+            "    extra notes will spawn to make it easier.\n" +
             "ALL NOTES:\n" +
             "    All eggs and feathers become notes. Brentildas are replaced\n" +
             "    with egg and feather refills. The refill at that Brentilda\n" +
@@ -119,51 +120,48 @@ tool_tips_dict = {
             "BOTTLES SHUFFLE:\n" +
             "    All worlds, including Mumbo's Mountain, are shuffled. Bottles\n" +
             "    mounds are shuffled with 1-Up locations to promote more\n" +
-            "    exploration. Logic may not work if worlds are opened out of order.",
+            "    exploration. Logic may not work if worlds are opened out of order."+
+            "LEVEL EXIT:\n"+
+            "    When leaving the level, do you want to spawn at the entrance you\n"+
+            "    came in, or the entrance that normally belongs to that world?",
         },
     "WITHIN_WORLD_WARPS": {
         "FRAME": 
             "NONE:\n" +
             "    Skips the setting.\n" +
-            "SHUFFLE:\n" +
-            "    Shuffles the warps that are within the world."
+            "SHUFFLE BY WORLD:\n" +
+            "    Shuffles the warps that are within the world." +
+            "SHUFFLE BY GAME:\n" +
+            "    Shuffles the warps throughout the worlds.\n" +
+            "    Feature is prone to crashes and softlocks.\n" +
+            "    Use at own risk!",
         },
     "STARTING_AREA": {
         "NEW_GAME":
             "Spawns you at the location upon a new game.",
-        "LOAD_GAME":
-            "Spawns you at the location upon a new game."
         },
     "ENEMIES": {
         "FRAME":
             "NONE:\n"+
             "    Skips the setting.\n" +
-            "SHUFFLE WORLD:\n" +
-            "    Takes all items of that set and swaps the Object IDs\n" +
-            "    within the world (with the exception of Click Clock\n" +
-            "    Wood unless the feature is turned on).\n" +
-            "SHUFFLE GAME:\n" +
-            "    Takes all items of that set and swaps the Object IDs\n" +
-            "    within the game (overrides the Click Clock Wood feature).\n" +
-            "    Recommended using FINAL NOTE DOOR feature.\n" +
+            "SHUFFLE:\n" +
+            "    Shuffles the enemies within the world by category \n" +
+            "    (ground, wall, air), whether checked or not.\n"
             "RANDOMIZE:\n"+
-            "    For every item in the world, randomly assign a new Object ID.\n" +
-            "    Recommended using FINAL NOTE DOOR feature.\n" +
-            "ALL TOUGHIES:\n"+
-            "    All ground enemies become Bigbutts. All flying enemies become\n" +
-            "    Bees. All wall enemies become Flotsams (or vents if included).\n"+
-            "BETA_ENEMIES: Unused enemies that are coded into the game but\n" +
-            "    aren't used.",#\n" +
-            #"INCLUDE_SOFTLOCKS: Shuffles/randomizes unkillable enemies.\n" +
-            #"    May block/prevent collectables.",
+            "    For every enemy in the game (with some exceptions),\n" +
+            "    randomly assign a new enemy that has a checkbox next to it.\n" +
+            "SOFTLOCK:\n"+
+            "    Any enemy with a * means it can softlock the game in some way.\n" +
+            "    May cause an incompletable seed. Use at own risk!",
         },
     "BK_COLOR": {
         "FRAME": "Change BK's colors to presets",
         },
     "CUSTOMIZABLE": {
-        "MODELS": "Swaps, shuffles, and randomizes some models.",
-        "ANIMATIONS": "Swaps, shuffles, and randomizes some animations.",
-        "PROPERTIES": "Swaps, shuffles, and randomizes some properties.",
+        "MODELS":
+            "Every checkbox with an (A) means it applies aethetic changes\n" +
+            "like model or animation replacements. Every checkbox with (P)\n" +
+            "changes the death property of an object (like an enemy).",
         },
     "SOUNDS_MUSIC": {
         "FULL_DESCRIPTION":
@@ -203,7 +201,8 @@ tool_tips_dict = {
                         "maximum is 99. The number of Jiggies required for red honeycombs\n" +
                         "is 100 - Jiggies Needed, minimum being 1, maximum being 4. All\n" +
                         "world puzzles are complete by default, meaning worlds are\n" +
-                        "automatically opened.",
+                        "automatically opened. No floating jiggies will remove all\n" +
+                        "Jiggies that aren't spawned by an event.",
         "RANDOM_JIGGY_BUTTON": "Turns on the final puzzle door feature and\n" +
                                "randomly selects a jiggy value",
         "SKIP_FURNACE_FUN_AND_BRENTILDA": "Places a warp on the first square of Furnace Fun\n" +
