@@ -10,14 +10,6 @@
 	    }
 	},
 	"Animations": {
-		"Babe Walking": {
-			"Swap1": {
-				"0x6E68": "Sexy Grunty Walking"
-			},
-			"Swap2": {
-				"0x7380": "Melon Babe Walking"
-			}
-		}
 	},
 	"Properties": {
 	}
