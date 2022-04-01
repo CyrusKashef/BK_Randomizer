@@ -1730,8 +1730,8 @@ class User_GUI_Class():
         elif(final_puzzle_val > 100):
             Error_GUI("Final Puzzle Value Must Be Less Than 100 Under These Settings.")
             return False
-        elif((self.remove_floating_jiggies_var.get() == 1) and (final_puzzle_val > 55)):
-            Error_GUI("Final Puzzle Value Must Be Less Than 56 When Removing Floating Jiggies.")
+        elif((self.remove_floating_jiggies_var.get() == 1) and (final_puzzle_val > 50)):
+            Error_GUI("Final Puzzle Value Must Be Less Than 51 When Removing Floating Jiggies.")
             return False
         return True
     
