@@ -18,38 +18,6 @@
 	    }
 	},
 	"Animations": {
-		"Grublin Idle": {
-			"Original": {
-				"0x61A8": "Grublin Idle"
-			},
-			"Replacements": {
-				"0x6000": "Jinjo Idle"
-			}
-		},
-		"Mum-Mum Idle": {
-			"Original": {
-				"0x6DE0": "Mum-Mum Idle"
-			},
-			"Replacements": {
-				"0x6000": "Jinjo Idle"
-			}
-		},
-		"Limbo Idle": {
-			"Original": {
-				"0x6DB8": "Limbo Idle"
-			},
-			"Replacements": {
-				"0x6000": "Jinjo Idle"
-			}
-		},
-		"Grublin-Hood Idle": {
-			"Original": {
-				"0x70B0": "Grublin-Hood Idle"
-			},
-			"Replacements": {
-				"0x6000": "Jinjo Idle"
-			}
-		}
 	},
 	"Properties": {
 	}
