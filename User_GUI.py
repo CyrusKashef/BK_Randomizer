@@ -592,19 +592,13 @@ class User_GUI_Class():
     
     def _set_random_carry_capacities(self, *args):
         '''Select random capacities for blue eggs, red feathers, and gold feathers'''
-        self.logger.info("Select Random Carry Capacities")
-        before_blue_egg = randint(0, 255)
-        after_blue_egg = randint(before_blue_egg, 255)
-        before_red_feather = randint(0, 255)
-        after_red_feather = randint(before_red_feather, 255)
-        before_gold_feather = randint(0, 255)
-        after_gold_feather = randint(before_gold_feather, 255)
-        self.before_blue_egg_carry_value.set(before_blue_egg)
-        self.after_blue_egg_carry_value.set(after_blue_egg)
-        self.before_red_feather_carry_value.set(before_red_feather)
-        self.after_red_feather_carry_value.set(after_red_feather)
-        self.before_gold_feather_carry_value.set(before_gold_feather)
-        self.after_gold_feather_carry_value.set(after_gold_feather)
+        self.logger.info("Random Carry Capacities")
+        self.before_blue_egg_carry_value.set("?")
+        self.after_blue_egg_carry_value.set("?")
+        self.before_red_feather_carry_value.set("?")
+        self.after_red_feather_carry_value.set("?")
+        self.before_gold_feather_carry_value.set("?")
+        self.after_gold_feather_carry_value.set("?")
     
     def _display_map_file_description(self, *args):
         '''Pulls the description from a Models, Animations, Properties json file'''
@@ -1762,7 +1756,9 @@ class User_GUI_Class():
         for value in [self.before_blue_egg_carry_value.get(), self.after_blue_egg_carry_value.get(),
                       self.before_red_feather_carry_value.get(), self.after_red_feather_carry_value.get(),
                       self.before_gold_feather_carry_value.get(), self.after_gold_feather_carry_value.get()]:
-            if((not value.isdigit()) or (int(value) < 0) or (int(value) > 255)):
+            if(value == "?"):
+                pass
+            elif((not value.isdigit()) or (int(value) < 0) or (int(value) > 255)):
                 Error_GUI("Egg and Feather carrying capacities should be between 0 and 255.")
                 return False
         return True
