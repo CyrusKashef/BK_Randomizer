@@ -389,9 +389,9 @@ class Misc_Manipulation_Class():
             game_engine_obj._mumbo_transformations_costs()
         if(self.grandmaster.one_health_banjo_var.get() == 1):
             game_engine_obj._max_health()
-        game_engine_obj._blue_egg_limit(int(self.grandmaster.before_blue_egg_carry_value.get()), int(self.grandmaster.after_blue_egg_carry_value.get()))
-        game_engine_obj._red_feather_limit(int(self.grandmaster.before_red_feather_carry_value.get()), int(self.grandmaster.after_red_feather_carry_value.get()))
-        game_engine_obj._gold_feather_limit(int(self.grandmaster.before_gold_feather_carry_value.get()), int(self.grandmaster.after_gold_feather_carry_value.get()))
+        game_engine_obj._blue_egg_limit(self.grandmaster.before_blue_egg, self.grandmaster.after_blue_egg)
+        game_engine_obj._red_feather_limit(self.grandmaster.before_red_feather, self.grandmaster.after_red_feather)
+        game_engine_obj._gold_feather_limit(self.grandmaster.before_gold_feather, self.grandmaster.after_gold_feather)
         all_start_moves = self.grandmaster.all_starting_moves_var.get()
         starting_area = self.grandmaster.new_area_var.get()
         if(starting_area == "Random Starting Area (Always Safe)"):
