@@ -149,7 +149,6 @@ class Progression_GUI_Class():
         self.progress_bar_window.config(background="#F3E5AB")
         self.progress_bar_value = 0
         self._mumbo_error_message = "Mumbo Get New Stick, This One Not Work Well..."
-        self._hidden_random_values()
     
     class App_Variable_Label():
         '''A text box that can altered after creation'''
@@ -184,6 +183,7 @@ class Progression_GUI_Class():
     
     def _hidden_random_values(self):
         self.master.logger.info("Hidden Random Values")
+        cheat_sheet = ""
         # Final Note Door
         if(self.master.final_note_door_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
@@ -191,6 +191,7 @@ class Progression_GUI_Class():
                 self.master.final_note_door_val = randint(0, 2000)
             else:
                 self.master.final_note_door_val = randint(0, 900)
+            cheat_sheet += f"Final Note Door Val: {self.master.final_note_door_val}\n"
         else:
             self.master.final_note_door_val = int(self.master.final_note_door_value.get())
         self.master.logger.debug(f"Final Note Door Val: {self.master.final_note_door_val}")
@@ -201,15 +202,60 @@ class Progression_GUI_Class():
                 self.master.final_puzzle_val = randint(0, 50)
             else:
                 self.master.final_puzzle_val = randint(0, 99)
+            cheat_sheet += f"Final Puzzle Val: {self.master.final_puzzle_val}\n"
         else:
             self.master.final_puzzle_val = int(self.master.final_puzzle_value.get())
         self.master.logger.debug(f"Final Puzzle Val: {self.master.final_puzzle_val}")
+        ### CAPACITIES
+        # Blue Egg Capacity
+        if(self.master.before_blue_egg_carry_value.get() == "?"):
+            self.master.before_blue_egg = randint(0, 255)
+            cheat_sheet += f"Before Cheato Blue Egg: {self.master.before_blue_egg}\n"
+        else:
+            self.master.before_blue_egg = int(self.master.before_blue_egg_carry_value.get())
+        self.master.logger.debug(f"Before Cheato Blue Egg: {self.master.before_blue_egg}")
+        if(self.master.before_blue_egg_carry_value.get() == "?"):
+            self.master.after_blue_egg = randint(32, 255)
+            cheat_sheet += f"After Cheato Blue Egg: {self.master.after_blue_egg}\n"
+        else:
+            self.master.after_blue_egg = int(self.master.before_blue_egg_carry_value.get())
+        self.master.logger.debug(f"After Cheato Blue Egg: {self.master.after_blue_egg}")
+        # Red Feather Capacity
+        if(self.master.before_red_feather_carry_value.get() == "?"):
+            self.master.before_red_feather = randint(0, 255)
+            cheat_sheet += f"Before Cheato Red Feather: {self.master.before_red_feather}\n"
+        else:
+            self.master.before_red_feather = int(self.master.before_red_feather_carry_value.get())
+        self.master.logger.debug(f"Before Cheato Red Feather: {self.master.before_red_feather}")
+        if(self.master.after_red_feather_carry_value.get() == "?"):
+            self.master.after_red_feather = randint(8, 255)
+            cheat_sheet += f"After Cheato Red Feather: {self.master.after_red_feather}\n"
+        else:
+            self.master.after_red_feather = int(self.master.after_red_feather_carry_value.get())
+        self.master.logger.debug(f"After Cheato Red Feather: {self.master.after_red_feather}")
+        # Gold Feather Capacity
+        if(self.master.before_gold_feather_carry_value.get() == "?"):
+            self.master.before_gold_feather = randint(0, 255)
+            cheat_sheet += f"Before Cheato Gold Feather: {self.master.before_gold_feather}\n"
+        else:
+            self.master.before_gold_feather = int(self.master.before_gold_feather_carry_value.get())
+        self.master.logger.debug(f"Before Cheato Gold Feather: {self.master.before_gold_feather}")
+        if(self.master.after_gold_feather_carry_value.get() == "?"):
+            self.master.after_gold_feather = randint(0, 255)
+            cheat_sheet += f"After Cheato Gold Feather: {self.master.after_gold_feather}\n"
+        else:
+            self.master.after_gold_feather = int(self.master.after_gold_feather_carry_value.get())
+        self.master.logger.debug(f"After Cheato Gold Feather: {self.master.after_gold_feather}")
+        # Cheat Sheet
+        with open(f"{self.master.cwd}Randomized_ROM/HIDDEN_VALUES_CHEAT_SHEET_{self.seed_val}.txt", "w+") as f:
+            f.write(cheat_sheet)
     
     def _setup(self):
         '''Creates the randomized ROM folder with a copy of the original ROM file'''
         self.master.logger.info("Randomization Setup")
         setup_tmp_folder(self.master.cwd)
         self.seed_val = set_seed(self.master.seed_value.get())
+        self._hidden_random_values()
         self.randomized_rom_path = make_copy_of_rom(self.seed_val, self.master.cwd, self.rom_path)
         gc.enable()
     
