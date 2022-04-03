@@ -219,7 +219,10 @@ tool_tips_dict = {
         },
     "TREASURE_TROVE_COVE": {
         "SCATTERED_STRUCTS": "Notes are scattered across the level,\n" +
-                             "both in the water and in the air."
+                             "both in the water and in the air.",
+        "SUPER_SLIPPERY_SAND": "At some point, you'll trigger the anti-tampering\n" +
+                               "and you won't be able to change direction unless\n" +
+                               "you jump. Have fun!"
         },
     "CLANKERS_CAVERN": {
         "SHUFFLE_CLANKER_RING_ORDER": "Clanker's ring order is shuffled.",
@@ -736,6 +739,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.flowers_var.get())
         # Treasure Trove Cove
         self._add_randomizer_settings_to_code(self.scattered_structs_var.get())
+        self._add_randomizer_settings_to_code(self.super_slippery_ttc_var.get())
         # Clanker's Cavern
         self._add_randomizer_settings_to_code(self.hard_rings_var.get())
         # Bubblegloop Swamp
@@ -847,6 +851,7 @@ class User_GUI_Class():
             self.flowers_var.set(self._get_randomizer_setting())
             # Treasure Trove Cove
             self.scattered_structs_var.set(self._get_randomizer_setting())
+            self.super_slippery_ttc_var.set(self._get_randomizer_setting())
             # Clanker's Cavern
             self.hard_rings_var.set(self._get_randomizer_setting())
             # Bubblegloop Swamp
@@ -965,6 +970,7 @@ class User_GUI_Class():
         self.flowers_var.set(0)
         # Treasure Trove Cove
         self.scattered_structs_var.set(0)
+        self.super_slippery_ttc_var.set(0)
         # Clanker's Cavern
         self.hard_rings_var.set(0)
         # Bubblegloop Swamp
@@ -1362,6 +1368,11 @@ class User_GUI_Class():
         except KeyError:
             setting_not_found.append("Scattered_Notes_Eggs_Feathers")
             self.scattered_structs_var.set(0)
+        try:
+            self.super_slippery_ttc_var.set(json_data["Super_Slippery_Sand"])
+        except KeyError:
+            setting_not_found.append("Super_Slippery_Sand")
+            self.super_slippery_ttc_var.set(0)
         # Clanker's Cavern
         try:
             self.hard_rings_var.set(json_data["CC_Hard_Rings"])
@@ -1635,6 +1646,7 @@ class User_GUI_Class():
             "MM_Flowers": self.flowers_var.get(),
             # Treasure Trove Cove
             "Scattered_Notes_Eggs_Feathers": self.scattered_structs_var.get(),
+            "Super_Slippery_Sand": self.super_slippery_ttc_var.get(),
             # Clanker's Cavern
             "CC_Hard_Rings": self.hard_rings_var.get(),
             # Bubblegloop Swamp
@@ -2369,6 +2381,12 @@ class User_GUI_Class():
         self.scattered_structs_var = tk.IntVar()
         self.scattered_structs_checkbox = tk.Checkbutton(self.treasure_trove_cove_frame, text="Scattered Notes/Eggs/Feathers", variable=self.scattered_structs_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.scattered_structs_checkbox.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.super_slippery_ttc_ttp_canvas = tk.Label(self.treasure_trove_cove_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
+        self.super_slippery_ttc_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.super_slippery_ttc_checkbox_ttp = self.CreateToolTip(self.super_slippery_ttc_ttp_canvas, self, tool_tips_dict["TREASURE_TROVE_COVE"]["SUPER_SLIPPERY_SAND"])
+        self.super_slippery_ttc_var = tk.IntVar()
+        self.super_slippery_ttc_checkbox = tk.Checkbutton(self.treasure_trove_cove_frame, text="Super Slippery Sand", variable=self.super_slippery_ttc_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.super_slippery_ttc_checkbox.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         # Clanker's Cavern
         curr_background_color = "#808080"
         self._clankers_cavern_tab = ttk.Frame(self._world_specific_tab_control)
