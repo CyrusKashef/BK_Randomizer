@@ -165,6 +165,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 
 ##### Treasure Trove Cove
 * Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear. (I think as of releasing this, sometimes notes and feathers don't get shuffled, but that's a problem for future me).
+* Super Slippery Sand: At some point, you'll trigger the anti-tampering and you won't be able to change direction unless you jump. Have fun!
 
 ##### Clanker's Cavern
 * Shuffle Clanker Ring Order: Clanker's ring order is shuffled.
