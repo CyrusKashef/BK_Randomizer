@@ -177,7 +177,10 @@ class Game_Engine_Class():
             m.write((0x1100000D000000008D0A0000000A4E0234010080552100083C098000012A4826).to_bytes(32, "big"))
             m.write((0x3C0100400121482A1120000300000000080E1C2200000000080E1C2800000000).to_bytes(32, "big"))
 
-    def _patch_antiantitamper(self):
+    def _patch_antiantitamper(self, core1_at=True, core2_at=True, sm_at=True,
+                              mm_at=True, ttc_at=True, cc_at=True,
+                              bgs_at=True, fp_at=True, gv_at=True,
+                              mmm_at=True, rbb_at=True, ccw_at=True):
         """
         Try and patch out some vanilla antitamper checks so Jiggly doesn't have
         to fix his checksum code. :^)
@@ -193,66 +196,66 @@ class Game_Engine_Class():
         ovl_bgs        = "FB44E0"
         ovl_gv         = "FA9150"
         ovl_mmm        = "FA5F50"
+        
+        if(core1_at):
+            with self._open_df(ovl_core1_text) as f:
+                m = mmap.mmap(f.fileno(), 0)
+                m[0x10A1C] = 0x00
+                m[0x10A1D] = 0x00
+                m[0x10A1E] = 0x00
+                m[0x10A1F] = 0x00
+                m[0x10A30] = 0x10
+                m[0x10A31] = 0x00
 
-        with self._open_df(ovl_core1_text) as f:
-            m = mmap.mmap(f.fileno(), 0)
+        if(sm_at):
+            with self._open_df(ovl_sm) as f:
+                m = mmap.mmap(f.fileno(), 0)
+                m[0x1D4]  = 0x10
+                m[0x1D5]  = 0x00
+                m[0x1EC]  = 0x10
+                m[0x1ED]  = 0x00
+                m[0x204]  = 0x10
+                m[0x205]  = 0x00
+                m[0x3FA4] = 0x00
+                m[0x3FA5] = 0x00
+                m[0x3FA6] = 0x00
+                m[0x3FA7] = 0x00
 
-            m[0x10A1C] = 0x00
-            m[0x10A1D] = 0x00
-            m[0x10A1E] = 0x00
-            m[0x10A1F] = 0x00
-            m[0x10A30] = 0x10
-            m[0x10A31] = 0x00
+        if(mm_at):
+            with self._open_df(ovl_mm) as f:
+                m = mmap.mmap(f.fileno(), 0)
+                m[0x1B7C] = 0x10
+                m[0x1B7D] = 0x00
 
-        with self._open_df(ovl_sm) as f:
-            m = mmap.mmap(f.fileno(), 0)
+        if(ttc_at):
+            with self._open_df(ovl_ttc) as f:
+                m = mmap.mmap(f.fileno(), 0)
+                m[0x31B4] = 0x00
+                m[0x31B5] = 0x00
+                m[0x31B6] = 0x00
+                m[0x31B7] = 0x00
 
-            m[0x1D4]  = 0x10
-            m[0x1D5]  = 0x00
-            m[0x1EC]  = 0x10
-            m[0x1ED]  = 0x00
-            m[0x204]  = 0x10
-            m[0x205]  = 0x00
-            m[0x3FA4] = 0x00
-            m[0x3FA5] = 0x00
-            m[0x3FA6] = 0x00
-            m[0x3FA7] = 0x00
+        if(cc_at):
+            with self._open_df(ovl_cc) as f:
+                m = mmap.mmap(f.fileno(), 0)
+                m[0x1984] = 0x10
+                m[0x1985] = 0x00
 
-        with self._open_df(ovl_mm) as f:
-            m = mmap.mmap(f.fileno(), 0)
+        if(bgs_at):
+            with self._open_df(ovl_bgs) as f:
+                m = mmap.mmap(f.fileno(), 0)
+                m[0x86C0] = 0x10
+                m[0x86C1] = 0x00
 
-            m[0x1B7C] = 0x10
-            m[0x1B7D] = 0x00
+        if(gv_at):
+            with self._open_df(ovl_gv) as f:
+                m = mmap.mmap(f.fileno(), 0)
+                m[0x3B8C] = 0x10
+                m[0x3B8D] = 0x00
 
-        with self._open_df(ovl_ttc) as f:
-            m = mmap.mmap(f.fileno(), 0)
-
-            m[0x31B4] = 0x00
-            m[0x31B5] = 0x00
-            m[0x31B6] = 0x00
-            m[0x31B7] = 0x00
-
-        with self._open_df(ovl_cc) as f:
-            m = mmap.mmap(f.fileno(), 0)
-
-            m[0x1984] = 0x10
-            m[0x1985] = 0x00
-
-        with self._open_df(ovl_bgs) as f:
-            m = mmap.mmap(f.fileno(), 0)
-
-            m[0x86C0] = 0x10
-            m[0x86C1] = 0x00
-
-        with self._open_df(ovl_gv) as f:
-            m = mmap.mmap(f.fileno(), 0)
-
-            m[0x3B8C] = 0x10
-            m[0x3B8D] = 0x00
-
-        with self._open_df(ovl_mmm) as f:
-            m = mmap.mmap(f.fileno(), 0)
-
-            m[0x4830] = 0x10
-            m[0x4831] = 0x00
+        if(mmm_at):
+            with self._open_df(ovl_mmm) as f:
+                m = mmap.mmap(f.fileno(), 0)
+                m[0x4830] = 0x10
+                m[0x4831] = 0x00
 
