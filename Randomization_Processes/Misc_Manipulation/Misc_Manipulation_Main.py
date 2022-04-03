@@ -408,7 +408,10 @@ class Misc_Manipulation_Class():
             game_engine_obj._starting_moves()
         game_engine_obj._starting_lives(self.grandmaster.starting_lives_value.get())
         game_engine_obj._patch_ttc_yumyum_crashfix()
-        game_engine_obj._patch_antiantitamper()
+        ttc_antitampering = True
+        if(self.grandmaster.super_slippery_ttc_var.get() == 1):
+            ttc_antitampering = False
+        game_engine_obj._patch_antiantitamper(ttc_at=ttc_antitampering)
 
     ########################
     ### EDIT OTHER TEXTS ###
