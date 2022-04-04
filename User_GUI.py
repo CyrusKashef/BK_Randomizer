@@ -701,12 +701,30 @@ class User_GUI_Class():
             self._add_randomizer_settings_to_code(2001, 11)
         else:
             self._add_randomizer_settings_to_code(self.final_note_door_value.get(), 11)
-        self._add_randomizer_settings_to_code(self.before_blue_egg_carry_value.get(), 9)
-        self._add_randomizer_settings_to_code(self.after_blue_egg_carry_value.get(), 9)
-        self._add_randomizer_settings_to_code(self.before_red_feather_carry_value.get(), 9)
-        self._add_randomizer_settings_to_code(self.after_red_feather_carry_value.get(), 9)
-        self._add_randomizer_settings_to_code(self.before_gold_feather_carry_value.get(), 9)
-        self._add_randomizer_settings_to_code(self.after_gold_feather_carry_value.get(), 9)
+        if(self.before_blue_egg_carry_value.get() == "?"):
+            self._add_randomizer_settings_to_code(256, 9)
+        else:
+            self._add_randomizer_settings_to_code(self.before_blue_egg_carry_value.get(), 9)
+        if(self.before_blue_egg_carry_value.get() == "?"):
+            self._add_randomizer_settings_to_code(256, 9)
+        else:
+            self._add_randomizer_settings_to_code(self.after_blue_egg_carry_value.get(), 9)
+        if(self.before_blue_egg_carry_value.get() == "?"):
+            self._add_randomizer_settings_to_code(256, 9)
+        else:
+            self._add_randomizer_settings_to_code(self.before_red_feather_carry_value.get(), 9)
+        if(self.before_blue_egg_carry_value.get() == "?"):
+            self._add_randomizer_settings_to_code(256, 9)
+        else:
+            self._add_randomizer_settings_to_code(self.after_red_feather_carry_value.get(), 9)
+        if(self.before_blue_egg_carry_value.get() == "?"):
+            self._add_randomizer_settings_to_code(256, 9)
+        else:
+            self._add_randomizer_settings_to_code(self.before_gold_feather_carry_value.get(), 9)
+        if(self.before_blue_egg_carry_value.get() == "?"):
+            self._add_randomizer_settings_to_code(256, 9)
+        else:
+            self._add_randomizer_settings_to_code(self.after_gold_feather_carry_value.get(), 9)
         # World Entrances
         self._add_randomizer_settings_to_code(["None", "Basic Shuffle", "Bottles Shuffle"].index(self.world_entrance_var.get()), 2)
         self._add_randomizer_settings_to_code(["Exit From World You Were Just In", "Exit From Entrance You Entered From"].index(self.world_exit_var.get()))
@@ -814,12 +832,37 @@ class User_GUI_Class():
                 self.final_note_door_value.set("?")
             else:
                 self.final_note_door_value.set(str(final_note_door_value))
-            self.before_blue_egg_carry_value.set(self._get_randomizer_setting(bit_count=9))
-            self.after_blue_egg_carry_value.set(self._get_randomizer_setting(bit_count=9))
-            self.before_red_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
-            self.after_red_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
-            self.before_gold_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
-            self.after_gold_feather_carry_value.set(self._get_randomizer_setting(bit_count=9))
+            # Carrying Capacities
+            before_blue_egg_carry_value = self._get_randomizer_setting(bit_count=9)
+            if(before_blue_egg_carry_value == 256):
+                self.before_blue_egg_carry_value.set("?")
+            else:
+                self.before_blue_egg_carry_value.set(str(before_blue_egg_carry_value))
+            after_blue_egg_carry_value = self._get_randomizer_setting(bit_count=9)
+            if(after_blue_egg_carry_value == 256):
+                self.after_blue_egg_carry_value.set("?")
+            else:
+                self.after_blue_egg_carry_value.set(str(after_blue_egg_carry_value))
+            before_red_feather_carry_value = self._get_randomizer_setting(bit_count=9)
+            if(before_red_feather_carry_value == 256):
+                self.before_red_feather_carry_value.set("?")
+            else:
+                self.before_red_feather_carry_value.set(str(before_red_feather_carry_value))
+            after_red_feather_carry_value = self._get_randomizer_setting(bit_count=9)
+            if(after_red_feather_carry_value == 256):
+                self.after_red_feather_carry_value.set("?")
+            else:
+                self.after_red_feather_carry_value.set(str(after_red_feather_carry_value))
+            before_gold_feather_carry_value = self._get_randomizer_setting(bit_count=9)
+            if(before_gold_feather_carry_value == 256):
+                self.before_gold_feather_carry_value.set("?")
+            else:
+                self.before_gold_feather_carry_value.set(str(before_gold_feather_carry_value))
+            after_gold_feather_carry_value = self._get_randomizer_setting(bit_count=9)
+            if(after_gold_feather_carry_value == 256):
+                self.after_gold_feather_carry_value.set("?")
+            else:
+                self.after_gold_feather_carry_value.set(str(after_gold_feather_carry_value))
             # World Entrances
             self.world_entrance_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Basic Shuffle", "Bottles Shuffle"]))
             self.world_exit_var.set(self._get_randomizer_setting(options_list=["Exit From World You Were Just In", "Exit From Entrance You Entered From"]))
