@@ -17,14 +17,6 @@
 			"Swap2": {
 				"0x7068": "Scabby Fly"
 			}
-		},
-		"Dying": {
-			"Swap1": {
-				"0x6DA0": "Bee Banjo Dying"
-			},
-			"Swap2": {
-				"0x7080": "Scabby Fly Dying"
-			}
 		}
 	},
 	"Properties": {
