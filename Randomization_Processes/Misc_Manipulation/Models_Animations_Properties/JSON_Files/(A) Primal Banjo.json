@@ -4,18 +4,10 @@
 	"Animations": {
 	    "Banjo Jumping": {
 	        "Original": {
-				"0x5ED8": "Banjo Jumping"
+	            "0x5ED8": "Banjo Jumping"
 	        },
 	        "Replacements": {
-				"0x6170": "Chimpy Hopping"
-	        }
-	    },
-	    "Banjo Roll Attack": {
-	        "Original": {
-				"0x6110": "Banjo Roll Attack"
-	        },
-	        "Replacements": {
-	        	"0x5EC0": "Banjo Punching"
+	            "0x6170": "Chimpy Hopping"
 	        }
 	    },
 	    "Banjo Running": {
