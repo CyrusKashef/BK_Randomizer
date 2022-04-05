@@ -697,7 +697,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"].index(self.struct_var.get()), 3)
         self._add_randomizer_settings_to_code(["Produce Extra Notes", "Produce Exactly Enough Notes"].index(self.struct_note_count_var.get()))
         self._add_randomizer_settings_to_code(["Scaling Note Doors", "Final Note Door Only"].index(self.final_note_door_var.get()))
-        if(self.final_puzzle_value.get() == "?"):
+        if(self.final_note_door_value.get() == "?"):
             self._add_randomizer_settings_to_code(2001, 11)
         else:
             self._add_randomizer_settings_to_code(self.final_note_door_value.get(), 11)
