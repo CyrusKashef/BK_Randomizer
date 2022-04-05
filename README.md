@@ -241,6 +241,8 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * All numbers must be positive integers, including seeds.
 * Python Files, Folders, and GZIP.EXE must be in their original locations with the BK ROM in the main folder.
 * **While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3. Link to the BK Rando Discord server at the top**
+* If you're not able to generate the randomizer settings code, go to Configurations, open the "Last_Used_Configuration" json file, remove your ROM File directory parameter, and send that to GiantJigglypuff3 as well
+* Example: "ROM_File": "C:/Users/Cyrus/eclipse-workspace/BK_Rando_v2.0/Banjo-Kazooie.z64" -> "ROM_File": ""
 
 ### Potential Softlocks
 * When turning on the 'Potential Softlock' features, the game may be put into a state where a collectable cannot be reached or the game cannot be progressed without resetting.
