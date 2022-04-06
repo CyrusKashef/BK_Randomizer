@@ -228,10 +228,11 @@ bottles_world_warp_dict = {
         "Clanker's Cavern": {
             "Possible_Bottles": {
                 "Wonderwing": [["Fly", "Eggs"]],
-                "Platform_1_Up": [[]],
-                "Alcove_1_Up": [["Shock_Jump_Pad"]],
-                "Yellow_Jinjo": [[]],
-                "Orange_Jinjo": [["Shock_Jump_Pad", "Beak_Buster"], ["Shock_Jump_Pad", "Eggs"]],
+                "Platform_1_Up": [["Eggs"]],
+                "Alcove_1_Up": [["Shock_Jump_Pad", "Eggs"]],
+                "Yellow_Jinjo": [["Eggs"]],
+                "Orange_Jinjo": [["Shock_Jump_Pad", "Eggs"]],
+#                 "Orange_Jinjo": [["Shock_Jump_Pad", "Beak_Buster"], ["Shock_Jump_Pad", "Eggs"]],
                 },
             "Flagged_Object_Flags": {
                 ### JIGGIES ###
