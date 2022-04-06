@@ -282,7 +282,8 @@ Not-Planned Features:
 * Wizzard for providing the general basis for the Within World Warps code logic.
 * Trynan for providing a more adaptable GUI interface.
 * Mittenz for providing the checksum calculating code in C/C++, which was translated to Python for this project.
-* Banjo's Backpack Discord, for everything ranging from technical support to emotional support. Big shoutouts to Jombo for most of the technical support. Other shoutouts go to BanjoFreak64, ThatCowGuy, PaleKing, Atezian, TheSourOG, Bynine, Wedarobi, RetroNuva, and SapChap99.
+* Wedarobi for patching the Yum-Yum crash and providing a solution to some checksum calculations.
+* Banjo's Backpack Discord, for everything ranging from technical support to emotional support. Big shoutouts to Jombo for most of the technical support. Other shoutouts go to BanjoFreak64, ThatCowGuy, PaleKing, Atezian, TheSourOG, Bynine, RetroNuva, and SapChap99.
 * OoT And SM64 Randomizers, for inspiring me to find the Banjo's Backpack discord.
 
 # Contributing
