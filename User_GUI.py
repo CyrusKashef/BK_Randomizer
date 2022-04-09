@@ -2530,7 +2530,7 @@ class User_GUI_Class():
         self.lit_pots_checkbox = tk.Checkbutton(self.mad_monster_mansion_frame, text="Pots Are Lit", variable=self.lit_pots_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.lit_pots_checkbox.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.lit_pots_ttp_canvas = tk.Label(self.mad_monster_mansion_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.lit_pots_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.lit_pots_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.motzand_keys_checkbox_ttp = self.CreateToolTip(self.lit_pots_ttp_canvas, self, tool_tips_dict["MAD_MONSTER_MANSION"]["MOTZAND_KEYS"])
         self.motzand_keys_var = tk.IntVar()
         self.motzand_keys_checkbox = tk.Checkbutton(self.mad_monster_mansion_frame, text="Randomize Motzand's Song", variable=self.motzand_keys_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
