@@ -59,6 +59,7 @@ Created on Oct 31, 2021
 
 from random import seed, shuffle, choice
 from mmap import mmap
+import os
 
 ###################
 ### FILE IMPORT ###
@@ -101,9 +102,9 @@ class Swap_Models_Manipulation_Class():
             pointer_str = str(hex(pointer))
             pointer_dec = int(pointer_str[2:], 16)
             curr_pointer_file = self._model_address_dict[pointer_str]
-            with open(f"{self._file_dir}Randomized_ROM\\{curr_pointer_file}", "r+b") as comp_file:
+            with open(f"{self._file_dir}Randomized_ROM/{curr_pointer_file}", "r+b") as comp_file:
                 pointer_content = comp_file.read()
-            with open(f"{self._file_dir}Randomized_ROM\\Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rom_file:
+            with open(f"{self._file_dir}Randomized_ROM/Banjo-Kazooie_Randomized_Seed_{self._seed_val}.z64", "r+b") as rom_file:
                 mm_rand_rom = mmap(rom_file.fileno(), 0)
 #                 print(f"Pointer Str: {pointer_str}   Pointer File: {curr_pointer_file}")
                 # Find The Pointer Start
@@ -124,6 +125,7 @@ class Swap_Models_Manipulation_Class():
                     mm_rand_rom[pointer_dec + 10] = int(address_end_hex[4:6], 16)
                     mm_rand_rom[pointer_dec + 11] = int(address_end_hex[6:], 16)
     #                 print(f"Address End Hex: {address_end_hex}")
+            os.remove(f"{self._file_dir}Randomized_ROM/{curr_pointer_file}")
     
     def _shuffle_list(self, original_list):
         '''Shuffles a given list'''
