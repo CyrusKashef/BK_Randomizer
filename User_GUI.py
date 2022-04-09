@@ -641,7 +641,7 @@ class User_GUI_Class():
             self.remove_floating_jiggies_checkbox.grid_remove()
         else:
             self.final_puzzle_entry.configure(state='normal')
-            self.remove_floating_jiggies_checkbox.grid(row=3, column=4, padx=self.padx, pady=self.pady, sticky='w')
+            self.remove_floating_jiggies_checkbox.grid(row=3, column=3, padx=self.padx, pady=self.pady, sticky='w')
     
     def _lock_struct_options(self, *args):
         self.logger.info("Lock Struct Options")
@@ -686,7 +686,7 @@ class User_GUI_Class():
             self._add_randomizer_settings_to_code(100, 8)
         else:
             self._add_randomizer_settings_to_code(self.final_puzzle_value.get(), 8)
-        self._add_randomizer_settings_to_code(self.free_transformations_var.get())
+        self._add_randomizer_settings_to_code(["Base Game Costs", "World Order Scaled Costs", "Free Transformations"].index(self.free_transformations_var.get()), 2)
         self._add_randomizer_settings_to_code(self.one_health_banjo_var.get())
         self._add_randomizer_settings_to_code(self.remove_floating_jiggies_var.get())
         # Non-Flagged Objects
@@ -816,7 +816,7 @@ class User_GUI_Class():
                 self.final_puzzle_value.set("?")
             else:
                 self.final_puzzle_value.set(str(final_puzzle_value))
-            self.free_transformations_var.set(self._get_randomizer_setting())
+            self.free_transformations_var.set(self._get_randomizer_setting(bit_count=2, options_list=["Base Game Costs", "World Order Scaled Costs", "Free Transformations"]))
             self.one_health_banjo_var.set(self._get_randomizer_setting())
             self.remove_floating_jiggies_var.set(self._get_randomizer_setting())
             # Non-Flagged Objects
@@ -936,7 +936,7 @@ class User_GUI_Class():
         self.flagged_object_softlock_var.set(0)
         self.final_puzzle_var.set(0)
         self.final_puzzle_value.set(25)
-        self.free_transformations_var.set(0)
+        self.free_transformations_var.set("Base Game Costs")
         self.one_health_banjo_var.set(0)
         self.remove_floating_jiggies_var.set(0)
         # Non-Flagged Objects
@@ -1118,7 +1118,7 @@ class User_GUI_Class():
             self.free_transformations_var.set(json_data["Free_Transformations"])
         except KeyError:
             setting_not_found.append("Free_Transformations")
-            self.free_transformations_var.set(0)
+            self.free_transformations_var.set("Base Game Costs")
         try:
             self.one_health_banjo_var.set(json_data["One_Health_Only"])
         except KeyError:
@@ -1509,7 +1509,7 @@ class User_GUI_Class():
         self.flagged_object_softlock_var.set(randint(0, 1))
         self.final_puzzle_var.set(randint(0, 1))
         self.final_puzzle_value.set(randint(0, 99))
-        self.free_transformations_var.set(randint(0, 1))
+        self.free_transformations_var.set(choice(["Base Game Costs", "World Order Scaled Costs", "Free Transformations"]))
         self.one_health_banjo_var.set(randint(0, 1))
         self.remove_floating_jiggies_var.set(0),
         # Non-Flagged Objects
@@ -1962,30 +1962,35 @@ class User_GUI_Class():
         self.flagged_object_abnormalities_checkbutton.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.flagged_object_softlock_var = tk.IntVar()
         self.flagged_object_softlock_checkbutton = tk.Checkbutton(self.flagged_object_frame, text="Include Potential Softlocks", variable=self.flagged_object_softlock_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.flagged_object_softlock_checkbutton.grid(row=1, column=3, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.flagged_object_softlock_checkbutton.grid(row=1, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self._jiggy_image = tk.PhotoImage(file=f"{self.cwd}Pictures/Jiggy.png")
         self.random_puzzle_value_button = tk.Button(self.flagged_object_frame, text='Random Puzzle Value', command=self._random_puzzle_value, image=self._jiggy_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.random_puzzle_value_button.grid(row=2, column=3, padx=self.padx, pady=self.pady)
+        self.random_puzzle_value_button.grid(row=2, column=2, rowspan=2, padx=self.padx, pady=self.pady)
         self.final_puzzle_ttp_canvas = tk.Label(self.flagged_object_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.final_puzzle_ttp_canvas.grid(row=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.final_puzzle_ttp_canvas.grid(row=2, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.final_puzzle_checkbox_ttp = self.CreateToolTip(self.final_puzzle_ttp_canvas, self, tool_tips_dict["GRUNTILDAS_LAIR"]["FINAL_PUZZLE"])
         self.final_puzzle_var = tk.IntVar()
         self.final_puzzle_checkbox = tk.Checkbutton(self.flagged_object_frame, text="Door Of Grunty Only", variable=self.final_puzzle_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.final_puzzle_checkbox.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.final_puzzle_checkbox.grid(row=2, column=1, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.final_text = tk.Label(self.flagged_object_frame, text="Door of Grunty Jiggies:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.final_text.grid(row=2, column=4, padx=self.padx, pady=self.pady)
+        self.final_text.grid(row=2, column=3, padx=self.padx, pady=self.pady)
         self.final_puzzle_value = tk.StringVar(self.flagged_object_frame)
         self.final_puzzle_entry = tk.Entry(self.flagged_object_frame, textvariable=self.final_puzzle_value, width=6)
-        self.final_puzzle_entry.grid(row=2, column=5, padx=self.padx, pady=self.pady)
-        self.free_transformations_var = tk.IntVar()
-        self.free_transformations_checkbox = tk.Checkbutton(self.flagged_object_frame, text="Free Transformations", variable=self.free_transformations_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.free_transformations_checkbox.grid(row=3, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.one_health_banjo_var = tk.IntVar()
-        self.one_health_banjo_checkbox = tk.Checkbutton(self.flagged_object_frame, text="One Health Only", variable=self.one_health_banjo_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.one_health_banjo_checkbox.grid(row=3, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.final_puzzle_entry.grid(row=2, column=4, padx=self.padx, pady=self.pady)
         self.remove_floating_jiggies_var = tk.IntVar()
         self.remove_floating_jiggies_checkbox = tk.Checkbutton(self.flagged_object_frame, text="No Floating Jiggies", variable=self.remove_floating_jiggies_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.remove_floating_jiggies_checkbox.grid(row=3, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.remove_floating_jiggies_checkbox.grid(row=3, column=3, padx=self.padx, pady=self.pady)
+        self.one_health_banjo_var = tk.IntVar()
+        self.one_health_banjo_checkbox = tk.Checkbutton(self.flagged_object_frame, text="One Health Only", variable=self.one_health_banjo_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.one_health_banjo_checkbox.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.free_transformations_text = tk.Label(self.flagged_object_frame, text="Token Option:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.free_transformations_text.grid(row=4, column=2, padx=self.padx, pady=self.pady, sticky='e')
+        self.free_transformations_var = tk.StringVar(self.flagged_object_frame)
+        self.free_transformations_options = ["Base Game Costs", "World Order Scaled Costs", "Free Transformations"]
+        self.free_transformations_dropdown = ttk.Combobox(self.flagged_object_frame, textvariable=self.free_transformations_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=23)
+        self.free_transformations_dropdown['values'] = self.free_transformations_options
+        self.free_transformations_dropdown['state'] = 'readonly'
+        self.free_transformations_dropdown.grid(row=4, column=3, padx=self.padx, pady=self.pady, sticky='w')
         self.final_puzzle_var.trace('w', self._lock_final_puzzle_value)
         # Structs
         self.struct_frame = tk.LabelFrame(self._collectables_tab, text="Notes, Blue Eggs, Red Feathers, & Gold Feathers", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
