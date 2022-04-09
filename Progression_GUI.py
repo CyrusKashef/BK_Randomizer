@@ -149,6 +149,13 @@ class Progression_GUI_Class():
         self.progress_bar_window.config(background="#F3E5AB")
         self.progress_bar_value = 0
         self._mumbo_error_message = "Mumbo Get New Stick, This One Not Work Well..."
+        self.transform_cost_dict = {
+                "Termite": 5,
+                "Crocodile": 10,
+                "Walrus": 15,
+                "Pumpkin": 20,
+                "Bee": 25
+                }
     
     class App_Variable_Label():
         '''A text box that can altered after creation'''
@@ -396,7 +403,7 @@ class Progression_GUI_Class():
         if(self.master.world_entrance_var.get() != "None"):
             try:
                 self.pb_label.set_text("Mumbo Lost Way Back To Mountain...")
-                world_manip._world_order_warps_main()
+                self.transform_cost_dict = world_manip._world_order_warps_main()
             except Exception:
                 self.master.logger.info("World Order Warps Error")
                 self.pb_label.set_text(f"{self._mumbo_error_message}\nPlease Check The ReadMe Under 'Errors'")
@@ -562,7 +569,7 @@ class Progression_GUI_Class():
                 raise
         try:
             self.pb_label.set_text("Mumbo Found Game Engine...")
-            misc_manip._setup_game_engine_manip()
+            misc_manip._setup_game_engine_manip(self.transform_cost_dict)
         except Exception:
             self.warning_label.set_text("Uh-Oh...")
             self.pb_label.set_text(f"Game Engine Error:\nPlease Check The ReadMe Under 'Errors'")
