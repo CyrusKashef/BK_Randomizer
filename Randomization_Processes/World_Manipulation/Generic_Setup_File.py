@@ -40,7 +40,7 @@ class SetupFile():
         self.bottles_info_list = []
         with open(f"{self.cwd}{setup_address}-Decompressed.bin", "r+b") as f:
             self.mm = mmap.mmap(f.fileno(), 0)
-        if(self.setup_address == "97B0"):
+        if(self.setup_address == 0x97B0):
             self.adjust_ttc_oob_egg()
         self.note_count = 0
         self.jiggy_count = 0
@@ -447,9 +447,14 @@ class SetupFile():
 
     def adjust_ttc_oob_egg(self):
         '''Moves the out of bounds egg in TTC slightly higher'''
+        print("Moving TTC OOB Egg")
         ttc_egg_index = self.mm.find(bytes.fromhex("F078041E06D6"))
-        self.mm[ttc_egg_index+2] = 4
-        self.mm[ttc_egg_index+3] = 166
+        if(ttc_egg_index > -1):
+            print(f"Found TTC Egg!")
+            self.mm[ttc_egg_index + 2] = 0x04
+            self.mm[ttc_egg_index + 3] = 0xA6
+        else:
+            print("Possibly Unbeatable Seed, Oh No...")
     
     def adjust_ttc_lighthouse_token(self):
         '''PyDoc'''
