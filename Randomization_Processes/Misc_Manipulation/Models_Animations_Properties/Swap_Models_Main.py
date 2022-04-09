@@ -89,6 +89,7 @@ class Swap_Models_Manipulation_Class():
         '''Uses the pointer to find the beginning and end of a model file and extracts it'''
         (address1, address2) = get_address_endpoints(self._file_bytes, pointer_str)
         with open(f"{self._file_dir}Randomized_ROM/{pointer_str[2:].lower()}-Compressed.bin", "w+b") as comp_file:
+            print(f"{pointer_str[2:].lower()}-Compressed.bin")
             for index in range(address1, address2):
                 hex_string = str(hex(self._file_bytes[index]))[2:]
                 if(len(hex_string) < 2):
@@ -125,13 +126,22 @@ class Swap_Models_Manipulation_Class():
                     mm_rand_rom[pointer_dec + 10] = int(address_end_hex[4:6], 16)
                     mm_rand_rom[pointer_dec + 11] = int(address_end_hex[6:], 16)
     #                 print(f"Address End Hex: {address_end_hex}")
-            os.remove(f"{self._file_dir}Randomized_ROM/{curr_pointer_file}")
     
     def _shuffle_list(self, original_list):
         '''Shuffles a given list'''
         seed(a=self._seed_val)
         shuffle(original_list)
         return original_list
+    
+    def _clean_up(self):
+        for pointer in range(self._pointers_start, self._pointers_end + 0x08, 0x08):
+#             print("~~~~")
+            pointer_str = str(hex(pointer))
+            curr_pointer_file = self._model_address_dict[pointer_str]
+            file_path = f"{self._file_dir}Randomized_ROM/{curr_pointer_file}"
+            for pointer in range(self._pointers_start, self._pointers_end + 0x08, 0x08):
+                if(os.path.isfile(file_path)):
+                    os.remove(file_path)
     
     def _model_manip_main(self):
         '''Runs through the functions of extracting, shuffling, and reinserting the model files'''
@@ -181,3 +191,4 @@ class Swap_Models_Manipulation_Class():
                     set_counter += 1
         # Replace Compressed Files Into ROM
         self._place_compressed_files()
+        self._clean_up()
