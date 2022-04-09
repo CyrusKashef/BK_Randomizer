@@ -1476,7 +1476,7 @@ class World_Manipulation_Class():
     ### BASIC SHUFFLE ###
     def _basic_calculate_new_world_order(self):
         '''Simple world order calculation'''
-        self.world_order = World_Order_Basic(self.seed, self.grandmaster.world_exit_var.get())
+        self.world_order = World_Order_Basic(self.seed, self.grandmaster.world_exit_var.get(), free_transformations=self.grandmaster.free_transformations_var.get())
         self.world_order._world_order_main()
     
     def _basic_edit_bottles_mound(self):
@@ -1603,7 +1603,8 @@ class World_Manipulation_Class():
                             break
         self.world_order = World_Order_Bottles(bottles_world_warp_dict, use_this_dict, seed_val=self.seed,
                                                one_hp=self.grandmaster.one_health_banjo_var.get(), final_puzzle_option=self.grandmaster.final_puzzle_var.get(),
-                                               world_exit_option=self.grandmaster.world_exit_var.get(), removed_detransformations=self.grandmaster.remove_magic_barriers_var.get())
+                                               world_exit_option=self.grandmaster.world_exit_var.get(),
+                                               removed_detransformations=self.grandmaster.remove_magic_barriers_var.get(), free_transformations=self.grandmaster.free_transformations_var.get())
         self.world_order._determine_world_order()
         world_cheat_sheet_str = ""
         for world in self.world_order.world_order_list:
