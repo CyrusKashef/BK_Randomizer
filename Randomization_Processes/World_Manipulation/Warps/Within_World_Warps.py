@@ -707,7 +707,7 @@ Levels = {
         Warp(debug_name="SM Banjo's House (Going Inside)", object_id=0x118, warps_to=0x1300, warps_from=0x1301, warp_search_strings=[
             "0F56FE571A694E860118000000002A7D",
             ]),
-        Warp(debug_name="SM Banjo's House (Coming Outside)", object_id=0x118, warps_to=0x1301, warps_from=0x1300, warp_search_strings=[
+        Warp(debug_name="SM Banjo's House (Coming Outside)", object_id=0x119, warps_to=0x1301, warps_from=0x1300, warp_search_strings=[
             "FFF9004A01C440060119000000000D60",
             ]),
         Warp(debug_name="SM Grunty's Lair (Going Inside)", object_id=0x12D, warps_to=0x1302, warps_from=0x1300, keep_in_same_setup=True, warp_search_strings=[
