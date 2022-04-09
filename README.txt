@@ -74,6 +74,8 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Include Abnormalities: Some items have special properties that won't softlock the game, but create weird effects.
 * Include Potential Softlocks: Some items create scenarios that may prevent the player from 100%-ing or finishing the seed.
 * Door Of Grunty Only: All worlds will automatically open, and the value for the Door Of Grunty can be set on the side (from 0 to 99). A value can be chosen at random by pressing the Jiggy button.
+* Base Game Costs: The costs for transformations for each world are the same as base game.
+* World Order Scaled Costs: The cost for transformations are determined by the order in which the world appears. 1st -> 5, 2nd -> 10... 5th -> 25.
 * Free Transformations: All Mumbo transformations won't cost you a single Mumbo Token.
 * One Health Only: You will only have one health the entire game, no matter how many Empty Honeycombs you pick up. Good luck not getting hit or falling!
 * Remove Floating Jiggies: Any non-spawning Jiggy gets removed from the game, limiting the number of Jiggies to 56 (the randomizer will only allow 50 jiggies to be required to allow for double health and possible softlock features).
@@ -103,7 +105,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Shuffle By World: All warps within a level are shuffled, barring some constraints. Excludes transformation warps.
 * Shuffle By Game: All warps within the levels (not including Gruntilda's Lair) are shuffled, barring some constraints. Excludes transformation warps. WARNING: This feature is crash heavy.
 ##### Starting Area
-* New Game Start Area: Starting a new game will start you here. Loading a game may start you here depending on what flags you hit, but I'm not entirely sure.
+* New Game Start Area: Starting a new game will start you here. Loading a game may start you here depending on what flags you hit, but I'm not entirely sure. Exiting Banjo's House will also take you to this location.
 * Skip Intro Cutscene: Skips the cutscene when starting a new game, but not the one where the player enters the lair for the first time.
 * Please watch the intro cutscene at least once. I worked hard on making custom dialog...
 
@@ -241,8 +243,8 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * All numbers must be positive integers, including seeds.
 * Python Files, Folders, and GZIP.EXE must be in their original locations with the BK ROM in the main folder.
 * **While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3. Link to the BK Rando Discord server at the top**
-* If you're not able to generate the randomizer settings code, go to Configurations, open the "Last_Used_Configuration" json file, remove your ROM File directory parameter, and send that to GiantJigglypuff3 as well
-* Example: "ROM_File": "C:/Users/Cyrus/eclipse-workspace/BK_Rando_v2.0/Banjo-Kazooie.z64" -> "ROM_File": ""
+* If you're not able to generate the randomizer settings code, go to Configurations, open the "Last_Used_Configuration" json file, remove your ROM File directory parameter, and send that to GiantJigglypuff3 as well. Example: "ROM_File": "C:/Users/Name/eclipse-workspace/BK_Rando_v2.0/Banjo-Kazooie.z64" -> "ROM_File": ""
+* If the progression bar gets stuck at the very beginning, make sure there are no special or accented characters in your directory, such as "É".
 
 ### Potential Softlocks
 * When turning on the 'Potential Softlock' features, the game may be put into a state where a collectable cannot be reached or the game cannot be progressed without resetting.
