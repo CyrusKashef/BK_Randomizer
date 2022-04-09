@@ -382,11 +382,15 @@ class Misc_Manipulation_Class():
     ### GAME ENGINE ###
     ###################
     
-    def _setup_game_engine_manip(self):
+    def _setup_game_engine_manip(self, transformation_costs):
         self.grandmaster.logger.info("Setup Game Engine Manipulation")
         game_engine_obj = Game_Engine_Class(self._file_dir)
-        if(self.grandmaster.free_transformations_var.get() == 1):
-            game_engine_obj._mumbo_transformations_costs()
+        if((self.grandmaster.free_transformations_var.get() != "Base Game Costs") and (self.grandmaster.world_entrance_var.get() != "None")):
+            game_engine_obj._mumbo_transformations_costs(termite_cost=transformation_costs["Termite"],
+                                                         crocodile_cost=transformation_costs["Crocodile"],
+                                                         walrus_cost=transformation_costs["Walrus"],
+                                                         pumpkin_cost=transformation_costs["Pumpkin"],
+                                                         bee_cost=transformation_costs["Bee"])
         if(self.grandmaster.one_health_banjo_var.get() == 1):
             game_engine_obj._max_health()
         game_engine_obj._blue_egg_limit(self.grandmaster.before_blue_egg, self.grandmaster.after_blue_egg)
