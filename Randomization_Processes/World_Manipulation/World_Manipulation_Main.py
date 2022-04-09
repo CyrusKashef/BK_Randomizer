@@ -45,6 +45,7 @@ from Randomization_Processes.Misc_Manipulation.Texture_Data.Texture_Main import 
 from ..Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation_Class
 from .Level_Model_Manip.Level_Models import Level_Model_Class
 from Randomization_Processes.World_Manipulation.Warps import Within_World_Warps
+from Randomization_Processes.Misc_Manipulation.Models_Animations_Properties.Swap_Models_Main import Swap_Models_Manipulation_Class
 
 ################################
 ### WORLD MANIPULATION CLASS ###
@@ -1660,15 +1661,76 @@ class World_Manipulation_Class():
         if(self.grandmaster.world_entrance_var.get() == "Basic Shuffle"):
             self._basic_world_order_shuffle_main()
             self._add_clankers_cavern_jump_pad()
+            self.world_order_list = self.world_order.world_order_list
         elif(self.grandmaster.world_entrance_var.get() == "Bottles Shuffle"):
             self._bottles_world_order_shuffle_main()
             self._remove_learning_move_warps()
+            self.world_order_list = self.world_order.world_order_list
         if(self.grandmaster.world_entrance_var.get() != "None"):
             self._world_entrance_signs()
             if(self.grandmaster.skip_furnace_fun_var.get() == 1):
                 self._brentilda_world_order_hints()
             if(self.grandmaster.world_exit_var.get() == "Exit From Entrance You Entered From"):
                 self._world_exits()
+        if(self.grandmaster.free_transformations_var.get() == "World Order Scaled Costs"):
+            print(f"World Order: {self.world_order.world_order_list}")
+            print(f"World Transformation Cost Dict: {self.world_order.transform_cost_dict}")
+            self._transformation_cost_signs()
+        return self.world_order.transform_cost_dict
+
+    def _transformation_cost_signs(self):
+        cost_to_sign_dict = {
+                5: "0x76A0",
+                10: "0x76A8",
+                15: "0x76B0",
+                20: "0x76B8",
+                25: "0x76C0"
+            }
+        transformation_cost_sign_dict = {
+            "Termite": {
+                "Original": {
+                        "0x76A0": "5 Token Sign"
+                    },
+                "Replacements": {
+                        cost_to_sign_dict[self.world_order.transform_cost_dict["Termite"]]: f"{self.world_order.transform_cost_dict['Termite']} Token Sign"
+                    }
+                },
+            "Crocodile": {
+                "Original": {
+                        "0x76A8": "10 Token Sign"
+                    },
+                "Replacements": {
+                        cost_to_sign_dict[self.world_order.transform_cost_dict["Crocodile"]]: f"{self.world_order.transform_cost_dict['Crocodile']} Token Sign"
+                    }
+                },
+            "Walrus": {
+                "Original": {
+                        "0x76B0": "15 Token Sign"
+                    },
+                "Replacements": {
+                        cost_to_sign_dict[self.world_order.transform_cost_dict["Walrus"]]: f"{self.world_order.transform_cost_dict['Walrus']} Token Sign"
+                    }
+                },
+            "Pumpkin": {
+                "Original": {
+                        "0x76B8": "20 Token Sign"
+                    },
+                "Replacements": {
+                        cost_to_sign_dict[self.world_order.transform_cost_dict["Pumpkin"]]: f"{self.world_order.transform_cost_dict['Pumpkin']} Token Sign"
+                    }
+                },
+            "Bee": {
+                "Original": {
+                        "0x76C0": "25 Token Sign"
+                    },
+                "Replacements": {
+                        cost_to_sign_dict[self.world_order.transform_cost_dict["Bee"]]: f"{self.world_order.transform_cost_dict['Bee']} Token Sign"
+                    }
+                }
+            }
+        print(f"Transformation Signs: {transformation_cost_sign_dict}")
+        swap_model_manip_obj = Swap_Models_Manipulation_Class(self.seed, self._file_dir, self.grandmaster.rom_file_entry.get(), transformation_cost_sign_dict)
+        swap_model_manip_obj._model_manip_main()
 
     def _world_exits(self):
         with open(f"{self._file_dir}Randomized_ROM/F9CAE0-Decompressed.bin", "r+b") as decomp_file:
