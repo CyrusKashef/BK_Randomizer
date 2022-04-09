@@ -55,6 +55,7 @@ class World_Order_Bottles():
             self._required_jiggies = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.world_exit_option = world_exit_option
         self.removed_detransformations = removed_detransformations
+        self.transform_cost_dict = {}
     
     def _progression_requirements(self, world_name):
         '''Calculates the progression requirements for the world number, based on lair progression and Jiggies needed to open the worlds'''
@@ -230,30 +231,26 @@ class World_Order_Bottles():
                         self.temp_learned_moves[world_name]["New_Mumbo_Tokens"].append(object_id)
         # Is there a transformation here and can you afford it?
         current_mumbo_count = len(set(self.collected_mumbo_token_list)) + len(set(self.temp_learned_moves[world_name]["New_Mumbo_Tokens"]))
-        if("Termite" in self.learned_moves):
-            current_mumbo_count -= 5
-        if("Crocodile" in self.learned_moves):
-            current_mumbo_count -= 10
-        if("Walrus" in self.learned_moves):
-            current_mumbo_count -= 15
-        if("Pumpkin" in self.learned_moves):
-            current_mumbo_count -= 20
-        if("Bee" in self.learned_moves):
-            current_mumbo_count -= 25
+        for transformation_name in ["Termite", "Crocodile", "Walrus", "Pumpkin", "Bee"]:
+            if(transformation_name in self.transform_cost_dict):
+                current_mumbo_count -= self.transform_cost_dict[transformation_name]
+        next_transform_cost = (len(self.transform_cost_dict) + 1) * 5
+        if(self.removed_detransformations == 1):
+            next_transform_cost = 0
         if(world_name == "Mumbo's Mountain"):
-            if(("Termite" not in self.learned_moves) and (current_mumbo_count >= 5)):
+            if(("Termite" not in self.learned_moves) and (current_mumbo_count >= next_transform_cost)):
                 self.temp_learned_moves[world_name]["New_Moves_List"].append("Termite")
         elif(world_name == "Bubblegloop Swamp"):
-            if(("Crocodile" not in self.learned_moves) and (current_mumbo_count >= 10)):
+            if(("Crocodile" not in self.learned_moves) and (current_mumbo_count >= next_transform_cost)):
                 self.temp_learned_moves[world_name]["New_Moves_List"].append("Crocodile")
         elif(world_name == "Freezeezy Peak"):
-            if(("Walrus" not in self.learned_moves) and (current_mumbo_count >= 15)):
+            if(("Walrus" not in self.learned_moves) and (current_mumbo_count >= next_transform_cost)):
                 self.temp_learned_moves[world_name]["New_Moves_List"].append("Walrus")
         elif(world_name == "Mad Monster Mansion"):
-            if(("Pumpkin" not in self.learned_moves) and (current_mumbo_count >= 25)):
+            if(("Pumpkin" not in self.learned_moves) and (current_mumbo_count >= next_transform_cost)):
                 self.temp_learned_moves[world_name]["New_Moves_List"].append("Pumpkin")
         elif(world_name == "Click Clock Wood"):
-            if(("Bee" not in self.learned_moves) and (current_mumbo_count >= 25)):
+            if(("Bee" not in self.learned_moves) and (current_mumbo_count >= next_transform_cost)):
                 self.temp_learned_moves[world_name]["New_Moves_List"].append("Bee")
         # Does the transformation get more tokens?
         for token_id in transformation_tokens:
@@ -383,6 +380,23 @@ class World_Order_Bottles():
             self.learned_moves.append(new_move)
             if(new_move in self.remaining_moves):
                 self.remaining_moves.remove(new_move)
+        # Transformations
+        transformation_name = None
+        if(next_world == "Mumbo's Mountain"):
+            transformation_name = "Termite"
+        elif(next_world == "Bubblegloop Swamp"):
+            transformation_name = "Crocodile"
+        elif(next_world == "Freezeezy Peak"):
+            transformation_name = "Walrus"
+        elif(next_world == "Mad Monster Mansion"):
+            transformation_name = "Pumpkin"
+        elif(next_world == "Click Clock Wood"):
+            transformation_name = "Bee"
+        if((transformation_name) and (transformation_name not in self.transform_cost_dict)):
+            if(self.removed_detransformations == 1):
+                self.transform_cost_dict[transformation_name] = 0
+            else:
+                self.transform_cost_dict[transformation_name] = (len(self.transform_cost_dict) + 1) * 5
         # What would your Mumbo Token list be?
         for world_name in self.world_order_list:
             for token_id in self.temp_learned_moves[world_name]["New_Mumbo_Tokens"]:
