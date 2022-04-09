@@ -9,10 +9,10 @@ Created on Aug 24, 2021
 ######################
 
 from mmap import mmap
+from pathlib import Path
 import subprocess
 import os
-import gzip
-from pathlib import Path
+import zlib
 
 ####################
 ### FILE IMPORTS ###
@@ -147,30 +147,26 @@ class Compressor():
         '''Compresses the hex file that was extracted from the main ROM file'''
         input_path = Path(self._file_dir, "Randomized_ROM", f"{file_name.upper()}-Decompressed.bin")
         output_path = Path(self._file_dir, "Randomized_ROM", f"{file_name.upper()}-New_Compressed.bin")
-
-        with gzip.open(output_path, 'wb') as f:
-            f.write(input_path.read_bytes())
+        compressor = zlib.compressobj(level=6, wbits=-15)
+        with output_path.open("wb") as comp_file:
+            comp_file.write(compressor.compress(input_path.read_bytes()))
+            comp_file.write(compressor.flush())
 
     def _post_compress_operations(self, file_name, header, footer, decomp_len, padding_text="AA"):
-        with open(f"{self._file_dir}Randomized_ROM/{file_name}-New_Compressed.bin", "r+b") as comp_file:
-            mm_comp = mmap(comp_file.fileno(), 0)
-            comp_file_len = len(mm_comp)
-            header_end = ""
-            for header_val in header[-4:]:
-                header_end += header_val
-            header_end_index = mm_comp.find(bytes.fromhex(header_end)) + 4
-            with open(f"{self._file_dir}Randomized_ROM/{file_name}-Randomized_Compressed.bin", "w+b") as new_comp_file:
-                new_comp_file.write(bytes.fromhex("1172"))
-                new_comp_file.write(bytes.fromhex(decomp_len))
-                new_comp_len = 6
-                for index in range(header_end_index, comp_file_len-len(footer)):
-                    hex_string = leading_zeros(mm_comp[index], 2)
-                    new_comp_file.write(bytes.fromhex(hex_string))
-                    new_comp_len += 1
-                if(padding_text and ((new_comp_len % 8) != 0)):
-                    needs_padding = 8 - (new_comp_len % 8)
-                    for index in range(new_comp_len, new_comp_len + needs_padding):
-                        new_comp_file.write(bytes.fromhex(padding_text))
+        input_path = Path(self._file_dir, "Randomized_ROM", f"{file_name}-New_Compressed.bin")
+        comp_data = input_path.read_bytes()
+        decomp_len = len(zlib.decompress(comp_data, wbits=-15))
+
+        with open(f"{self._file_dir}Randomized_ROM/{file_name}-Randomized_Compressed.bin", "wb") as new_comp_file:
+            new_comp_file.write(bytes.fromhex("1172"))
+            new_comp_file.write(decomp_len.to_bytes(4, byteorder="big"))
+            new_comp_file.write(comp_data)
+            new_comp_len = new_comp_file.tell()
+
+            if(padding_text and ((new_comp_len % 8) != 0)):
+                needs_padding = 8 - (new_comp_len % 8)
+                for index in range(new_comp_len, new_comp_len + needs_padding):
+                    new_comp_file.write(bytes.fromhex(padding_text))
 
     def _insert_into_rom_by_pointer(self, setup_pointer_start, setup_pointer_end, additional_skip_these_pointer_list=[]):
         for index_dec in range(setup_pointer_start, setup_pointer_end + 1, 8):
