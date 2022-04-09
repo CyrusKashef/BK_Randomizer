@@ -89,7 +89,6 @@ class Swap_Models_Manipulation_Class():
         '''Uses the pointer to find the beginning and end of a model file and extracts it'''
         (address1, address2) = get_address_endpoints(self._file_bytes, pointer_str)
         with open(f"{self._file_dir}Randomized_ROM/{pointer_str[2:].lower()}-Compressed.bin", "w+b") as comp_file:
-            print(f"{pointer_str[2:].lower()}-Compressed.bin")
             for index in range(address1, address2):
                 hex_string = str(hex(self._file_bytes[index]))[2:]
                 if(len(hex_string) < 2):
