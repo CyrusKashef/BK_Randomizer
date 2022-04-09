@@ -15,11 +15,11 @@ import random
 #################
 
 class World_Order_Basic():
-    def __init__(self, seed_val=0, world_exits="Exit From World You Were Just In", removed_detransformations=0):
+    def __init__(self, seed_val=0, world_exits="Exit From World You Were Just In", free_transformations="Base Game Costs"):
         self._seed_val = seed_val
         self._world_exits = world_exits
         self.transform_cost_dict = {}
-        self.removed_detransformations = removed_detransformations
+        self.free_transformations = free_transformations
 
     def _determine_world_order_normal(self):
         '''Creates a random order for the worlds'''
@@ -38,9 +38,15 @@ class World_Order_Basic():
 
     def _transformation_costs(self):
         '''PyDoc'''
-        for transformation_name in ["Termite", "Crocodile", "Walrus", "Pumpkin", "Bee"]:
-            self.transform_cost_dict[transformation_name] = 0
-        if(self.removed_detransformations == 0):
+        if(self.free_transformations == "Base Game Costs"):
+            transformation_cost = 5
+            for transformation_name in ["Termite", "Crocodile", "Walrus", "Pumpkin", "Bee"]:
+                self.transform_cost_dict[transformation_name] = transformation_cost
+                transformation_cost += 5
+        elif(self.free_transformations == "Free Transformations"):
+            for transformation_name in ["Termite", "Crocodile", "Walrus", "Pumpkin", "Bee"]:
+                self.transform_cost_dict[transformation_name] = 0
+        elif(self.free_transformations == "World Order Scaled Costs"):
             transformation_cost = 5
             for world in self.world_order_list:
                 if(world == "Mumbo's Mountain"):
