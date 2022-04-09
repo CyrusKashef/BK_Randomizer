@@ -31,7 +31,7 @@ learnable_moves_dict = {
 #########################
 
 class World_Order_Bottles():
-    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0, final_puzzle_option=0, world_exit_option="Exit From World You Were Just In", removed_detransformations=0):
+    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0, final_puzzle_option=0, world_exit_option="Exit From World You Were Just In", removed_detransformations=0, free_transformations="Base Game Costs"):
         '''Initializes the World Order Bottles Class'''
         self.bottles_world_warp_dict = bottles_world_warp_dict
         self.extra_flagged_object_flags = extra_flagged_object_flags
@@ -55,7 +55,20 @@ class World_Order_Bottles():
             self._required_jiggies = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.world_exit_option = world_exit_option
         self.removed_detransformations = removed_detransformations
+        self.free_transformations = free_transformations
         self.transform_cost_dict = {}
+        if(self.free_transformations == "Base Game Costs"):
+            self.transform_cost_dict["Termite"] = 5
+            self.transform_cost_dict["Crocodile"] = 10
+            self.transform_cost_dict["Walrus"] = 15
+            self.transform_cost_dict["Pumpkin"] = 20
+            self.transform_cost_dict["Bee"] = 25
+        elif(self.free_transformations == "Free Transformations"):
+            self.transform_cost_dict["Termite"] = 0
+            self.transform_cost_dict["Crocodile"] = 0
+            self.transform_cost_dict["Walrus"] = 0
+            self.transform_cost_dict["Pumpkin"] = 0
+            self.transform_cost_dict["Bee"] = 0
     
     def _progression_requirements(self, world_name):
         '''Calculates the progression requirements for the world number, based on lair progression and Jiggies needed to open the worlds'''
@@ -232,11 +245,21 @@ class World_Order_Bottles():
         # Is there a transformation here and can you afford it?
         current_mumbo_count = len(set(self.collected_mumbo_token_list)) + len(set(self.temp_learned_moves[world_name]["New_Mumbo_Tokens"]))
         for transformation_name in ["Termite", "Crocodile", "Walrus", "Pumpkin", "Bee"]:
-            if(transformation_name in self.transform_cost_dict):
+            if(transformation_name in self.learned_moves):
                 current_mumbo_count -= self.transform_cost_dict[transformation_name]
-        next_transform_cost = (len(self.transform_cost_dict) + 1) * 5
-        if(self.removed_detransformations == 1):
-            next_transform_cost = 0
+        if(self.free_transformations == "World Order Scaled Costs"):
+            next_transform_cost = (len(self.transform_cost_dict) + 1) * 5
+        else:
+            if(world_name == "Mumbo's Mountain"):
+                next_transform_cost = self.transform_cost_dict["Termite"]
+            elif(world_name == "Bubblegloop Swamp"):
+                next_transform_cost = self.transform_cost_dict["Crocodile"]
+            elif(world_name == "Freezeezy Peak"):
+                next_transform_cost = self.transform_cost_dict["Walrus"]
+            elif(world_name == "Mad Monster Mansion"):
+                next_transform_cost = self.transform_cost_dict["Pumpkin"]
+            elif(world_name == "Click Clock Wood"):
+                next_transform_cost = self.transform_cost_dict["Bee"]
         if(world_name == "Mumbo's Mountain"):
             if(("Termite" not in self.learned_moves) and (current_mumbo_count >= next_transform_cost)):
                 self.temp_learned_moves[world_name]["New_Moves_List"].append("Termite")
@@ -393,9 +416,9 @@ class World_Order_Bottles():
         elif(next_world == "Click Clock Wood"):
             transformation_name = "Bee"
         if((transformation_name) and (transformation_name not in self.transform_cost_dict)):
-            if(self.removed_detransformations == 1):
+            if(self.free_transformations == "Free Transformations"):
                 self.transform_cost_dict[transformation_name] = 0
-            else:
+            elif(self.free_transformations == "World Order Scaled Costs"):
                 self.transform_cost_dict[transformation_name] = (len(self.transform_cost_dict) + 1) * 5
         # What would your Mumbo Token list be?
         for world_name in self.world_order_list:
