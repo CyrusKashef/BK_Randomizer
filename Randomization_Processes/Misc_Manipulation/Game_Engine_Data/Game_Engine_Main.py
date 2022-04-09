@@ -54,8 +54,6 @@ class Game_Engine_Class():
         # 0x4A7F7 (Walrus)
         # 0x4A7FF (Pumpkin)
         # 0x4A807 (Bee)
-#         for transform_index in range(0x4A7E7, 0x4A808, 8):
-#             self.mm[transform_index] = 0
         self.mm[0x4A7E7] = termite_cost
         self.mm[0x4A7EF] = crocodile_cost
         self.mm[0x4A7F7] = walrus_cost
