@@ -1,0 +1,7 @@
+__pycache__
+*.pyc
+Randomized_ROM/*
+Last_Used_Configuration.json
+*.log
+*.z64
+Git_Commit_Message.txt
