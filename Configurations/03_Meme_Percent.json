@@ -1,5 +1,5 @@
 {
-    "ROM_File": "C:/Users/Cyrus/eclipse-workspace/BK_Rando_v2.0/Banjo-Kazooie.z64",
+    "ROM_File": "",
     "Seed": "",
     "Flagged_Objects_Option": "Shuffle (Game)",
     "Flagged_Objects_Abnormalities": 1,
@@ -132,7 +132,5 @@
     "Include (A) Throws": 1,
     "Include (A) Tooie Beehive": 1,
     "Include (A) Walrus": 1,
-    "Include (P) Gamble Hive": 0,
-    "Include (P) Hard Bosses": 0,
-    "Include (P) Hard Enemies": 0
+    "Include (P) Gamble Hive": 0
 }
