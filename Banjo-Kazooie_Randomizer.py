@@ -14,7 +14,7 @@ from User_GUI import User_GUI_Class
 ### VARIABLES ###
 #################
 
-BK_RANDO_VERSION = "2.0.20220409"
+BK_RANDO_VERSION = "2.0.20220411"
 
 ############
 ### MAIN ###

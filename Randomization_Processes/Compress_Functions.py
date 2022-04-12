@@ -332,7 +332,7 @@ class Compressor():
         self.master.logger.debug("Bottles Tutorial Confirm")
         self._section_compression_main(speech_file_ids, 0xCF90, 0xCF98) # Bottles Tutorial Confirm & Secret Game Text
         self.master.logger.debug("Bottles Move Texts")
-        self._section_compression_main(speech_file_ids, 0xAFD0, 0xDA00) # Bottles Move Texts
+        self._section_compression_main(speech_file_ids, 0xAFD0, 0xDA30) # Bottles Move Texts
         if(self.master.skip_furnace_fun_var.get() == 1):
             self.master.logger.debug("Lair Speeches & Brentilda Hints")
             self._section_compression_main(speech_file_ids, 0xDAC8, 0xFFB8, furnace_fun_questions_pointer_list) # Gruntilda Lair Speeches, Brentilda Hints, Furnace Fun & Whatever Is In Between

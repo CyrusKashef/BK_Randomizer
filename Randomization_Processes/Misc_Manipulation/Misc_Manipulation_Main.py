@@ -444,18 +444,25 @@ class Misc_Manipulation_Class():
     def _edit_world_order_related_text_main(self):
         self.grandmaster.logger.info("Edit World Order Related Text Main")
         self.speech_manip._bottles_50_notes()
+        self.speech_manip._bottles_slippery_slope()
         self.speech_manip._bottles_enter_mm_moves()
         self.speech_manip._bottles_learned_mm_moves()
+        self.speech_manip._bottles_leaving_mm_without_moves()
         self.speech_manip._bottles_enter_ttc_moves()
         self.speech_manip._bottles_learned_ttc_moves()
+        self.speech_manip._bottles_leaving_ttc_without_moves()
         self.speech_manip._bottles_enter_cc_moves()
         self.speech_manip._bottles_learned_cc_moves()
+        self.speech_manip._bottles_leaving_cc_without_moves()
         self.speech_manip._bottles_enter_bgs_moves()
         self.speech_manip._bottles_learned_bgs_moves()
+        self.speech_manip._bottles_leaving_bgs_without_moves()
         self.speech_manip._bottles_enter_fp_moves()
         self.speech_manip._bottles_learned_fp_moves()
+        self.speech_manip._bottles_leaving_fp_without_moves()
         self.speech_manip._bottles_enter_gv_moves()
         self.speech_manip._bottles_learned_gv_moves()
+        self.speech_manip._bottles_leaving_gv_without_moves()
     
     def _edit_furnace_fun_questions_main(self):
         '''I probably won't implement this, since it seems everyone just wants to skip furnace fun'''

@@ -746,6 +746,13 @@ class Speech_Manipulation_Class():
         # YIPPEE! YOU'VE COLLECTED ENOUGH NOTES TO BREAK THE FIRST NOTE DOOR SPELL!
         intro_cutscene_text = Speech_File_Class(self._file_dir, "DA38")
         intro_cutscene_text._replace_line("59495050454521", "REMEMBER TO STAY HYDRATED!")
+
+    def _bottles_slippery_slope(self):
+        '''PyDoc'''
+        # 0xB900 - 5C42F0
+        # THINGS A BIT SLIPPY, HUH? FIND ME AND I'LL TEACH YOU HOW TO GET UP STEEP SLOPES!
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "B900")
+        intro_cutscene_text._replace_line("5448494E475320412042495420534C49", "LMAO CAUGHT YOU SLIPPIN' IN 4K!")
     
     def _bottles_enter_mm_moves(self):
         '''PyDoc'''
@@ -761,6 +768,14 @@ class Speech_Manipulation_Class():
         intro_cutscene_text = Speech_File_Class(self._file_dir, "B908")
         intro_cutscene_text._replace_line("574f4141412c", "EEKUM BOKUM!")
     
+    def _bottles_leaving_mm_without_moves(self):
+        '''PyDoc'''
+        print("HERE")
+        # 0xDA08 - 5CC390
+        # WAIT! YOU DIDN'T LEARN ALL THE NEW MOVES IN MUMBO'S MOUNTAIN! YOU WON'T GET FAR WITHOUT THEM...
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA08")
+        intro_cutscene_text._replace_line("574149542120594F55204449444E2754", "WHAT'S THE MATTER? DON'T LIKE BACKTRACKING? GUESS YOU WON'T LIKE TOOIE...")
+    
     def _bottles_enter_ttc_moves(self):
         '''PyDoc'''
         # 0xD9E0 - 5CC210
@@ -774,6 +789,13 @@ class Speech_Manipulation_Class():
         # NICE GOING, YOU'VE LEARNED ALL THE COVE'S NEW MOVES!
         intro_cutscene_text = Speech_File_Class(self._file_dir, "AFD0")
         intro_cutscene_text._replace_line("4e49434520474f494e47", "THE REAL LOOT BE THE SCALLYWAGS WE MADE ALONG THE WAY!")
+    
+    def _bottles_leaving_ttc_without_moves(self):
+        '''PyDoc'''
+        # 0xDA10 - 5CC3F8
+        # HEY! THERE'S AT LEAST ONE NEW MOVE YOU MISSED. THAT'S THE REAL TREASURE!
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA10")
+        intro_cutscene_text._replace_line("48455921205448455245275320415420", "THE CAMERAS GET FUNKY WHEN YOU LEARN A MOVE NOT FROM THAT LEVEL!")
     
     def _bottles_enter_cc_moves(self):
         '''PyDoc'''
@@ -789,6 +811,13 @@ class Speech_Manipulation_Class():
         intro_cutscene_text = Speech_File_Class(self._file_dir, "C850")
         intro_cutscene_text._replace_line("594f55275645", "IS ANYONE REALLY FREE WHEN CHAINED TO SOCIETY?")
     
+    def _bottles_leaving_cc_without_moves(self):
+        '''PyDoc'''
+        # 0xDA18 - 5CC450
+        # YOU DIDN'T SPLASH AROUND ENOUGH TO FIND THE NEW MOVE IN THERE, DID YOU?
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA18")
+        intro_cutscene_text._replace_line("594F55204449444E27542053504C4153", "BABY SHARK DO DO DO DO DO DO!")
+    
     def _bottles_enter_bgs_moves(self):
         '''PyDoc'''
         # 0xD9F0 - 5CC2B8
@@ -802,6 +831,13 @@ class Speech_Manipulation_Class():
         # GREAT, NOW YOU KNOW ALL THE SWAMP'S NEW MOVES!
         intro_cutscene_text = Speech_File_Class(self._file_dir, "C2E8")
         intro_cutscene_text._replace_line("47524541542c", "IT SMELLS LIKE A VIDEO GAME CHAMPIONSHIP HERE...")
+    
+    def _bottles_leaving_bgs_without_moves(self):
+        '''PyDoc'''
+        # 0xDA20 - 5CC4A8
+        # WADE BACK IN THERE AND FIND THAT NEW MOVE YOU JUST MISSED IF YOU WANT TO BEAT GRUNTY!
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA20")
+        intro_cutscene_text._replace_line("57414445204241434B20494E20544845", "THESE BOOTS ARE MADE FOR WALKIN, THAT'S JUST WHAT THEY'LL DO...")
     
     def _bottles_enter_fp_moves(self):
         '''PyDoc'''
@@ -817,6 +853,13 @@ class Speech_Manipulation_Class():
         intro_cutscene_text = Speech_File_Class(self._file_dir, "BFE8")
         intro_cutscene_text._replace_line("594f55275645", "HAPPY WALRUS NOISES!")
     
+    def _bottles_leaving_fp_without_moves(self):
+        '''PyDoc'''
+        # 0xDA28 - 5CC508
+        # HOLD IT, BANJO, HADN'T YOU BETTER SLIDE BACK IN AND FIND THAT NEW MOVE?
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA28")
+        intro_cutscene_text._replace_line("484F4C442049542C2042414E4A4F2C20", "CHRISTMAS IS OVER, TIME FOR VALENTINES DAY DECORATIONS!")
+    
     def _bottles_enter_gv_moves(self):
         '''PyDoc'''
         # 0xDA00 - 5CC350
@@ -830,6 +873,13 @@ class Speech_Manipulation_Class():
         # WELL, I'M AFRAID THAT'S IT FOR NEW MOVES IN GOBI'S VALLEY.
         intro_cutscene_text = Speech_File_Class(self._file_dir, "B2C8")
         intro_cutscene_text._replace_line("57454c4c2c", "CHILI DOGS!")
+    
+    def _bottles_leaving_gv_without_moves(self):
+        '''PyDoc'''
+        # 0xDA30 - 5CC560
+        # DON'T DESERT THE VALLEY WITHOUT FINDING THE NEW MOVE! I'M SURE YOU'LL BE NEEDING IT LATER...
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA30")
+        intro_cutscene_text._replace_line("444F4E27542044455345525420544845", "THERE ARE SOME REALLY COOL IMAGES ON THE WALLS IN THE MAZE!")
     
     def _bottles_this_is_a_mod(self):
         '''PyDoc'''
