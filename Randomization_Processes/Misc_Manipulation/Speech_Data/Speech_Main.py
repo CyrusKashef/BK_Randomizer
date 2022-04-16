@@ -740,6 +740,26 @@ class Speech_Manipulation_Class():
     ### BASE GAME PROGRESS TEXT ###
     ###############################
     
+    def _bottles_opened_first_world(self, world_object):
+        # 0xDA88 - 5CC988
+        # Bottles: THAT'S IT! THE PICTURE'S COMPLETE AND THE DOOR TO MUMBO'S MOUNTAIN IS OPEN!
+        # Gruntilda: THAT WAS SUCH AN EASY FIT,
+        # Gruntilda: THE OTHERS MAY JUST TEST YOUR WIT!
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA88")
+        intro_cutscene_text._replace_line("54484154275320495421205448452050", f"THAT'S IT! THE PICTURE'S COMPLETE AND THE DOOR TO {(world_object._world_name).upper()} IS OPEN!")
+
+    def _bottles_this_is_first_world(self):
+        # 0xDA90 - 5CCA10
+        # THIS IS THE FIRST WORLD, MUMBO'S MOUNTAIN. TO OPEN THE DOOR YOU'LL NEED TO FIND THE JIGSAW PICTURE WITH AN IMAGE OF THIS AREA ON IT. HAVE A LOOK AROUND, IT CAN'T BE FAR AWAY.
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA90")
+        intro_cutscene_text._replace_line("54484953204953205448452046495253", f"IS THIS YOUR FIRST TIME PLAYING BANJO-KAZOOIE? GO GET A JIGGY, 4HEAD!")
+
+    def _bottles_this_is_first_puzzle(self):
+        # 0xDA98 - 5CCAA8
+        # THIS IS THE FIRST WORLD, MUMBO'S MOUNTAIN. COMPLETE THE JIGSAW PICTURE TO OPEN THE DOOR.
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "DA98")
+        intro_cutscene_text._replace_line("54484953204953205448452046495253", f"IS IT REALLY MUMBO'S MOUNTAIN? MAYBE THE PICTURES SHOULD BE UPDATED...")
+
     def _bottles_50_notes(self):
         '''PyDoc'''
         # 0xDA38 - 5CC5C8

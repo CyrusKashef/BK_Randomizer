@@ -335,7 +335,7 @@ class Compressor():
         self._section_compression_main(speech_file_ids, 0xAFD0, 0xDA30) # Bottles Move Texts
         if(self.master.skip_furnace_fun_var.get() == 1):
             self.master.logger.debug("Lair Speeches & Brentilda Hints")
-            self._section_compression_main(speech_file_ids, 0xDAC8, 0xFFB8, furnace_fun_questions_pointer_list) # Gruntilda Lair Speeches, Brentilda Hints, Furnace Fun & Whatever Is In Between
+            self._section_compression_main(speech_file_ids, 0xDA88, 0xFFB8, furnace_fun_questions_pointer_list) # Gruntilda Lair Speeches, Brentilda Hints, Furnace Fun & Whatever Is In Between
 #             self._section_compression_main(speech_file_ids, 0xE2B0, 0xFFB8, furnace_fun_questions_pointer_list) # Brentilda Hints & Furnace Fun & Whatever Is In Between
         else:
             if((self.master.before_blue_egg_carry_value.get() != 100) or (self.master.after_blue_egg_carry_value.get() != 200) or

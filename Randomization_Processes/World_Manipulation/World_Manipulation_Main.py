@@ -1441,6 +1441,7 @@ class World_Manipulation_Class():
                         world_object_list.append(world_object)
                         break
         speech_manip = Speech_Manipulation_Class(self.grandmaster, self.seed)
+        speech_manip._bottles_opened_first_world(world_object_list[0])
         speech_manip._brentilda_intro()
         speech_manip._brentilda_1_1(world_object_list[0])
         speech_manip._brentilda_1_2(world_object_list[0])

@@ -385,7 +385,13 @@ class Misc_Manipulation_Class():
     def _setup_game_engine_manip(self, transformation_costs):
         self.grandmaster.logger.info("Setup Game Engine Manipulation")
         game_engine_obj = Game_Engine_Class(self._file_dir)
-        if((self.grandmaster.free_transformations_var.get() != "Base Game Costs") and (self.grandmaster.world_entrance_var.get() != "None")):
+        if(self.grandmaster.free_transformations_var.get() == "Free Transformations"):
+            game_engine_obj._mumbo_transformations_costs(termite_cost=0,
+                                                         crocodile_cost=0,
+                                                         walrus_cost=0,
+                                                         pumpkin_cost=0,
+                                                         bee_cost=0)
+        elif((self.grandmaster.free_transformations_var.get() == "World Order Scaled Costs") and (self.grandmaster.world_entrance_var.get() != "None")):
             game_engine_obj._mumbo_transformations_costs(termite_cost=transformation_costs["Termite"],
                                                          crocodile_cost=transformation_costs["Crocodile"],
                                                          walrus_cost=transformation_costs["Walrus"],
@@ -443,6 +449,8 @@ class Misc_Manipulation_Class():
     
     def _edit_world_order_related_text_main(self):
         self.grandmaster.logger.info("Edit World Order Related Text Main")
+        self.speech_manip._bottles_this_is_first_world()
+        self.speech_manip._bottles_this_is_first_puzzle()
         self.speech_manip._bottles_50_notes()
         self.speech_manip._bottles_slippery_slope()
         self.speech_manip._bottles_enter_mm_moves()
