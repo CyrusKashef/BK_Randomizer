@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Termite": {
+	        "Swap1": {
+	            "0x7990": "Jiggy"
+	        },
+	        "Swap2": {
+	            "0x8700": "SnS Egg"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

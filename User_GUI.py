@@ -2335,17 +2335,24 @@ class User_GUI_Class():
         self.customizable_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.customizable_frame["borderwidth"] = 0
         self.customizable_frame["highlightthickness"] = 0
+        customizable_disclaimer_text = (
+            "    WARNING:\n" +
+            "        The Models/Animations/Properties configurations have been tested on\n"+
+            "        Emulator, but not Everdrive. If playing on Everdrive, enable at own risk."
+            )
+        self.customizable_disclaimer_label = tk.Label(self.customizable_frame, text=customizable_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.customizable_disclaimer_label.grid(row=0, column=0, columnspan=4, padx=self.padx, pady=self.pady, sticky='w')
         self.customizable_ttp_canvas = tk.Label(self.customizable_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.customizable_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.customizable_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.customizable_frame_ttp = self.CreateToolTip(self.customizable_ttp_canvas, self, tool_tips_dict["CUSTOMIZABLE"]["MODELS"])
         self.all_aesthetics_button = tk.Button(self.customizable_frame, text='Select All\nCustom Aesthetic', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._all_custom_aesthetics()))
-        self.all_aesthetics_button.grid(row=0, column=1, padx=self.padx, pady=self.pady)
+        self.all_aesthetics_button.grid(row=1, column=1, padx=self.padx, pady=self.pady)
         self.no_customization_button = tk.Button(self.customizable_frame, text='Uncheck All\nCustom Options', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._no_customization()))
-        self.no_customization_button.grid(row=0, column=2, padx=self.padx, pady=self.pady)
+        self.no_customization_button.grid(row=1, column=2, padx=self.padx, pady=self.pady)
         self.random_customization_button = tk.Button(self.customizable_frame, text='Random Customs\nAnd Hide Options', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._random_customization()), width=15)
-        self.random_customization_button.grid(row=0, column=3, padx=self.padx, pady=self.pady)
+        self.random_customization_button.grid(row=1, column=3, padx=self.padx, pady=self.pady)
         self.customizable_checklist_frame = tk.LabelFrame(self.customizable_frame, text="(A) = Aesthetical Only; (P) = Contains Property Changes", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.customizable_checklist_frame.grid(row=1, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
+        self.customizable_checklist_frame.grid(row=2, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
         self.customizable_checklist_frame["borderwidth"] = 0
         self.customizable_checklist_frame["highlightthickness"] = 0
         self.customizable_checkbox_dict = {}
@@ -2355,7 +2362,7 @@ class User_GUI_Class():
             display_name = json_name.split(".json")[0]
             self.customizable_checkbox_dict[display_name] = tk.IntVar()
             custom_checkbutton = tk.Checkbutton(self.customizable_checklist_frame, text=display_name, variable=self.customizable_checkbox_dict[display_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=13, anchor="w")
-            custom_checkbutton.grid(row=(json_count // 4) + 1, column=(json_count % 4), padx=self.padx, pady=self.pady, sticky='w')
+            custom_checkbutton.grid(row=(json_count // 4) + 2, column=(json_count % 4), padx=self.padx, pady=self.pady, sticky='w')
             self.customization_checkbuttons.append(custom_checkbutton)
         ##########################
         ### WORLD SPECIFIC TAB ###
