@@ -507,14 +507,6 @@ class Progression_GUI_Class():
                 self.master.customizable_checkbox_dict[custom_name].set(randint(0, 1))
             if(self.master.customizable_checkbox_dict[custom_name].get() == 1):
                 customization_option = True
-        if(customization_option):
-            try:
-                self.pb_label.set_text("Banjo Must Stand Still Or Spell Go All Funny...")
-                misc_manip._models_animations_properties(self.seed_val, self.master.cwd, self.rom_path)
-            except Exception:
-                self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"Models/Animations/Properties Error:\nPlease Check The ReadMe Under 'Errors'")
-                raise
         if((self.master.short_sounds_var.get() == 1) or (self.master.jingles_var.get() == 1) or (self.master.music_var.get() == 1)):
             try:
                 self.pb_label.set_text("Hut Music Best Music...")
@@ -539,6 +531,14 @@ class Progression_GUI_Class():
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
                 self.pb_label.set_text(f"Talking Sprite Error:\nPlease Check The ReadMe Under 'Errors'")
+                raise
+        if(customization_option):
+            try:
+                self.pb_label.set_text("Banjo Must Stand Still Or Spell Go All Funny...\n(Takes Longer The More Options You Selected)")
+                misc_manip._models_animations_properties(self.seed_val, self.master.cwd, self.rom_path)
+            except Exception:
+                self.warning_label.set_text("Uh-Oh...")
+                self.pb_label.set_text(f"Models/Animations/Properties Error:\nPlease Check The ReadMe Under 'Errors'")
                 raise
         if((self.master.before_blue_egg_carry_value.get() != 100) or (self.master.after_blue_egg_carry_value.get() != 200) or
            (self.master.before_red_feather_carry_value.get() != 50) or (self.master.after_red_feather_carry_value.get() != 100) or

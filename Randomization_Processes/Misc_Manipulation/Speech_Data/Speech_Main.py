@@ -790,7 +790,6 @@ class Speech_Manipulation_Class():
     
     def _bottles_leaving_mm_without_moves(self):
         '''PyDoc'''
-        print("HERE")
         # 0xDA08 - 5CC390
         # WAIT! YOU DIDN'T LEARN ALL THE NEW MOVES IN MUMBO'S MOUNTAIN! YOU WON'T GET FAR WITHOUT THEM...
         intro_cutscene_text = Speech_File_Class(self._file_dir, "DA08")

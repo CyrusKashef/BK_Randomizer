@@ -1,0 +1,17 @@
+{
+	"Models": {
+	    "Transitions": {
+	        "Swap1": {
+	            "0x9D18": "Jiggy"
+	        },
+	        "Swap2": {
+	            "0x9D38": "Witch"
+	        }
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}
