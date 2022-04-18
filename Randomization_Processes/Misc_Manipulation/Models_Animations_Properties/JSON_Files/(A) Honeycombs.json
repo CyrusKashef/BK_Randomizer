@@ -1,0 +1,17 @@
+{
+	"Models": {
+		"UI_Honeycomb": {
+			"Shuffle": {
+				"0x9D78": "Empty",
+				"0x9D80": "Regular",
+				"0x9DC0": "Water",
+				"0x9DE8": "Red"
+			}
+	    }
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

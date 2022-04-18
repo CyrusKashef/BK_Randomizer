@@ -1,0 +1,20 @@
+{
+	"Models": {
+	    "UI_Font_Colors": {
+	        "Shuffle": {
+	            "0x95B8": "Green/Yellow",
+	            "0x95C0": "White/Brown",
+	            "0x95C8": "Purple",
+	            "0x95D0": "Pink",
+	            "0x9610": "Yellow/Orange",
+	            "0x9618": "Blue/White",
+				"0x96D8": "Blue_Egg"
+	        }
+		}
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

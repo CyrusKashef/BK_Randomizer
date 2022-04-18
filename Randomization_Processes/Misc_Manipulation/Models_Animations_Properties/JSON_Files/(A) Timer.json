@@ -1,0 +1,17 @@
+{
+	"Models": {
+		"Timer": {
+			"Swap1": {
+				"0x9568": "Hourglass"
+			},
+			"Swap2": {
+				"0x9570": "Skull"
+			}
+		}
+	},
+	"Animations": {
+	},
+	"Properties": {
+	}
+	
+}

@@ -465,6 +465,7 @@ class World_Order_Bottles():
         try:
             while(self.remaining_worlds):
                 # What can be the next world?
+                next_world = None
                 possible_world_list = self._possible_next_worlds()
                 if((self.world_exit_option == "Exit From Entrance You Entered From")):
                     if(self.removed_detransformations == 0):
@@ -475,18 +476,20 @@ class World_Order_Bottles():
                                 self._restart()
                         elif("Mad Monster Mansion" in possible_world_list):
                             possible_world_list.remove("Mad Monster Mansion")
-                    if(self.removed_detransformations == 1):
+                    elif(self.removed_detransformations == 1):
                         if((len(self.world_order_list) == 6) and ("Mad Monster Mansion" not in self.world_order_list)):
                             if("Mad Monster Mansion" in possible_world_list):
                                 next_world = "Mad Monster Mansion"
                             else:
                                 self._restart()
-                        elif((len(self.world_order_list) in [1, 2]) and ("Mad Monster Mansion" in possible_world_list)):
+                        elif((len(self.world_order_list) < 4) and ("Mad Monster Mansion" in possible_world_list)):
                             possible_world_list.remove("Mad Monster Mansion")
                 # Select from possible worlds
                 seed(a=(self.seed_val + self.increment))
                 self.increment += 1
-                if(possible_world_list):
+                if(next_world):
+                    pass
+                elif(possible_world_list):
                     next_world = choice(possible_world_list)
                 else:
                     self._restart()
