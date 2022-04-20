@@ -13,6 +13,7 @@
     "Non_Flagged_Objects_Abnormalities": 0,
     "Starting_Lives": "100",
     "Struct_Option": "None",
+    "Note_Overflow": "Allow Save & Quit/Reset",
     "Struct_Note_Count": "Produce Extra Notes",
     "Final_Note_Door": "Final Note Door Only",
     "Final_Note_Door_Value": "0",

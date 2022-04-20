@@ -707,6 +707,10 @@ flagged_object_dict = {
         },
     "Gruntilda's Lair": {
         # Jiggies
+        "0032": { # The First Jiggy
+            "Object":"FA1F0258007B190C0046",
+            "Flag":  "FA290258007F3F140032",
+            },
         "0036": {
             "Object":"00000000FFEC190C0046",
             "Flag":  "FFFA0000000212940036",
@@ -917,11 +921,6 @@ softlock_flagged_object_dict = {
     "Click Clock Wood - Winter": {
         },
     "Gruntilda's Lair": {
-        # Jiggies
-        "0032": { # The First Jiggy
-            "Object":"FA1F0258007B190C0046",
-            "Flag":  "FA290258007F3F140032",
-            },
         },
     }
 

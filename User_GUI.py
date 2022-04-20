@@ -106,7 +106,10 @@ tool_tips_dict = {
             "ALL NOTES:\n" +
             "    All eggs and feathers become notes. Brentildas are replaced\n" +
             "    with egg and feather refills. The refill at that Brentilda\n" +
-            "    location is random.",
+            "    location is random.\n"+
+            "Allow Save & Quit/Reset\n" +
+            "    Sets the limits of all world's notes to 127 to allow exiting\n" +
+            "    the save file. Cannot be used for 'All Notes' feature.",
         "CARRY_LIMIT": "Changes how many eggs/feathers can be carried,\n" +
                        "before and after finding Cheato.",
         },
@@ -577,6 +580,12 @@ class User_GUI_Class():
                 checkbutton.grid_remove()
             self.hiding_customization = True
     
+    def _default_starting_area(self):
+        '''Selects a random starting area'''
+        self.logger.info("Select Default Starting Area")
+        self.new_area_var.set("SM - Main")
+        self.skip_intro_cutscene_var.set(0)
+    
     def _random_starting_area(self):
         '''Selects a random starting area'''
         self.logger.info("Select Random Starting Area")
@@ -587,7 +596,7 @@ class User_GUI_Class():
         self.logger.info("Selecting 'Skip Intro Cutscene'")
         if(self.new_area_var.get() != "SM - Main"):
             self.skip_intro_cutscene_var.set(1)
-        if(self.new_area_var.get() == "Random Starting Area (Safe With All Moves)"):
+        if(self.new_area_var.get() == "Random Starting Area (Auto Have All Moves)"):
             self.all_starting_moves_var.set(1)
             self.all_starting_moves_checkbutton.configure(state='disabled')
         else:
@@ -645,11 +654,28 @@ class User_GUI_Class():
     
     def _lock_struct_options(self, *args):
         self.logger.info("Lock Struct Options")
-        if(self.struct_var.get() == "Randomize"):
-            self.struct_note_count_dropdown.grid(row=0, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
-        else:
+        if(self.struct_var.get() == "None"):
             self.struct_note_count_var.set("Produce Extra Notes")
             self.struct_note_count_dropdown.grid_remove()
+            self.note_overflow_var.set("Allow Save & Quit/Reset")
+            self.note_overflow_dropdown.grid_remove()
+        elif(self.struct_var.get() == "Shuffle (World)"):
+            self.struct_note_count_var.set("Produce Extra Notes")
+            self.struct_note_count_dropdown.grid_remove()
+            self.note_overflow_var.set("Allow Save & Quit/Reset")
+            self.note_overflow_dropdown.grid_remove()
+        elif(self.struct_var.get() == "Shuffle (Game)"):
+            self.struct_note_count_var.set("Produce Extra Notes")
+            self.struct_note_count_dropdown.grid_remove()
+            self.note_overflow_dropdown.grid(row=0, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        elif(self.struct_var.get() == "Randomize"):
+            self.struct_note_count_dropdown.grid(row=1, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+            self.note_overflow_dropdown.grid(row=0, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        elif(self.struct_var.get() == "All Notes"):
+            self.struct_note_count_var.set("Produce Extra Notes")
+            self.struct_note_count_dropdown.grid_remove()
+            self.note_overflow_var.set("Allow Save & Quit/Reset")
+            self.note_overflow_dropdown.grid_remove()
     
     ################################
     ### RANDOMIZER SETTINGS CODE ###
@@ -695,6 +721,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.starting_lives_value.get(), 8)
         # Structs
         self._add_randomizer_settings_to_code(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"].index(self.struct_var.get()), 3)
+        self._add_randomizer_settings_to_code(["Allow Save & Quit/Reset", "Possible No Save & Quit/Reset"].index(self.note_overflow_var.get()))
         self._add_randomizer_settings_to_code(["Produce Extra Notes", "Produce Exactly Enough Notes"].index(self.struct_note_count_var.get()))
         self._add_randomizer_settings_to_code(["Scaling Note Doors", "Final Note Door Only"].index(self.final_note_door_var.get()))
         if(self.final_note_door_value.get() == "?"):
@@ -733,8 +760,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(["None", "Shuffle By World", "Shuffle By Game"].index(self.within_world_warps_var.get()), 2)
         # Starting World
         starting_world_options = [option for option in start_level_ids]
-        starting_world_options.insert(0, "Random Starting Area (Always Safe)")
-        starting_world_options.insert(1, "Random Starting Area (Safe With All Moves)")
+        starting_world_options.insert(0, "Random Starting Area (Auto Have All Moves)")
         self._add_randomizer_settings_to_code(starting_world_options.index(self.new_area_var.get()), 8)
         self._add_randomizer_settings_to_code(self.skip_intro_cutscene_var.get())
         # Enemies
@@ -825,6 +851,7 @@ class User_GUI_Class():
             self.starting_lives_value.set(self._get_randomizer_setting(bit_count=8))
             # Structs
             self.struct_var.set(self._get_randomizer_setting(bit_count=3, options_list=["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
+            self.note_overflow_var.set(self._get_randomizer_setting(options_list=["Allow Save & Quit/Reset", "Possible No Save & Quit/Reset"]))
             self.struct_note_count_var.set(self._get_randomizer_setting(options_list=["Produce Extra Notes", "Produce Exactly Enough Notes"]))
             self.final_note_door_var.set(self._get_randomizer_setting(options_list=["Scaling Note Doors", "Final Note Door Only"]))
             final_note_door_value = self._get_randomizer_setting(bit_count=11)
@@ -871,8 +898,7 @@ class User_GUI_Class():
             self.within_world_warps_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle By World", "Shuffle By Game"]))
             # Starting World
             starting_world_options = [option for option in start_level_ids]
-            starting_world_options.insert(0, "Random Starting Area (Always Safe)")
-            starting_world_options.insert(1, "Random Starting Area (Safe With All Moves)")
+            starting_world_options.insert(0, "Random Starting Area (Auto Have All Moves)")
             self.new_area_var.set(self._get_randomizer_setting(bit_count=8, options_list=starting_world_options))
             self.skip_intro_cutscene_var.set(self._get_randomizer_setting())
             # Enemies
@@ -945,6 +971,7 @@ class User_GUI_Class():
         self.starting_lives_value.set(3)
         # Structs
         self.struct_var.set("Shuffle (World)")
+        self.note_overflow_var.set("Allow Save & Quit/Reset")
         self.struct_note_count_var.set("Produce Extra Notes")
         self.final_note_door_var.set("Scaling Note Doors")
         self.final_note_door_value.set(810)
@@ -1151,6 +1178,11 @@ class User_GUI_Class():
         except KeyError:
             setting_not_found.append("Struct_Option")
             self.struct_var.set("Shuffle (World)")
+        try:
+            self.struct_note_count_var.set(json_data["Note_Overflow"])
+        except KeyError:
+            setting_not_found.append("Note_Overflow")
+            self.note_overflow_var.set("Allow Save & Quit/Reset")
         try:
             self.struct_note_count_var.set(json_data["Struct_Note_Count"])
         except KeyError:
@@ -1518,6 +1550,7 @@ class User_GUI_Class():
         self.starting_lives_value.set(randint(0, 69))
         # Structs
         self.struct_var.set(choice(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
+        self.note_overflow_var.set("Allow Save & Quit/Reset")
         self.struct_note_count_var.set(choice(["Produce Extra Notes", "Produce Exactly Enough Notes"]))
         self.final_note_door_var.set(choice(["Scaling Note Doors", "Final Note Door Only"]))
         if(self.struct_var.get() == "All Notes"):
@@ -1629,6 +1662,7 @@ class User_GUI_Class():
             "Starting_Lives": self.starting_lives_value.get(),
             # Structs
             "Struct_Option": self.struct_var.get(),
+            "Note_Overflow": self.note_overflow_var.get(),
             "Struct_Note_Count": self.struct_note_count_var.get(),
             "Final_Note_Door": self.final_note_door_var.get(),
             "Final_Note_Door_Value": self.final_note_door_value.get(),
@@ -1996,41 +2030,47 @@ class User_GUI_Class():
         self.struct_frame = tk.LabelFrame(self._collectables_tab, text="Notes, Blue Eggs, Red Feathers, & Gold Feathers", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.struct_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.struct_ttp_canvas = tk.Label(self.struct_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.struct_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.struct_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.struct_ttp = self.CreateToolTip(self.struct_ttp_canvas, self, tool_tips_dict["STRUCTS"]["FRAME"])
         self.struct_var = tk.StringVar(self.struct_frame)
         self.struct_options = ["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]
         self.struct_dropdown = ttk.Combobox(self.struct_frame, textvariable=self.struct_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.struct_dropdown['values'] = self.struct_options
         self.struct_dropdown['state'] = 'readonly'
-        self.struct_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.struct_dropdown.grid(row=0, column=1, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.note_overflow_var = tk.StringVar(self.struct_frame)
+        self.note_overflow_options = ["Allow Save & Quit/Reset", "Possible No Save & Quit/Reset"]
+        self.note_overflow_dropdown = ttk.Combobox(self.struct_frame, textvariable=self.note_overflow_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=26)
+        self.note_overflow_dropdown['values'] = self.note_overflow_options
+        self.note_overflow_dropdown['state'] = 'readonly'
+        self.note_overflow_dropdown.grid(row=0, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.struct_note_count_var = tk.StringVar(self.struct_frame)
         self.struct_note_count_options = ["Produce Extra Notes", "Produce Exactly Enough Notes"]
         self.struct_note_count_dropdown = ttk.Combobox(self.struct_frame, textvariable=self.struct_note_count_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=26)
         self.struct_note_count_dropdown['values'] = self.struct_note_count_options
         self.struct_note_count_dropdown['state'] = 'readonly'
-        self.struct_note_count_dropdown.grid(row=0, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.struct_note_count_dropdown.grid(row=1, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.final_note_door_ttp_canvas = tk.Label(self.struct_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.final_note_door_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.final_note_door_ttp_canvas.grid(row=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.final_note_door_checkbox_ttp = self.CreateToolTip(self.final_note_door_ttp_canvas, self, tool_tips_dict["GRUNTILDAS_LAIR"]["FINAL_NOTE_DOOR"])
         self.final_note_door_var = tk.StringVar(self.struct_frame)
         self.note_door_options = ["Scaling Note Doors", "Final Note Door Only"]
         self.final_note_door_dropdown = ttk.Combobox(self.struct_frame, textvariable=self.final_note_door_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.final_note_door_dropdown['values'] = self.note_door_options
         self.final_note_door_dropdown['state'] = 'readonly'
-        self.final_note_door_dropdown.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.final_note_door_dropdown.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.final_note_door_value = tk.StringVar(self.struct_frame)
         self._note_image = tk.PhotoImage(file=f"{self.cwd}Pictures/Note.png")
         self.random_note_value_button = tk.Button(self.struct_frame, text='Random Note Value', command=self._random_note_value, image=self._note_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.random_note_value_button.grid(row=1, column=2, padx=self.padx, pady=self.pady)
+        self.random_note_value_button.grid(row=2, column=2, padx=self.padx, pady=self.pady)
         self.final_text = tk.Label(self.struct_frame, text="810 Note Door Value:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.final_text.grid(row=1, column=3, padx=self.padx, pady=self.pady)
+        self.final_text.grid(row=2, column=3, padx=self.padx, pady=self.pady)
         self.final_note_door_entry = tk.Entry(self.struct_frame, textvariable=self.final_note_door_value, width=6)
-        self.final_note_door_entry.grid(row=1, column=4, padx=self.padx, pady=self.pady, sticky='e')
+        self.final_note_door_entry.grid(row=2, column=4, padx=self.padx, pady=self.pady, sticky='e')
         self.final_text = tk.Label(self.struct_frame, text="Notes", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.final_text.grid(row=1, column=5, padx=self.padx, pady=self.pady, sticky='w')
+        self.final_text.grid(row=2, column=5, padx=self.padx, pady=self.pady, sticky='w')
         self.carry_limit_frame = tk.LabelFrame(self.struct_frame, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.carry_limit_frame.grid(row=2, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
+        self.carry_limit_frame.grid(row=3, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
         self.carry_limit_frame["borderwidth"] = 0
         self.carry_limit_frame["highlightthickness"] = 0
         self.carry_limit_ttp_canvas = tk.Label(self.carry_limit_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
@@ -2143,8 +2183,7 @@ class User_GUI_Class():
         self.new_area_text.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.new_area_var = tk.StringVar(self.world_entrance_frame)
         self.starting_area_options = [option for option in start_level_ids]
-        self.starting_area_options.insert(0, "Random Starting Area (Always Safe)")
-        self.starting_area_options.insert(1, "Random Starting Area (Safe With All Moves)")
+        self.starting_area_options.insert(0, "Random Starting Area (Auto Have All Moves)")
         self.new_area_dropdown = ttk.Combobox(self.starting_area_frame, textvariable=self.new_area_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=39)
         self.new_area_dropdown['values'] = self.starting_area_options
         self.new_area_dropdown['state'] = 'readonly'
@@ -2337,8 +2376,9 @@ class User_GUI_Class():
         self.customizable_frame["highlightthickness"] = 0
         customizable_disclaimer_text = (
             "    WARNING:\n" +
-            "        The Models/Animations/Properties configurations have been tested on\n"+
-            "        Emulator, but not Everdrive. If playing on Everdrive, enable at own risk."
+            "        The Models/Animations/Properties configurations have been tested\n"+
+            "        mainly on Emulator, but barely Everdrive. If playing on Everdrive,\n" +
+            "        enable at own risk."
             )
         self.customizable_disclaimer_label = tk.Label(self.customizable_frame, text=customizable_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
         self.customizable_disclaimer_label.grid(row=0, column=0, columnspan=4, padx=self.padx, pady=self.pady, sticky='w')

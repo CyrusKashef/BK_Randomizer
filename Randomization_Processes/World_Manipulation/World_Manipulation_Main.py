@@ -73,9 +73,9 @@ class World_Manipulation_Class():
         self.ancient_ones_info_list = []
         self.jinxy_head_info_list = []
     
-    def _shuffle_list(self, original_list, address=0):
+    def _shuffle_list(self, original_list, address=0, increment=0):
         '''Shuffles list based on the current address, if applicable'''
-        seed(a=(self.seed + address))
+        seed(a=(self.seed + address + increment))
         shuffle(original_list)
     
     def _choose_from_list(self, original_list, address=0, increment=0):
@@ -303,19 +303,70 @@ class World_Manipulation_Class():
     def _shuffle_structs_within_game(self):
         '''Shuffles the structs found within the world'''
         self.grandmaster.logger.debug("Shuffle Structs Within Game")
-        for world_object in self.world_list[:-2]:
-            for setup_file in world_object._setup_list:
-                for struct_info_list in setup_file.struct_info_list:
-                    self.struct_info_list.append(struct_info_list)
-        self._shuffle_list(self.struct_info_list)
+        if(self.grandmaster.note_overflow_var.get() == "Possible No Save & Quit/Reset"):
+            for world_object in self.world_list[:-2]:
+                for setup_file in world_object._setup_list:
+                    for struct_info_list in setup_file.struct_info_list:
+                        self.struct_info_list.append(struct_info_list)
+            self._shuffle_list(self.struct_info_list)
+        else:
+            world_name_list = []
+            world_total_struct_dict = {}
+            note_info_list = []
+            non_note_info_list = []
+            for world_object in self.world_list[:-2]:
+                if((world_object._world_name).startswith("Click Clock Wood")):
+                    world_name = "Click Clock Wood"
+                else:
+                    world_name = world_object._world_name
+                if(world_name not in world_name_list):
+                    world_name_list.append(world_name)
+                    world_total_struct_dict[world_name] = 0
+                for setup_file in world_object._setup_list:
+                    for struct_info_list in setup_file.struct_info_list:
+                        world_total_struct_dict[world_name] += 1
+                        if((struct_info_list["Obj_ID1"] == 0x16) and (struct_info_list["Obj_ID2"] == 0x40)):
+                            note_info_list.append(struct_info_list)
+                        else:
+                            non_note_info_list.append(struct_info_list)
+            new_world_note_count_dict = {}
+            for world_name in world_total_struct_dict:
+                new_world_note_count_dict[world_name] = 0
+            for note_num in range(len(note_info_list)):
+                world_name = self._choose_from_list(world_name_list, increment=note_num)
+                new_world_note_count_dict[world_name] += 1
+                if((new_world_note_count_dict[world_name] == world_total_struct_dict[world_name]) or (new_world_note_count_dict[world_name] == 127)):
+                    world_name_list.remove(world_name)
+            self.struct_info_list = []
+            for world_count, world_name in enumerate(new_world_note_count_dict):
+                world_info_list = []
+                for note_num in range(new_world_note_count_dict[world_name]):
+                    world_info_list.append(note_info_list[0])
+                    note_info_list.pop(0)
+                for struct_count in range(world_total_struct_dict[world_name] - new_world_note_count_dict[world_name]):
+                    world_info_list.append(non_note_info_list[0])
+                    non_note_info_list.pop(0)
+                self._shuffle_list(world_info_list, increment=world_count)
+                for struct_info in world_info_list:
+                    self.struct_info_list.append(struct_info)
     
     def _randomize_structs(self):
         '''Randomizes the value of each struct found'''
         self.grandmaster.logger.debug("Randomize Structs Within Worlds")
         struct_count = 0
+        world_name_list = []
+        world_total_struct_dict = {}
         for world_object in self.world_list[:-2]:
+            if((world_object._world_name).startswith("Click Clock Wood")):
+                world_name = "Click Clock Wood"
+            else:
+                world_name = world_object._world_name
+            if(world_name not in world_name_list):
+                world_name_list.append(world_name)
+                world_total_struct_dict[world_name] = 0
             for setup_file in world_object._setup_list:
                 struct_count += len(setup_file.struct_info_list)
+                world_total_struct_dict[world_name] += len(setup_file.struct_info_list)
         struct_list = [
             { # Egg
             "Obj_ID1": 0x16,
@@ -354,11 +405,32 @@ class World_Manipulation_Class():
             note_count = 0
         else:
             note_count -= 10
-        self.struct_info_list = [note_info] * note_count
-        for struct_count in range(struct_count - note_count):
-            struct_info = self._choose_from_list(struct_list, struct_count)
-            self.struct_info_list.append(struct_info)
-        self._shuffle_list(self.struct_info_list)
+        if(self.grandmaster.note_overflow_var.get() == "Possible No Save & Quit/Reset"):
+            self.struct_info_list = [note_info] * note_count
+            for struct_count in range(struct_count - note_count):
+                struct_info = self._choose_from_list(struct_list, struct_count)
+                self.struct_info_list.append(struct_info)
+            self._shuffle_list(self.struct_info_list)
+        else:
+            new_world_note_count_dict = {}
+            for world_name in world_total_struct_dict:
+                new_world_note_count_dict[world_name] = 0
+            for note_num in range(note_count):
+                world_name = self._choose_from_list(world_name_list, increment=note_num)
+                new_world_note_count_dict[world_name] += 1
+                if((new_world_note_count_dict[world_name] == world_total_struct_dict[world_name]) or (new_world_note_count_dict[world_name] == 127)):
+                    world_name_list.remove(world_name)
+            self.struct_info_list = []
+            for world_count, world_name in enumerate(new_world_note_count_dict):
+                world_info_list = []
+                for note_num in range(new_world_note_count_dict[world_name]):
+                    world_info_list.append(note_info)
+                for struct_count in range(world_total_struct_dict[world_name] - new_world_note_count_dict[world_name]):
+                    struct_info = self._choose_from_list(struct_list, struct_count)
+                    world_info_list.append(struct_info)
+                self._shuffle_list(world_info_list, increment=world_count)
+                for struct_info in world_info_list:
+                    self.struct_info_list.append(struct_info)
     
     def _oh_whoops_all_notes(self):
         '''Turns all found structs into notes'''
@@ -763,11 +835,34 @@ class World_Manipulation_Class():
     def _shuffle_flagged_objects_within_game(self):
         '''Shuffles the flagged objects found within the game'''
         self.grandmaster.logger.debug("Shuffle Flag Objects Within Game")
+        count = 0
         for world_object in self.world_list:
             for setup_file in world_object._setup_list:
                 for flagged_object_info_list in setup_file.flagged_object_info_list:
                     self.flagged_object_info_list.append(flagged_object_info_list)
-        self._shuffle_list(self.flagged_object_info_list)
+                    count += 1
+        jiggy_missing = True
+        increment = 0
+        first_jiggy_index = 151
+        if(self.grandmaster.flagged_object_abnormalities_var.get() == 1):
+            first_jiggy_index += 6
+        if(self.grandmaster.flagged_object_softlock_var.get() == 1):
+            first_jiggy_index += 13
+        while(jiggy_missing and (self.grandmaster.final_puzzle_var.get() == 0)):
+            print("Shuffling Flagged Object List")
+            self._shuffle_list(self.flagged_object_info_list, increment=increment)
+            # The First Jiggy
+            if(self.flagged_object_info_list[170][0]['Obj_ID2'] == 0x46):
+                print("Jiggy Found!")
+                jiggy_missing = False
+            # Spiral Mountain Honeycombs
+            if(jiggy_missing):
+                for flagged_objects in self.flagged_object_info_list[-4:]:
+                    if(flagged_objects[0]['Obj_ID2'] == 0x46):
+                        print("Jiggy Found!")
+                        jiggy_missing = False
+                        break
+            increment += 1
     
     def _move_flagged_objects_within_world(self, world_object):
         '''Places the randomized flagged objects list back into the world'''

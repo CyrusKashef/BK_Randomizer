@@ -13,6 +13,7 @@
     "Non_Flagged_Objects_Abnormalities": 0,
     "Starting_Lives": "3",
     "Struct_Option": "Shuffle (World)",
+    "Note_Overflow": "Allow Save & Quit/Reset",
     "Struct_Note_Count": "Produce Extra Notes",
     "Final_Note_Door": "Scaling Note Doors",
     "Final_Note_Door_Value": "810",

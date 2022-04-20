@@ -6,6 +6,46 @@ I'm really bad at looking at social media messages, but here are different ways 
 * Twitch: https://www.twitch.tv/giantjigglypuff3
 * BK Rando Server: https://discord.gg/wkbm4jTE5P
 
+# TABLE OF CONTENTS
+* Intro
+  * What Is A Randomizer?
+  * Who Made The Banjo-Kazooie Randomizer?
+  * Why Make The Banjo-Kazooie Randomizer?
+* How To Use
+  * Requirements
+  * Setting Up
+  * Running
+* Feature Overview
+* Feature Details
+  * Overall Buttons
+  * General
+  * Collectables
+  * Warps
+  * Enemies
+  * Aesthetics
+  * MAP Config
+  * World Specific
+* Premade Configurations
+  * 01 Basic Settings
+  * 02 Basic World Shuffle
+  * 03 Meme Percent
+  * 03 One Floating Note
+  * 04 World Order Shuffle (Advanced)
+  * 04 No Floating Jiggie
+  * 04 Only Hard Grunty Fight
+  * 06 One Health Mode
+  * Nothing
+* Common Problems
+  * Computer Says Randomizer Is A Virus
+  * GUI Errors/Warnings
+  * Potential Softlocks
+  * Known Bugs/Crashes
+* FAQ
+  * Where Could I Find A Banjo-Kazooie v1.0 NTSC ROM File?
+  * Could ___ Feature Be Added?
+  * My Game Crashed, What Do I Do?
+* Special Thanks
+
 # Intro
 
 ### What Is A Randomizer?
@@ -40,7 +80,7 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 * Shuffle Warps: Challenges the player to remember what leads where and what moves are needed for specific locations.
 * Shuffle/Randomize Enemies: Allows players to face against selected enemies.
 * Aesthetic Features: Changes how he game looks and sounds.
-* Customizable Features: Neither competitive nor merely asthetic features with modifiable JSON files for modders to explore with.
+* Model/Animation/Property Swaps: Neither competitive nor merely asthetic features. Developers can feel free to test swaps with modifiable JSON files.
 * World Specific Features: Changes unique things about each world.
 * Miscellaneous Features: None of these affect gameplay, but may prove useful.
 
@@ -82,6 +122,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 ##### Notes, Blue Eggs, Red Feathers, & Gold Feathers
 * Randomize: Based on the number of notes needed to complete the game, the odds of a note appearing will be adjusted. Adds another dropdown to have the exact number of notes or have 1.1 times more than required.
 * All Notes: All eggs and feathers become notes. Brentildas are replaced with egg and feather refills. The refill at that Brentilda location is random.
+* Allow Save & Quit/Resets: Allows the player to Save & Quit/Reset without affecting the note score totals by limiting the worlds to a possible 127 notes maximum. Read "Note Limit Warning" for more details.
 * Scaling Note Doors: Depending on how many notes you set the 810 Note Door Value to, the number of notes needed per proceeding door will be increased/decreased accordingly.
 * Final Note Door Only: Removes all note doors proceeding the 810 Note Door, and sets the value of the 810 Note Door to the desired value. A random value can be chosen by clicking the Note button.
 * Item Carrying Capacity: Sets the number of each item the player can carry before and after visiting Cheato between 0 and 255, inclusively.
@@ -170,12 +211,12 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Super Slippery Sand: At some point, you'll trigger the anti-tampering and you won't be able to change direction unless you jump. Have fun!
 
 ##### Clanker's Cavern
-* Shuffle Clanker Ring Order: Clanker's ring order is shuffled.
+* Shuffle Clanker Ring Order: Clanker's ring order, besides the first, is shuffled.
 
 ##### Bubblegloop Swamp
 * Shuffle Croctus Order: Croctus spawn order is shuffled.
 * Mr. Vile Bigger, Badder Crocodile: Makes Mr. Vile appear larger. He still moves at the same speed and eats at the same distance, but it's harder to see where the Yumblies and Grumblies spawn.
-* Tiptup Choir: The turtles are scattered across the room, with their heads barely appearing above the floor. One may be off-screen; this is intentional.
+* Tiptup Choir: The turtles are scattered across the room, with their heads barely appearing above the floor. One may be off-screen; this is intentional. If there's an occurence where two or more are off-screen, please contact GiantJigglypuff3.
 
 ##### Freezeezy Peak
 * Boggy Races Moved Flags: Flag poles for the Boggy race are either tighter left, tighter right, lowered to the floor to make harder to see, or rotated.
@@ -183,7 +224,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 ##### Gobi's Valley
 * Shuffle Ancient Ones Order: Ancient Ones order is shuffled.
 * Shuffle Maze Jinxy Heads Order: Jinxy heads to raise King Sandybutt's Tomb order is shuffled.
-* Randomize Matching Puzzle: The matching puzzle changes the colors of the tiles that the player has to match, rather than the icons themselves.
+* Randomize Matching Puzzle: The matching puzzle changes the colors of the tiles that the player has to match, rather than the icons themselves. For anyone with a color blindness, please forgive me, when I learn how to swap images instead, I will try to implement that instead. If you happen to accidentally turn this feature on, you may have to use the cheat sheet.
 
 ##### Mad Monster Mansion
 * Pots Are Lit: The flower pots located in the graveyard switch places with the fire pain objects, which are shown with sparkles and steam. Look at torches and other fire places for sparkles. If you don't see it, shoot/poop an egg in.
@@ -194,10 +235,14 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 
 ##### Click Clock Wood
 * By Season: All shuffling happens within each seasons/lobby area. This makes it easier for players to track what they are missing.
+  * Lobby: 4 Notes
+  * Spring: 16 Notes, Green & Pink Jinjos
+  * Summer: 16 Notes, Yellow Jinjo
+  * Fall: 48 Notes, Orange Jinjo
+  * Winter: 16 Notes, Blue Jinjo
 * Within World: All shuffling happens throughout the level.
 
 ### Miscellaneous
-* Create Cheat Sheet(s): Writes helpful into to files that gives hints item locations, warps, and some misc info.
 * Remove Extra Files: Removes the compressed and decompressed files extrated from the ROM. Useful for BK modders or debugging an issue.
 * Show Tool Tips: With the feature on, hovering over a Brentilda icon will inform the user what the feature does.
 
@@ -230,8 +275,8 @@ This warps you to the end of the game with all of the moves. Gruntilda's altered
 ### 06 One Health Mode
 I skipped 5 because this is extremely hard. Can you collect everything in the game with just one health and a bunch of other settings? Kudos if you do.
 
-### Nothing/Everything
-Just made to have a clean slate or check everything for developer purposes. Don't overthink this. REALLY don't recommend "Everything".
+### Nothing
+Just made to have a clean slate. Don't overthink this.
 
 # Common Problems
 
@@ -244,7 +289,7 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * Python Files, Folders, and GZIP.EXE must be in their original locations with the BK ROM in the main folder.
 * **While the processes are running, if Mumbo says there is an error, take a screenshot of the error, generate the randomizer setting code, and send the screenshot, the randomizer setting code, and the seed to GiantJigglypuff3. Link to the BK Rando Discord server at the top**
 * If you're not able to generate the randomizer settings code, go to Configurations, open the "Last_Used_Configuration" json file, remove your ROM File directory parameter, and send that to GiantJigglypuff3 as well. Example: "ROM_File": "C:/Users/Name/eclipse-workspace/BK_Rando_v2.0/Banjo-Kazooie.z64" -> "ROM_File": ""
-* If the progression bar gets stuck at the very beginning, make sure there are no special or accented characters in your directory, such as "É".
+* If the progression bar gets stuck at the very beginning, make sure there are no special or accented characters in your directory, such as "ï¿½".
 
 ### Potential Softlocks
 * When turning on the 'Potential Softlock' features, the game may be put into a state where a collectable cannot be reached or the game cannot be progressed without resetting.
@@ -258,7 +303,7 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * In Mad Monster Mansion, Napper may be indefinetly awake and guarding a Jiggy. The reason is unknown, but should only occur with potential softlocks checked on.
 * In Click Clock Wood, there is an occasional glitch where the player can collect 11/10 Jiggies when items are only shuffled within the world. The reason is unknown, but may only occur with abnormal or potential softlock Jiggies/Tokens/Honeycombs.
 * Randomizing the warps within worlds by game may result in warps that crash the game.
-* Some of the Model/Animation/Properties features may crash the credits.
+* Some of the Model/Animation/Properties features may crash the credits, and this feature was only barely tested on Everdrive.
 
 # FAQ
 
@@ -266,10 +311,31 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 I am not providing anyone the ROM file for Banjo-Kazooie, nor does the script create the ROM file for them. It takes the users software and creates a copy, then modifies that copy. It is up to the user to obtain a copy of the software legally.
 
 ### Could ___ Feature Be Added?
-If you have any suggestions for new features, feel free to let me know. I honestly didn't think people would care about shuffling music, but that turned out to be a really funny feature. If you don't like a feature, don't use it, but if you have an idea of how it can be changed, let me know. Even if your feedback is "This part of the game is too easy", I could try to figure out some way to make it harder.
-Not-Planned Features:
-* Non-Collectable Objects, such as trees, crates, etc
-* Bosses, such as Conga, Nipper, etc
+If you have any suggestions for new features, please join the discord and ask in the #Suggestions channel.
+Curren Suggested Features List:
+* Custom Furnace Fun questions/Randomize Tiles
+* Turning shock jump pads and flight pads that are always active into ones that act normally
+* Changing text voices with the talking sprite
+* Changing object/animation sounds
+* Make Stop n Swap a thing
+* Note Saving
+* Randomize warps in Gruntilda's Lair
+* Randomize Spiral Mountain moves
+* Randomize object/level colors
+* Have misc items carry between worlds
+* Custom music/Music from other games
+* Option to remove all the music
+* Making RBB Engine Room easier
+* Totals displays that level's new totals
+* Skip all cutscenes/Marking some flags as completed by default
+* Random Mumbo Token Cost
+* Random XYZ Locations (but not in the air like TTC)
+* Add FAQ to server
+* Choose Starting Health
+* Generating Multiple Seeds/One Patched ROM That Generates Seeds
+* More Model Swaps (ex: Play As Other Characters)
+* Updated Pause Menu With Move Tracker
+* Swap Witch Switches
 
 ### My Game Crashed, What Do I Do?
 1) Write down the circumstances before the crash.

@@ -26,7 +26,7 @@ from Randomization_Processes.Misc_Manipulation.Game_Engine_Data.Game_Engine_Main
 from Randomization_Processes.Misc_Manipulation.Models_Animations_Properties.Models_Animations_Properties_Main import Models_Animations_Properties_Class
 from Randomization_Processes.Common_Functions import leading_zeros, read_json
 from Randomization_Processes.Dicts_And_Lists.Misc_Dicts_And_Lists import gv_matching_puzzle_pictures
-from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids, non_softlock_start_level
+from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids
 
 #################################
 ### MISCELLANEOUS MANIP CLASS ###
@@ -404,11 +404,7 @@ class Misc_Manipulation_Class():
         game_engine_obj._gold_feather_limit(self.grandmaster.before_gold_feather, self.grandmaster.after_gold_feather)
         all_start_moves = self.grandmaster.all_starting_moves_var.get()
         starting_area = self.grandmaster.new_area_var.get()
-        if(starting_area == "Random Starting Area (Always Safe)"):
-            start_area_list = [option for option in non_softlock_start_level]
-            starting_area = choice(start_area_list)
-            self.grandmaster.logger.info(f"Random Starting Area: {starting_area}")
-        elif(starting_area == "Random Starting Area (Safe With All Moves)"):
+        if(starting_area == "Random Starting Area (Auto Have All Moves)"):
             start_area_list = [option for option in start_level_ids]
             starting_area = choice(start_area_list)
             self.grandmaster.logger.info(f"Random Starting Area: {starting_area}")

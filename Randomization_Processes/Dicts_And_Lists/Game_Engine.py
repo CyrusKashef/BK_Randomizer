@@ -108,14 +108,3 @@ start_level_ids = {
     "GL - Door Of Grunty Room": 0x93,
     "Final Battle": 0x90,
     }
-
-non_softlock_start_level = [
-    "SM - Main",
-    "MM - Main", "MM - Ticker's Tower", "MM - Mumbo's Skull",
-    "TTC - Main", "TTC - Nipper's Shell",
-    "BGS - Main", "BGS - Tiptup Choir", "BGS - Mumbo's Skull",
-    "FP - Main", "FP - Boggy's Igloo", "FP - Mumbo's Skull", "FP - Christmas Tree",
-    "GV - Gobi's Valley", "GV - King Sandybutt's Tomb", "GV - Rupee", "GV - Jinxy",
-    "GL - MM Puzzle/Entrance Room", "GL - TTC Puzzle Room",
-    "GL - GV Entrance", "GL - FP Entrance", "GL - Grunty Statue Room", "GL - BGS Entrance", "GL - Lava Room",
-    ]
