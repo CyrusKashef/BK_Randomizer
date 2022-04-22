@@ -9,6 +9,7 @@ Created on Sep 23, 2021
 ######################
 
 from random import seed, choice
+import sys
 
 ############
 ### DICT ###
@@ -56,6 +57,10 @@ class World_Order_Bottles():
         self.world_exit_option = world_exit_option
         self.removed_detransformations = removed_detransformations
         self.free_transformations = free_transformations
+        self._create_transformation_cost_dict()
+        self.restart_count = 0
+
+    def _create_transformation_cost_dict(self):
         self.transform_cost_dict = {}
         if(self.free_transformations == "Base Game Costs"):
             self.transform_cost_dict["Termite"] = 5
@@ -69,6 +74,7 @@ class World_Order_Bottles():
             self.transform_cost_dict["Walrus"] = 0
             self.transform_cost_dict["Pumpkin"] = 0
             self.transform_cost_dict["Bee"] = 0
+
     
     def _progression_requirements(self, world_name):
         '''Calculates the progression requirements for the world number, based on lair progression and Jiggies needed to open the worlds'''
@@ -355,7 +361,6 @@ class World_Order_Bottles():
     def _possible_next_worlds(self):
         '''Determines the next possible world list based on learning progressable moves and getting enough Jiggies. Also creates a backup for levels that allow you to progress'''
         possible_world_list = []
-#         backup_world_list = []
         for world_name in self.remaining_worlds:
             # Moves
             self.temp_learned_moves[world_name] = {}
@@ -385,9 +390,7 @@ class World_Order_Bottles():
                         possible_total_jiggy_list.append(jiggy_id)
                 if(len(set(possible_total_jiggy_list)) >= required_jiggy_count):
                     possible_world_list.append(world_name)
-#                 else:
-#                     backup_world_list.append(world_name)
-        return possible_world_list#, backup_world_list
+        return possible_world_list
 
     def _set_next_world(self, next_world):
         '''Finalizes the selected world and all additional changes'''
@@ -450,7 +453,11 @@ class World_Order_Bottles():
             selected_bottles = choice(list(available_bottles))
             self.world_order_dict[available_bottles[selected_bottles]]["Learned_Moves"][selected_bottles] = remaining_move
     
-    def _restart(self):
+    def _restart(self, reason="Unknown"):
+        print(f"### RESTARTING REASON: {reason} ###")
+        self.restart_count += 1
+        if(self.restart_count > 6.9):
+            raise SystemError("Restart Count Higher Than 10")
         self.remaining_moves = [move for move in learnable_moves_dict]
         self.learned_moves = []
         self.temp_learned_moves = {}
@@ -459,6 +466,7 @@ class World_Order_Bottles():
         self.world_order_dict = {}
         self.collected_jiggy_list = []
         self.collected_mumbo_token_list = []
+        self._create_transformation_cost_dict()
 
     def _determine_world_order(self):
         '''Determines the world order based on accessibility'''
@@ -473,7 +481,7 @@ class World_Order_Bottles():
                             if("Mad Monster Mansion" in possible_world_list):
                                 next_world = "Mad Monster Mansion"
                             else:
-                                self._restart()
+                                self._restart(reason="No Mad Monster Mansion 1")
                         elif("Mad Monster Mansion" in possible_world_list):
                             possible_world_list.remove("Mad Monster Mansion")
                     elif(self.removed_detransformations == 1):
@@ -481,27 +489,28 @@ class World_Order_Bottles():
                             if("Mad Monster Mansion" in possible_world_list):
                                 next_world = "Mad Monster Mansion"
                             else:
-                                self._restart()
+                                self._restart(reason="No Mad Monster Mansion 2")
                         elif((len(self.world_order_list) < 4) and ("Mad Monster Mansion" in possible_world_list)):
                             possible_world_list.remove("Mad Monster Mansion")
                 # Select from possible worlds
                 seed(a=(self.seed_val + self.increment))
                 self.increment += 1
                 if(next_world):
-                    pass
+                    # Placed all of the calculations in the dictionary
+                    self._set_next_world(next_world)
                 elif(possible_world_list):
                     next_world = choice(possible_world_list)
+                    # Placed all of the calculations in the dictionary
+                    self._set_next_world(next_world)
                 else:
-                    self._restart()
-                # Placed all of the calculations in the dictionary
-                self._set_next_world(next_world)
+                    self._restart(reason="No Next World Available")
             # Teach any remaining moves
             self._remaining_moves()
         except IndexError:
-            self._restart()
+            self._restart(reason="Index Error")
             self._determine_world_order()
         except KeyError:
-            self._restart()
+            self._restart(reason="Key Error")
             self._determine_world_order()
 
 if __name__ == '__main__':

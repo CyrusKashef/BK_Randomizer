@@ -271,6 +271,7 @@ class Progression_GUI_Class():
         self.master.logger.info("Decompress Main")
         decompressor = Decompressor(self.master.cwd, self.randomized_rom_path)
         decompressor._decompress_main()
+        del decompressor
     
     def _randomize_world(self):
         '''Runs the world manipulation functions, including world specific functions'''
@@ -448,6 +449,7 @@ class Progression_GUI_Class():
                 self.master.logger.info("Scattered Struct Error")
                 self.pb_label.set_text(f"Error Scattering Notes...\n{self._mumbo_error_message}")
                 raise
+        del world_manip
         self.master.logger.info("End of Randomize World")
     
     def _misc_options(self):
@@ -568,12 +570,13 @@ class Progression_GUI_Class():
                 self.pb_label.set_text(f"Error Removing Furnace Fun...\n{self._mumbo_error_message}")
                 raise
         try:
-            self.pb_label.set_text("Mumbo Found Game Engine...")
+            self.pb_label.set_text("Mumbo's Motors Now In Business...")
             misc_manip._setup_game_engine_manip(self.transform_cost_dict)
         except Exception:
             self.warning_label.set_text("Uh-Oh...")
             self.pb_label.set_text(f"Error Adjusting Game Engine...\n{self._mumbo_error_message}")
             raise
+        del misc_manip
         self.master.logger.info("End of Misc Options")
     
     def _perform_checksum(self):
@@ -581,6 +584,7 @@ class Progression_GUI_Class():
         self.master.logger.info("Performing Checksum")
         bk_checksum_obj = BK_Checksum_Class(self.master.cwd, self.seed_val)
         bk_checksum_obj._main()
+        del bk_checksum_obj
         self.master.logger.info("Checksum Complete")
     
     def _compress_main(self):
@@ -588,6 +592,7 @@ class Progression_GUI_Class():
         self.master.logger.info("Compressing Main Start")
         compressor = Compressor(self.master, self.seed_val, self.master.cwd)
         compressor._main()
+        del compressor
         self.master.logger.info("Compression Main End")
     
     def _crc_calc(self):
@@ -596,6 +601,7 @@ class Progression_GUI_Class():
         crc_calc_obj = CRC_Calc_Class(self.master.cwd, self.seed_val)
         crc_calc_obj.calculate_crc()
         crc_calc_obj.set_crc()
+        del crc_calc_obj
         self.master.logger.info("CRC Functions Complete")
 
     def _clean_up(self):
@@ -604,6 +610,7 @@ class Progression_GUI_Class():
         if(self.master.remove_files_var.get() == 1):
             clean_up = CleanUp(self.master.cwd)
             clean_up._remove_bin_files()
+            del clean_up
         gc.collect()
         self.master.logger.info("Cleaning Up Complete")
 

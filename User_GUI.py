@@ -586,11 +586,6 @@ class User_GUI_Class():
         self.new_area_var.set("SM - Main")
         self.skip_intro_cutscene_var.set(0)
     
-    def _random_starting_area(self):
-        '''Selects a random starting area'''
-        self.logger.info("Select Random Starting Area")
-        self.new_area_var.set(choice([option for option in start_level_ids]))
-    
     def _new_area_option(self, *args):
         '''If the starting area is not the default area, skip the intro cutscene'''
         self.logger.info("Selecting 'Skip Intro Cutscene'")
@@ -1179,7 +1174,7 @@ class User_GUI_Class():
             setting_not_found.append("Struct_Option")
             self.struct_var.set("Shuffle (World)")
         try:
-            self.struct_note_count_var.set(json_data["Note_Overflow"])
+            self.note_overflow_var.set(json_data["Note_Overflow"])
         except KeyError:
             setting_not_found.append("Note_Overflow")
             self.note_overflow_var.set("Allow Save & Quit/Reset")
@@ -1540,7 +1535,10 @@ class User_GUI_Class():
         self.flagged_object_abnormalities_var.set(randint(0, 1))
         self.flagged_object_softlock_var.set(randint(0, 1))
         self.final_puzzle_var.set(randint(0, 1))
-        self.final_puzzle_value.set(randint(0, 99))
+        if(self.final_puzzle_var.get() == 1):
+            self.final_puzzle_value.set(randint(0, 99))
+        else:
+            self.final_puzzle_value.set(25)
         self.free_transformations_var.set(choice(["Base Game Costs", "World Order Scaled Costs", "Free Transformations"]))
         self.one_health_banjo_var.set(randint(0, 1))
         self.remove_floating_jiggies_var.set(0),
@@ -1594,9 +1592,6 @@ class User_GUI_Class():
         # Sprites/Textures
         self.skybox_var.set(randint(0, 1))
         self.talking_sprite_var.set(randint(0, 1))
-        ### Misc Settings ###
-#         self.remove_files_var.set(randint(0, 1))
-#         self.tool_tips_var.set(randint(0, 1))
         ### World Specific ###
         # Gruntilda's Lair
         self.skip_furnace_fun_var.set(randint(0, 1))
@@ -1872,6 +1867,7 @@ class User_GUI_Class():
             self._save_current_configuration(button_press=False)
             progression_app = Progression_GUI_Class(self)
             progression_app._main()
+            del progression_app
         else:
             self.logger.debug("At Least One Setting Seem To Be Invalid. Please check all settings.")
     
@@ -2178,27 +2174,29 @@ class User_GUI_Class():
         self.starting_area_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.starting_area_ttp_canvas = tk.Label(self.starting_area_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.starting_area_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        starting_area_disclaimer_text = (
+            "WARNING:\n" +
+            "  The 'Starting Area' option is not programmed into any logic\n"+
+            "  and may softlock the player early on if not all moves are\n"+
+            "  active. Mostly for developer usage. Use at own risk."
+            )
+        self.starting_area_label = tk.Label(self.starting_area_frame, text=starting_area_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.starting_area_label.grid(row=0, column=1, columnspan=4, padx=self.padx, pady=self.pady, sticky='w')
         self.new_area_ttp = self.CreateToolTip(self.starting_area_ttp_canvas, self, tool_tips_dict["STARTING_AREA"]["NEW_GAME"])
         self.new_area_text = tk.Label(self.starting_area_frame, text="Starting Area", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.new_area_text.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.new_area_text.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.new_area_var = tk.StringVar(self.world_entrance_frame)
         self.starting_area_options = [option for option in start_level_ids]
         self.starting_area_options.insert(0, "Random Starting Area (Auto Have All Moves)")
         self.new_area_dropdown = ttk.Combobox(self.starting_area_frame, textvariable=self.new_area_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=39)
         self.new_area_dropdown['values'] = self.starting_area_options
         self.new_area_dropdown['state'] = 'readonly'
-        self.new_area_dropdown.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.random_starting_area_button = tk.Button(self.starting_area_frame, text='Random\nStarting Area', command=self._random_starting_area, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
-        self.random_starting_area_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='w')
-#         self.load_area_text = tk.Label(self.starting_area_frame, text="Load Game Area", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-#         self.load_area_text.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
-#         self.load_area_var = tk.StringVar(self.world_entrance_frame)
-#         self.load_area_var.set("GL - MM Puzzle/Entrance Room")
-#         self.load_area_label = tk.Label(self.starting_area_frame, textvariable=self.load_area_var, foreground=self.black, background="#AAAAAA", font=(self.font_type, self.small_font_size), width=30, anchor="w")
-#         self.load_area_label.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.new_area_dropdown.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.skip_intro_cutscene_var = tk.IntVar()
         self.skip_intro_cutscene_checkbutton = tk.Checkbutton(self.starting_area_frame, text="Skip Intro Cutscene", variable=self.skip_intro_cutscene_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.skip_intro_cutscene_checkbutton.grid(row=2, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.default_starting_area_button = tk.Button(self.starting_area_frame, text='Default\nStarting Area', command=self._default_starting_area, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
+        self.default_starting_area_button.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')
         self.new_area_var.trace('w', self._new_area_option)
         ###################
         ### ENEMIES TAB ###
