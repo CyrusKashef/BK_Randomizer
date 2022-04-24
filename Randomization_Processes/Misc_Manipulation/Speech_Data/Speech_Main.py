@@ -746,7 +746,10 @@ class Speech_Manipulation_Class():
         # Gruntilda: THAT WAS SUCH AN EASY FIT,
         # Gruntilda: THE OTHERS MAY JUST TEST YOUR WIT!
         intro_cutscene_text = Speech_File_Class(self._file_dir, "DA88")
-        intro_cutscene_text._replace_line("54484154275320495421205448452050", f"THAT'S IT! THE PICTURE'S COMPLETE AND THE DOOR TO {(world_object._world_name).upper()} IS OPEN!")
+        if(isinstance(world_object, list)):
+            intro_cutscene_text._replace_line("54484154275320495421205448452050", f"THAT'S IT! THE PICTURE'S COMPLETE AND THE DOOR TO CLICK CLOCK WOOD IS OPEN!")
+        else:
+            intro_cutscene_text._replace_line("54484154275320495421205448452050", f"THAT'S IT! THE PICTURE'S COMPLETE AND THE DOOR TO {(world_object._world_name).upper()} IS OPEN!")
 
     def _bottles_this_is_first_world(self):
         # 0xDA90 - 5CCA10
