@@ -1002,246 +1002,486 @@ bottles_world_warp_dict = {
                     "Requirements": [[]],
                     },
                 },
-            },
-        "Click Clock Wood": {
-            "Possible_Bottles": {
-                "Spring_Branch_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Spring_Whipcrack_Room_Floor_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Summer_Grass_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Summer_Treehouse_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Summer_Yellow_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Summer_Whipcrack_Room_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Fall_Orange_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Fall_Acorn_Ledge": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                "Winter_Sir_Slush": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Fly", "Beak_Bomb"]],
-                },
-            "Flagged_Object_Flags": {
-                ###### SPRING ######
-                ### JIGGIES ###
-                # Top Of The Tree
-                "FFCD1DE50C5C": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Bee"]],
-                    },
-                # Whipcrack Room
-                "FFC500240103": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                    },
-                ### MUMBO TOKENS ###
-                # Treehouse
-                "17FB1094014B": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                    },
-                # Branches
-                "F0230B4E024D": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Talon_Trot"]],
-                    },
-                # Near Eyrie
-                "F54E11D9FDD3": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                    },
-                # Bramble
-                "F5940000FE6C": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster"]],
-                    },
-                # Plant Baresnare
-                "077E0069F589": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Wonderwing"], ["Beak_Buster", "Bee"]],
-                    },
-                # Entrance Snarebear
-                "03EF006914BA": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Wonderwing"], ["Beak_Buster", "Bee"]],
-                    },
-                # Zubba Hive
-                "000C0DD1EB8A": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                    },
-                # Nabnut
-                "FDCF012CFF7C": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-                    },
-                ###### SUMMER ######
-                ### JIGGIES ###
-                # Tree House
-                "17781094FF8F": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Side Of Tree
-                "08700A39088C": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Whipcrack Room
-                "FFA1001300FA": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                ### MUMBO TOKEN ###
-                # Ledge Near Eyrie
-                "F8BA11750643": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Grass Corner Near Plant
-                "F2090028EF61": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Snarebear Near Mumbo
-                "F0F105940EEC": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot", "Wonderwing"]],
-                    },
-                # Branches
-                "EDD60AF0FB2C": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Gnawty Entrance
-                "0A8BFDA80017": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Leaf
-                "08060DCE06FC": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # In Mumbo's Skull
-                "000D01A001E4": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                ###### FALL ######
-                ### JIGGIES ###
-                # Tree House
-                "17571094FF6D": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Side Of Tree
-                "086A0A390866": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Whipcrack Room
-                "FFBA0013010E": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Gnawty
-                "011902580042": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Nabnut
-                "*Nabnut Acorn": {
-                    "Type": "Jiggy",
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Plant
-                "*Plant": {
-                    "Type": "Jiggy",
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot", "Eggs"]],
-                    },
-                ### MUMBO TOKEN ###
-                # Leaf Side
-                "009207410A7F": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Snarebear Entrance
-                "01EC00A613ED": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Snarebear Top
-                "FFFD16C6F2E5": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Leaf Treehouse
-                "0D40100B03EB": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Branches
-                "E8D40A1A002D": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                ###### WINTER ######
-                ### JIGGIES ###
-                # Top Of The Tree
-                "00341DC90C56": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot", "Fly"]],
-                    },
-                # Whipcrack Room
-                "FFAD001100FD": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad"], ["Beak_Buster", "Fly"]],
-                    },
-                # Gnawty
-                "011902580042": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Eyrie
-                "*Eyrie": {
-                    "Type": "Jiggy",
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                ### EMPTY HONEYCOMBS ###
-                # Gnawty
-                "026F03E60273": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Nabnut Attic
-                "02460201FF2E": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot", "Fly"]],
-                    },
-                ### MUMBO TOKENS ###
-                # Plant
-                "000E0069EAFB": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # On Frozen Water
-                "1755FFD2FFE9": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Zubba Hive
-                "FFFF0C42F1A7": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Ledge Near Nabnut
-                "001B0F81135E": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot"]],
-                    },
-                # Under Sir Slush
-                "F3A9012CF3DA": {
-                    "Type": None,
-                    "Requirements": [["Beak_Buster", "Shock_Jump_Pad", "Talon_Trot", "Fly", "Beak_Bomb"]],
-                    },
-                },
-            },
+            }
         }
+
+click_clock_wood_closed_dict = {
+    "Possible_Bottles": {
+        "Spring_Branch_1_Up": [["Beak_Buster", "Talon_Trot"]],
+        "Spring_Whipcrack_Room_Floor_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+        "Summer_Grass_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+        "Summer_Treehouse_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+        "Summer_Yellow_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+        "Summer_Whipcrack_Room_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+        "Fall_Orange_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+        "Fall_Acorn_Ledge": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+        "Winter_Sir_Slush": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Fly", "Beak_Bomb"]],
+        },
+    "Flagged_Object_Flags": {
+        ###### SPRING ######
+        ### JIGGIES ###
+        # Top Of The Tree
+        "FFCD1DE50C5C": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Bee"], ["Beak_Buster", "Wading_Boots", "Bee"]],
+            },
+        # Whipcrack Room
+        "FFC500240103": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        ### MUMBO TOKENS ###
+        # Treehouse
+        "17FB1094014B": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"], ["Beak_Buster", "Talon_Trot", "Bee"], ["Beak_Buster", "Wading_Boots", "Bee"]],
+            },
+        # Branches
+        "F0230B4E024D": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot"], ["Beak_Buster", "Wading_Boots", "Bee"]],
+            },
+        # Near Eyrie
+        "F54E11D9FDD3": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"], ["Beak_Buster", "Talon_Trot", "Bee"], ["Beak_Buster", "Wading_Boots", "Bee"]],
+            },
+        # Bramble
+        "F5940000FE6C": {
+            "Type": None,
+            "Requirements": [["Beak_Buster"]],
+            },
+        # Plant Baresnare
+        "077E0069F589": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Wonderwing"], ["Beak_Buster", "Talon_Trot", "Bee"], ["Beak_Buster", "Wading_Boots", "Bee"]],
+            },
+        # Entrance Snarebear
+        "03EF006914BA": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Wonderwing"], ["Beak_Buster", "Talon_Trot", "Bee"], ["Beak_Buster", "Wading_Boots", "Bee"]],
+            },
+        # Zubba Hive
+        "000C0DD1EB8A": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot"], ["Beak_Buster", "Wading_Boots", "Bee"]],
+            },
+        # Nabnut
+        "FDCF012CFF7C": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"], ["Beak_Buster", "Talon_Trot", "Bee"], ["Beak_Buster", "Wading_Boots", "Bee"]],
+            },
+        ###### SUMMER ######
+        ### JIGGIES ###
+        # Tree House
+        "17781094FF8F": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Side Of Tree
+        "08700A39088C": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Whipcrack Room
+        "FFA1001300FA": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        ### MUMBO TOKEN ###
+        # Ledge Near Eyrie
+        "F8BA11750643": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Grass Corner Near Plant
+        "F2090028EF61": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Snarebear Near Mumbo
+        "F0F105940EEC": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Wonderwing"]],
+            },
+        # Branches
+        "EDD60AF0FB2C": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Gnawty Entrance
+        "0A8BFDA80017": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Leaf
+        "08060DCE06FC": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # In Mumbo's Skull
+        "000D01A001E4": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        ###### FALL ######
+        ### JIGGIES ###
+        # Tree House
+        "17571094FF6D": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Side Of Tree
+        "086A0A390866": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Whipcrack Room
+        "FFBA0013010E": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Gnawty
+        "011902580042": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Nabnut
+        "*Nabnut Acorn": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Plant
+        "*Plant": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Eggs"]],
+            },
+        ### MUMBO TOKEN ###
+        # Leaf Side
+        "009207410A7F": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Snarebear Entrance
+        "01EC00A613ED": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Wonderwing"]],
+            },
+        # Snarebear Top
+        "FFFD16C6F2E5": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Leaf Treehouse
+        "0D40100B03EB": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Branches
+        "E8D40A1A002D": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        ###### WINTER ######
+        ### JIGGIES ###
+        # Top Of The Tree
+        "00341DC90C56": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Fly"]],
+            },
+        # Whipcrack Room
+        "FFAD001100FD": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Shock_Jump_Pad"], ["Beak_Buster", "Fly"]],
+            },
+        # Gnawty
+        "011902580042": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Eyrie
+        "*Eyrie": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        ### EMPTY HONEYCOMBS ###
+        # Gnawty
+        "026F03E60273": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Nabnut Attic
+        "02460201FF2E": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Fly"]],
+            },
+        ### MUMBO TOKENS ###
+        # Plant
+        "000E0069EAFB": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # On Frozen Water
+        "1755FFD2FFE9": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Zubba Hive
+        "FFFF0C42F1A7": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Ledge Near Nabnut
+        "001B0F81135E": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Under Sir Slush
+        "F3A9012CF3DA": {
+            "Type": None,
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Fly", "Beak_Bomb"]],
+            },
+        },
+    }
+
+click_clock_wood_open_dict = {
+    "Possible_Bottles": {
+        "Spring_Branch_1_Up": [["Talon_Trot"]],
+        "Spring_Whipcrack_Room_Floor_1_Up": [["Talon_Trot", "Shock_Jump_Pad"]],
+        "Summer_Grass_1_Up": [[]],
+        "Summer_Treehouse_1_Up": [["Talon_Trot", "Shock_Jump_Pad"]],
+        "Summer_Yellow_Jinjo": [[]],
+        "Summer_Whipcrack_Room_1_Up": [["Talon_Trot", "Shock_Jump_Pad"]],
+        "Fall_Orange_Jinjo": [["Talon_Trot"]],
+        "Fall_Acorn_Ledge": [["Talon_Trot", "Shock_Jump_Pad"]],
+        "Winter_Sir_Slush": [["Fly", "Beak_Bomb"]],
+        },
+    "Flagged_Object_Flags": {
+        ###### SPRING ######
+        ### JIGGIES ###
+        # Top Of The Tree
+        "FFCD1DE50C5C": {
+            "Type": None,
+            "Requirements": [["Talon_Trot", "Bee"], ["Wading_Boots", "Bee"]],
+            },
+        # Whipcrack Room
+        "FFC500240103": {
+            "Type": None,
+            "Requirements": [["Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        ### MUMBO TOKENS ###
+        # Treehouse
+        "17FB1094014B": {
+            "Type": None,
+            "Requirements": [["Talon_Trot", "Shock_Jump_Pad"], ["Talon_Trot", "Bee"], ["Wading_Boots", "Bee"]],
+            },
+        # Branches
+        "F0230B4E024D": {
+            "Type": None,
+            "Requirements": [["Talon_Trot"], ["Talon_Trot", "Bee"], ["Wading_Boots", "Bee"]],
+            },
+        # Near Eyrie
+        "F54E11D9FDD3": {
+            "Type": None,
+            "Requirements": [["Talon_Trot", "Shock_Jump_Pad"], ["Talon_Trot", "Bee"], ["Wading_Boots", "Bee"]],
+            },
+        # Bramble
+        "F5940000FE6C": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Plant Baresnare
+        "077E0069F589": {
+            "Type": None,
+            "Requirements": [["Wonderwing"], ["Talon_Trot", "Bee"], ["Wading_Boots", "Bee"]],
+            },
+        # Entrance Snarebear
+        "03EF006914BA": {
+            "Type": None,
+            "Requirements": [["Wonderwing"], ["Talon_Trot", "Bee"], ["Wading_Boots", "Bee"]],
+            },
+        # Zubba Hive
+        "000C0DD1EB8A": {
+            "Type": None,
+            "Requirements": [["Talon_Trot"], ["Shock_Jump_Pad"], ["Wading_Boots", "Bee"]],
+            },
+        # Nabnut
+        "FDCF012CFF7C": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"], ["Talon_Trot", "Bee"], ["Wading_Boots", "Bee"]],
+            },
+        ###### SUMMER ######
+        ### JIGGIES ###
+        # Tree House
+        "17781094FF8F": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Side Of Tree
+        "08700A39088C": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Whipcrack Room
+        "FFA1001300FA": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        ### MUMBO TOKEN ###
+        # Ledge Near Eyrie
+        "F8BA11750643": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Grass Corner Near Plant
+        "F2090028EF61": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Snarebear Near Mumbo
+        "F0F105940EEC": {
+            "Type": None,
+            "Requirements": [["Wonderwing"]],
+            },
+        # Branches
+        "EDD60AF0FB2C": {
+            "Type": None,
+            "Requirements": [["Talon_Trot"], ["Shock_Jump_Pad"]],
+            },
+        # Gnawty Entrance
+        "0A8BFDA80017": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Leaf
+        "08060DCE06FC": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # In Mumbo's Skull
+        "000D01A001E4": {
+            "Type": None,
+            "Requirements": [["Talon_Trot"], ["Shock_Jump_Pad"]],
+            },
+        ###### FALL ######
+        ### JIGGIES ###
+        # Tree House
+        "17571094FF6D": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Side Of Tree
+        "086A0A390866": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Whipcrack Room
+        "FFBA0013010E": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Gnawty
+        "011902580042": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Nabnut
+        "*Nabnut Acorn": {
+            "Type": "Jiggy",
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Plant
+        "*Plant": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Eggs"]],
+            },
+        ### MUMBO TOKEN ###
+        # Leaf Side
+        "009207410A7F": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Snarebear Entrance
+        "01EC00A613ED": {
+            "Type": None,
+            "Requirements": [["Wonderwing"]],
+            },
+        # Snarebear Top
+        "FFFD16C6F2E5": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Leaf Treehouse
+        "0D40100B03EB": {
+            "Type": None,
+            "Requirements": [["Shock_Jump_Pad"]],
+            },
+        # Branches
+        "E8D40A1A002D": {
+            "Type": None,
+            "Requirements": [["Talon_Trot"], ["Shock_Jump_Pad"]],
+            },
+        ###### WINTER ######
+        ### JIGGIES ###
+        # Top Of The Tree
+        "00341DC90C56": {
+            "Type": None,
+            "Requirements": [["Fly"]],
+            },
+        # Whipcrack Room
+        "FFAD001100FD": {
+            "Type": None,
+            "Requirements": [["Talon_Trot", "Shock_Jump_Pad"], ["Fly"]],
+            },
+        # Gnawty
+        "011902580042": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Eyrie
+        "*Eyrie": {
+            "Type": "Jiggy",
+            "Requirements": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        ### EMPTY HONEYCOMBS ###
+        # Gnawty
+        "026F03E60273": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Nabnut Attic
+        "02460201FF2E": {
+            "Type": None,
+            "Requirements": [["Talon_Trot", "Shock_Jump_Pad"], ["Fly"]],
+            },
+        ### MUMBO TOKENS ###
+        # Plant
+        "000E0069EAFB": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # On Frozen Water
+        "1755FFD2FFE9": {
+            "Type": None,
+            "Requirements": [[]],
+            },
+        # Zubba Hive
+        "FFFF0C42F1A7": {
+            "Type": None,
+            "Requirements": [["Talon_Trot"]],
+            },
+        # Ledge Near Nabnut
+        "001B0F81135E": {
+            "Type": None,
+            "Requirements": [["Talon_Trot", "Shock_Jump_Pad"]],
+            },
+        # Under Sir Slush
+        "F3A9012CF3DA": {
+            "Type": None,
+            "Requirements": [["Talon_Trot", "Shock_Jump_Pad", "Fly", "Beak_Bomb"]],
+            },
+        },
+    }
 
 extra_flagged_object_flags = {
     "Gruntilda's Lair": {

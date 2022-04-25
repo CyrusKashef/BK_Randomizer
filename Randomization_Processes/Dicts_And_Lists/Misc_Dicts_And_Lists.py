@@ -243,3 +243,10 @@ note_door_indices = {
             },
         },
     }
+
+ccw_open_season_list = {
+    "Click Clock Wood - Lobby": ["190C01E3", "190C016D", "190C016B", "190C0169", "190C01E2"],
+    "Click Clock Wood - Spring": ["190C016C"],
+    "Click Clock Wood - Summer": ["190C016A"],
+    "Click Clock Wood - Fall": ["190C0168"]
+}

@@ -255,7 +255,9 @@ tool_tips_dict = {
     "CLICK_CLOCK_WOOD": {
         "SHUFFLE_BY": "SEASON: All shuffling happens within each seasons/lobby area,\n" +
                       "        making it easier for players to track what they are missing.\n" +
-                      "WORLD: All shuffling happens throughout the level.",
+                      "WORLD: All shuffling happens throughout the level.\n" +
+                      "OPEN SEASONS: The CCW season doors and buttons are removed,\n" +
+                      "        allowing the player to enter the sections without Beak Buster.",
         },
     }
 
@@ -798,6 +800,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.buttons_var.get())
         # Click Clock Wood
         self._add_randomizer_settings_to_code(["Season", "Within World"].index(self.ccw_var.get()))
+        self._add_randomizer_settings_to_code(self.ccw_open_var.get())
         self._randomizer_settings_int_to_char_translator()
 #         print(f"Code: {self.generated_randomizer_settings_code}")
     
@@ -935,6 +938,7 @@ class User_GUI_Class():
             self.buttons_var.set(self._get_randomizer_setting())
             # Click Clock Wood
             self.ccw_var.set(self._get_randomizer_setting(options_list=["Season", "Within World"]))
+            self.ccw_open_var.set(self._get_randomizer_setting())
         except IndexError:
             Error_GUI(f"Error: Something went wrong with applying the settings.\nPlease check your settings code.")
     
@@ -1055,6 +1059,7 @@ class User_GUI_Class():
         self.buttons_var.set(0)
         # Click Clock Wood
         self.ccw_var.set("Season")
+        self.ccw_open_var.set(0)
     
     def _load_configuration(self, button_press=True, random_file=False):
         '''Opens a chosen JSON file and sets the parameters to match those'''
@@ -1510,6 +1515,11 @@ class User_GUI_Class():
         except KeyError:
             setting_not_found.append("CCW_Option")
             self.ccw_var.set("Season")
+        try:
+            self.ccw_open_var.set(json_data["CCW_Open"])
+        except KeyError:
+            setting_not_found.append("CCW_Open")
+            self.ccw_open_var.set(0)
         if(setting_not_found):
             if(len(setting_not_found) < 6):
                 error_msg = "Error: The Following Settings Weren't Set!\n"
@@ -1631,6 +1641,7 @@ class User_GUI_Class():
         self.buttons_var.set(randint(0, 1))
         # Click Clock Wood
         self.ccw_var.set(choice(["Season", "Within World"]))
+        self.ccw_open_var.set(randint(0, 1))
     
     def _save_current_configuration(self, button_press=True):
         '''Writes the current configuration to a JSON file'''
@@ -1738,6 +1749,7 @@ class User_GUI_Class():
             "RBB_Buttons": self.buttons_var.get(),
             # Click Clock Wood
             "CCW_Option": self.ccw_var.get(),
+            "CCW_Open": self.ccw_open_var.get(),
             }
         # Enemies
         for enemy_name in master_enemy_dict:
@@ -2613,6 +2625,9 @@ class User_GUI_Class():
         self.ccw_dropdown['values'] = self.ccw_options
         self.ccw_dropdown['state'] = 'readonly'
         self.ccw_dropdown.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.ccw_open_var = tk.IntVar()
+        self.open_click_clock_wood_checkbox = tk.Checkbutton(self.click_clock_wood_frame, text="Open Seasons", variable=self.ccw_open_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.open_click_clock_wood_checkbox.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         #########################################
         ### END OF WORLD SPECIFIC TAB CONTROL ###
         #########################################

@@ -449,6 +449,16 @@ class Progression_GUI_Class():
                 self.master.logger.info("Scattered Struct Error")
                 self.pb_label.set_text(f"Error Scattering Notes...\n{self._mumbo_error_message}")
                 raise
+        if(self.master.ccw_open_var.get() == 1):
+            try:
+                self.pb_label.set_text(f"Be Vewy Vewy Quiet...")
+                if(self.master.ccw_var.get() == "Season"):
+                    world_manip._ccw_open_seasons_by_season()
+                elif(self.master.ccw_var.get() == "Within World"):
+                    world_manip._ccw_open_seasons_within_world()
+            except Exception:
+                self.master.logger.info("CCW Open Seasons Error")
+                self.pb_label.set_text(f"Error CCW Open Seasons...\n{self._mumbo_error_message}")
         del world_manip
         self.master.logger.info("End of Randomize World")
     

@@ -73,6 +73,7 @@
     "Motzand_Keys": 0,
     "RBB_Buttons": 1,
     "CCW_Option": "Season",
+    "CCW_Open": 0,
     "Include Bull": 1,
     "Include Ticker": 1,
     "Include Beehive": 1,

@@ -37,8 +37,8 @@ from copy import deepcopy
 from .Generic_World import World
 from .Generic_Setup_File import SetupFile
 from ..Dicts_And_Lists import Structs, Non_Flagged_Objects, Enemies, Flagged_Objects, Sequences, World_Order_Warps
-from ..Dicts_And_Lists.Misc_Dicts_And_Lists import note_door_texture_offsets, note_door_indices
-from ..Dicts_And_Lists.Flagged_Object_Flags import bottles_world_warp_dict, extra_flagged_object_flags, extra_flagged_object_flags_adjusted
+from ..Dicts_And_Lists.Misc_Dicts_And_Lists import note_door_texture_offsets, note_door_indices, ccw_open_season_list
+from ..Dicts_And_Lists.Flagged_Object_Flags import bottles_world_warp_dict, click_clock_wood_open_dict, click_clock_wood_closed_dict, extra_flagged_object_flags, extra_flagged_object_flags_adjusted
 from Randomization_Processes.World_Manipulation.Warps.Basic_World_Order import World_Order_Basic
 from Randomization_Processes.World_Manipulation.Warps.Bottles_World_Order import World_Order_Bottles
 from ..Common_Functions import leading_zeros, possible_negative, fit_for_hex
@@ -74,6 +74,10 @@ class World_Manipulation_Class():
         self.ancient_ones_info_list = []
         self.jinxy_head_info_list = []
         self.modified_bottles_world_warp_dict = deepcopy(bottles_world_warp_dict)
+        if(self.grandmaster.ccw_open_var.get() == 1):
+            self.modified_bottles_world_warp_dict["Click Clock Wood"] = deepcopy(click_clock_wood_open_dict)
+        else:
+            self.modified_bottles_world_warp_dict["Click Clock Wood"] = deepcopy(click_clock_wood_closed_dict)
         self.extra_flagged_object_flags = deepcopy(extra_flagged_object_flags)
         self.extra_flagged_object_flags_adjusted = deepcopy(extra_flagged_object_flags_adjusted)
     
@@ -834,39 +838,57 @@ class World_Manipulation_Class():
         for setup_file in world_object._setup_list:
             for flagged_object_info_list in setup_file.flagged_object_info_list:
                 self.flagged_object_info_list.append(flagged_object_info_list)
-        self._shuffle_list(self.flagged_object_info_list)
+        if((self.grandmaster.final_puzzle_var.get() == 0) and (world_object._world_name == "Gruntilda's Lair")):
+            jiggy_missing = True
+            increment = 0
+            while(jiggy_missing):
+                self._shuffle_list(self.flagged_object_info_list, increment=increment)
+                if(self.flagged_object_info_list[0][0]['Obj_ID2'] == 0x46):
+                    print("Jiggy Found!")
+                    jiggy_missing = False
+                else:
+                    print("Reshuffling Gruntilda's Lair Flagged Objects...")
+                increment += 1
+        else:
+            print("Shuffling Flagged Object List")
+            self._shuffle_list(self.flagged_object_info_list)
     
     def _shuffle_flagged_objects_within_game(self):
         '''Shuffles the flagged objects found within the game'''
         self.grandmaster.logger.debug("Shuffle Flag Objects Within Game")
-        count = 0
+        print("Shuffle Flag Objects Within Game")
         for world_object in self.world_list:
             for setup_file in world_object._setup_list:
                 for flagged_object_info_list in setup_file.flagged_object_info_list:
                     self.flagged_object_info_list.append(flagged_object_info_list)
-                    count += 1
-        jiggy_missing = True
-        increment = 0
-        first_jiggy_index = 151
-        if(self.grandmaster.flagged_object_abnormalities_var.get() == 1):
-            first_jiggy_index += 6
-        if(self.grandmaster.flagged_object_softlock_var.get() == 1):
-            first_jiggy_index += 13
-        while(jiggy_missing and (self.grandmaster.final_puzzle_var.get() == 0)):
+        if(self.grandmaster.final_puzzle_var.get() == 0):
+            jiggy_missing = True
+            increment = 0
+            first_jiggy_index = 151
+            if(self.grandmaster.flagged_object_abnormalities_var.get() == 1):
+                first_jiggy_index += 6
+            if(self.grandmaster.flagged_object_softlock_var.get() == 1):
+                first_jiggy_index += 13
+            while(jiggy_missing):
+                print("Shuffling Flagged Object List")
+                self._shuffle_list(self.flagged_object_info_list, increment=increment)
+                # The First Jiggy
+                if(self.flagged_object_info_list[170][0]['Obj_ID2'] == 0x46):
+                    print("Jiggy Found!")
+                    jiggy_missing = False
+                # Spiral Mountain Honeycombs
+                if(jiggy_missing):
+                    for flagged_objects in self.flagged_object_info_list[-4:]:
+                        if(flagged_objects[0]['Obj_ID2'] == 0x46):
+                            print("Jiggy Found!")
+                            jiggy_missing = False
+                            break
+                else:
+                    print("Reshuffling Flagged Objects...")
+                increment += 1
+        else:
             print("Shuffling Flagged Object List")
-            self._shuffle_list(self.flagged_object_info_list, increment=increment)
-            # The First Jiggy
-            if(self.flagged_object_info_list[170][0]['Obj_ID2'] == 0x46):
-                print("Jiggy Found!")
-                jiggy_missing = False
-            # Spiral Mountain Honeycombs
-            if(jiggy_missing):
-                for flagged_objects in self.flagged_object_info_list[-4:]:
-                    if(flagged_objects[0]['Obj_ID2'] == 0x46):
-                        print("Jiggy Found!")
-                        jiggy_missing = False
-                        break
-            increment += 1
+            self._shuffle_list(self.flagged_object_info_list)
     
     def _move_flagged_objects_within_world(self, world_object):
         '''Places the randomized flagged objects list back into the world'''
@@ -2659,3 +2681,35 @@ class World_Manipulation_Class():
             if(replacement_dict != {-4: 0xFE, -3: 0xED}):
                 possible_locations.remove(replacement_dict)
             increment += 1
+
+    def _ccw_open_seasons_by_season(self):
+        '''Removes the seasons and season doors in CCW by season'''
+        self.grandmaster.logger.debug("Removing CCW Doors And Buttons")
+        print("Removing CCW Doors And Buttons")
+        replacement_dict = {2: 0x02, 3: 0x68}
+        print("Removing For Lobby")
+        for item_search_string in ccw_open_season_list["Click Clock Wood - Lobby"]:
+            (self.click_clock_wood_lobby._setup_list[0])._edit_object(item_search_string, replacement_dict)
+        print("Removing For Spring")
+        for item_search_string in ccw_open_season_list["Click Clock Wood - Spring"]:
+            (self.click_clock_wood_spring._setup_list[0])._edit_object(item_search_string, replacement_dict)
+        print("Removing For Summer")
+        for item_search_string in ccw_open_season_list["Click Clock Wood - Summer"]:
+            (self.click_clock_wood_summer._setup_list[0])._edit_object(item_search_string, replacement_dict)
+        print("Removing For Fall")
+        for item_search_string in ccw_open_season_list["Click Clock Wood - Fall"]:
+            (self.click_clock_wood_fall._setup_list[0])._edit_object(item_search_string, replacement_dict)
+
+    def _ccw_open_seasons_within_world(self):
+        '''Removes the seasons and season doors in CCW'''
+        self.grandmaster.logger.debug("Removing CCW Doors And Buttons")
+        replacement_dict = {2: 0x02, 3: 0x68}
+        print("Removing CCW Doors And Buttons")
+        for season in ccw_open_season_list:
+            for item_search_string in ccw_open_season_list[season]:
+                print(f"Removing {item_search_string}")
+                for setup_file in self.click_clock_wood._setup_list:
+                    print("Setup File...")
+                    if(setup_file._edit_object(item_search_string, replacement_dict)):
+                        print(f"Found It!")
+                        break

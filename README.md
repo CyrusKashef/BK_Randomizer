@@ -241,6 +241,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
   * Fall: 48 Notes, Orange Jinjo
   * Winter: 16 Notes, Blue Jinjo
 * Within World: All shuffling happens throughout the level.
+* Open Seasons: The CCW season doors and buttons are removed, allowing the player to enter the sections without Beak Buster.
 
 ### Miscellaneous
 * Remove Extra Files: Removes the compressed and decompressed files extrated from the ROM. Useful for BK modders or debugging an issue.
