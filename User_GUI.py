@@ -53,7 +53,7 @@ tool_tips_dict = {
     "SETTING_CODE": {
         "GENERATING_SETTING_CODE": "Generates a settings code to verify matching settings with another user.\n" +
                                    "This code does not apply for the file directory, seed value, BK's model,\n" +
-                                   "colors, music settings, skyboxes, sprites, and miscellaneous settings.",
+                                   "colors, music settings, and miscellaneous settings.",
         },
     "FLAGGED_OBJECTS": {
         "FRAME":
@@ -158,7 +158,11 @@ tool_tips_dict = {
             "    May cause an incompletable seed. Use at own risk!",
         },
     "BK_COLOR": {
-        "FRAME": "Change BK's colors to presets",
+        "FRAME": "Change BK's colors to either presets or create\n"+
+                 "your own custom colors for each part. Most colors\n" +
+                 "are RGB32, but some colors are RGB16. Press the\n" +
+                 "'Transfer Colors' button to try to transfer the\n" +
+                 "RGB32 body part colors over to the RGB16 color parts.",
         },
     "CUSTOMIZABLE": {
         "MODELS":
@@ -173,10 +177,6 @@ tool_tips_dict = {
             "SHUFFLE_MUSIC: Shuffles music for levels and minigames.\n" +
             "INCLUDE_BETA_SOUNDS: Shuffles the other categories with unused versions.\n" +
             "INCLUDE_JARRING_SOUNDS: Includes harsher sounding sounds with the other categories."
-        },
-    "SPRITES_TEXTURES": {
-        "SHUFFLE_SKYBOXES": "Shuffles the skyboxes, including clouds/thunderstorms.",
-        "SHUFFLE_TALKING_SPRITES": "Shuffles the talking sprites (not the voices).",
         },
     "MISC_OPTIONS": {
         "CREATE_CHEAT_SHEET": "Writes a JSON file that gives a hint for the location of each Jiggy,\n" +
@@ -281,7 +281,7 @@ from mmap import mmap
 ####################
 
 from Progression_GUI import Progression_GUI_Class
-from Randomization_Processes.Common_Functions import read_json, leading_zeros
+from Randomization_Processes.Common_Functions import read_json, dump_json, leading_zeros
 from Randomization_Processes.Dicts_And_Lists.Game_Engine import start_level_ids
 from Randomization_Processes.Dicts_And_Lists.Enemies import master_enemy_dict
 
@@ -302,7 +302,6 @@ def Error_GUI(error_msg):
         bottles_talking_label.configure(image=frame)
         bottles_talking_label.after(60, update_bottles_gif, ind)
     error_window = tk.Tk()
-    error_msg = error_msg
     error_window.winfo_toplevel().title("Banjo-Kazooie Randomizer Error")
     error_window.config(background="#F3E5AB")
     # Bottles Talking
@@ -319,6 +318,57 @@ def Error_GUI(error_msg):
     error_window.protocol("WM_DELETE_WINDOW", error_window.destroy)
     error_window.after(0, update_bottles_gif, 0)
     error_window.mainloop()
+
+#########################
+### WARNING GUI CLASS ###
+#########################
+
+class WARNING_GUI():
+    '''Brings up a GUI that displays an warning message'''
+    def __init__(self, warning_msg):
+        self.warning_msg = warning_msg
+        self.chosen_option = False
+        self.warning_window = tk.Tk()
+        self.warning_window.winfo_toplevel().title("Banjo-Kazooie Randomizer Warning")
+        self.warning_window.config(background="#F3E5AB")
+
+    def update_klungo_gif(self, ind):
+        '''Updates The Gif Frame'''
+        self.frame = self.frames[ind]
+        ind += 1
+        if ind == self.frame_count:
+            ind = 0
+        self.klungo_talking_label.configure(image=self.frame)
+        self.klungo_talking_label.after(60, self.update_klungo_gif, ind)
+
+    def confirm(self):
+        self.warning_window.quit()
+        self.chosen_option = True
+
+    def cancel(self):
+        self.warning_window.quit()
+        self.chosen_option = False
+    
+    def main(self):
+        # Klungo Talking
+        self.frame_count = 10
+        self.frames = [tk.PhotoImage(master=self.warning_window, file=(f"{os.getcwd()}/Pictures/Klungo_Speaking.gif"), format = 'gif -index %i' %(i)) for i in range(self.frame_count)]
+        self.klungo_talking_label = tk.Label(self.warning_window, background="#F3E5AB")
+        self.klungo_talking_label.grid(row=0, column=1, padx=5, pady=5)
+        self.warning_label = tk.Label(self.warning_window, text=self.warning_msg, background="#F3E5AB", font=("LITHOGRAPH-BOLD", 12))
+        self.warning_label.config(anchor='center')
+        self.warning_label.grid(row=1, column=0, columnspan=3, padx=5, pady=5)
+        self.confirm_btn = tk.Button(self.warning_window, text='Confirm', background="#F3E5AB", command=self.confirm, font=("LITHOGRAPH-BOLD", 12))
+        self.confirm_btn.config(anchor='center')
+        self.confirm_btn.grid(row=2, column=0, padx=5, pady=5)
+        self.cancel_btn = tk.Button(self.warning_window, text='Cancel', background="#F3E5AB", command=self.cancel, font=("LITHOGRAPH-BOLD", 12))
+        self.cancel_btn.config(anchor='center')
+        self.cancel_btn.grid(row=2, column=2, padx=5, pady=5)
+        self.warning_window.protocol("WM_DELETE_WINDOW", self.warning_window.destroy)
+        self.warning_window.after(0, self.update_klungo_gif, 0)
+        self.warning_window.mainloop()
+        self.warning_window.destroy()
+        return self.chosen_option
 
 ######################
 ### USER GUI CLASS ###
@@ -674,6 +724,80 @@ class User_GUI_Class():
             self.note_overflow_var.set("Allow Save & Quit/Reset")
             self.note_overflow_dropdown.grid_remove()
     
+    def _convert_rgb32_to_rgb16(self, _32_bit_color):
+        if(len(_32_bit_color) == 0):
+            return ""
+        if(len(_32_bit_color) == 6):
+            alpha = 255
+        elif(len(_32_bit_color) == 8):
+            alpha = int(_32_bit_color[6:8], 16)
+        else:
+            Error_GUI(f"Error: 32-bit color is not length 6 or 8.\nPlease check for proper formatting.\nex: 'F5D9E2' or 'F5D9E2FF'")
+            return
+        red = int(_32_bit_color[0:2], 16)
+        green = int(_32_bit_color[2:4], 16)
+        blue = int(_32_bit_color[4:6], 16)
+        r = (red >> 3)
+        g = (green >> 3)
+        b = (blue >> 3)
+        a = (alpha >> 7)
+        _16_bit_color = (r << 11) | (g << 6) | (b << 1) | (a)
+        return leading_zeros(_16_bit_color, 4)
+
+    def _transfer_rgb32_to_rgb16(self):
+        self.banjo_feet_var.set(self._convert_rgb32_to_rgb16(self.banjo_skin_var.get()))
+        self.kazooie_wing_primary_var.set(self._convert_rgb32_to_rgb16(self.kazooie_primary_var.get()))
+        self.kazooie_wing_secondary_var.set(self._convert_rgb32_to_rgb16(self.kazooie_secondary_var.get()))
+        self.shorts_texture_var.set(self._convert_rgb32_to_rgb16(self.shorts_vertex_var.get()))
+
+    def _save_bk_colors(self):
+        if(self.bk_model_var.get() == "Default"):
+            Error_GUI("You can't overwrite the OG colors!\nThey are classic!")
+        else:
+            new_custom_name = self.custom_bk_model_name_var.get()
+            warning_gui = WARNING_GUI(f"Are you sure you want to save this preset?\n{new_custom_name}")
+            confirmation = warning_gui.main()
+            del warning_gui
+            if(confirmation):
+                self.bk_model_json[new_custom_name] = {
+                    "Banjo_Fur": self.banjo_fur_var.get(),
+                    "Banjo_Skin": self.banjo_skin_var.get(),
+                    "Banjo_Feet": self.banjo_feet_var.get(),
+                    "Kazooie_Primary": self.kazooie_primary_var.get(),
+                    "Kazooie_Secondary": self.kazooie_secondary_var.get(),
+                    "Kazooie_Wing_Primary": self.kazooie_wing_primary_var.get(),
+                    "Kazooie_Wing_Secondary": self.kazooie_wing_secondary_var.get(),
+                    "Backpack": self.backpack_var.get(),
+                    "Wading_Boots": self.wading_boots_var.get(),
+                    "Shorts_Vertex": self.shorts_vertex_var.get(),
+                    "Shorts_Texture": self.shorts_texture_var.get(),
+                    "Tooth_Necklace": self.tooth_necklace_var.get()
+                    }
+                dump_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json", self.bk_model_json)
+                self.bk_model_options = ["Seed Determined Preset", "Seed Determined Colors"]
+                self.custom_color_count = 0
+                for item in sorted(self.bk_model_json):
+                    self.bk_model_options.append(item)
+                    if(item.startswith("Custom Preset")):
+                        self.custom_color_count += 1
+                self.bk_model_var.set(new_custom_name)
+                self.bk_model_dropdown = ttk.Combobox(self.bk_model_frame, textvariable=self.bk_model_var, foreground=self.black, background="#F3E5AB", font=(self.font_type, self.small_font_size), width=30)
+                self.bk_model_dropdown['values'] = self.bk_model_options
+                self.bk_model_dropdown['state'] = 'readonly'
+                self.bk_model_dropdown.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+
+    def _delete_bk_colors(self):
+        if(self.bk_model_var.get() == "Default"):
+            Error_GUI("You can't delete the OG colors!\nThey are classic!")
+        else:
+            warning_gui = WARNING_GUI(f"Are you sure you want to delete this preset?\n{self.bk_model_var.get()}")
+            confirmation = warning_gui.main()
+            del warning_gui
+            if(confirmation):
+                del self.bk_model_json[self.bk_model_var.get()]
+                self.bk_model_var.set("Default")
+                dump_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json", self.bk_model_json)
+    
     ################################
     ### RANDOMIZER SETTINGS CODE ###
     ################################
@@ -1021,9 +1145,6 @@ class User_GUI_Class():
         self.music_var.set(0)
         self.beta_sounds_var.set(0)
         self.jarring_sounds_var.set(0)
-        # Sprites/Textures
-        self.skybox_var.set(0)
-        self.talking_sprite_var.set(0)
         ### Misc Settings ###
         self.remove_files_var.set(1)
         self.tool_tips_var.set(1)
@@ -1377,17 +1498,6 @@ class User_GUI_Class():
         except KeyError:
             setting_not_found.append("Jarring_Sounds")
             self.jarring_sounds_var.set(0)
-        # Sprites/Textures
-        try:
-            self.skybox_var.set(json_data["Skybox_Option"])
-        except KeyError:
-            setting_not_found.append("Skybox_Option")
-            self.skybox_var.set(0)
-        try:
-            self.talking_sprite_var.set(json_data["Talking_Sprite_Option"])
-        except KeyError:
-            setting_not_found.append("Talking_Sprite_Option")
-            self.talking_sprite_var.set(0)
         ### Misc Settings ###
         try:
             self.remove_files_var.set(json_data["Remove_Files"])
@@ -1599,9 +1709,6 @@ class User_GUI_Class():
         self.music_var.set(randint(0, 1))
         self.beta_sounds_var.set(randint(0, 1))
         self.jarring_sounds_var.set(randint(0, 1))
-        # Sprites/Textures
-        self.skybox_var.set(randint(0, 1))
-        self.talking_sprite_var.set(randint(0, 1))
         ### World Specific ###
         # Gruntilda's Lair
         self.skip_furnace_fun_var.set(randint(0, 1))
@@ -1711,9 +1818,6 @@ class User_GUI_Class():
             "Music_Option": self.music_var.get(),
             "Beta_Sounds": self.beta_sounds_var.get(),
             "Jarring_Sounds": self.jarring_sounds_var.get(),
-            # Sprites/Textures
-            "Skybox_Option": self.skybox_var.get(),
-            "Talking_Sprite_Option": self.talking_sprite_var.get(),
             ### Misc Settings ###
             "Remove_Files": self.remove_files_var.get(),
             "Tool_Tips": self.tool_tips_var.get(),
@@ -2244,22 +2348,25 @@ class User_GUI_Class():
             self.enemy_checkbox_dict[enemy_name] = tk.IntVar()
             enemy_checkbutton = tk.Checkbutton(self.enemy_checklist_frame, text=enemy_name, variable=self.enemy_checkbox_dict[enemy_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=13, anchor="w")
             enemy_checkbutton.grid(row=(enemy_count // 4) + 1, column=(enemy_count % 4), padx=self.padx, pady=self.pady, sticky='w')
-        #####################
-        ### AESTHETIC TAB ###
-        #####################
-        self._aesthetic_tab = ttk.Frame(self._tab_control)
-        self._tab_control.add(self._aesthetic_tab, text="Aesthetics")
+        ####################
+        ### PERSONAL TAB ###
+        ####################
+        self._personal_tab = ttk.Frame(self._tab_control)
+        self._tab_control.add(self._personal_tab, text="Personal")
         # BK Model
-        self.bk_model_frame = tk.LabelFrame(self._aesthetic_tab, text="Banjo-Kazooie Model Color", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.bk_model_frame = tk.LabelFrame(self._personal_tab, text="Banjo-Kazooie Model Color", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.bk_model_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.bk_model_ttp_canvas = tk.Label(self.bk_model_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.bk_model_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.bk_model_ttp_canvas.grid(row=0, rowspan=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.bk_model_frame_ttp = self.CreateToolTip(self.bk_model_ttp_canvas, self, tool_tips_dict["BK_COLOR"]["FRAME"])
         self.bk_model_json = read_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json")
         self.bk_model_var = tk.StringVar(self.bk_model_frame)
         self.bk_model_options = ["Seed Determined Preset", "Seed Determined Colors"]
+        self.custom_color_count = 0
         for item in sorted(self.bk_model_json):
             self.bk_model_options.append(item)
+            if(item.startswith("Custom Preset")):
+                self.custom_color_count += 1
         self.bk_model_var.set(self.bk_model_options[0])
         self.bk_model_dropdown = ttk.Combobox(self.bk_model_frame, textvariable=self.bk_model_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=30)
         self.bk_model_dropdown['values'] = self.bk_model_options
@@ -2267,76 +2374,89 @@ class User_GUI_Class():
         self.bk_model_dropdown.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.random_bk_model_preset_button = tk.Button(self.bk_model_frame, text='Random Preset', command=self._random_bk_model_preset, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
         self.random_bk_model_preset_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.custom_bk_model_name_var = tk.StringVar(self.bk_model_frame)
+        self.custom_bk_model_name_var.set(f"Custom Preset {self.custom_color_count}")
+        self.custom_bk_model_name_entry = tk.Entry(self.bk_model_frame, textvariable=self.custom_bk_model_name_var, width=20)
+        self.custom_bk_model_name_entry.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.save_bk_model_preset_button = tk.Button(self.bk_model_frame, text='Save As Preset', command=self._save_bk_colors, foreground=self.white, background=self.blue, font=(self.font_type, self.small_font_size))
+        self.save_bk_model_preset_button.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.delete_bk_model_preset_button = tk.Button(self.bk_model_frame, text='Delete Preset', command=self._delete_bk_colors, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
+        self.delete_bk_model_preset_button.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')
         if(self.bk_model_var.get() in ["Seed Determined Preset", "Seed Determined Colors"]):
             self.bk_model_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Models/Default.png")
         else:
             self.bk_model_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Models/{self.bk_model_var.get()}.png")
         self.bk_model_image_label = tk.Label(self.bk_model_frame, text='Preview', foreground=curr_background_color, background=curr_background_color, font=(self.font_type, self.small_font_size), image=self.bk_model_image)
-        self.bk_model_image_label.grid(row=0, column=4, padx=self.padx, pady=self.pady, sticky='w')
-        
+        self.bk_model_image_label.grid(row=0, rowspan=2, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.rgb32_text = tk.Label(self.bk_model_frame, text="RGB32", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.rgb32_text.grid(row=2, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.rgb16_text = tk.Label(self.bk_model_frame, text="RGB16", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.rgb16_text.grid(row=2, column=4, padx=self.padx, pady=self.pady, sticky='w')
         self.banjo_fur_text = tk.Label(self.bk_model_frame, text="Banjo's Fur", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.banjo_fur_text.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.banjo_fur_text.grid(row=3, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.banjo_fur_var = tk.StringVar(self.bk_model_frame)
         self.banjo_fur_entry = tk.Entry(self.bk_model_frame, textvariable=self.banjo_fur_var, width=9)
-        self.banjo_fur_entry.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.tooth_necklace_text = tk.Label(self.bk_model_frame, text="Tooth Necklace", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.tooth_necklace_text.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')
-        self.tooth_necklace_var = tk.StringVar(self.bk_model_frame)
-        self.tooth_necklace_entry = tk.Entry(self.bk_model_frame, textvariable=self.tooth_necklace_var, width=9)
-        self.tooth_necklace_entry.grid(row=1, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.banjo_fur_entry.grid(row=3, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.banjo_skin_text = tk.Label(self.bk_model_frame, text="Banjo's Skin", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.banjo_skin_text.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.banjo_skin_text.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.banjo_skin_var = tk.StringVar(self.bk_model_frame)
         self.banjo_skin_entry = tk.Entry(self.bk_model_frame, textvariable=self.banjo_skin_var, width=9)
-        self.banjo_skin_entry.grid(row=2, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.banjo_skin_entry.grid(row=4, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.banjo_feet_text = tk.Label(self.bk_model_frame, text="Banjo's Toes", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.banjo_feet_text.grid(row=2, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.banjo_feet_text.grid(row=4, column=3, padx=self.padx, pady=self.pady, sticky='w')
         self.banjo_feet_var = tk.StringVar(self.bk_model_frame)
         self.banjo_feet_entry = tk.Entry(self.bk_model_frame, textvariable=self.banjo_feet_var, width=5)
-        self.banjo_feet_entry.grid(row=2, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.banjo_feet_entry.grid(row=4, column=4, padx=self.padx, pady=self.pady, sticky='w')
         self.kazooie_primary_text = tk.Label(self.bk_model_frame, text="Kazooie Primary", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.kazooie_primary_text.grid(row=3, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.kazooie_primary_text.grid(row=5, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.kazooie_primary_var = tk.StringVar(self.bk_model_frame)
         self.kazooie_primary_entry = tk.Entry(self.bk_model_frame, textvariable=self.kazooie_primary_var, width=9)
-        self.kazooie_primary_entry.grid(row=3, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.kazooie_primary_entry.grid(row=5, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.kazooie_wing_primary_text = tk.Label(self.bk_model_frame, text="Wing Primary", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.kazooie_wing_primary_text.grid(row=3, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.kazooie_wing_primary_text.grid(row=5, column=3, padx=self.padx, pady=self.pady, sticky='w')
         self.kazooie_wing_primary_var = tk.StringVar(self.bk_model_frame)
         self.kazooie_wing_primary_entry = tk.Entry(self.bk_model_frame, textvariable=self.kazooie_wing_primary_var, width=5)
-        self.kazooie_wing_primary_entry.grid(row=3, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.kazooie_wing_primary_entry.grid(row=5, column=4, padx=self.padx, pady=self.pady, sticky='w')
         self.kazooie_secondary_text = tk.Label(self.bk_model_frame, text="Kazooie Secondary", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.kazooie_secondary_text.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.kazooie_secondary_text.grid(row=6, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.kazooie_secondary_var = tk.StringVar(self.bk_model_frame)
         self.kazooie_secondary_entry = tk.Entry(self.bk_model_frame, textvariable=self.kazooie_secondary_var, width=9)
-        self.kazooie_secondary_entry.grid(row=4, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.kazooie_secondary_entry.grid(row=6, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.kazooie_wing_secondary_text = tk.Label(self.bk_model_frame, text="Wing Secondary", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.kazooie_wing_secondary_text.grid(row=4, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.kazooie_wing_secondary_text.grid(row=6, column=3, padx=self.padx, pady=self.pady, sticky='w')
         self.kazooie_wing_secondary_var = tk.StringVar(self.bk_model_frame)
         self.kazooie_wing_secondary_entry = tk.Entry(self.bk_model_frame, textvariable=self.kazooie_wing_secondary_var, width=5)
-        self.kazooie_wing_secondary_entry.grid(row=4, column=4, padx=self.padx, pady=self.pady, sticky='w')
-        self.backpack_text = tk.Label(self.bk_model_frame, text="Backpack", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.backpack_text.grid(row=5, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.backpack_var = tk.StringVar(self.bk_model_frame)
-        self.backpack_entry = tk.Entry(self.bk_model_frame, textvariable=self.backpack_var, width=9)
-        self.backpack_entry.grid(row=5, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.wading_boots_text = tk.Label(self.bk_model_frame, text="Wading Boots", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.wading_boots_text.grid(row=5, column=3, padx=self.padx, pady=self.pady, sticky='w')
-        self.wading_boots_var = tk.StringVar(self.bk_model_frame)
-        self.wading_boots_entry = tk.Entry(self.bk_model_frame, textvariable=self.wading_boots_var, width=9)
-        self.wading_boots_entry.grid(row=5, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.kazooie_wing_secondary_entry.grid(row=6, column=4, padx=self.padx, pady=self.pady, sticky='w')
         self.shorts_vertex_text = tk.Label(self.bk_model_frame, text="Shorts Main", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.shorts_vertex_text.grid(row=6, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.shorts_vertex_text.grid(row=7, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.shorts_vertex_var = tk.StringVar(self.bk_model_frame)
         self.shorts_vertex_entry = tk.Entry(self.bk_model_frame, textvariable=self.shorts_vertex_var, width=9)
-        self.shorts_vertex_entry.grid(row=6, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.shorts_vertex_entry.grid(row=7, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.shorts_texture_text = tk.Label(self.bk_model_frame, text="Shorts Front", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.shorts_texture_text.grid(row=6, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.shorts_texture_text.grid(row=7, column=3, padx=self.padx, pady=self.pady, sticky='w')
         self.shorts_texture_var = tk.StringVar(self.bk_model_frame)
-        self.shorts_texture_entry = tk.Entry(self.bk_model_frame, textvariable=self.shorts_texture_var, width=9)
-        self.shorts_texture_entry.grid(row=6, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.shorts_texture_entry = tk.Entry(self.bk_model_frame, textvariable=self.shorts_texture_var, width=5)
+        self.shorts_texture_entry.grid(row=7, column=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.tooth_necklace_text = tk.Label(self.bk_model_frame, text="Tooth Necklace", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.tooth_necklace_text.grid(row=8, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.tooth_necklace_var = tk.StringVar(self.bk_model_frame)
+        self.tooth_necklace_entry = tk.Entry(self.bk_model_frame, textvariable=self.tooth_necklace_var, width=9)
+        self.tooth_necklace_entry.grid(row=8, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.backpack_text = tk.Label(self.bk_model_frame, text="Backpack", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.backpack_text.grid(row=9, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.backpack_var = tk.StringVar(self.bk_model_frame)
+        self.backpack_entry = tk.Entry(self.bk_model_frame, textvariable=self.backpack_var, width=9)
+        self.backpack_entry.grid(row=9, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.wading_boots_text = tk.Label(self.bk_model_frame, text="Wading Boots", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.wading_boots_text.grid(row=10, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.wading_boots_var = tk.StringVar(self.bk_model_frame)
+        self.wading_boots_entry = tk.Entry(self.bk_model_frame, textvariable=self.wading_boots_var, width=9)
+        self.wading_boots_entry.grid(row=10, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.transfer_32_to_16_button = tk.Button(self.bk_model_frame, text='Transfer RGB32\nTo RGB16 Parts', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._transfer_rgb32_to_rgb16)
+        self.transfer_32_to_16_button.grid(row=9, rowspan=2, column=3, columnspan=2, padx=self.padx, pady=self.pady)
         self.bk_model_var.trace('w', self._update_bk_model)
         # Sounds/Music
-        self.sound_music_frame = tk.LabelFrame(self._aesthetic_tab, text="Short Sounds, Fanfare/Jingles, & Looped Music", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.sound_music_frame = tk.LabelFrame(self._personal_tab, text="Short Sounds, Fanfare/Jingles, & Looped Music", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.sound_music_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.short_sounds_ttp_canvas = tk.Label(self.sound_music_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.short_sounds_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
@@ -2360,21 +2480,6 @@ class User_GUI_Class():
         self.jarring_sounds_var = tk.IntVar()
         self.jarring_sounds_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Include Jarring Sounds", variable=self.jarring_sounds_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.jarring_sounds_checkbutton.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')
-        # Sprites/Textures
-        self.texture_frame = tk.LabelFrame(self._aesthetic_tab, text="Sprites & Textures", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.texture_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
-        self.skybox_ttp_canvas = tk.Label(self.texture_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.skybox_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.skybox_checkbutton_ttp = self.CreateToolTip(self.skybox_ttp_canvas, self, tool_tips_dict["SPRITES_TEXTURES"]["SHUFFLE_SKYBOXES"])
-        self.skybox_var = tk.IntVar()
-        self.skybox_checkbutton = tk.Checkbutton(self.texture_frame, text="Shuffle Skyboxes", variable=self.skybox_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.skybox_checkbutton.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.talking_sprite_ttp_canvas = tk.Label(self.texture_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.talking_sprite_ttp_canvas.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.talking_sprite_checkbutton_ttp = self.CreateToolTip(self.talking_sprite_ttp_canvas, self, tool_tips_dict["SPRITES_TEXTURES"]["SHUFFLE_TALKING_SPRITES"])
-        self.talking_sprite_var = tk.IntVar()
-        self.talking_sprite_checkbutton = tk.Checkbutton(self.texture_frame, text="Shuffle Talking Sprites", variable=self.talking_sprite_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.talking_sprite_checkbutton.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='w')
         ###########################
         ### CUSTOM SETTINGS TAB ###
         ###########################

@@ -528,22 +528,6 @@ class Progression_GUI_Class():
             except Exception:
                 self.pb_label.set_text(f"Error Shuffling Sounds/Jingles/Music...\n{self._mumbo_error_message}")
                 raise
-        if(self.master.skybox_var.get() == 1):
-            try:
-                self.pb_label.set_text("Mumbo Make Wish On Shooting Star. A Different Magic...")
-                misc_manip._shuffle_skyboxes(self.seed_val, self.master.cwd, self.rom_path)
-            except Exception:
-                self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"Error Shuffling Skyboxes...\n{self._mumbo_error_message}")
-                raise
-        if(self.master.talking_sprite_var.get() == 1):
-            try:
-                self.pb_label.set_text("Mumbo Don't Care Who Talking...")
-                misc_manip._shuffle_sprites(self.seed_val, self.master.cwd, self.rom_path)
-            except Exception:
-                self.warning_label.set_text("Uh-Oh...")
-                self.pb_label.set_text(f"Error Shuffling Talking Sprites...\n{self._mumbo_error_message}")
-                raise
         if(customization_option):
             try:
                 self.pb_label.set_text("Banjo Must Stand Still Or Spell Go All Funny...\n(Takes Longer The More Options You Selected)")

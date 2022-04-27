@@ -873,7 +873,7 @@ class World_Manipulation_Class():
                 print("Shuffling Flagged Object List")
                 self._shuffle_list(self.flagged_object_info_list, increment=increment)
                 # The First Jiggy
-                if(self.flagged_object_info_list[170][0]['Obj_ID2'] == 0x46):
+                if(self.flagged_object_info_list[first_jiggy_index][0]['Obj_ID2'] == 0x46):
                     print("Jiggy Found!")
                     jiggy_missing = False
                 # Spiral Mountain Honeycombs

@@ -31,6 +31,11 @@ def read_json(json_file_dir):
         json_content = json.load(jf)
     return json_content
 
+def dump_json(json_file_dir, use_this_dict):
+    '''Reads contents of a JSON file into a dictionary and returns that dictionary'''
+    with open(json_file_dir, "w+") as jf:
+        json_content = json.dump(use_this_dict, jf, indent = 4)
+
 # def apply_patch(xdelta_path, old_file_path, delta_file_path, new_file_path):
 #     # xdelta -d -s old_file delta_file decoded_new_file
 #     cmd = f"{xdelta_path}xdelta.exe -d -s {old_file_path} {delta_file_path} {new_file_path}"

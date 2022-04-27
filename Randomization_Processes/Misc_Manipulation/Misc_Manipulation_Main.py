@@ -19,8 +19,6 @@ import os
 
 from Randomization_Processes.Misc_Manipulation.Model_Data.BK_Models import BK_Model_Class
 from Randomization_Processes.Misc_Manipulation.Music_Data.Music_Main import Music_Manipulation_Class
-from Randomization_Processes.Misc_Manipulation.Skybox_Data.Skybox_Main import Skybox_Manipulation_Class
-from Randomization_Processes.Misc_Manipulation.Sprite_Data.Sprite_Main import Sprite_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Game_Engine_Data.Game_Engine_Main import Game_Engine_Class
 from Randomization_Processes.Misc_Manipulation.Models_Animations_Properties.Models_Animations_Properties_Main import Models_Animations_Properties_Class
@@ -357,26 +355,6 @@ class Misc_Manipulation_Class():
         self.grandmaster.logger.info("Shuffle Music")
         music_manip = Music_Manipulation_Class(seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var, jarring_sounds_var)
         music_manip._music_manip_main()
-    
-    ################
-    ### SKYBOXES ###
-    ################
-    
-    def _shuffle_skyboxes(self, seed_val, file_dir, randomized_rom_path):
-        '''Runs the functions for shuffling the skyboxes'''
-        self.grandmaster.logger.info("Shuffle Skyboxes")
-        skybox_manip = Skybox_Manipulation_Class(seed_val, file_dir, randomized_rom_path)
-        skybox_manip._skybox_manip_main()
-    
-    ###############
-    ### SPRITES ###
-    ###############
-    
-    def _shuffle_sprites(self, seed_val, file_dir, randomized_rom_path):
-        '''Runs the functions for shuffling the sprites'''
-        self.grandmaster.logger.info("Shuffle Sprites")
-        sprite_manip = Sprite_Manipulation_Class(seed_val, file_dir, randomized_rom_path)
-        sprite_manip._sprite_manip_main()
 
     ###################
     ### GAME ENGINE ###

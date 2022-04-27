@@ -177,6 +177,7 @@ master_enemy_dict = {
     "Beehive": ["190C0012"],
     "Snippet": ["190C0067", "008C0067"],
     "Ripper": ["190C00C7", "008C00C7", "190C03C2"],
+    "Slappa": ["190C0120"],
     "Limbo": ["190C034E"],
     "Mum-mum": ["190C034F"],
     "Seaman Grublin": ["190C0350"],
