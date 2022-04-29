@@ -430,7 +430,7 @@ class Misc_Manipulation_Class():
     ### EDIT OTHER TEXTS ###
     ########################
     
-    def _edit_intro_cutscene_text_main(self):
+    def _edit_cutscenes_text_main(self):
         self.grandmaster.logger.info("Edit Intro Cutscene Text Main")
         self.speech_manip._bottles_introduction_text()
         self.speech_manip._intro_cutscene_1()
@@ -449,6 +449,7 @@ class Misc_Manipulation_Class():
         self.speech_manip._intro_cutscene_14()
         self.speech_manip._intro_cutscene_15()
         self.speech_manip._enter_lair_cutscene()
+        self.speech_manip._game_over_cutscene()
     
     def _edit_world_order_related_text_main(self):
         self.grandmaster.logger.info("Edit World Order Related Text Main")

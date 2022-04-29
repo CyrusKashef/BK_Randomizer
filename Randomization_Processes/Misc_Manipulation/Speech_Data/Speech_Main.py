@@ -736,6 +736,47 @@ class Speech_Manipulation_Class():
         intro_cutscene_text._replace_line("5945535353204d49535353545245535353", "YESSS MISSSTRESSS GRUNTY!")
         intro_cutscene_text._replace_line("42414e4a4f2e2e2e", "THIS IS SO NOT WAHAY...")
     
+    ##########################
+    ### GAME OVER CUTSCENE ###
+    ##########################
+
+    def _game_over_cutscene(self):
+        '''PyDoc'''
+        # 0xD1D0 - 5CAF48
+        # GRUNTY: BANJO'S GAME ENDS IN MY TOWER,
+        # GRUNTY: TURN IT UP I NEED FULL POWER!
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "D1D0")
+        intro_cutscene_text._replace_line("42414E4A4F27532047414D4520454E44", "THE PLAYER IS NOW REGRETTING,")
+        intro_cutscene_text._replace_line("5455524E2049542055502049204E4545", "TURNING ON A HARDER SETTING!")
+        # 0xD1D8 - 5CAF98
+        # KLUNGO: YESSS YOUR GRUNTYSSSHIP, TRANSSSFORMATION SSSOON BE COMPLETE...
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "D1D8")
+        intro_cutscene_text._replace_line("594553535320594F5552204752554E54", "GEE GEE EASSSY, AMAZZZING CHESSST AHEAD...")
+        # 0xD1E0 - 5CAFE8
+        # KLUNGO: BEAR AND BIRD FINISSSHED, GRUNTY WINSSS!
+        # TOOTY: ýhHELP ýhME ýhBANJO, ýhI ýhFEEL ýhALL ýhFUNNY...ýl
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "D1E0")
+        intro_cutscene_text._replace_line("4245415220414E442042495244204649", "TRANSSSFORMATION ISSS SSSUCCESSSSFUL!")
+        intro_cutscene_text._replace_line("FD6848454C5020FD684D4520FD684241", "ýhOH ýhNO! ýhTHERE'S ýhA ýhYUM-YUM ýhIN ýhHERE!ýl")
+        # 0xD1E8 - 5CB058
+        # GRUNTY: LOOK AT GRUNTY SHE'S A BEAUTY,
+        # GRUNTY: I'M MUCH PRETTIER THAN TOOTY!
+        # KLUNGO: OH YOU ARE MISSSTRESSS!
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "D1E8")
+        intro_cutscene_text._replace_line("4C4F4F4B204154204752554E54592053", "NOW THAT I AM SO MUCH HOTTER,")
+        intro_cutscene_text._replace_line("49274D204D5543482050524554544945", "I CAN SELL MY CAULDRON WATER!")
+        intro_cutscene_text._replace_line("4F4820594F5520415245204D49535353", "YASSS MISSSTRESSS! SSSLAY!")
+        # 0xD230 - 5CB2C8
+        # MUMBO: GRUNTY NICE, COME BACK TO MUMBO'S SKULL, YES?
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "D230")
+        intro_cutscene_text._replace_line("4752554E5459204E4943452C20434F4D", "MOMMY? SORRY, MOMMY? SORRY, MOMMY?...")
+        # 0xD200 - 5CB100
+        # TOOTY: BANJO! YOUR SISTER WANTS A WORD WITH YOU.........
+        # TOOTY: NOW!
+        intro_cutscene_text = Speech_File_Class(self._file_dir, "D200")
+        intro_cutscene_text._replace_line("42414E4A4F2120594F55522053495354", "BANJO! YOUR SISTER HAS TWO WORDS FOR YOU...")
+        intro_cutscene_text._replace_line("4E4F5721", "GIT GUD!")
+
     ###############################
     ### BASE GAME PROGRESS TEXT ###
     ###############################

@@ -325,8 +325,8 @@ class Compressor():
     def _main(self):
         self.master.logger.debug("Setups")
         self._section_compression_main(setup_ids, 0x9780, 0x9C40, skip_these_setup_pointer_list) # Setups
-        self.master.logger.debug("Intro & Lair Cutscene")
-        self._section_compression_main(speech_file_ids, 0xD150, 0xD1C8) # Intro & Lair Cutscene
+        self.master.logger.debug("Intro & Lair & Game Over Cutscenes")
+        self._section_compression_main(speech_file_ids, 0xD150, 0xD230) # Intro & Lair & Game Over Cutscenes
         self.master.logger.debug("Bottles Intro")
         self._section_compression_main(speech_file_ids, 0xCE30, 0xCE30) # Bottles Intro
         self.master.logger.debug("Bottles Tutorial Confirm")

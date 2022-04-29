@@ -545,7 +545,7 @@ class Progression_GUI_Class():
                 raise
         try:
             self.pb_label.set_text("Mumbo Hide Easter Egg...")
-            misc_manip._edit_intro_cutscene_text_main()
+            misc_manip._edit_cutscenes_text_main()
             if(self.master.skip_furnace_fun_var.get() == 1):
                 misc_manip._gruntildas_lair_speeches_main()
         except Exception:
