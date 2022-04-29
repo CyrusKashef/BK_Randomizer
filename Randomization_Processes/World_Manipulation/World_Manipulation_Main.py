@@ -850,13 +850,11 @@ class World_Manipulation_Class():
                     print("Reshuffling Gruntilda's Lair Flagged Objects...")
                 increment += 1
         else:
-            print("Shuffling Flagged Object List")
             self._shuffle_list(self.flagged_object_info_list)
     
     def _shuffle_flagged_objects_within_game(self):
         '''Shuffles the flagged objects found within the game'''
         self.grandmaster.logger.debug("Shuffle Flag Objects Within Game")
-        print("Shuffle Flag Objects Within Game")
         for world_object in self.world_list:
             for setup_file in world_object._setup_list:
                 for flagged_object_info_list in setup_file.flagged_object_info_list:
@@ -870,7 +868,6 @@ class World_Manipulation_Class():
             if(self.grandmaster.flagged_object_softlock_var.get() == 1):
                 first_jiggy_index += 13
             while(jiggy_missing):
-                print("Shuffling Flagged Object List")
                 self._shuffle_list(self.flagged_object_info_list, increment=increment)
                 # The First Jiggy
                 if(self.flagged_object_info_list[first_jiggy_index][0]['Obj_ID2'] == 0x46):
@@ -887,7 +884,6 @@ class World_Manipulation_Class():
                     print("Reshuffling Flagged Objects...")
                 increment += 1
         else:
-            print("Shuffling Flagged Object List")
             self._shuffle_list(self.flagged_object_info_list)
     
     def _move_flagged_objects_within_world(self, world_object):
@@ -2685,18 +2681,13 @@ class World_Manipulation_Class():
     def _ccw_open_seasons_by_season(self):
         '''Removes the seasons and season doors in CCW by season'''
         self.grandmaster.logger.debug("Removing CCW Doors And Buttons")
-        print("Removing CCW Doors And Buttons")
         replacement_dict = {2: 0x02, 3: 0x68}
-        print("Removing For Lobby")
         for item_search_string in ccw_open_season_list["Click Clock Wood - Lobby"]:
             (self.click_clock_wood_lobby._setup_list[0])._edit_object(item_search_string, replacement_dict)
-        print("Removing For Spring")
         for item_search_string in ccw_open_season_list["Click Clock Wood - Spring"]:
             (self.click_clock_wood_spring._setup_list[0])._edit_object(item_search_string, replacement_dict)
-        print("Removing For Summer")
         for item_search_string in ccw_open_season_list["Click Clock Wood - Summer"]:
             (self.click_clock_wood_summer._setup_list[0])._edit_object(item_search_string, replacement_dict)
-        print("Removing For Fall")
         for item_search_string in ccw_open_season_list["Click Clock Wood - Fall"]:
             (self.click_clock_wood_fall._setup_list[0])._edit_object(item_search_string, replacement_dict)
 
@@ -2704,12 +2695,8 @@ class World_Manipulation_Class():
         '''Removes the seasons and season doors in CCW'''
         self.grandmaster.logger.debug("Removing CCW Doors And Buttons")
         replacement_dict = {2: 0x02, 3: 0x68}
-        print("Removing CCW Doors And Buttons")
         for season in ccw_open_season_list:
             for item_search_string in ccw_open_season_list[season]:
-                print(f"Removing {item_search_string}")
                 for setup_file in self.click_clock_wood._setup_list:
-                    print("Setup File...")
                     if(setup_file._edit_object(item_search_string, replacement_dict)):
-                        print(f"Found It!")
                         break

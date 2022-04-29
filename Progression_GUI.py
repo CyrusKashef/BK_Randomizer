@@ -513,21 +513,18 @@ class Progression_GUI_Class():
                 self.pb_label.set_text(f"Error Adjusting BK's Colors...\n{self._mumbo_error_message}")
                 raise
         customization_option = False
-        for custom_count, custom_name in enumerate(self.master.customizable_checkbox_dict):
-            if(self.master.customizable_checkbox_dict[custom_name].get() == 2):
+        for custom_count, custom_name in enumerate(self.master.map_config_checkbox_dict):
+            if(self.master.map_config_checkbox_dict[custom_name].get() == 2):
                 seed(a=(self.seed_val + custom_count))
-                self.master.customizable_checkbox_dict[custom_name].set(randint(0, 1))
-            if(self.master.customizable_checkbox_dict[custom_name].get() == 1):
+                self.master.map_config_checkbox_dict[custom_name].set(randint(0, 1))
+            if(self.master.map_config_checkbox_dict[custom_name].get() == 1):
                 customization_option = True
-        if((self.master.short_sounds_var.get() == 1) or (self.master.jingles_var.get() == 1) or (self.master.music_var.get() == 1)):
-            try:
-                self.pb_label.set_text("Hut Music Best Music...")
-                misc_manip._shuffle_music(self.seed_val, self.master.cwd, self.rom_path,
-                                          self.master.short_sounds_var.get(), self.master.jingles_var.get(), self.master.music_var.get(),
-                                          self.master.beta_sounds_var.get(), self.master.jarring_sounds_var.get())
-            except Exception:
-                self.pb_label.set_text(f"Error Shuffling Sounds/Jingles/Music...\n{self._mumbo_error_message}")
-                raise
+        try:
+            self.pb_label.set_text("Hut Music Best Music...")
+            misc_manip._shuffle_music(self.seed_val, self.master.cwd, self.rom_path)
+        except Exception:
+            self.pb_label.set_text(f"Error Shuffling Sounds/Jingles/Music...\n{self._mumbo_error_message}")
+            raise
         if(customization_option):
             try:
                 self.pb_label.set_text("Banjo Must Stand Still Or Spell Go All Funny...\n(Takes Longer The More Options You Selected)")

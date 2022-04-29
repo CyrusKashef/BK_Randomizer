@@ -164,8 +164,8 @@ tool_tips_dict = {
                  "'Transfer Colors' button to try to transfer the\n" +
                  "RGB32 body part colors over to the RGB16 color parts.",
         },
-    "CUSTOMIZABLE": {
-        "MODELS":
+    "MAP_CONFIG": {
+        "FRAME":
             "Every checkbox with an (A) means it applies aethetic changes\n" +
             "like model or animation replacements. Every checkbox with (P)\n" +
             "changes the death property of an object (like an enemy).",
@@ -602,30 +602,30 @@ class User_GUI_Class():
     def _all_custom_aesthetics(self):
         '''PyDoc'''
         self.logger.info("Select All Custom Aesthetic")
-        for custom_name in self.customizable_checkbox_dict:
+        for custom_name in self.map_config_checkbox_dict:
             if(custom_name.startswith("(A)")):
-                self.customizable_checkbox_dict[custom_name].set(1)
+                self.map_config_checkbox_dict[custom_name].set(1)
     
     def _no_customization(self):
         '''PyDoc'''
         self.logger.info("Removing Customizations")
-        for custom_name in self.customizable_checkbox_dict:
-            self.customizable_checkbox_dict[custom_name].set(0)
+        for custom_name in self.map_config_checkbox_dict:
+            self.map_config_checkbox_dict[custom_name].set(0)
     
     def _random_customization(self):
         '''PyDoc'''
         self.logger.info("Random Customization")
         if(self.hiding_customization):
             self.logger.info("Hiding Customization")
-            for custom_name in self.customizable_checkbox_dict:
-                self.customizable_checkbox_dict[custom_name].set(2)
+            for custom_name in self.map_config_checkbox_dict:
+                self.map_config_checkbox_dict[custom_name].set(2)
             self.random_customization_button.configure(text='Random By Seed\nAnd Hide Options')
             for checkbutton_count, checkbutton in enumerate(self.customization_checkbuttons):
                 checkbutton.grid(row=(checkbutton_count // 4) + 1, column=(checkbutton_count % 4), padx=self.padx, pady=self.pady, sticky='w')
             self.hiding_customization = False
         else:
-            for custom_name in self.customizable_checkbox_dict:
-                self.customizable_checkbox_dict[custom_name].set(randint(0, 1))
+            for custom_name in self.map_config_checkbox_dict:
+                self.map_config_checkbox_dict[custom_name].set(randint(0, 1))
             self.logger.info("Re-Adding Customization")
             self.random_customization_button.configure(text='Show Customize\nCheckboxes')
             for checkbutton in self.customization_checkbuttons:
@@ -662,7 +662,7 @@ class User_GUI_Class():
     def _display_map_file_description(self, *args):
         '''Pulls the description from a Models, Animations, Properties json file'''
         self.logger.info("Display Models, Animations, & Properties File Description")
-        filename = self.customizable_var.get()
+        filename = self.map_config_var.get()
         file_path = f"{self.cwd}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/{filename}.json"
         if(filename == "None"):
             map_file_desc = "No Model/Animation/Properties file selected.\nSelect a preset to check its description!"
@@ -673,7 +673,7 @@ class User_GUI_Class():
                 property_dict = read_json(file_path)
             except Exception:
                 Error_GUI(f"Error: Could not open JSON file.\nPlease check for proper formatting!")
-                self.customizable_var.set("None")
+                self.map_config_var.set("None")
                 map_file_desc = "No Model/Animation/Properties file selected.\nSelect a preset to check its description!"
             if(("Description" in property_dict) and (property_dict["Description"])):
                 map_file_desc = ""
@@ -686,7 +686,7 @@ class User_GUI_Class():
                 map_file_desc = "This preset doesn't have a description?"
         else:
             map_file_desc = "Select a preset to check its description!"
-        self.customizable_file_description.config(text=map_file_desc)
+        self.map_config_file_description.config(text=map_file_desc)
     
     def _lock_final_puzzle_value(self, *args):
         self.logger.info("Lock Final Puzzle Value")
@@ -727,13 +727,15 @@ class User_GUI_Class():
     def _convert_rgb32_to_rgb16(self, _32_bit_color):
         if(len(_32_bit_color) == 0):
             return ""
-        if(len(_32_bit_color) == 6):
+        elif(_32_bit_color == "?"):
+            return None
+        elif(len(_32_bit_color) == 6):
             alpha = 255
         elif(len(_32_bit_color) == 8):
             alpha = int(_32_bit_color[6:8], 16)
         else:
             Error_GUI(f"Error: 32-bit color is not length 6 or 8.\nPlease check for proper formatting.\nex: 'F5D9E2' or 'F5D9E2FF'")
-            return
+            return None
         red = int(_32_bit_color[0:2], 16)
         green = int(_32_bit_color[2:4], 16)
         blue = int(_32_bit_color[4:6], 16)
@@ -745,17 +747,28 @@ class User_GUI_Class():
         return leading_zeros(_16_bit_color, 4)
 
     def _transfer_rgb32_to_rgb16(self):
-        self.banjo_feet_var.set(self._convert_rgb32_to_rgb16(self.banjo_skin_var.get()))
-        self.kazooie_wing_primary_var.set(self._convert_rgb32_to_rgb16(self.kazooie_primary_var.get()))
-        self.kazooie_wing_secondary_var.set(self._convert_rgb32_to_rgb16(self.kazooie_secondary_var.get()))
-        self.shorts_texture_var.set(self._convert_rgb32_to_rgb16(self.shorts_vertex_var.get()))
+        color = self._convert_rgb32_to_rgb16(self.banjo_skin_var.get())
+        if(color):
+            self.banjo_feet_var.set(color)
+        color = self._convert_rgb32_to_rgb16(self.kazooie_primary_var.get())
+        if(color):
+            self.kazooie_wing_primary_var.set(color)
+        color = self._convert_rgb32_to_rgb16(self.kazooie_secondary_var.get())
+        if(color):
+            self.kazooie_wing_secondary_var.set(color)
+        color = self._convert_rgb32_to_rgb16(self.shorts_vertex_var.get())
+        if(color):
+            self.shorts_texture_var.set(color)
 
     def _save_bk_colors(self):
         if(self.bk_model_var.get() == "Default"):
             Error_GUI("You can't overwrite the OG colors!\nThey are classic!")
         else:
             new_custom_name = self.custom_bk_model_name_var.get()
-            warning_gui = WARNING_GUI(f"Are you sure you want to save this preset?\n{new_custom_name}")
+            if(new_custom_name in self.bk_model_json):
+                warning_gui = WARNING_GUI(f"Are you sure you want to overwrite this preset?\n{new_custom_name}")
+            else:
+                warning_gui = WARNING_GUI(f"Are you sure you want to save this new preset?\n{new_custom_name}")
             confirmation = warning_gui.main()
             del warning_gui
             if(confirmation):
@@ -797,6 +810,40 @@ class User_GUI_Class():
                 del self.bk_model_json[self.bk_model_var.get()]
                 self.bk_model_var.set("Default")
                 dump_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json", self.bk_model_json)
+    
+    def _select_all_short_sounds(self):
+        for short_sound_type in self.short_sounds_dict:
+            for short_sound_name in self.short_sounds_dict[short_sound_type]:
+                (self.short_sounds_dict[short_sound_type][short_sound_name]).set(1)
+
+    def _select_non_jarring_short_sounds(self):
+        for short_sound_name in self.short_sounds_dict["Normal"]:
+            (self.short_sounds_dict["Normal"][short_sound_name]).set(1)
+        for short_sound_name in self.short_sounds_dict["Jarring"]:
+            (self.short_sounds_dict["Jarring"][short_sound_name]).set(0)
+
+    def _deselect_all_short_sounds(self):
+        for short_sound_type in self.short_sounds_dict:
+            for short_sound_name in self.short_sounds_dict[short_sound_type]:
+                (self.short_sounds_dict[short_sound_type][short_sound_name]).set(0)
+
+    def _select_all_jingles(self):
+        for short_sound_name in self.jingles_dict:
+            (self.jingles_dict[short_sound_name]).set(1)
+
+    def _deselect_all_jingles(self):
+        for short_sound_name in self.jingles_dict:
+            (self.jingles_dict[short_sound_name]).set(0)
+
+    def _select_all_music(self):
+        for short_sound_type in self.music_dict:
+            for short_sound_name in self.music_dict[short_sound_type]:
+                (self.music_dict[short_sound_type][short_sound_name]).set(1)
+
+    def _deselect_all_music(self):
+        for short_sound_type in self.music_dict:
+            for short_sound_name in self.music_dict[short_sound_type]:
+                (self.music_dict[short_sound_type][short_sound_name]).set(0)
     
     ################################
     ### RANDOMIZER SETTINGS CODE ###
@@ -890,8 +937,8 @@ class User_GUI_Class():
             self._add_randomizer_settings_to_code(self.enemy_checkbox_dict[enemy_name].get())
         ### Aesthetic Settings ###
         # Models, Animations, Properties
-        for custom_name in sorted(self.customizable_checkbox_dict):
-            self._add_randomizer_settings_to_code(self.customizable_checkbox_dict[custom_name].get())
+        for custom_name in sorted(self.map_config_checkbox_dict):
+            self._add_randomizer_settings_to_code(self.map_config_checkbox_dict[custom_name].get())
         ### World Specific ###
         # Gruntilda's Lair
         self._add_randomizer_settings_to_code(self.skip_furnace_fun_var.get())
@@ -1028,8 +1075,8 @@ class User_GUI_Class():
             for enemy_name in sorted(self.enemy_checkbox_dict):
                 self.enemy_checkbox_dict[enemy_name].set(self._get_randomizer_setting())
             ### Aesthetic Settings ###
-            for custom_name in sorted(self.customizable_checkbox_dict):
-                self.customizable_checkbox_dict[custom_name].set(self._get_randomizer_setting())
+            for custom_name in sorted(self.map_config_checkbox_dict):
+                self.map_config_checkbox_dict[custom_name].set(self._get_randomizer_setting())
             ### World Specific ###
             # Gruntilda's Lair
             self.skip_furnace_fun_var.set(self._get_randomizer_setting())
@@ -1137,14 +1184,17 @@ class User_GUI_Class():
         self.shorts_vertex_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Vertex"])
         self.shorts_texture_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Texture"])
         # Models, Animations, Properties
-        for custom_name in self.customizable_checkbox_dict:
-            self.customizable_checkbox_dict[custom_name].set(0)
+        for custom_name in self.map_config_checkbox_dict:
+            self.map_config_checkbox_dict[custom_name].set(0)
         # Sounds/Music
-        self.short_sounds_var.set(0)
-        self.jingles_var.set(0)
-        self.music_var.set(0)
-        self.beta_sounds_var.set(0)
-        self.jarring_sounds_var.set(0)
+        for short_sound_type in self.short_sounds_dict:
+            for short_sound_name in self.short_sounds_dict[short_sound_type]:
+                (self.short_sounds_dict[short_sound_type][short_sound_name]).set(0)
+        for jingle_name in self.jingles_dict:
+            (self.jingles_dict[jingle_name]).set(0)
+        for music_type in self.music_dict:
+            for music_name in self.music_dict[music_type]:
+                (self.music_dict[music_type][music_name]).set(0)
         ### Misc Settings ###
         self.remove_files_var.set(1)
         self.tool_tips_var.set(1)
@@ -1465,39 +1515,36 @@ class User_GUI_Class():
         except KeyError:
             setting_not_found.append("Shorts_Texture")
             self.shorts_texture_var.set(self.bk_model_json[self.bk_model_var.get()]["Shorts_Texture"])
-        # Enemy Models
-        for custom_name in self.customizable_checkbox_dict:
+        # MAP Config
+        for custom_name in self.map_config_checkbox_dict:
             try:
-                self.customizable_checkbox_dict[custom_name].set(json_data[f"Include {custom_name}"])
+                self.map_config_checkbox_dict[custom_name].set(json_data[f"Include {custom_name}"])
             except KeyError:
                 setting_not_found.append(f"Include {custom_name}")
-                self.customizable_checkbox_dict[custom_name].set(0)
-        # Sounds/Music
-        try:
-            self.short_sounds_var.set(json_data["Short_Sound_Option"])
-        except KeyError:
-            setting_not_found.append("Short_Sound_Option")
-            self.short_sounds_var.set(0)
-        try:
-            self.jingles_var.set(json_data["Jingle_Option"])
-        except KeyError:
-            setting_not_found.append("Jingle_Option")
-            self.jingles_var.set(0)
-        try:
-            self.music_var.set(json_data["Music_Option"])
-        except KeyError:
-            setting_not_found.append("Music_Option")
-            self.music_var.set(0)
-        try:
-            self.beta_sounds_var.set(json_data["Beta_Sounds"])
-        except KeyError:
-            setting_not_found.append("Beta_Sounds")
-            self.beta_sounds_var.set(0)
-        try:
-            self.jarring_sounds_var.set(json_data["Jarring_Sounds"])
-        except KeyError:
-            setting_not_found.append("Jarring_Sounds")
-            self.jarring_sounds_var.set(0)
+                self.map_config_checkbox_dict[custom_name].set(0)
+        # Short Sounds
+        for short_sound_type in self.short_sounds_dict:
+            for short_sound_name in self.short_sounds_dict[short_sound_type]:
+                try:
+                    (self.short_sounds_dict[short_sound_type][short_sound_name]).set(json_data[f"Include {short_sound_name}"])
+                except KeyError:
+                    setting_not_found.append(f"Include {short_sound_name}")
+                    (self.short_sounds_dict[short_sound_type][short_sound_name]).set(0)
+        # Jingles
+        for jingle_name in self.jingles_dict:
+            try:
+                (self.jingles_dict[jingle_name]).set(json_data[f"Include {jingle_name}"])
+            except KeyError:
+                setting_not_found.append(f"Include {jingle_name}")
+                (self.jingles_dict[jingle_name]).set(0)
+        # Music
+        for music_type in self.music_dict:
+            for music_name in self.music_dict[music_type]:
+                try:
+                    (self.music_dict[music_type][music_name]).set(json_data[f"Include {music_name}"])
+                except KeyError:
+                    setting_not_found.append(f"Include {music_name}")
+                    (self.music_dict[music_type][music_name]).set(0)
         ### Misc Settings ###
         try:
             self.remove_files_var.set(json_data["Remove_Files"])
@@ -1701,14 +1748,17 @@ class User_GUI_Class():
         # BK Model
         self._random_bk_model_colors()
         # Enemy Models
-        for custom_name in self.customizable_checkbox_dict:
-            self.customizable_checkbox_dict[custom_name].set(randint(0, 1))
+        for custom_name in self.map_config_checkbox_dict:
+            self.map_config_checkbox_dict[custom_name].set(randint(0, 1))
         # Sounds/Music
-        self.short_sounds_var.set(randint(0, 1))
-        self.jingles_var.set(randint(0, 1))
-        self.music_var.set(randint(0, 1))
-        self.beta_sounds_var.set(randint(0, 1))
-        self.jarring_sounds_var.set(randint(0, 1))
+        for short_sound_type in self.short_sounds_dict:
+            for short_sound_name in self.short_sounds_dict[short_sound_type]:
+                (self.short_sounds_dict[short_sound_type][short_sound_name]).set(randint(0, 1))
+        for jingle_name in self.jingles_dict:
+            (self.jingles_dict[jingle_name]).set(randint(0, 1))
+        for music_type in self.music_dict:
+            for music_name in self.music_dict[music_type]:
+                (self.music_dict[music_type][music_name]).set(randint(0, 1))
         ### World Specific ###
         # Gruntilda's Lair
         self.skip_furnace_fun_var.set(randint(0, 1))
@@ -1812,12 +1862,6 @@ class User_GUI_Class():
             "Shorts_Vertex": self.shorts_vertex_var.get(),
             "Shorts_Texture": self.shorts_texture_var.get(),
             # Enemy Models
-            # Sounds/Music
-            "Short_Sound_Option": self.short_sounds_var.get(),
-            "Jingle_Option": self.jingles_var.get(),
-            "Music_Option": self.music_var.get(),
-            "Beta_Sounds": self.beta_sounds_var.get(),
-            "Jarring_Sounds": self.jarring_sounds_var.get(),
             ### Misc Settings ###
             "Remove_Files": self.remove_files_var.get(),
             "Tool_Tips": self.tool_tips_var.get(),
@@ -1858,9 +1902,20 @@ class User_GUI_Class():
         # Enemies
         for enemy_name in master_enemy_dict:
             current_config[f"Include {enemy_name}"] = self.enemy_checkbox_dict[enemy_name].get()
-        # Enemies
-        for custom_name in self.customizable_checkbox_dict:
-            current_config[f"Include {custom_name}"] = self.customizable_checkbox_dict[custom_name].get()
+        # MAP Config
+        for custom_name in self.map_config_checkbox_dict:
+            current_config[f"Include {custom_name}"] = self.map_config_checkbox_dict[custom_name].get()
+        # Short Sounds
+        for short_sound_type in self.short_sounds_dict:
+            for short_sound_name in self.short_sounds_dict[short_sound_type]:
+                current_config[f"Include {short_sound_name}"] = (self.short_sounds_dict[short_sound_type][short_sound_name]).get()
+        # Jingles
+        for jingle_name in self.jingles_dict:
+            current_config[f"Include {jingle_name}"] = (self.jingles_dict[jingle_name]).get()
+        # Music
+        for music_type in self.music_dict:
+            for music_name in self.music_dict[music_type]:
+                current_config[f"Include {music_name}"] = (self.music_dict[music_type][music_name]).get()
         if(button_press):
             try:
                 json_file = tkinter.filedialog.asksaveasfile(filetypes=(("Json Files","*.json"),("all files","*.*")), defaultextension=json)
@@ -2349,12 +2404,12 @@ class User_GUI_Class():
             enemy_checkbutton = tk.Checkbutton(self.enemy_checklist_frame, text=enemy_name, variable=self.enemy_checkbox_dict[enemy_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=13, anchor="w")
             enemy_checkbutton.grid(row=(enemy_count // 4) + 1, column=(enemy_count % 4), padx=self.padx, pady=self.pady, sticky='w')
         ####################
-        ### PERSONAL TAB ###
+        ### BK MODEL TAB ###
         ####################
-        self._personal_tab = ttk.Frame(self._tab_control)
-        self._tab_control.add(self._personal_tab, text="Personal")
+        self._bk_model_tab = ttk.Frame(self._tab_control)
+        self._tab_control.add(self._bk_model_tab, text="BK Model")
         # BK Model
-        self.bk_model_frame = tk.LabelFrame(self._personal_tab, text="Banjo-Kazooie Model Color", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.bk_model_frame = tk.LabelFrame(self._bk_model_tab, text="Banjo-Kazooie Model Color", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.bk_model_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
         self.bk_model_ttp_canvas = tk.Label(self.bk_model_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.bk_model_ttp_canvas.grid(row=0, rowspan=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
@@ -2374,12 +2429,6 @@ class User_GUI_Class():
         self.bk_model_dropdown.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.random_bk_model_preset_button = tk.Button(self.bk_model_frame, text='Random Preset', command=self._random_bk_model_preset, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
         self.random_bk_model_preset_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='w')
-        self.custom_bk_model_name_var = tk.StringVar(self.bk_model_frame)
-        self.custom_bk_model_name_var.set(f"Custom Preset {self.custom_color_count}")
-        self.custom_bk_model_name_entry = tk.Entry(self.bk_model_frame, textvariable=self.custom_bk_model_name_var, width=20)
-        self.custom_bk_model_name_entry.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        self.save_bk_model_preset_button = tk.Button(self.bk_model_frame, text='Save As Preset', command=self._save_bk_colors, foreground=self.white, background=self.blue, font=(self.font_type, self.small_font_size))
-        self.save_bk_model_preset_button.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.delete_bk_model_preset_button = tk.Button(self.bk_model_frame, text='Delete Preset', command=self._delete_bk_colors, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
         self.delete_bk_model_preset_button.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')
         if(self.bk_model_var.get() in ["Seed Determined Preset", "Seed Determined Colors"]):
@@ -2454,69 +2503,153 @@ class User_GUI_Class():
         self.wading_boots_entry.grid(row=10, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.transfer_32_to_16_button = tk.Button(self.bk_model_frame, text='Transfer RGB32\nTo RGB16 Parts', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._transfer_rgb32_to_rgb16)
         self.transfer_32_to_16_button.grid(row=9, rowspan=2, column=3, columnspan=2, padx=self.padx, pady=self.pady)
+        self.bk_model_frame.grid_rowconfigure(11, minsize=20)
+        self.custom_bk_model_name_label = tk.Label(self.bk_model_frame, text="Custom Colors Name:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size), anchor="w", justify="left")
+        self.custom_bk_model_name_label.grid(row=12, column=2, columnspan=2, padx=self.padx, pady=self.pady)
+        self.custom_bk_model_name_var = tk.StringVar(self.bk_model_frame)
+        self.custom_bk_model_name_var.set(f"Custom Preset {self.custom_color_count}")
+        self.custom_bk_model_name_entry = tk.Entry(self.bk_model_frame, textvariable=self.custom_bk_model_name_var, width=20)
+        self.custom_bk_model_name_entry.grid(row=13, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.save_bk_model_preset_button = tk.Button(self.bk_model_frame, text='Save As Preset', command=self._save_bk_colors, foreground=self.white, background=self.blue, font=(self.font_type, self.small_font_size))
+        self.save_bk_model_preset_button.grid(row=13, column=3, padx=self.padx, pady=self.pady, sticky='w')
         self.bk_model_var.trace('w', self._update_bk_model)
-        # Sounds/Music
-        self.sound_music_frame = tk.LabelFrame(self._personal_tab, text="Short Sounds, Fanfare/Jingles, & Looped Music", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.sound_music_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
-        self.short_sounds_ttp_canvas = tk.Label(self.sound_music_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.short_sounds_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.short_sounds_checkbutton_ttp = self.CreateToolTip(self.short_sounds_ttp_canvas, self, tool_tips_dict["SOUNDS_MUSIC"]["FULL_DESCRIPTION"])
-        self.short_sounds_var = tk.IntVar()
-        self.short_sounds_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Shuffle Sounds", variable=self.short_sounds_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.short_sounds_checkbutton.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        ##################
+        ### SOUNDS TAB ###
+        ##################
+        self._sounds_tab = ttk.Frame(self._tab_control)
+        self._tab_control.add(self._sounds_tab, text="Sounds")
+        self._sounds_tab_control = ttk.Notebook(self._sounds_tab, width=self.app_window.winfo_width())
+        music_dict = read_json(f"{os.getcwd()}/Randomization_Processes/Misc_Manipulation/Music_Data/BK_Sounds.json")
+        # Short Sounds
+        self._short_sounds_tab = ttk.Frame(self._sounds_tab_control, width=10)
+        self._sounds_tab_control.add(self._short_sounds_tab, text="Short Sounds")
+        self.short_sounds_frame = tk.LabelFrame(self._short_sounds_tab, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.short_sounds_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
+        self.short_sounds_frame["borderwidth"] = 0
+        self.short_sounds_frame["highlightthickness"] = 0
+        self.short_sounds_label = tk.Label(self.short_sounds_frame, text="Short sounds are any one second noises, like collecting items.\nJarring sounds are harsher sounding sounds.", foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.short_sounds_label.grid(row=0, column=0, columnspan=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.short_sounds_select_all_button = tk.Button(self.short_sounds_frame, text='Select All\nShort Sounds', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._select_all_short_sounds)
+        self.short_sounds_select_all_button.grid(row=1, column=0, padx=self.padx)
+        self.short_sounds_select_non_jarring_button = tk.Button(self.short_sounds_frame, text='Select All\nNon-Jarring\nShort Sounds', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._select_non_jarring_short_sounds)
+        self.short_sounds_select_non_jarring_button.grid(row=1, column=1, padx=self.padx)
+        self.short_sounds_deselect_all_button = tk.Button(self.short_sounds_frame, text='Deselect All\nShort Sounds', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._deselect_all_short_sounds)
+        self.short_sounds_deselect_all_button.grid(row=1, column=2, padx=self.padx)
+        self.short_sounds_dict = {"Normal": {}, "Jarring": {}}
+        for short_sound_pointer in sorted(music_dict["Short"]):
+            short_sound_type = music_dict["Short"][short_sound_pointer].split("|", 1)[0]
+            short_sound_name = music_dict["Short"][short_sound_pointer].split("|", 1)[1]
+            if(short_sound_type not in self.short_sounds_dict):
+                self.short_sounds_dict[short_sound_type] = {}
+            self.short_sounds_dict[short_sound_type][short_sound_name] = tk.IntVar()
+        self.music_type_tabs = {}
+        self._short_sounds_tab_control = ttk.Notebook(self._short_sounds_tab, width=self.app_window.winfo_width())
+        for short_sound_type in self.short_sounds_dict:
+            self.music_type_tabs[short_sound_type] = {}
+            self.music_type_tabs[short_sound_type]["Tab"] = ttk.Frame(self._short_sounds_tab)
+            self._short_sounds_tab_control.add(self.music_type_tabs[short_sound_type]["Tab"], text=short_sound_type)
+            self.music_type_tabs[short_sound_type]["Frame"] = tk.LabelFrame(self.music_type_tabs[short_sound_type]["Tab"], foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+            (self.music_type_tabs[short_sound_type]["Frame"]).pack(expand=tk.TRUE, fill=tk.BOTH)
+            (self.music_type_tabs[short_sound_type]["Frame"])["borderwidth"] = 0
+            (self.music_type_tabs[short_sound_type]["Frame"])["highlightthickness"] = 0
+            for short_sound_count, short_sound_name in enumerate(sorted(self.short_sounds_dict[short_sound_type])):
+                short_sound_checkbutton = tk.Checkbutton(self.music_type_tabs[short_sound_type]["Frame"], text=short_sound_name, variable=self.short_sounds_dict[short_sound_type][short_sound_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=20, anchor="w")
+                short_sound_checkbutton.grid(row=(short_sound_count // 3) + 1, column=(short_sound_count % 3), sticky='w')
         # Jingles
-        self.jingles_var = tk.IntVar()
-        self.jingle_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Shuffle Jingles", variable=self.jingles_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.jingle_checkbutton.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self._jingles_tab = ttk.Frame(self._sounds_tab_control)
+        self._sounds_tab_control.add(self._jingles_tab, text="Jingles/Fanfare")
+        self.jingles_frame = tk.LabelFrame(self._jingles_tab, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.jingles_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
+        self.jingles_frame["borderwidth"] = 0
+        self.jingles_frame["highlightthickness"] = 0
+        self.jingles_label = tk.Label(self.jingles_frame, text="Jingles/Fanfare are any several second songs, like collecting a Jiggy.", foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.jingles_label.grid(row=0, column=0, columnspan=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.jingles_select_all_button = tk.Button(self.jingles_frame, text='Select All\nJingles/Fanfare', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._select_all_jingles)
+        self.jingles_select_all_button.grid(row=1, column=0, padx=self.padx)
+        self.jingles_deselect_all_button = tk.Button(self.jingles_frame, text='Deselect All\nJingles/Fanfare', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._deselect_all_jingles)
+        self.jingles_deselect_all_button.grid(row=1, column=1, padx=self.padx)
+        self.jingles_dict = {}
+        for jingle_count, jingle_pointer in enumerate(sorted(music_dict["Jingle"])):
+            jingle_name = music_dict["Jingle"][jingle_pointer]
+            self.jingles_dict[jingle_name] = tk.IntVar()
+            jingle_checkbutton = tk.Checkbutton(self.jingles_frame, text=jingle_name, variable=self.jingles_dict[jingle_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=20, anchor="w")
+            jingle_checkbutton.grid(row=(jingle_count // 3) + 2, column=(jingle_count % 3), padx=self.padx, pady=self.pady, sticky='w')
         # Music
-        self.music_var = tk.IntVar()
-        self.music_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Shuffle Music", variable=self.music_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.music_checkbutton.grid(row=0, column=5, padx=self.padx, pady=self.pady, sticky='w')
-        # Beta Sounds
-        self.beta_sounds_var = tk.IntVar()
-        self.beta_sounds_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Include Beta Sounds", variable=self.beta_sounds_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.beta_sounds_checkbutton.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
-        # Jarring Sounds
-        self.jarring_sounds_var = tk.IntVar()
-        self.jarring_sounds_checkbutton = tk.Checkbutton(self.sound_music_frame, text="Include Jarring Sounds", variable=self.jarring_sounds_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.jarring_sounds_checkbutton.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')
+        self._music_tab = ttk.Frame(self._sounds_tab_control)
+        self._sounds_tab_control.add(self._music_tab, text="Music")
+        self.music_frame = tk.LabelFrame(self._music_tab, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.music_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
+        self.music_frame["borderwidth"] = 0
+        self.music_frame["highlightthickness"] = 0
+        self.music_label = tk.Label(self.music_frame, text="Music are songs that go on for a while, like level songs.", foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.music_label.grid(row=0, column=0, columnspan=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.music_select_all_button = tk.Button(self.music_frame, text='Select All\nMusic', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._select_all_music)
+        self.music_select_all_button.grid(row=1, column=0, padx=self.padx)
+        self.music_deselect_all_button = tk.Button(self.music_frame, text='Deselect All\nMusic', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=self._deselect_all_music)
+        self.music_deselect_all_button.grid(row=1, column=1, padx=self.padx)
+        self.music_dict = {"Main Area": {}, "Side Area": {}, "Special": {}, "Misc": {}}
+        for music_pointer in sorted(music_dict["Music"]):
+            music_type = music_dict["Music"][music_pointer].split("|", 1)[0]
+            music_name = music_dict["Music"][music_pointer].split("|", 1)[1]
+            if(music_type not in self.music_dict):
+                self.music_dict[music_type] = {}
+            self.music_dict[music_type][music_name] = tk.IntVar()
+        self.music_type_tabs = {}
+        self._music_tab_control = ttk.Notebook(self._music_tab, width=self.app_window.winfo_width())
+        for music_type in self.music_dict:
+            self.music_type_tabs[music_type] = {}
+            self.music_type_tabs[music_type]["Tab"] = ttk.Frame(self._music_tab)
+            self._music_tab_control.add(self.music_type_tabs[music_type]["Tab"], text=music_type)
+            self.music_type_tabs[music_type]["Frame"] = tk.LabelFrame(self.music_type_tabs[music_type]["Tab"], foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+            (self.music_type_tabs[music_type]["Frame"]).pack(expand=tk.TRUE, fill=tk.BOTH)
+            (self.music_type_tabs[music_type]["Frame"])["borderwidth"] = 0
+            (self.music_type_tabs[music_type]["Frame"])["highlightthickness"] = 0
+            for music_count, music_name in enumerate(sorted(self.music_dict[music_type])):
+                music_checkbutton = tk.Checkbutton(self.music_type_tabs[music_type]["Frame"], text=music_name, variable=self.music_dict[music_type][music_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=20, anchor="w")
+                music_checkbutton.grid(row=(music_count // 3) + 1, column=(music_count % 3), sticky='w')
+        #########################################
+        ### END OF WORLD SPECIFIC TAB CONTROL ###
+        #########################################
+        self._short_sounds_tab_control.pack(expand=1, fill="both")
+        self._music_tab_control.pack(expand=1, fill="both")
+        self._sounds_tab_control.pack(expand=1, fill="both")
         ###########################
         ### CUSTOM SETTINGS TAB ###
         ###########################
         self._custom_settings_tab = ttk.Frame(self._tab_control)
         self._tab_control.add(self._custom_settings_tab, text="MAP Config")
-        self.customizable_frame = tk.LabelFrame(self._custom_settings_tab, text="Models, Animations, & Properties", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
-        self.customizable_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
-        self.customizable_frame["borderwidth"] = 0
-        self.customizable_frame["highlightthickness"] = 0
-        customizable_disclaimer_text = (
+        self.map_config_frame = tk.LabelFrame(self._custom_settings_tab, text="Models, Animations, & Properties", foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
+        self.map_config_frame.pack(expand=tk.TRUE, fill=tk.BOTH)
+        self.map_config_frame["borderwidth"] = 0
+        self.map_config_frame["highlightthickness"] = 0
+        map_config_disclaimer_text = (
             "    WARNING:\n" +
             "        The Models/Animations/Properties configurations have been tested\n"+
             "        mainly on Emulator, but barely Everdrive. If playing on Everdrive,\n" +
             "        enable at own risk."
             )
-        self.customizable_disclaimer_label = tk.Label(self.customizable_frame, text=customizable_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
-        self.customizable_disclaimer_label.grid(row=0, column=0, columnspan=4, padx=self.padx, pady=self.pady, sticky='w')
-        self.customizable_ttp_canvas = tk.Label(self.customizable_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.customizable_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.customizable_frame_ttp = self.CreateToolTip(self.customizable_ttp_canvas, self, tool_tips_dict["CUSTOMIZABLE"]["MODELS"])
-        self.all_aesthetics_button = tk.Button(self.customizable_frame, text='Select All\nCustom Aesthetic', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._all_custom_aesthetics()))
+        self.map_config_disclaimer_label = tk.Label(self.map_config_frame, text=map_config_disclaimer_text, foreground=self.black, background=curr_background_color, font=(self.font_type, 12), anchor="w", justify="left")
+        self.map_config_disclaimer_label.grid(row=0, column=0, columnspan=4, padx=self.padx, pady=self.pady, sticky='w')
+        self.map_config_ttp_canvas = tk.Label(self.map_config_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.map_config_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.map_config_frame_ttp = self.CreateToolTip(self.map_config_ttp_canvas, self, tool_tips_dict["MAP_CONFIG"]["FRAME"])
+        self.all_aesthetics_button = tk.Button(self.map_config_frame, text='Select All\nCustom Aesthetic', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._all_custom_aesthetics()))
         self.all_aesthetics_button.grid(row=1, column=1, padx=self.padx, pady=self.pady)
-        self.no_customization_button = tk.Button(self.customizable_frame, text='Uncheck All\nCustom Options', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._no_customization()))
+        self.no_customization_button = tk.Button(self.map_config_frame, text='Uncheck All\nCustom Options', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._no_customization()))
         self.no_customization_button.grid(row=1, column=2, padx=self.padx, pady=self.pady)
-        self.random_customization_button = tk.Button(self.customizable_frame, text='Random Customs\nAnd Hide Options', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._random_customization()), width=15)
+        self.random_customization_button = tk.Button(self.map_config_frame, text='Random Customs\nAnd Hide Options', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._random_customization()), width=15)
         self.random_customization_button.grid(row=1, column=3, padx=self.padx, pady=self.pady)
-        self.customizable_checklist_frame = tk.LabelFrame(self.customizable_frame, text="(A) = Aesthetical Only; (P) = Contains Property Changes", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.customizable_checklist_frame.grid(row=2, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
-        self.customizable_checklist_frame["borderwidth"] = 0
-        self.customizable_checklist_frame["highlightthickness"] = 0
-        self.customizable_checkbox_dict = {}
+        self.map_config_checklist_frame = tk.LabelFrame(self.map_config_frame, text="(A) = Aesthetical Only; (P) = Contains Property Changes", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.map_config_checklist_frame.grid(row=2, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
+        self.map_config_checklist_frame["borderwidth"] = 0
+        self.map_config_checklist_frame["highlightthickness"] = 0
+        self.map_config_checkbox_dict = {}
         self.hiding_customization = False
         self.customization_checkbuttons = []
         for json_count, json_name in enumerate(sorted(os.listdir(f"{self.cwd}/Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/JSON_Files/"))):
             display_name = json_name.split(".json")[0]
-            self.customizable_checkbox_dict[display_name] = tk.IntVar()
-            custom_checkbutton = tk.Checkbutton(self.customizable_checklist_frame, text=display_name, variable=self.customizable_checkbox_dict[display_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=13, anchor="w")
+            self.map_config_checkbox_dict[display_name] = tk.IntVar()
+            custom_checkbutton = tk.Checkbutton(self.map_config_checklist_frame, text=display_name, variable=self.map_config_checkbox_dict[display_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=13, anchor="w")
             custom_checkbutton.grid(row=(json_count // 4) + 2, column=(json_count % 4), padx=self.padx, pady=self.pady, sticky='w')
             self.customization_checkbuttons.append(custom_checkbutton)
         ##########################

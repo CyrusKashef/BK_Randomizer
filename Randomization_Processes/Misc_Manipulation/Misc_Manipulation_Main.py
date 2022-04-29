@@ -9,6 +9,7 @@ Created on Oct 9, 2021
 ### PYTHON IMPORT ###
 #####################
 
+from copy import deepcopy
 from mmap import mmap
 from random import seed, choice, choices, shuffle, sample, randint
 import os
@@ -331,8 +332,8 @@ class Misc_Manipulation_Class():
         '''PyDoc'''
         self.grandmaster.logger.info("Models Animnations Properties")
         master_map_dict = {"Models": {}, "Animations": {}, "Properties": {}}
-        for custom_json_name in self.grandmaster.customizable_checkbox_dict:
-            if(self.grandmaster.customizable_checkbox_dict[custom_json_name].get() == 1):
+        for custom_json_name in self.grandmaster.map_config_checkbox_dict:
+            if(self.grandmaster.map_config_checkbox_dict[custom_json_name].get() == 1):
                 selected_json_dict = read_json(f"{self._file_dir}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/JSON_Files/{custom_json_name}.json")
                 for category in selected_json_dict:
                     if(selected_json_dict[category]):
@@ -350,11 +351,39 @@ class Misc_Manipulation_Class():
     ### SOUNDS AND MUSIC ###
     ########################
     
-    def _shuffle_music(self, seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var, jarring_sounds_var):
+    def _shuffle_music(self, seed_val, file_dir, randomized_rom_path):
         '''Runs the functions for shuffling the music'''
         self.grandmaster.logger.info("Shuffle Music")
-        music_manip = Music_Manipulation_Class(seed_val, file_dir, randomized_rom_path, short_sounds_var, jingles_var, music_var, beta_sounds_var, jarring_sounds_var)
-        music_manip._music_manip_main()
+        original_sound_dict = read_json(f"{self._file_dir}Randomization_Processes/Misc_Manipulation/Music_Data/BK_Sounds.json")
+        filtered_sound_dict = deepcopy(original_sound_dict)
+        # Short Sound
+        short_sounds_var = 0
+        for short_sound_pointer in original_sound_dict["Short"]:
+            short_sound_type = original_sound_dict["Short"][short_sound_pointer].split("|", 1)[0]
+            short_sound_name = original_sound_dict["Short"][short_sound_pointer].split("|", 1)[1]
+            if((self.grandmaster.short_sounds_dict[short_sound_type][short_sound_name]).get() == 0):
+                del filtered_sound_dict["Short"][short_sound_pointer]
+        if(len(filtered_sound_dict["Short"]) > 1):
+            short_sounds_var = 1
+        # Jingles
+        jingles_var = 0
+        for jingle_pointer in original_sound_dict["Jingle"]:
+            if((self.grandmaster.jingles_dict[original_sound_dict["Jingle"][jingle_pointer]]).get() == 0):
+                del filtered_sound_dict["Jingle"][jingle_pointer]
+        if(len(filtered_sound_dict["Jingle"]) > 1):
+            jingles_var = 1
+        # Music
+        music_var = 0
+        for music_pointer in original_sound_dict["Music"]:
+            music_type = original_sound_dict["Music"][music_pointer].split("|", 1)[0]
+            music_name = original_sound_dict["Music"][music_pointer].split("|", 1)[1]
+            if((self.grandmaster.music_dict[music_type][music_name]).get() == 0):
+                del filtered_sound_dict["Music"][music_pointer]
+        if(len(filtered_sound_dict["Music"]) > 1):
+            music_var = 1
+        if(1 in [short_sounds_var, jingles_var, music_var]):
+            music_manip = Music_Manipulation_Class(seed_val, file_dir, randomized_rom_path, filtered_sound_dict, short_sounds_var, jingles_var, music_var)
+            music_manip._music_manip_main()
 
     ###################
     ### GAME ENGINE ###
