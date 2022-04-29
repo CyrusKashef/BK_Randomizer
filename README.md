@@ -159,22 +159,27 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Checkboxes: Select the enemies you want to appear when using the Randomize option. Must select at least 1 generic Ground, Wall, and Flying enemy each. Enemies with an asterisks may softlock/crash the game. If no enemy is checked for a category, no enemy will appear.
 * Warning: A recent fix for Yum-Yums were put into the game. If your game crashes in TTC, please contact GiantJigglypuff3.
 
-### Aesthetics
+### BK Model
 
 ##### Banjo-Kazooie Model Color
 * Dropbox: Select from presets of color combinations.
 * Random Preset: Randomly sets a preset for colors.
 * Random Colors: Randomly sets colors.
-* Note: When setting your own colors, longer entries are made for 32-bit and shorter entries are made for 16-bit. If you're using a 16-bit color, the last value must be odd in order to be visible. You can use the following link to convert the colors: https://trolsoft.ru/en/articles/rgb565-color-picker
+* Preset Preview: For most of the presets that come by default, a preview can be seen. If the preview is unavailable, a blue SnS egg will appear in its place.
+* Delete Preset: Removes the preset from the list. You cannot delete the default colors.
+* Save As Preset: Saves the combination of colors as a new preset. If you give the preset a name already used, it will ask if you're okay with overwriting the previous preset.
+* If you'd like to use your own 16bit color, you can use the following link to convert the colors: https://trolsoft.ru/en/articles/rgb565-color-picker. Note that the color must end in an odd number to be visible.
+* NOTE: This feature does not get transfered from applying the Randomizer Settings Code, as this feature is mostly preference.
+
+### Sounds
+
 ##### Short Sounds, Fanfare/Jingles, & Looped Music
-* Shuffle Sounds: Sounds last about a second long. This includes things like Eggs, Feathers, Honeycombs, Mumbo Tokens, etc.
-* Shuffle Jingles: Jingles last a few seconds. This includes the Jiggy Jig, successfully finishing a task, etc.
-* Shuffle Music: Music is typically long and potentially loops. This includes level background music, mini games music, and ambient noises.
-* Include Beta Sounds: Some songs not used in the final game but are present in the data are including in shuffling for all checked categories.
-* Include Jarring Sounds: Some noises are painful to listen to repeatedly. Use this feature at your own risk.
-##### Sprites & Textures
-* Shuffle Skyboxes: Shuffles the skies and the clouds of the levels.
-* Shuffle Talking Sprites: Shuffles the head sprites used in conversations.
+* DISCLAIMER: The names of the sounds are not official names. These are names the community or I came up with to describe what it is. If you know a better name for the sound, please let me know.
+* Short Sounds: Sounds last about a second long. This includes things like Eggs, Feathers, Honeycombs, Mumbo Tokens, etc.
+* Jarring Sounds: Sounds that are a little harsh to hear. I recommend these off unless you feel like you can tolerate them.
+* Jingles/Fanfare: Jingles last a few seconds. This includes the Jiggy Jig, successfully finishing a task, etc.
+* Music: Music is typically long and potentially loops. This includes level background music, mini games music, and ambient noises. Music is separated into tabs for easier search, but all shuffle together.
+* NOTE: This feature does not get transfered from applying the Randomizer Settings Code, as this feature is mostly preference.
 
 ### MAP Config
 
