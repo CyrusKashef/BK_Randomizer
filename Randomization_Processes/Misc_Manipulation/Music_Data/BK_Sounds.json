@@ -61,14 +61,14 @@
         "0x108D0": "Game Over",
         "0x108D8": "N64 Logo Background",
         "0x108F8": "All 100 Notes",
-        "0x10900": "Feathers Stacking Up?",
+        "0x10900": "Door Opening (Beta)",
         "0x10908": "MMM Church Door Closing",
         "0x10920": "FP Boggy Race Winner",
         "0x10928": "FP Boggy Race Loser",
         "0x10930": "Jiggy Appearance",
-        "0x10958": "Open Note Door",
+        "0x10958": "FP Light The Tree 1",
         "0x10A28": "Beta Game Over",
-        "0x10A50": "FP Light The Tree",
+        "0x10A50": "FP Light The Tree 2",
         "0x10A70": "Filling Jigzaw Puzzle",
         "0x10B08": "Open Note Door",
         "0x10B88": "Collection Of SNS Item",
@@ -174,7 +174,9 @@
         "0x10C88": "Special|Klungo Pushing Rock",
         "0x10C90": "Special|Tooty",
         "0x10C98": "Special|Beach Theme",
-        "0x10CA0": "Special|Rock Falls On Grunty",
+        "0x10CA0": "Special|Rock Falls On Grunty"
+    },
+    "Do Not Randomize": {
         "0x10AA8": "Special|New Game Cutscene"
     }
 }
