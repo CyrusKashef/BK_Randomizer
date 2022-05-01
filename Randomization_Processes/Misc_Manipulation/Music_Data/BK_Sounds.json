@@ -44,6 +44,7 @@
         "0x10C60": "Jarring|Jinjonator Hitting 10",
         "0x10810": "Normal|? Honeycomb Start (Beta)",
         "0x10938": "Normal|? Honeycomb Stop (Beta)",
+        "0x10BE0": "Normal|Losing Air",
         "0x10C68": "Jarring|Barbeque Shock 1",
         "0x10C70": "Jarring|Barbeque Shock 2",
         "0x10C78": "Jarring|Barbeque Shock 3",
@@ -76,7 +77,6 @@
         "0x10B98": "Turbo Talon Trot Short",
         "0x10BA8": "Jinjonator Rising",
         "0x10BC8": "Door Of Grunty Opening",
-        "0x10BE0": "Bottles Game Piece",
         "0x10BF0": "Start Of Bottles Game 1",
         "0x10C08": "Start Of Bottles Game 2",
         "0x10CA8": "Finale Game Over"
