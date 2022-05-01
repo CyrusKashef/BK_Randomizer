@@ -17,14 +17,6 @@
 	    	"Replacements": {
 	    		"0x69C0": "Beehive Idle"
 	    	}
-	    },
-	    "Dying": {
-	    	"Original": {
-	    		"0x6E08": "Ripper Dying"
-	    	},
-	    	"Replacements": {
-	    		"0x61C0": "Beehive Dying"
-	    	}
 	    }
 	},
 	"Properties": {
