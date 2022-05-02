@@ -228,7 +228,7 @@ class Progression_GUI_Class():
         self.master.logger.debug(f"Before Cheato Blue Egg: {self.master.before_blue_egg}")
         if(self.master.before_blue_egg_carry_value.get() == "?"):
             seed(a=(self.seed_val + 6))
-            self.master.after_blue_egg = randint(32, 255)
+            self.master.after_blue_egg = randint(self.master.before_blue_egg, 255)
             cheat_sheet += f"After Cheato Blue Egg: {self.master.after_blue_egg}\n"
         else:
             self.master.after_blue_egg = int(self.master.before_blue_egg_carry_value.get())
@@ -243,7 +243,7 @@ class Progression_GUI_Class():
         self.master.logger.debug(f"Before Cheato Red Feather: {self.master.before_red_feather}")
         if(self.master.after_red_feather_carry_value.get() == "?"):
             seed(a=(self.seed_val + 8))
-            self.master.after_red_feather = randint(8, 255)
+            self.master.after_red_feather = randint(self.master.before_red_feather, 255)
             cheat_sheet += f"After Cheato Red Feather: {self.master.after_red_feather}\n"
         else:
             self.master.after_red_feather = int(self.master.after_red_feather_carry_value.get())
@@ -258,7 +258,7 @@ class Progression_GUI_Class():
         self.master.logger.debug(f"Before Cheato Gold Feather: {self.master.before_gold_feather}")
         if(self.master.after_gold_feather_carry_value.get() == "?"):
             seed(a=(self.seed_val + 10))
-            self.master.after_gold_feather = randint(0, 255)
+            self.master.after_gold_feather = randint(self.master.before_gold_feather, 255)
             cheat_sheet += f"After Cheato Gold Feather: {self.master.after_gold_feather}\n"
         else:
             self.master.after_gold_feather = int(self.master.after_gold_feather_carry_value.get())
