@@ -881,7 +881,7 @@ class User_GUI_Class():
         else:
             self._add_randomizer_settings_to_code(self.final_puzzle_value.get(), 8)
         self._add_randomizer_settings_to_code(["Base Game Costs", "World Order Scaled Costs", "Free Transformations"].index(self.free_transformations_var.get()), 2)
-        self._add_randomizer_settings_to_code(["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Don't Touch/Don't Pause", "Random Health Option"].index(self.max_health_banjo_var.get()), 3)
+        self._add_randomizer_settings_to_code(["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Zero Health (Unbeatable)", "Random Health Option"].index(self.max_health_banjo_var.get()), 3)
         self._add_randomizer_settings_to_code(self.remove_floating_jiggies_var.get())
         # Non-Flagged Objects
         self._add_randomizer_settings_to_code(["None", "Shuffle (World)"].index(self.non_flagged_object_var.get()))
@@ -1012,7 +1012,7 @@ class User_GUI_Class():
             else:
                 self.final_puzzle_value.set(str(final_puzzle_value))
             self.free_transformations_var.set(self._get_randomizer_setting(bit_count=2, options_list=["Base Game Costs", "World Order Scaled Costs", "Free Transformations"]))
-            self.max_health_banjo_var.set(self._get_randomizer_setting(bit_count=3, options_list=["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Don't Touch/Don't Pause", "Random Health Option"]))
+            self.max_health_banjo_var.set(self._get_randomizer_setting(bit_count=3, options_list=["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Zero Health (Unbeatable)", "Random Health Option"]))
             self.remove_floating_jiggies_var.set(self._get_randomizer_setting())
             # Non-Flagged Objects
             self.non_flagged_object_var.set(self._get_randomizer_setting(options_list=["None", "Shuffle (World)"]))
@@ -2182,7 +2182,7 @@ class User_GUI_Class():
         self.remove_floating_jiggies_checkbox = tk.Checkbutton(self.flagged_object_frame, text="No Floating Jiggies", variable=self.remove_floating_jiggies_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.remove_floating_jiggies_checkbox.grid(row=3, column=3, padx=self.padx, pady=self.pady)
         self.max_health_banjo_var = tk.StringVar(self.flagged_object_frame)
-        self.max_health_banjo_options = ["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Don't Touch/Don't Pause", "Random Health Option"]
+        self.max_health_banjo_options = ["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Zero Health (Unbeatable)", "Random Health Option"]
         self.max_health_banjo_dropdown = ttk.Combobox(self.flagged_object_frame, textvariable=self.max_health_banjo_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=23)
         self.max_health_banjo_dropdown.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.max_health_banjo_dropdown['values'] = self.max_health_banjo_options
