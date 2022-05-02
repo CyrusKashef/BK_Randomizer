@@ -140,10 +140,25 @@ class Game_Engine_Class():
         # 24 03 00 02 24 03 00 [01]
         self.mm[0xBF14F] = 0x02
     
-    def _max_health(self):
+    def _max_health(self, health_val="Normal Health"):
         ## Lower Health Total?
         # 00 03 20 [C0]
-        self.mm[0xBF157] = 0x00
+        # XX11 = 0x30/0x70/0xF0 = Crash
+        # XX01 = 0x10/0x50/0x90/0xD0 = Don't Touch Anything/Pausing Loses Life
+        # XX10 = 0x00/0x20/0x60/0xA0/0xE0 = 1 Health
+        # 0100 = 0x40 = 2 Health
+        # 1000 = 0x80 = 4 Health
+        # 1100 = 0xC0 = 5 Health
+        if(health_val == "Zero Health (Unbeatable)"):
+            self.mm[0xBF157] = 0x10
+        elif(health_val == "One Health Only"):
+            self.mm[0xBF157] = 0x00
+        elif(health_val == "Two Health Only"):
+            self.mm[0xBF157] = 0x40
+        elif(health_val == "Four Health Only"):
+            self.mm[0xBF157] = 0x80
+        elif(health_val == "Normal Health"):
+            self.mm[0xBF157] = 0xC0
 
     def _open_df(self, offset: str):
         return open(f"{self._file_dir}Randomized_ROM/{offset}-Decompressed.bin", "r+b")

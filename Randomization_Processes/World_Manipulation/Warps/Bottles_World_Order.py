@@ -9,7 +9,6 @@ Created on Sep 23, 2021
 ######################
 
 from random import seed, choice
-import sys
 
 ############
 ### DICT ###
@@ -32,7 +31,7 @@ learnable_moves_dict = {
 #########################
 
 class World_Order_Bottles():
-    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, one_hp=0, final_puzzle_option=0, world_exit_option="Exit From World You Were Just In", removed_detransformations=0, free_transformations="Base Game Costs"):
+    def __init__(self, bottles_world_warp_dict, extra_flagged_object_flags, seed_val=0, max_hp="One Health Only", final_puzzle_option=0, world_exit_option="Exit From World You Were Just In", removed_detransformations=0, free_transformations="Base Game Costs"):
         '''Initializes the World Order Bottles Class'''
         self.bottles_world_warp_dict = bottles_world_warp_dict
         self.extra_flagged_object_flags = extra_flagged_object_flags
@@ -46,10 +45,10 @@ class World_Order_Bottles():
         self.collected_jiggy_list = []
         self.collected_mumbo_token_list = []
         self.increment = 0
-        if(one_hp == 0):
-            self.one_hp = False
+        if(max_hp in ["Normal Health", "Four Health Only"]):
+            self.max_hp = False
         else:
-            self.one_hp = True
+            self.max_hp = True
         if(final_puzzle_option == 0):
             self._required_jiggies = [3, 8, 15, 23, 32, 42, 54, 69, 0]
         else:
@@ -122,20 +121,20 @@ class World_Order_Bottles():
                             possible_world_found = True
                             break
                     if(possible_world_found):
-                        if(self.one_hp):
+                        if(self.max_hp):
                             # Get To Puzzle Without Taking Damage
                             required_move_list = ["Wading_Boots"]
                     else:
-                        if(self.one_hp):
+                        if(self.max_hp):
                             required_move_list = ["Shock_Jump_Pad", "Wading_Boots"]
                         else:
                             # Get To 260 Note Door; Get To Puzzle Without Taking Damage
                             required_move_list = ["Shock_Jump_Pad"]
                 else:
-                    if(self.one_hp):
+                    if(self.max_hp):
                         required_move_list = ["Wading_Boots"]
             else:
-                if(self.one_hp):
+                if(self.max_hp):
                     required_move_list = ["Wading_Boots"]
         # Exiting FP -> Going To GV
         elif(world_count == 4):
@@ -143,7 +142,7 @@ class World_Order_Bottles():
             if(self.world_exit_option == "Exit From World You Were Just In"):
                 if((world_name != "Gobi's Valley") and ("Gobi's Valley" not in self.world_order_list)):
                     # Get To GV Without Taking Damage
-                    if(self.one_hp):
+                    if(self.max_hp):
                         required_move_list = ["Wading_Boots"]
         # Exiting GV -> Going To MMM
         elif(world_count == 5):

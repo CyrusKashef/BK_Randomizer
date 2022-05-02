@@ -117,7 +117,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Base Game Costs: The costs for transformations for each world are the same as base game.
 * World Order Scaled Costs: The cost for transformations are determined by the order in which the world appears. 1st -> 5, 2nd -> 10... 5th -> 25.
 * Free Transformations: All Mumbo transformations won't cost you a single Mumbo Token.
-* One Health Only: You will only have one health the entire game, no matter how many Empty Honeycombs you pick up. Good luck not getting hit or falling!
+* Max Health: If not the normal health option, you will only have four/two/one/zero health the entire game, no matter how many Empty Honeycombs you pick up. If you have zero health, you will lose a life when you pause and will die when touching any enemy. Zero health isn't selectable with the random option, as it is unbeatable.
 * Remove Floating Jiggies: Any non-spawning Jiggy gets removed from the game, limiting the number of Jiggies to 56 (the randomizer will only allow 50 jiggies to be required to allow for double health and possible softlock features).
 ##### Notes, Blue Eggs, Red Feathers, & Gold Feathers
 * Randomize: Based on the number of notes needed to complete the game, the odds of a note appearing will be adjusted. Adds another dropdown to have the exact number of notes or have 1.1 times more than required.
@@ -147,7 +147,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Shuffle By Game: All warps within the levels (not including Gruntilda's Lair) are shuffled, barring some constraints. Excludes transformation warps. WARNING: This feature is crash heavy.
 ##### Starting Area
 * New Game Start Area: Starting a new game will start you here. Loading a game may start you here depending on what flags you hit, but I'm not entirely sure. Exiting Banjo's House will also take you to this location.
-* Skip Intro Cutscene: Skips the cutscene when starting a new game, but not the one where the player enters the lair for the first time.
+* Skip Intro Cutscenes: Skips the cutscene when starting a new game and when entering the lair for the first time.
 * Please watch the intro cutscene at least once. I worked hard on making custom dialog...
 
 ### Enemies

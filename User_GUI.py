@@ -636,13 +636,13 @@ class User_GUI_Class():
         '''Selects a random starting area'''
         self.logger.info("Select Default Starting Area")
         self.new_area_var.set("SM - Main")
-        self.skip_intro_cutscene_var.set(0)
+        self.skip_intro_cutscenes_var.set(0)
     
     def _new_area_option(self, *args):
         '''If the starting area is not the default area, skip the intro cutscene'''
         self.logger.info("Selecting 'Skip Intro Cutscene'")
         if(self.new_area_var.get() != "SM - Main"):
-            self.skip_intro_cutscene_var.set(1)
+            self.skip_intro_cutscenes_var.set(1)
         if(self.new_area_var.get() == "Random Starting Area (Auto Have All Moves)"):
             self.all_starting_moves_var.set(1)
             self.all_starting_moves_checkbutton.configure(state='disabled')
@@ -881,7 +881,7 @@ class User_GUI_Class():
         else:
             self._add_randomizer_settings_to_code(self.final_puzzle_value.get(), 8)
         self._add_randomizer_settings_to_code(["Base Game Costs", "World Order Scaled Costs", "Free Transformations"].index(self.free_transformations_var.get()), 2)
-        self._add_randomizer_settings_to_code(self.one_health_banjo_var.get())
+        self._add_randomizer_settings_to_code(["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Don't Touch/Don't Pause", "Random Health Option"].index(self.max_health_banjo_var.get()), 3)
         self._add_randomizer_settings_to_code(self.remove_floating_jiggies_var.get())
         # Non-Flagged Objects
         self._add_randomizer_settings_to_code(["None", "Shuffle (World)"].index(self.non_flagged_object_var.get()))
@@ -930,7 +930,7 @@ class User_GUI_Class():
         starting_world_options = [option for option in start_level_ids]
         starting_world_options.insert(0, "Random Starting Area (Auto Have All Moves)")
         self._add_randomizer_settings_to_code(starting_world_options.index(self.new_area_var.get()), 8)
-        self._add_randomizer_settings_to_code(self.skip_intro_cutscene_var.get())
+        self._add_randomizer_settings_to_code(self.skip_intro_cutscenes_var.get())
         # Enemies
         self._add_randomizer_settings_to_code(["None", "Shuffle", "Randomize"].index(self.enemies_var.get()), 2)
         for enemy_name in sorted(self.enemy_checkbox_dict):
@@ -1012,7 +1012,7 @@ class User_GUI_Class():
             else:
                 self.final_puzzle_value.set(str(final_puzzle_value))
             self.free_transformations_var.set(self._get_randomizer_setting(bit_count=2, options_list=["Base Game Costs", "World Order Scaled Costs", "Free Transformations"]))
-            self.one_health_banjo_var.set(self._get_randomizer_setting())
+            self.max_health_banjo_var.set(self._get_randomizer_setting(bit_count=3, options_list=["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Don't Touch/Don't Pause", "Random Health Option"]))
             self.remove_floating_jiggies_var.set(self._get_randomizer_setting())
             # Non-Flagged Objects
             self.non_flagged_object_var.set(self._get_randomizer_setting(options_list=["None", "Shuffle (World)"]))
@@ -1069,7 +1069,7 @@ class User_GUI_Class():
             starting_world_options = [option for option in start_level_ids]
             starting_world_options.insert(0, "Random Starting Area (Auto Have All Moves)")
             self.new_area_var.set(self._get_randomizer_setting(bit_count=8, options_list=starting_world_options))
-            self.skip_intro_cutscene_var.set(self._get_randomizer_setting())
+            self.skip_intro_cutscenes_var.set(self._get_randomizer_setting())
             # Enemies
             self.enemies_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle", "Randomize"]))
             for enemy_name in sorted(self.enemy_checkbox_dict):
@@ -1133,7 +1133,7 @@ class User_GUI_Class():
         self.final_puzzle_var.set(0)
         self.final_puzzle_value.set(25)
         self.free_transformations_var.set("Base Game Costs")
-        self.one_health_banjo_var.set(0)
+        self.max_health_banjo_var.set("Normal Health")
         self.remove_floating_jiggies_var.set(0)
         # Non-Flagged Objects
         self.non_flagged_object_var.set("Shuffle (World)")
@@ -1159,7 +1159,7 @@ class User_GUI_Class():
         self.within_world_warps_var.set("Shuffle By World")
         # Starting Area
         self.new_area_var.set("SM - Main")
-        self.skip_intro_cutscene_var.set(0)
+        self.skip_intro_cutscenes_var.set(0)
 #         self.load_area_var.set("GL - MM Puzzle/Entrance Room")
         # Enemies
         self.enemies_var.set("Randomize")
@@ -1318,10 +1318,10 @@ class User_GUI_Class():
             setting_not_found.append("Free_Transformations")
             self.free_transformations_var.set("Base Game Costs")
         try:
-            self.one_health_banjo_var.set(json_data["One_Health_Only"])
+            self.max_health_banjo_var.set(json_data["Max_Health"])
         except KeyError:
-            setting_not_found.append("One_Health_Only")
-            self.one_health_banjo_var.set(0)
+            setting_not_found.append("Max_Health")
+            self.max_health_banjo_var.set("Normal Health")
         try:
             self.remove_floating_jiggies_var.set(json_data["Remove_Floating_Jiggies"])
         except Exception:
@@ -1428,10 +1428,10 @@ class User_GUI_Class():
             setting_not_found.append("Starting_Area")
             self.new_area_var.set("SM - Main")
         try:
-            self.skip_intro_cutscene_var.set(json_data["Skip_Intro_Cutscene"])
+            self.skip_intro_cutscenes_var.set(json_data["Skip_Intro_Cutscenes"])
         except KeyError:
-            setting_not_found.append("Skip_Intro_Cutscene")
-            self.skip_intro_cutscene_var.set(0)
+            setting_not_found.append("Skip_Intro_Cutscenes")
+            self.skip_intro_cutscenes_var.set(0)
         # Enemies
         try:
             self.enemies_var.set(json_data["Enemies_Option"])
@@ -1707,7 +1707,7 @@ class User_GUI_Class():
         else:
             self.final_puzzle_value.set(25)
         self.free_transformations_var.set(choice(["Base Game Costs", "World Order Scaled Costs", "Free Transformations"]))
-        self.one_health_banjo_var.set(randint(0, 1))
+        self.max_health_banjo_var.set("Random Health Option")
         self.remove_floating_jiggies_var.set(0),
         # Non-Flagged Objects
         self.non_flagged_object_var.set(choice(["None", "Shuffle (World)"]))
@@ -1737,9 +1737,9 @@ class User_GUI_Class():
         # Starting World
         self.new_area_var.set(choice([option for option in start_level_ids]))
         if(self.new_area_var.get() == "SM - Main"):
-            self.skip_intro_cutscene_var.set(randint(0, 1))
+            self.skip_intro_cutscenes_var.set(randint(0, 1))
         else:
-            self.skip_intro_cutscene_var.set(1)
+            self.skip_intro_cutscenes_var.set(1)
         # Enemies
         self.enemies_var.set(choice(["None", "Shuffle", "Randomize"]))
         for enemy_name in self.enemy_checkbox_dict:
@@ -1817,7 +1817,7 @@ class User_GUI_Class():
             "Final_Puzzle": self.final_puzzle_var.get(),
             "Final_Puzzle_Value": self.final_puzzle_value.get(),
             "Free_Transformations": self.free_transformations_var.get(),
-            "One_Health_Only": self.one_health_banjo_var.get(),
+            "Max_Health": self.max_health_banjo_var.get(),
             "Remove_Floating_Jiggies": self.remove_floating_jiggies_var.get(),
             # Non-Flagged Objects
             "Non_Flagged_Objects_Option": self.non_flagged_object_var.get(),
@@ -1843,7 +1843,7 @@ class User_GUI_Class():
             "Within_World_Warps_Option": self.within_world_warps_var.get(),
             # Starting World
             "Starting_Area": self.new_area_var.get(),
-            "Skip_Intro_Cutscene": self.skip_intro_cutscene_var.get(),
+            "Skip_Intro_Cutscenes": self.skip_intro_cutscenes_var.get(),
             # Enemies
             "Enemies_Option": self.enemies_var.get(),
             ### Aesthetic Settings ###
@@ -2181,9 +2181,12 @@ class User_GUI_Class():
         self.remove_floating_jiggies_var = tk.IntVar()
         self.remove_floating_jiggies_checkbox = tk.Checkbutton(self.flagged_object_frame, text="No Floating Jiggies", variable=self.remove_floating_jiggies_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.remove_floating_jiggies_checkbox.grid(row=3, column=3, padx=self.padx, pady=self.pady)
-        self.one_health_banjo_var = tk.IntVar()
-        self.one_health_banjo_checkbox = tk.Checkbutton(self.flagged_object_frame, text="One Health Only", variable=self.one_health_banjo_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.one_health_banjo_checkbox.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.max_health_banjo_var = tk.StringVar(self.flagged_object_frame)
+        self.max_health_banjo_options = ["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Don't Touch/Don't Pause", "Random Health Option"]
+        self.max_health_banjo_dropdown = ttk.Combobox(self.flagged_object_frame, textvariable=self.max_health_banjo_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=23)
+        self.max_health_banjo_dropdown.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.max_health_banjo_dropdown['values'] = self.max_health_banjo_options
+        self.max_health_banjo_dropdown['state'] = 'readonly'
         self.free_transformations_text = tk.Label(self.flagged_object_frame, text="Token Option:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.free_transformations_text.grid(row=4, column=2, padx=self.padx, pady=self.pady, sticky='e')
         self.free_transformations_var = tk.StringVar(self.flagged_object_frame)
@@ -2363,8 +2366,8 @@ class User_GUI_Class():
         self.new_area_dropdown['values'] = self.starting_area_options
         self.new_area_dropdown['state'] = 'readonly'
         self.new_area_dropdown.grid(row=1, column=2, padx=self.padx, pady=self.pady, sticky='w')
-        self.skip_intro_cutscene_var = tk.IntVar()
-        self.skip_intro_cutscene_checkbutton = tk.Checkbutton(self.starting_area_frame, text="Skip Intro Cutscene", variable=self.skip_intro_cutscene_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.skip_intro_cutscenes_var = tk.IntVar()
+        self.skip_intro_cutscene_checkbutton = tk.Checkbutton(self.starting_area_frame, text="Skip Intro Cutscenes", variable=self.skip_intro_cutscenes_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.skip_intro_cutscene_checkbutton.grid(row=2, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.default_starting_area_button = tk.Button(self.starting_area_frame, text='Default\nStarting Area', command=self._default_starting_area, foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size))
         self.default_starting_area_button.grid(row=1, column=3, padx=self.padx, pady=self.pady, sticky='w')

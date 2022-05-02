@@ -109,7 +109,7 @@ VARIABLE TEXT:
 ### PYTHON IMPORTS ###
 ######################
 
-from random import seed, randint
+from random import seed, randint, choice
 import tkinter as tk
 from tkinter import ttk
 from tkinter import HORIZONTAL
@@ -195,8 +195,10 @@ class Progression_GUI_Class():
         if(self.master.final_note_door_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
             if(self.master.struct_var.get() == "All Notes"):
+                seed(a=(self.seed_val + 1))
                 self.master.final_note_door_val = randint(0, 2000)
             else:
+                seed(a=(self.seed_val + 2))
                 self.master.final_note_door_val = randint(0, 900)
             cheat_sheet += f"Final Note Door Val: {self.master.final_note_door_val}\n"
         else:
@@ -206,8 +208,10 @@ class Progression_GUI_Class():
         if(self.master.final_puzzle_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
             if(self.master.remove_floating_jiggies_var.get() == 1):
+                seed(a=(self.seed_val + 3))
                 self.master.final_puzzle_val = randint(0, 50)
             else:
+                seed(a=(self.seed_val + 4))
                 self.master.final_puzzle_val = randint(0, 99)
             cheat_sheet += f"Final Puzzle Val: {self.master.final_puzzle_val}\n"
         else:
@@ -216,12 +220,14 @@ class Progression_GUI_Class():
         ### CAPACITIES
         # Blue Egg Capacity
         if(self.master.before_blue_egg_carry_value.get() == "?"):
+            seed(a=(self.seed_val + 5))
             self.master.before_blue_egg = randint(0, 255)
             cheat_sheet += f"Before Cheato Blue Egg: {self.master.before_blue_egg}\n"
         else:
             self.master.before_blue_egg = int(self.master.before_blue_egg_carry_value.get())
         self.master.logger.debug(f"Before Cheato Blue Egg: {self.master.before_blue_egg}")
         if(self.master.before_blue_egg_carry_value.get() == "?"):
+            seed(a=(self.seed_val + 6))
             self.master.after_blue_egg = randint(32, 255)
             cheat_sheet += f"After Cheato Blue Egg: {self.master.after_blue_egg}\n"
         else:
@@ -229,12 +235,14 @@ class Progression_GUI_Class():
         self.master.logger.debug(f"After Cheato Blue Egg: {self.master.after_blue_egg}")
         # Red Feather Capacity
         if(self.master.before_red_feather_carry_value.get() == "?"):
+            seed(a=(self.seed_val + 7))
             self.master.before_red_feather = randint(0, 255)
             cheat_sheet += f"Before Cheato Red Feather: {self.master.before_red_feather}\n"
         else:
             self.master.before_red_feather = int(self.master.before_red_feather_carry_value.get())
         self.master.logger.debug(f"Before Cheato Red Feather: {self.master.before_red_feather}")
         if(self.master.after_red_feather_carry_value.get() == "?"):
+            seed(a=(self.seed_val + 8))
             self.master.after_red_feather = randint(8, 255)
             cheat_sheet += f"After Cheato Red Feather: {self.master.after_red_feather}\n"
         else:
@@ -242,17 +250,26 @@ class Progression_GUI_Class():
         self.master.logger.debug(f"After Cheato Red Feather: {self.master.after_red_feather}")
         # Gold Feather Capacity
         if(self.master.before_gold_feather_carry_value.get() == "?"):
+            seed(a=(self.seed_val + 9))
             self.master.before_gold_feather = randint(0, 255)
             cheat_sheet += f"Before Cheato Gold Feather: {self.master.before_gold_feather}\n"
         else:
             self.master.before_gold_feather = int(self.master.before_gold_feather_carry_value.get())
         self.master.logger.debug(f"Before Cheato Gold Feather: {self.master.before_gold_feather}")
         if(self.master.after_gold_feather_carry_value.get() == "?"):
+            seed(a=(self.seed_val + 10))
             self.master.after_gold_feather = randint(0, 255)
             cheat_sheet += f"After Cheato Gold Feather: {self.master.after_gold_feather}\n"
         else:
             self.master.after_gold_feather = int(self.master.after_gold_feather_carry_value.get())
         self.master.logger.debug(f"After Cheato Gold Feather: {self.master.after_gold_feather}")
+        # Max Health
+        if(self.master.max_health_banjo_var.get() == "Random Health Option"):
+            seed(a=(self.seed_val + 11))
+            self.master.health_val = choice(["Normal Health", "Four Health Only", "Two Health Only", "One Health Only"])
+        else:
+            self.master.health_val = self.master.max_health_banjo_var.get()
+        self.master.logger.debug(f"Max Health: {self.master.health_val}")
         # Cheat Sheet
         with open(f"{self.master.cwd}Randomized_ROM/HIDDEN_VALUES_CHEAT_SHEET_{self.seed_val}.txt", "w+") as f:
             f.write(cheat_sheet)
@@ -459,9 +476,16 @@ class Progression_GUI_Class():
             except Exception:
                 self.master.logger.info("CCW Open Seasons Error")
                 self.pb_label.set_text(f"Error CCW Open Seasons...\n{self._mumbo_error_message}")
+        if(self.master.skip_intro_cutscenes_var.get() == 1):
+            try:
+                self.pb_label.set_text(f"Mumbo Work Hard To Make This House A Home...")
+                world_manip._skip_lair_cutscene()
+            except Exception:
+                self.master.logger.info("Skip Intro Cutscenes Error")
+                self.pb_label.set_text(f"Error Skip Intro Cutscenes...\n{self._mumbo_error_message}")
         del world_manip
         self.master.logger.info("End of Randomize World")
-    
+
     def _misc_options(self):
         '''Runs all non-world functions, such as overlays, models, and speeches'''
         self.master.logger.info("Start of Misc Options")

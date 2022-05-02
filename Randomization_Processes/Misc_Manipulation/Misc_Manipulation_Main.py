@@ -404,8 +404,7 @@ class Misc_Manipulation_Class():
                                                          walrus_cost=transformation_costs["Walrus"],
                                                          pumpkin_cost=transformation_costs["Pumpkin"],
                                                          bee_cost=transformation_costs["Bee"])
-        if(self.grandmaster.one_health_banjo_var.get() == 1):
-            game_engine_obj._max_health()
+        game_engine_obj._max_health(self.grandmaster.health_val)
         game_engine_obj._blue_egg_limit(self.grandmaster.before_blue_egg, self.grandmaster.after_blue_egg)
         game_engine_obj._red_feather_limit(self.grandmaster.before_red_feather, self.grandmaster.after_red_feather)
         game_engine_obj._gold_feather_limit(self.grandmaster.before_gold_feather, self.grandmaster.after_gold_feather)
@@ -416,7 +415,7 @@ class Misc_Manipulation_Class():
             starting_area = choice(start_area_list)
             self.grandmaster.logger.info(f"Random Starting Area: {starting_area}")
             all_start_moves = 1
-        game_engine_obj._new_game_start_level(starting_area, self.grandmaster.skip_intro_cutscene_var.get())
+        game_engine_obj._new_game_start_level(starting_area, self.grandmaster.skip_intro_cutscenes_var.get())
         if(all_start_moves == 1):
             game_engine_obj._starting_moves()
         game_engine_obj._starting_lives(self.grandmaster.starting_lives_value.get())

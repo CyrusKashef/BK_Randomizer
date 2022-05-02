@@ -1720,7 +1720,7 @@ class World_Manipulation_Class():
                             use_this_dict[world_name][flag_string]["ID"] = flag_id
                             break
         self.world_order = World_Order_Bottles(self.modified_bottles_world_warp_dict, use_this_dict, seed_val=self.seed,
-                                               one_hp=self.grandmaster.one_health_banjo_var.get(), final_puzzle_option=self.grandmaster.final_puzzle_var.get(),
+                                               max_hp=self.grandmaster.health_val, final_puzzle_option=self.grandmaster.final_puzzle_var.get(),
                                                world_exit_option=self.grandmaster.world_exit_var.get(),
                                                removed_detransformations=self.grandmaster.remove_magic_barriers_var.get(), free_transformations=self.grandmaster.free_transformations_var.get())
         self.world_order._determine_world_order()
@@ -2700,3 +2700,10 @@ class World_Manipulation_Class():
                 for setup_file in self.click_clock_wood._setup_list:
                     if(setup_file._edit_object(item_search_string, replacement_dict)):
                         break
+
+    def _skip_lair_cutscene(self):
+        '''PyDoc'''
+        replacement_dict = {
+            8: 0x1, 9: 0x1A
+        }
+        (self.spiral_mountain._setup_list[0])._edit_object("00000798F13C7506012D", replacement_dict)
