@@ -73,7 +73,6 @@ class World_Order_Bottles():
             self.transform_cost_dict["Walrus"] = 0
             self.transform_cost_dict["Pumpkin"] = 0
             self.transform_cost_dict["Bee"] = 0
-
     
     def _progression_requirements(self, world_name):
         '''Calculates the progression requirements for the world number, based on lair progression and Jiggies needed to open the worlds'''
@@ -225,6 +224,10 @@ class World_Order_Bottles():
             self._possible_world_moves(world_name, progress_move_list, additional_learned_moves=self.temp_learned_moves[world_name]["New_Moves"])
         else:
             return False
+        # Double Check
+        for progress_move in progress_move_list:
+            if(progress_move not in self.temp_learned_moves[world_name]["New_Moves_List"]):
+                return False
         return True
     
     def _possible_world_transformation(self, world_name):

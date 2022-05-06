@@ -1483,6 +1483,16 @@ class Speech_Manipulation_Class():
         grunty_text = Speech_File_Class(self._file_dir, "")
         grunty_text._replace_line("", "")
     
+    def _bk_first_death_gruntilda(self):
+        # 0xDAA0 - 5CCB08
+        # Gruntilda: WHAT'S WRONG BANJO, IS IT TOUGH?
+        #            TRYING TO GET THE GAME OVER SCREEN?
+        # Gruntilda: LET ME KNOW WHEN YOU'VE HAD ENOUGH!
+        #            YOU ARE LIKE A PERVERTED TEEN!
+        grunty_text = Speech_File_Class(self._file_dir, "DAA0")
+        grunty_text._replace_line("5748415427532057524F4E472042414E", "TRYING TO GET THE GAME OVER SCREEN?!")
+        grunty_text._replace_line("4C4554204D45204B4E4F57205748454E", "YOU ARE LIKE A PERVERTED TEEN!")
+    
     ##################
     ### SANDCASTLE ###
     ##################

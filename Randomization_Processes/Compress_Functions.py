@@ -336,7 +336,6 @@ class Compressor():
         if(self.master.skip_furnace_fun_var.get() == 1):
             self.master.logger.debug("Lair Speeches & Brentilda Hints")
             self._section_compression_main(speech_file_ids, 0xDA88, 0xFFB8, furnace_fun_questions_pointer_list) # Gruntilda Lair Speeches, Brentilda Hints, Furnace Fun & Whatever Is In Between
-#             self._section_compression_main(speech_file_ids, 0xE2B0, 0xFFB8, furnace_fun_questions_pointer_list) # Brentilda Hints & Furnace Fun & Whatever Is In Between
         else:
             if((self.master.before_blue_egg_carry_value.get() != 100) or (self.master.after_blue_egg_carry_value.get() != 200) or
                (self.master.before_red_feather_carry_value.get() != 50) or (self.master.after_red_feather_carry_value.get() != 100) or

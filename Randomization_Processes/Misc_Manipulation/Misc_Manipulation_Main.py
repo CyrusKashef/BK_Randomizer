@@ -556,13 +556,14 @@ class Misc_Manipulation_Class():
         self.speech_manip._gruntilda_lair_speech_29(grunty_lair_speeches_list[28][0], grunty_lair_speeches_list[28][1])
         self.speech_manip._gruntilda_lair_speech_30(grunty_lair_speeches_list[29][0], grunty_lair_speeches_list[29][1])
         self.speech_manip._gruntilda_lair_speech_31(grunty_lair_speeches_list[30][0], grunty_lair_speeches_list[30][1])
+        # self.speech_manip._bk_first_death_gruntilda()
     
     def _adjust_sandcastle_speeches(self):
         self.grandmaster.logger.info("Adjust Sandcastle Speeches")
         self.speech_manip._raised_maximum_blue_eggs_speech()
         self.speech_manip._raised_maximum_red_feathers_speech()
         self.speech_manip._raised_maximum_gold_feathers_speech()
-    
+
 ############
 ### MAIN ###
 ############
