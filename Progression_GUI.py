@@ -189,17 +189,28 @@ class Progression_GUI_Class():
             self.progressbar.pack(padx=5, pady=5)
     
     def _hidden_random_values(self):
+        '''Calculates hidden values'''
         self.master.logger.info("Hidden Random Values")
         cheat_sheet = ""
         # Final Note Door
         if(self.master.final_note_door_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
+            increment = 1
             if(self.master.struct_var.get() == "All Notes"):
-                seed(a=(self.seed_val + 1))
-                self.master.final_note_door_val = randint(0, 2000)
+                seed(a=(self.seed_val + increment))
+                final_note_door_str = str(randint(0, 1))
+                while(len(final_note_door_str) < 4):
+                    increment += 1
+                    seed(a=(self.seed_val + increment))
+                    final_note_door_str += str(randint(0, 8))
+                self.master.final_note_door_val = int(final_note_door_str)
             else:
-                seed(a=(self.seed_val + 2))
-                self.master.final_note_door_val = randint(0, 900)
+                final_note_door_str = ""
+                while(len(final_note_door_str) < 3):
+                    seed(a=(self.seed_val + increment))
+                    final_note_door_str += str(randint(0, 8))
+                    increment += 1
+                self.master.final_note_door_val = int(final_note_door_str)
             cheat_sheet += f"Final Note Door Val: {self.master.final_note_door_val}\n"
         else:
             self.master.final_note_door_val = int(self.master.final_note_door_value.get())
@@ -418,7 +429,7 @@ class Progression_GUI_Class():
             except Exception:
                 self.pb_label.set_text(f"Error Moving Jinxy Heads...\n{self._mumbo_error_message}")
                 raise
-        if(self.master.world_entrance_var.get() != "None"):
+        if(self.master.world_entrance_var.get() != "No Shuffle"):
             try:
                 self.pb_label.set_text("Mumbo Lost Way Back To Mountain...")
                 self.transform_cost_dict = world_manip._world_order_warps_main()
@@ -426,7 +437,7 @@ class Progression_GUI_Class():
                 self.master.logger.info("World Order Warps Error")
                 self.pb_label.set_text(f"Error Shuffling World Order...\n{self._mumbo_error_message}")
                 raise
-        if(self.master.within_world_warps_var.get() != "None"):
+        if(self.master.within_world_warps_var.get() != "No Shuffle"):
             try:
                 self.pb_label.set_text("Mumbo Lost Way Back To Skull...")
                 world_manip._within_world_warps_main()
@@ -458,7 +469,7 @@ class Progression_GUI_Class():
                 self.master.logger.info("Final World Puzzle Error")
                 self.pb_label.set_text(f"Error Making Worlds Open...\n{self._mumbo_error_message}")
                 raise
-        if(self.master.scattered_structs_var.get() == 1):
+        if(self.master.scattered_structs_var.get() != "No Scatter"):
             try:
                 self.pb_label.set_text(f"Mumbo Better Shaman Than SM64 Modders...")
                 world_manip._scattered_structs_main()

@@ -93,6 +93,7 @@ class World_Manipulation_Class():
         return random_choice
     
     def _choose_random_integer(self, int_start=0, int_end=1, address=0, increment=0):
+        '''Selects a random integer between the two given values based on the seed, address, and number of increments, when applicable'''
         seed(a=(self.seed + address + increment))
         random_int = randint(int_start, int_end)
         return random_int
@@ -644,12 +645,6 @@ class World_Manipulation_Class():
             return False
         return True
     
-#     def _remove_yum_yums(self):
-#         self.grandmaster.logger.debug("Remove Yum-Yums")
-#         for setup_file in self.treasure_trove_cove._setup_list:
-#             replace_list = {2: 0x00, 3: 0x67}
-#             setup_file._replace_all_in_area("190C0069", replace_list)
-    
     def _gather_enemies(self, world_object, enemy_option):
         '''Collects the enemies per setup for the world'''
         self.grandmaster.logger.debug("Gather Enemies")
@@ -784,8 +779,6 @@ class World_Manipulation_Class():
     def _enemies_main(self):
         '''Runs the enemies options that are not NONE'''
         self.grandmaster.logger.info("Enemies Main")
-#         if(self.grandmaster.enemy_checkbox_dict["Yum-Yum*"]):
-#             self._remove_yum_yums()
         if(self.grandmaster.enemies_var.get() == "Shuffle"):
             for world_object in self.world_list:
                 self._gather_enemies(world_object, "Shuffle")
@@ -956,6 +949,7 @@ class World_Manipulation_Class():
                 list_index_start += len(setup_file.flagged_object_index_list)
     
     def _remove_floating_jiggies(self):
+        '''Removes all non-spawn Jiggies'''
         replacement_dict = {
             2: 0x02,
             3: 0x68
@@ -1785,7 +1779,7 @@ class World_Manipulation_Class():
             self._bottles_world_order_shuffle_main()
             self._remove_learning_move_warps()
             self.world_order_list = self.world_order.world_order_list
-        if(self.grandmaster.world_entrance_var.get() != "None"):
+        if(self.grandmaster.world_entrance_var.get() != "No Shuffle"):
             self._world_entrance_signs()
             if(self.grandmaster.skip_furnace_fun_var.get() == 1):
                 self._brentilda_world_order_hints()
@@ -1798,6 +1792,7 @@ class World_Manipulation_Class():
         return self.world_order.transform_cost_dict
 
     def _transformation_cost_signs(self):
+        '''Moves the Mumbo Token cost signs based on selected options'''
         cost_to_sign_dict = {
                 5: "0x76A0",
                 10: "0x76A8",
@@ -1852,6 +1847,7 @@ class World_Manipulation_Class():
         swap_model_manip_obj._model_manip_main()
 
     def _world_exits(self):
+        '''Adjusts the world exists to match the entrance'''
         with open(f"{self._file_dir}Randomized_ROM/F9CAE0-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
             exit_indices_dict = {
@@ -1962,7 +1958,7 @@ class World_Manipulation_Class():
     ###################
     
     def _generate_cheat_sheet(self):
-        '''PyDoc'''
+        '''Creates a cheat sheet for the notes and flagged objects'''
         self.grandmaster.logger.info("Generate Object/Struct Cheat Sheet")
         totals_note_count = 0
         cheat_sheet_dict = {}
@@ -1971,19 +1967,19 @@ class World_Manipulation_Class():
             world_note_count = 0
             for setup_file in world_object._setup_list:
                 cheat_sheet_dict[world_object._world_name][setup_file.setup_name] = {}
-                if(self.grandmaster.struct_var.get() != "None"):
+                if(self.grandmaster.struct_var.get() != "No Shuffle"):
                     try:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Note_Count"] = setup_file.note_count
                     except AttributeError:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Note_Count"] = 0
                     world_note_count += setup_file.note_count
                     totals_note_count += setup_file.note_count
-                if(self.grandmaster.non_flagged_object_var.get() != "None"):
+                if(self.grandmaster.non_flagged_object_var.get() != "No Shuffle"):
                     try:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Non_Flagged_Object_Dict"] = setup_file.non_flagged_obj_dict
                     except AttributeError:
                         pass
-                if(self.grandmaster.flagged_object_var.get() != "None"):
+                if(self.grandmaster.flagged_object_var.get() != "No Shuffle"):
                     try:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Flagged_Object_Dict"] = setup_file.flagged_obj_dict
                     except AttributeError:
@@ -2001,6 +1997,7 @@ class World_Manipulation_Class():
     ### RETURN OF FURNACE FUN ###
     
     def _replace_model_files(self):
+        '''Unused #RIP'''
         self.grandmaster.logger.info("Replace Model Files")
         # Furnace Fun: 0x105D8 - A795B8
         # Final Battle A: 0x10678 - BEA360
@@ -2013,6 +2010,7 @@ class World_Manipulation_Class():
         shutil.copy(final_battle_b_bin, f"{self.grandmaster.cwd}Randomized_ROM/10740-Randomized_Compressed.bin")
     
     def _adjust_ff_setup_file(self):
+        '''Unused #RIP'''
         self.grandmaster.logger.debug("Adjust Furnace Fun Setup File")
         final_battle_list = [
             # GRUNTILDA ACTORS
@@ -2033,6 +2031,7 @@ class World_Manipulation_Class():
         self.gruntildas_lair._setup_list[19]._replace_each_object_parameters(final_battle_list, replacement_dict)
     
     def _return_of_furnace_fun(self):
+        '''Unused #RIP'''
         self.grandmaster.logger.info("Return Of Furnace Fun")
         self._replace_model_files()
         self._adjust_ff_setup_file()
@@ -2040,7 +2039,7 @@ class World_Manipulation_Class():
     ### ENEMIES ###
     
     def _final_battle_sir_slush(self):
-        '''PyDoc'''
+        '''Adds Sir Slush to block the Jinjo Statues'''
         self.grandmaster.logger.debug("Final Battle Sir Slush")
         search_string_list = [
             "07C6000407C6", # +X +Z
@@ -2093,7 +2092,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._replace_each_object_parameters(search_string_list, replacement_dict_list)
     
     def _final_battle_whipcrack(self):
-        '''PyDoc'''
+        '''Adds Whipcracks to block the Jinjo Statues'''
         self.grandmaster.logger.debug("Final Battle Whipcrack")
         search_string_list = [
             "080C0004044C", # +X +Z
@@ -2146,6 +2145,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._replace_each_object_parameters(search_string_list, replacement_dict_list)
     
     def _final_battle_ground_enemies(self):
+        '''Adds grounded enemies to the final battle'''
         self.grandmaster.logger.debug("Final Battle Ground Enemies")
         # Enemies
         ground_enemy_string_list = [
@@ -2215,7 +2215,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._replace_each_object_parameters(ground_enemy_string_list, ground_enemy_location_replacement_dict)
     
     def _final_battle_sky_enemies(self):
-        '''PyDoc'''
+        '''Adds flying enemies to the final battle'''
         self.grandmaster.logger.debug("Final Battle Sku Enemies")
         sky_enemy_string_list = [
             "011E0004065E", # +X +Z
@@ -2276,7 +2276,7 @@ class World_Manipulation_Class():
     ### ENVIRONMENT ###
     
     def _final_battle_floor_is_missing(self):
-        '''PyDoc'''
+        '''Removes the collision of the floor of the final battle'''
         self.grandmaster.logger.debug("Floor Is Missing")
         search_string_list = [
 #             "02AEF5C10FF5", # Lava
@@ -2380,6 +2380,7 @@ class World_Manipulation_Class():
         final_battle_area._change_floor_type_by_vert(vert_condition, new_bytes)
     
     def _final_battle_jinjo_pads(self):
+        '''Adds shock jump pads to the final battle near the jinjos'''
         self.grandmaster.logger.debug("Final Battle Jinjo Pads")
         search_string_list = [
             "07C6000407C6", # +X +Z
@@ -2432,7 +2433,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._replace_each_object_parameters(search_string_list, replacement_dict_list)
     
     def _final_battle_jinjonator_floor(self):
-        '''PyDoc'''
+        '''Adds shock jump pads to the final battle near the jinjonator'''
         self.grandmaster.logger.debug("Final Battle Jinjonator Floor")
         search_string_list = [
             "080C0004044C", # +X +Z
@@ -2582,7 +2583,11 @@ class World_Manipulation_Class():
                     selectable_x_z_list.append((possible_x, possible_z))
         if(selectable_x_z_list):
             (new_x, new_z) = self._choose_from_list(selectable_x_z_list, address=self.curr_setup_file.setup_address, increment=item_index)
-            new_y = self._choose_random_integer(max(voxel_min_y, level_collision_dict[(new_x, new_z)]), voxel_max_y, address=self.curr_setup_file.setup_address, increment=item_index)
+            min_val = max(voxel_min_y, level_collision_dict[(new_x, new_z)])
+            max_val = voxel_max_y
+            if(self.grandmaster.scattered_structs_var.get() == "Low Scatter"):
+                max_val = min(voxel_max_y, min_val + 300)
+            new_y = self._choose_random_integer(min_val, max_val, address=self.curr_setup_file.setup_address, increment=item_index)
             self.curr_setup_file.mm[item_index + 4] = int(leading_zeros(new_x, 4)[:2], 16)
             self.curr_setup_file.mm[item_index + 5] = int(leading_zeros(new_x, 4)[2:], 16)
             self.curr_setup_file.mm[item_index + 6] = int(leading_zeros(new_y, 4)[:2], 16)
@@ -2702,7 +2707,7 @@ class World_Manipulation_Class():
                         break
 
     def _skip_lair_cutscene(self):
-        '''PyDoc'''
+        '''Replaces the warp to the lair cutscene to the warp that leads to the lair'''
         replacement_dict = {
             8: 0x1, 9: 0x1A
         }

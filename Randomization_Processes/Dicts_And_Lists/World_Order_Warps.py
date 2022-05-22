@@ -58,39 +58,48 @@ learnable_moves_dict = {
     }
 
 bottles_moves_camera_dict = {
-    "058C037A": { # Beak Buster
+    "058C037A": {
+        "Move_Name": "BEAK BUSTER",
         "Primary_Camera": "01001702",
         "Secondary_Camera": None,
         },
-    "060C037A": { # Talon Trot
+    "060C037A": {
+        "Move_Name": "TALON TROT",
         "Primary_Camera": "01001802",
         "Secondary_Camera": None,
         },
-    "068C037A": { # Shock Jump Pad
+    "068C037A": {
+        "Move_Name": "SHOCK JUMP SPRING",
         "Primary_Camera": "01000C02",
         "Secondary_Camera": None,
         },
-    "050C037A": { # Eggs
+    "050C037A": {
+        "Move_Name": "EGG FIRING",
         "Primary_Camera": "01001602",
         "Secondary_Camera": None,
         },
-    "070C037A": { # Fly Pad
+    "070C037A": {
+        "Move_Name": "FLIGHT PAD",
         "Primary_Camera": "01000D02",
         "Secondary_Camera": None,
         },
-    "078C037A": { # Wonderwing
+    "078C037A": {
+        "Move_Name": "WONDERWING",
         "Primary_Camera": "01000102",
         "Secondary_Camera": None,
         },
-    "080C037A": { # Wading Boots
+    "080C037A": {
+        "Move_Name": "STILT STRIDE",
         "Primary_Camera": "01001002",
         "Secondary_Camera": "01001102",
         },
-    "048C037A": { # Beak Bomb
+    "048C037A": {
+        "Move_Name": "BEAK BOMB",
         "Primary_Camera": "01000F02",
         "Secondary_Camera": None,
         },
-    "088C037A": { # Running Shoes
+    "088C037A": {
+        "Move_Name": "TURBO TALON TROT",
         "Primary_Camera": "01001902",
         "Secondary_Camera": "01002902",
         },

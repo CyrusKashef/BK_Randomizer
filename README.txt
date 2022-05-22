@@ -107,7 +107,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 
 ### Collectables
 ##### All Items
-* None: Skips the setting.
+* None/No Shuffle: Skips the setting.
 * Shuffle (World): Takes all items of that set and swaps the Object IDs within the world (can be overriden for Click Clock Wood; see World Specific Features).
 * Shuffle (Game): Takes all items of that set and swaps the Object IDs within all worlds/lair. This will override the World Specific Feature for Click Clock Wood.
 ##### Jiggy, Empty Honeycomb, & Mumbo Token Specific
@@ -125,6 +125,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Allow Save & Quit/Resets: Allows the player to Save & Quit/Reset without affecting the note score totals by limiting the worlds to a possible 127 notes maximum. Read "Note Limit Warning" for more details.
 * Scaling Note Doors: Depending on how many notes you set the 810 Note Door Value to, the number of notes needed per proceeding door will be increased/decreased accordingly.
 * Final Note Door Only: Removes all note doors proceeding the 810 Note Door, and sets the value of the 810 Note Door to the desired value. A random value can be chosen by clicking the Note button.
+* Final Note Door Only Warning: The game does not have a symbol for the number 9 on the note doors. The 6 has been flipped twice in order to make a 9, but sometimes the game doesn't like it. Please try to avoid the number 9 when setting the value. 900 should work, though.
 * Item Carrying Capacity: Sets the number of each item the player can carry before and after visiting Cheato between 0 and 255, inclusively.
 * Note Door Warning: Before opening any Note Door, the player must talk to Bottles at the 50 Note door. In order to add to the Quality of Life, a bottles is added to the 810 Note Door Location for Final Note Door Only mode.
 * Item Capacity Warning: I'm not sure if the game will break if you set the After Cheato value to a value smaller than the Before Cheato value. Please be weary.
@@ -212,7 +213,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Include Flowers: If the notes/eggs/feathers feature is not set to 'none', the flowers in the level will be included in shuffling.
 
 ##### Treasure Trove Cove
-* Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear. (I think as of releasing this, sometimes notes and feathers don't get shuffled, but that's a problem for future me).
+* Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear. The low setting has everything within jumping distance. The high setting may require flight.
 * Super Slippery Sand: At some point, you'll trigger the anti-tampering and you won't be able to change direction unless you jump. Have fun!
 
 ##### Clanker's Cavern
@@ -310,6 +311,7 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * In Click Clock Wood, there is an occasional glitch where the player can collect 11/10 Jiggies when items are only shuffled within the world. The reason is unknown, but may only occur with abnormal or potential softlock Jiggies/Tokens/Honeycombs.
 * Randomizing the warps within worlds by game may result in warps that crash the game.
 * Some of the Model/Animation/Properties features may crash the credits, and this feature was only barely tested on Everdrive.
+* For unknown reasons, when the final note door has the number 9 in it, it may cause the player to crash when entering Gruntilda's lair. Just change your final note door value to another value without a 9 and you should be fine.
 
 # FAQ
 

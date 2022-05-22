@@ -225,13 +225,16 @@ bottles_world_warp_dict = {
                     },
                 },
             },
+        # Note: You don't need Talon Trot or Eggs for some of these,
+        # but the cameras are weird in CC's main area
+        # and I'm really tired
         "Clanker's Cavern": {
             "Possible_Bottles": {
                 "Wonderwing": [["Fly", "Eggs"]],
-                "Platform_1_Up": [["Eggs"]],
-                "Alcove_1_Up": [["Shock_Jump_Pad", "Eggs"]],
-                "Yellow_Jinjo": [["Eggs"]],
-                "Orange_Jinjo": [["Shock_Jump_Pad", "Eggs"]],
+                "Platform_1_Up": [["Eggs", "Talon Trot"]],
+                "Alcove_1_Up": [["Shock_Jump_Pad", "Eggs", "Talon Trot"]],
+                "Yellow_Jinjo": [["Eggs", "Talon Trot"]],
+                "Orange_Jinjo": [["Shock_Jump_Pad", "Eggs", "Talon Trot"]],
 #                 "Orange_Jinjo": [["Shock_Jump_Pad", "Beak_Buster"], ["Shock_Jump_Pad", "Eggs"]],
                 },
             "Flagged_Object_Flags": {

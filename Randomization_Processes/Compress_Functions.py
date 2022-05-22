@@ -344,7 +344,7 @@ class Compressor():
         self.master.logger.debug("BK Models Through Note Doors")
         self._section_compression_main(texture_setup_ids, 0x7900, 0x8320) # BK Model - Note Doors
 #         self._section_compression_main(texture_setup_ids, 0x7900, 0x8468, ["8460"]) # BK Model - RBB Window, Skip Beta Jiggy Switch
-        if(self.master.world_entrance_var.get() != "None"):
+        if(self.master.world_entrance_var.get() != "No Shuffle"):
             self.master.logger.debug("Level Sign")
             self._section_compression_main(texture_setup_ids, 0x89B0, 0x89B0) # Level Sign
         if(self.master.matching_puzzle_var.get() == 1):

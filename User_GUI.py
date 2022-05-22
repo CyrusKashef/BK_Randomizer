@@ -208,9 +208,10 @@ tool_tips_dict = {
                         "Jiggies that aren't spawned by an event.",
         "RANDOM_JIGGY_BUTTON": "Turns on the final puzzle door feature and\n" +
                                "randomly selects a jiggy value",
-        "SKIP_FURNACE_FUN_AND_BRENTILDA": "Places a warp on the first square of Furnace Fun\n" +
-                                          "that leads to the next area. Brentilda's texts are\n" +
-                                          "replace with hints about the randomizer.",
+        "SKIP_FURNACE_FUN": "Places a warp on the first square of Furnace Fun\n" +
+                            "that leads to the next area. Options appear for\n" +
+                            "Brentilda's texts to be replace with hints about\n" +
+                            "the randomizer.",
         "NO_DETRANSFORMATIONS": "Removes all detransformation barriers in the lair.",
         "HARDER_FINAL_BATTLE": "Uses one of three variations of the final battle,\n" +
                                "each ranging in difficulty from easiest (1) to\n" +
@@ -342,14 +343,17 @@ class WARNING_GUI():
         self.klungo_talking_label.after(60, self.update_klungo_gif, ind)
 
     def confirm(self):
+        '''Confirming Option'''
         self.warning_window.quit()
         self.chosen_option = True
 
     def cancel(self):
+        '''Cancel Option'''
         self.warning_window.quit()
         self.chosen_option = False
     
     def main(self):
+        '''Runs the warning window with Klungo's face'''
         # Klungo Talking
         self.frame_count = 10
         self.frames = [tk.PhotoImage(master=self.warning_window, file=(f"{os.getcwd()}/Pictures/Klungo_Speaking.gif"), format = 'gif -index %i' %(i)) for i in range(self.frame_count)]
@@ -456,7 +460,7 @@ class User_GUI_Class():
         self._verify_rom_file(filename)
     
     def _verify_rom_file(self, filename):
-        '''PyDoc'''
+        '''Compares the checksum of the selected ROM with known ROM file checksums to verify the version'''
         rom_version_dict = {
             "NTSC-U v1.0": [0xA4, 0xBF, 0x93, 0x06, 0xBF, 0x0C, 0xDF, 0xD1],
             "NTSC-U v1.1": [0xCD, 0x75, 0x59, 0xAC, 0xB2, 0x6C, 0xF5, 0xAE],
@@ -584,6 +588,14 @@ class User_GUI_Class():
             self.bk_model_image = tk.PhotoImage(file=f"{self.cwd}Pictures/BK_Models/Question_Mark.png")
             self.bk_model_image_label.config(image=self.bk_model_image)
     
+    def _enemy_option_select(self, *args):
+        '''Shows enemy options if Randomize is selected'''
+        self.logger.info("Enemy Option Select")
+        if(self.enemies_var.get() == "Randomize"):
+            self.enemy_checklist_frame.grid(row=1, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
+        else:
+            self.enemy_checklist_frame.grid_remove()
+    
     def _select_non_softlock_enemies(self):
         '''Checks the boxes for all non-softlock enemies and unchecks all softlock enemies'''
         self.logger.info("Select Non-Softlock Enemies")
@@ -600,20 +612,20 @@ class User_GUI_Class():
             self.enemy_checkbox_dict[enemy_name].set(0)
     
     def _all_custom_aesthetics(self):
-        '''PyDoc'''
+        '''Selects all aesthetic MAP configs'''
         self.logger.info("Select All Custom Aesthetic")
         for custom_name in self.map_config_checkbox_dict:
             if(custom_name.startswith("(A)")):
                 self.map_config_checkbox_dict[custom_name].set(1)
     
     def _no_customization(self):
-        '''PyDoc'''
+        '''Removes all MAP configs'''
         self.logger.info("Removing Customizations")
         for custom_name in self.map_config_checkbox_dict:
             self.map_config_checkbox_dict[custom_name].set(0)
     
     def _random_customization(self):
-        '''PyDoc'''
+        '''Randomly selects MAP configs'''
         self.logger.info("Random Customization")
         if(self.hiding_customization):
             self.logger.info("Hiding Customization")
@@ -659,36 +671,8 @@ class User_GUI_Class():
         self.before_gold_feather_carry_value.set("?")
         self.after_gold_feather_carry_value.set("?")
     
-    def _display_map_file_description(self, *args):
-        '''Pulls the description from a Models, Animations, Properties json file'''
-        self.logger.info("Display Models, Animations, & Properties File Description")
-        filename = self.map_config_var.get()
-        file_path = f"{self.cwd}Randomization_Processes/Misc_Manipulation/Models_Animations_Properties/{filename}.json"
-        if(filename == "None"):
-            map_file_desc = "No Model/Animation/Properties file selected.\nSelect a preset to check its description!"
-        elif(filename == "Random Preset"):
-            map_file_desc = "Selects a random preset from the list!"
-        elif(os.path.isfile(file_path)):
-            try:
-                property_dict = read_json(file_path)
-            except Exception:
-                Error_GUI(f"Error: Could not open JSON file.\nPlease check for proper formatting!")
-                self.map_config_var.set("None")
-                map_file_desc = "No Model/Animation/Properties file selected.\nSelect a preset to check its description!"
-            if(("Description" in property_dict) and (property_dict["Description"])):
-                map_file_desc = ""
-                desc_len = len(property_dict["Description"])
-                for line_num in range(desc_len):
-                    map_file_desc += property_dict["Description"][str(line_num)]
-                    if(line_num < (desc_len - 1)):
-                        map_file_desc += "\n"
-            else:
-                map_file_desc = "This preset doesn't have a description?"
-        else:
-            map_file_desc = "Select a preset to check its description!"
-        self.map_config_file_description.config(text=map_file_desc)
-    
     def _lock_final_puzzle_value(self, *args):
+        '''Displays options depending on whether final puzzle is selected'''
         self.logger.info("Lock Final Puzzle Value")
         if(self.final_puzzle_var.get() == 0):
             self.final_puzzle_value.set("25")
@@ -700,8 +684,9 @@ class User_GUI_Class():
             self.remove_floating_jiggies_checkbox.grid(row=3, column=3, padx=self.padx, pady=self.pady, sticky='w')
     
     def _lock_struct_options(self, *args):
+        '''Displays options depending on which struct option is selected'''
         self.logger.info("Lock Struct Options")
-        if(self.struct_var.get() == "None"):
+        if(self.struct_var.get() == "No Shuffle"):
             self.struct_note_count_var.set("Produce Extra Notes")
             self.struct_note_count_dropdown.grid_remove()
             self.note_overflow_var.set("Allow Save & Quit/Reset")
@@ -725,6 +710,7 @@ class User_GUI_Class():
             self.note_overflow_dropdown.grid_remove()
     
     def _convert_rgb32_to_rgb16(self, _32_bit_color):
+        '''Converts RGB32 colors to RBG16'''
         if(len(_32_bit_color) == 0):
             return ""
         elif(_32_bit_color == "?"):
@@ -747,6 +733,7 @@ class User_GUI_Class():
         return leading_zeros(_16_bit_color, 4)
 
     def _transfer_rgb32_to_rgb16(self):
+        '''Overwrites RGB16 colors with translated RGB32 colors'''
         color = self._convert_rgb32_to_rgb16(self.banjo_skin_var.get())
         if(color):
             self.banjo_feet_var.set(color)
@@ -761,45 +748,47 @@ class User_GUI_Class():
             self.shorts_texture_var.set(color)
 
     def _save_bk_colors(self):
-        if(self.bk_model_var.get() == "Default"):
+        '''Saves the BK colors as a preset'''
+        new_custom_name = self.custom_bk_model_name_var.get()
+        if(new_custom_name == "Default"):
             Error_GUI("You can't overwrite the OG colors!\nThey are classic!")
+            return
+        elif(new_custom_name in self.bk_model_json):
+            warning_gui = WARNING_GUI(f"Are you sure you want to overwrite this preset?\n{new_custom_name}")
         else:
-            new_custom_name = self.custom_bk_model_name_var.get()
-            if(new_custom_name in self.bk_model_json):
-                warning_gui = WARNING_GUI(f"Are you sure you want to overwrite this preset?\n{new_custom_name}")
-            else:
-                warning_gui = WARNING_GUI(f"Are you sure you want to save this new preset?\n{new_custom_name}")
-            confirmation = warning_gui.main()
-            del warning_gui
-            if(confirmation):
-                self.bk_model_json[new_custom_name] = {
-                    "Banjo_Fur": self.banjo_fur_var.get(),
-                    "Banjo_Skin": self.banjo_skin_var.get(),
-                    "Banjo_Feet": self.banjo_feet_var.get(),
-                    "Kazooie_Primary": self.kazooie_primary_var.get(),
-                    "Kazooie_Secondary": self.kazooie_secondary_var.get(),
-                    "Kazooie_Wing_Primary": self.kazooie_wing_primary_var.get(),
-                    "Kazooie_Wing_Secondary": self.kazooie_wing_secondary_var.get(),
-                    "Backpack": self.backpack_var.get(),
-                    "Wading_Boots": self.wading_boots_var.get(),
-                    "Shorts_Vertex": self.shorts_vertex_var.get(),
-                    "Shorts_Texture": self.shorts_texture_var.get(),
-                    "Tooth_Necklace": self.tooth_necklace_var.get()
-                    }
-                dump_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json", self.bk_model_json)
-                self.bk_model_options = ["Seed Determined Preset", "Seed Determined Colors"]
-                self.custom_color_count = 0
-                for item in sorted(self.bk_model_json):
-                    self.bk_model_options.append(item)
-                    if(item.startswith("Custom Preset")):
-                        self.custom_color_count += 1
-                self.bk_model_var.set(new_custom_name)
-                self.bk_model_dropdown = ttk.Combobox(self.bk_model_frame, textvariable=self.bk_model_var, foreground=self.black, background="#F3E5AB", font=(self.font_type, self.small_font_size), width=30)
-                self.bk_model_dropdown['values'] = self.bk_model_options
-                self.bk_model_dropdown['state'] = 'readonly'
-                self.bk_model_dropdown.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+            warning_gui = WARNING_GUI(f"Are you sure you want to save this new preset?\n{new_custom_name}")
+        confirmation = warning_gui.main()
+        del warning_gui
+        if(confirmation):
+            self.bk_model_json[new_custom_name] = {
+                "Banjo_Fur": self.banjo_fur_var.get(),
+                "Banjo_Skin": self.banjo_skin_var.get(),
+                "Banjo_Feet": self.banjo_feet_var.get(),
+                "Kazooie_Primary": self.kazooie_primary_var.get(),
+                "Kazooie_Secondary": self.kazooie_secondary_var.get(),
+                "Kazooie_Wing_Primary": self.kazooie_wing_primary_var.get(),
+                "Kazooie_Wing_Secondary": self.kazooie_wing_secondary_var.get(),
+                "Backpack": self.backpack_var.get(),
+                "Wading_Boots": self.wading_boots_var.get(),
+                "Shorts_Vertex": self.shorts_vertex_var.get(),
+                "Shorts_Texture": self.shorts_texture_var.get(),
+                "Tooth_Necklace": self.tooth_necklace_var.get()
+                }
+            dump_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json", self.bk_model_json)
+            self.bk_model_options = ["Seed Determined Preset", "Seed Determined Colors"]
+            self.custom_color_count = 0
+            for item in sorted(self.bk_model_json):
+                self.bk_model_options.append(item)
+                if(item.startswith("Custom Preset")):
+                    self.custom_color_count += 1
+            self.bk_model_var.set(new_custom_name)
+            self.bk_model_dropdown = ttk.Combobox(self.bk_model_frame, textvariable=self.bk_model_var, foreground=self.black, background="#F3E5AB", font=(self.font_type, self.small_font_size), width=30)
+            self.bk_model_dropdown['values'] = self.bk_model_options
+            self.bk_model_dropdown['state'] = 'readonly'
+            self.bk_model_dropdown.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
 
     def _delete_bk_colors(self):
+        '''Delete BK preset'''
         if(self.bk_model_var.get() == "Default"):
             Error_GUI("You can't delete the OG colors!\nThey are classic!")
         else:
@@ -812,38 +801,71 @@ class User_GUI_Class():
                 dump_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json", self.bk_model_json)
     
     def _select_all_short_sounds(self):
+        '''Selects all short sounds'''
         for short_sound_type in self.short_sounds_dict:
             for short_sound_name in self.short_sounds_dict[short_sound_type]:
                 (self.short_sounds_dict[short_sound_type][short_sound_name]).set(1)
 
     def _select_non_jarring_short_sounds(self):
+        '''Selects all non-jarring short sounds'''
         for short_sound_name in self.short_sounds_dict["Normal"]:
             (self.short_sounds_dict["Normal"][short_sound_name]).set(1)
         for short_sound_name in self.short_sounds_dict["Jarring"]:
             (self.short_sounds_dict["Jarring"][short_sound_name]).set(0)
 
     def _deselect_all_short_sounds(self):
+        '''Deselects all short sounds'''
         for short_sound_type in self.short_sounds_dict:
             for short_sound_name in self.short_sounds_dict[short_sound_type]:
                 (self.short_sounds_dict[short_sound_type][short_sound_name]).set(0)
 
     def _select_all_jingles(self):
+        '''Selects all jingles'''
         for short_sound_name in self.jingles_dict:
             (self.jingles_dict[short_sound_name]).set(1)
 
     def _deselect_all_jingles(self):
+        '''Deselects all jingles'''
         for short_sound_name in self.jingles_dict:
             (self.jingles_dict[short_sound_name]).set(0)
 
     def _select_all_music(self):
+        '''Selects all music'''
         for short_sound_type in self.music_dict:
             for short_sound_name in self.music_dict[short_sound_type]:
                 (self.music_dict[short_sound_type][short_sound_name]).set(1)
 
     def _deselect_all_music(self):
+        '''Deselects all music'''
         for short_sound_type in self.music_dict:
             for short_sound_name in self.music_dict[short_sound_type]:
                 (self.music_dict[short_sound_type][short_sound_name]).set(0)
+        
+    def _skip_furnace_fun_checkbox_trace(self, *args):
+        '''Shows options depending on whether skip furnace fun is selected'''
+        if(self.skip_furnace_fun_var.get() == 1):
+            self.brentilda_hints_var.set("Vague Brentilda Rando Hints")
+            self.brentilda_hints_dropdown.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        else:
+            self.brentilda_hints_var.set("Base Game Brentilda Hints")
+            self.brentilda_hints_dropdown.grid_remove()
+    
+    def _gruntilda_difficulty_trace(self, *args):
+        '''Shows options depending on whether harder grunty is selected'''
+        if(self.gruntilda_difficulty_var.get() == 0):
+            self.what_floor_var.set(0)
+            self.what_floor_checkbox.grid_remove()
+            self.grunty_size_var.set(0)
+            self.grunty_size_checkbox.grid_remove()
+            self.monster_house_var.set(0)
+            self.monster_house_checkbox.grid_remove()
+        else:
+            self.what_floor_var.set(1)
+            self.what_floor_checkbox.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
+            self.grunty_size_var.set(1)
+            self.grunty_size_checkbox.grid(row=5, column=1, padx=self.padx, pady=self.pady, sticky='w')
+            self.monster_house_var.set(1)
+            self.monster_house_checkbox.grid(row=6, column=1, padx=self.padx, pady=self.pady, sticky='w')
     
     ################################
     ### RANDOMIZER SETTINGS CODE ###
@@ -872,7 +894,7 @@ class User_GUI_Class():
         self.randomizer_settings_count = 0
         ### General Settings ###
         # Flagged Objects
-        self._add_randomizer_settings_to_code(["None", "Shuffle (World)", "Shuffle (Game)"].index(self.flagged_object_var.get()), 2)
+        self._add_randomizer_settings_to_code(["No Shuffle", "Shuffle (World)", "Shuffle (Game)"].index(self.flagged_object_var.get()), 2)
         self._add_randomizer_settings_to_code(self.flagged_object_abnormalities_var.get())
         self._add_randomizer_settings_to_code(self.flagged_object_softlock_var.get())
         self._add_randomizer_settings_to_code(self.final_puzzle_var.get())
@@ -884,11 +906,11 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Zero Health (Unbeatable)", "Random Health Option"].index(self.max_health_banjo_var.get()), 3)
         self._add_randomizer_settings_to_code(self.remove_floating_jiggies_var.get())
         # Non-Flagged Objects
-        self._add_randomizer_settings_to_code(["None", "Shuffle (World)"].index(self.non_flagged_object_var.get()))
+        self._add_randomizer_settings_to_code(["No Shuffle", "Shuffle (World)"].index(self.non_flagged_object_var.get()))
         self._add_randomizer_settings_to_code(self.non_flagged_object_abnormalities_var.get())
         self._add_randomizer_settings_to_code(self.starting_lives_value.get(), 8)
         # Structs
-        self._add_randomizer_settings_to_code(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"].index(self.struct_var.get()), 3)
+        self._add_randomizer_settings_to_code(["No Shuffle", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"].index(self.struct_var.get()), 3)
         self._add_randomizer_settings_to_code(["Allow Save & Quit/Reset", "Possible No Save & Quit/Reset"].index(self.note_overflow_var.get()))
         self._add_randomizer_settings_to_code(["Produce Extra Notes", "Produce Exactly Enough Notes"].index(self.struct_note_count_var.get()))
         self._add_randomizer_settings_to_code(["Scaling Note Doors", "Final Note Door Only"].index(self.final_note_door_var.get()))
@@ -921,18 +943,18 @@ class User_GUI_Class():
         else:
             self._add_randomizer_settings_to_code(self.after_gold_feather_carry_value.get(), 9)
         # World Entrances
-        self._add_randomizer_settings_to_code(["None", "Basic Shuffle", "Bottles Shuffle"].index(self.world_entrance_var.get()), 2)
+        self._add_randomizer_settings_to_code(["No Shuffle", "Basic Shuffle", "Bottles Shuffle"].index(self.world_entrance_var.get()), 2)
         self._add_randomizer_settings_to_code(["Exit From World You Were Just In", "Exit From Entrance You Entered From"].index(self.world_exit_var.get()))
         self._add_randomizer_settings_to_code(self.all_starting_moves_var.get())
         # Within World Warps
-        self._add_randomizer_settings_to_code(["None", "Shuffle By World", "Shuffle By Game"].index(self.within_world_warps_var.get()), 2)
+        self._add_randomizer_settings_to_code(["No Shuffle", "Shuffle By World", "Shuffle By Game"].index(self.within_world_warps_var.get()), 2)
         # Starting World
         starting_world_options = [option for option in start_level_ids]
         starting_world_options.insert(0, "Random Starting Area (Auto Have All Moves)")
         self._add_randomizer_settings_to_code(starting_world_options.index(self.new_area_var.get()), 8)
         self._add_randomizer_settings_to_code(self.skip_intro_cutscenes_var.get())
         # Enemies
-        self._add_randomizer_settings_to_code(["None", "Shuffle", "Randomize"].index(self.enemies_var.get()), 2)
+        self._add_randomizer_settings_to_code(["Default Enemies", "Shuffle", "Randomize"].index(self.enemies_var.get()), 2)
         for enemy_name in sorted(self.enemy_checkbox_dict):
             self._add_randomizer_settings_to_code(self.enemy_checkbox_dict[enemy_name].get())
         ### Aesthetic Settings ###
@@ -942,6 +964,7 @@ class User_GUI_Class():
         ### World Specific ###
         # Gruntilda's Lair
         self._add_randomizer_settings_to_code(self.skip_furnace_fun_var.get())
+        self._add_randomizer_settings_to_code(["Base Game Brentilda Hints", "Vague Brentilda Rando Hints", "Detailed Brentilda Rando Hints"].index(self.brentilda_hints_var.get()), 2)
         self._add_randomizer_settings_to_code(self.remove_magic_barriers_var.get())
         self._add_randomizer_settings_to_code(self.gruntilda_difficulty_var.get(), 2)
         self._add_randomizer_settings_to_code(self.monster_house_var.get())
@@ -950,7 +973,7 @@ class User_GUI_Class():
         # Mumbo's Mountain
         self._add_randomizer_settings_to_code(self.flowers_var.get())
         # Treasure Trove Cove
-        self._add_randomizer_settings_to_code(self.scattered_structs_var.get())
+        self._add_randomizer_settings_to_code(["No Scatter", "Low Scatter", "High Scatter"].index(self.scattered_structs_var.get()), 2)
         self._add_randomizer_settings_to_code(self.super_slippery_ttc_var.get())
         # Clanker's Cavern
         self._add_randomizer_settings_to_code(self.hard_rings_var.get())
@@ -1002,7 +1025,7 @@ class User_GUI_Class():
             self._randomizer_settings_char_to_int_translator()
             ### General Settings ###
             # Flagged Objects
-            self.flagged_object_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle (World)", "Shuffle (Game)"]))
+            self.flagged_object_var.set(self._get_randomizer_setting(bit_count=2, options_list=["No Shuffle", "Shuffle (World)", "Shuffle (Game)"]))
             self.flagged_object_abnormalities_var.set(self._get_randomizer_setting())
             self.flagged_object_softlock_var.set(self._get_randomizer_setting())
             self.final_puzzle_var.set(self._get_randomizer_setting())
@@ -1015,11 +1038,11 @@ class User_GUI_Class():
             self.max_health_banjo_var.set(self._get_randomizer_setting(bit_count=3, options_list=["Normal Health", "Four Health Only", "Two Health Only", "One Health Only", "Zero Health (Unbeatable)", "Random Health Option"]))
             self.remove_floating_jiggies_var.set(self._get_randomizer_setting())
             # Non-Flagged Objects
-            self.non_flagged_object_var.set(self._get_randomizer_setting(options_list=["None", "Shuffle (World)"]))
+            self.non_flagged_object_var.set(self._get_randomizer_setting(options_list=["No Shuffle", "Shuffle (World)"]))
             self.non_flagged_object_abnormalities_var.set(self._get_randomizer_setting())
             self.starting_lives_value.set(self._get_randomizer_setting(bit_count=8))
             # Structs
-            self.struct_var.set(self._get_randomizer_setting(bit_count=3, options_list=["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
+            self.struct_var.set(self._get_randomizer_setting(bit_count=3, options_list=["No Shuffle", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
             self.note_overflow_var.set(self._get_randomizer_setting(options_list=["Allow Save & Quit/Reset", "Possible No Save & Quit/Reset"]))
             self.struct_note_count_var.set(self._get_randomizer_setting(options_list=["Produce Extra Notes", "Produce Exactly Enough Notes"]))
             self.final_note_door_var.set(self._get_randomizer_setting(options_list=["Scaling Note Doors", "Final Note Door Only"]))
@@ -1060,18 +1083,18 @@ class User_GUI_Class():
             else:
                 self.after_gold_feather_carry_value.set(str(after_gold_feather_carry_value))
             # World Entrances
-            self.world_entrance_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Basic Shuffle", "Bottles Shuffle"]))
+            self.world_entrance_var.set(self._get_randomizer_setting(bit_count=2, options_list=["No Shuffle", "Basic Shuffle", "Bottles Shuffle"]))
             self.world_exit_var.set(self._get_randomizer_setting(options_list=["Exit From World You Were Just In", "Exit From Entrance You Entered From"]))
             self.all_starting_moves_var.set(self._get_randomizer_setting())
             # Within World Warps
-            self.within_world_warps_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle By World", "Shuffle By Game"]))
+            self.within_world_warps_var.set(self._get_randomizer_setting(bit_count=2, options_list=["No Shuffle", "Shuffle By World", "Shuffle By Game"]))
             # Starting World
             starting_world_options = [option for option in start_level_ids]
             starting_world_options.insert(0, "Random Starting Area (Auto Have All Moves)")
             self.new_area_var.set(self._get_randomizer_setting(bit_count=8, options_list=starting_world_options))
             self.skip_intro_cutscenes_var.set(self._get_randomizer_setting())
             # Enemies
-            self.enemies_var.set(self._get_randomizer_setting(bit_count=2, options_list=["None", "Shuffle", "Randomize"]))
+            self.enemies_var.set(self._get_randomizer_setting(bit_count=2, options_list=["Default Enemies", "Shuffle", "Randomize"]))
             for enemy_name in sorted(self.enemy_checkbox_dict):
                 self.enemy_checkbox_dict[enemy_name].set(self._get_randomizer_setting())
             ### Aesthetic Settings ###
@@ -1080,6 +1103,7 @@ class User_GUI_Class():
             ### World Specific ###
             # Gruntilda's Lair
             self.skip_furnace_fun_var.set(self._get_randomizer_setting())
+            self.brentilda_hints_var.set(self._get_randomizer_setting(bit_count=2, options_list=["Base Game Brentilda Hints", "Vague Brentilda Rando Hints", "Detailed Brentilda Rando Hints"]))
             self.remove_magic_barriers_var.set(self._get_randomizer_setting())
             self.gruntilda_difficulty_var.set(self._get_randomizer_setting(bit_count=2))
             self.monster_house_var.set(self._get_randomizer_setting())
@@ -1088,7 +1112,7 @@ class User_GUI_Class():
             # Mumbo's Mountain
             self.flowers_var.set(self._get_randomizer_setting())
             # Treasure Trove Cove
-            self.scattered_structs_var.set(self._get_randomizer_setting())
+            self.scattered_structs_var.set(self._get_randomizer_setting(bit_count=2, options_list=["No Scatter", "Low Scatter", "High Scatter"]))
             self.super_slippery_ttc_var.set(self._get_randomizer_setting())
             # Clanker's Cavern
             self.hard_rings_var.set(self._get_randomizer_setting())
@@ -1201,6 +1225,7 @@ class User_GUI_Class():
         ### World Specific ###
         # Gruntilda's Lair
         self.skip_furnace_fun_var.set(0)
+        self.brentilda_hints_var.set("Base Game Brentilda Hints")
         self.remove_magic_barriers_var.set(0)
         self.gruntilda_difficulty_var.set(0)
         self.monster_house_var.set(1)
@@ -1209,7 +1234,7 @@ class User_GUI_Class():
         # Mumbo's Mountain
         self.flowers_var.set(0)
         # Treasure Trove Cove
-        self.scattered_structs_var.set(0)
+        self.scattered_structs_var.set("No Scatter")
         self.super_slippery_ttc_var.set(0)
         # Clanker's Cavern
         self.hard_rings_var.set(0)
@@ -1564,6 +1589,11 @@ class User_GUI_Class():
             setting_not_found.append("Furnace_Fun_Skip")
             self.skip_furnace_fun_var.set(0)
         try:
+            self.brentilda_hints_var.set(json_data["Brentilda_Hints"])
+        except KeyError:
+            setting_not_found.append("Brentilda_Hints")
+            self.brentilda_hints_var.set("Base Game Brentilda Hints")
+        try:
             self.remove_magic_barriers_var.set(json_data["Remove_Magic_Barriers"])
         except KeyError:
             setting_not_found.append("Remove_Magic_Barriers")
@@ -1599,7 +1629,7 @@ class User_GUI_Class():
             self.scattered_structs_var.set(json_data["Scattered_Notes_Eggs_Feathers"])
         except KeyError:
             setting_not_found.append("Scattered_Notes_Eggs_Feathers")
-            self.scattered_structs_var.set(0)
+            self.scattered_structs_var.set("No Scatter")
         try:
             self.super_slippery_ttc_var.set(json_data["Super_Slippery_Sand"])
         except KeyError:
@@ -1698,7 +1728,7 @@ class User_GUI_Class():
         self.seed_value.set(randint(10000000, 19940303))
         ### General Settings ###
         # Flagged Objects
-        self.flagged_object_var.set(choice(["None", "Shuffle (World)", "Shuffle (Game)"]))
+        self.flagged_object_var.set(choice(["No Shuffle", "Shuffle (World)", "Shuffle (Game)"]))
         self.flagged_object_abnormalities_var.set(randint(0, 1))
         self.flagged_object_softlock_var.set(randint(0, 1))
         self.final_puzzle_var.set(randint(0, 1))
@@ -1710,11 +1740,11 @@ class User_GUI_Class():
         self.max_health_banjo_var.set("Random Health Option")
         self.remove_floating_jiggies_var.set(0),
         # Non-Flagged Objects
-        self.non_flagged_object_var.set(choice(["None", "Shuffle (World)"]))
+        self.non_flagged_object_var.set(choice(["No Shuffle", "Shuffle (World)"]))
         self.non_flagged_object_abnormalities_var.set(randint(0, 1))
         self.starting_lives_value.set(randint(0, 69))
         # Structs
-        self.struct_var.set(choice(["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
+        self.struct_var.set(choice(["No Shuffle", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]))
         self.note_overflow_var.set("Allow Save & Quit/Reset")
         self.struct_note_count_var.set(choice(["Produce Extra Notes", "Produce Exactly Enough Notes"]))
         self.final_note_door_var.set(choice(["Scaling Note Doors", "Final Note Door Only"]))
@@ -1729,11 +1759,11 @@ class User_GUI_Class():
         self.before_gold_feather_carry_value.set(randint(0, 255))
         self.after_gold_feather_carry_value.set(randint(int(self.before_gold_feather_carry_value.get()), 255))
         # World Entrances
-        self.world_entrance_var.set(choice(["None", "Basic Shuffle", "Bottles Shuffle"]))
+        self.world_entrance_var.set(choice(["No Shuffle", "Basic Shuffle", "Bottles Shuffle"]))
         self.world_exit_var.set(choice(["Exit From World You Were Just In", "Exit From Entrance You Entered From"]))
         self.all_starting_moves_var.set(randint(0, 1))
         # Within World Warps
-        self.within_world_warps_var.set(choice(["None", "Shuffle By World", "Shuffle By Game"]))
+        self.within_world_warps_var.set(choice(["No Shuffle", "Shuffle By World", "Shuffle By Game"]))
         # Starting World
         self.new_area_var.set(choice([option for option in start_level_ids]))
         if(self.new_area_var.get() == "SM - Main"):
@@ -1741,7 +1771,7 @@ class User_GUI_Class():
         else:
             self.skip_intro_cutscenes_var.set(1)
         # Enemies
-        self.enemies_var.set(choice(["None", "Shuffle", "Randomize"]))
+        self.enemies_var.set(choice(["Default Enemies", "Shuffle", "Randomize"]))
         for enemy_name in self.enemy_checkbox_dict:
             self.enemy_checkbox_dict[enemy_name].set(randint(0, 1))
         ### Aesthetic Settings ###
@@ -1762,6 +1792,10 @@ class User_GUI_Class():
         ### World Specific ###
         # Gruntilda's Lair
         self.skip_furnace_fun_var.set(randint(0, 1))
+        if(self.skip_furnace_fun_var.get() == 0):
+            self.brentilda_hints_var.set("Base Game Brentilda Hints")
+        else:
+            self.brentilda_hints_var.set(choice(["Base Game Brentilda Hints", "Vague Brentilda Rando Hints", "Detailed Brentilda Rando Hints"]))
         self.remove_magic_barriers_var.set(randint(0, 1))
         self.gruntilda_difficulty_var.set(randint(0, 3))
         self.monster_house_var.set(randint(0, 1))
@@ -1778,7 +1812,7 @@ class User_GUI_Class():
         # Mumbo's Mountain
         self.flowers_var.set(randint(0, 1))
         # Treasure Trove Cove
-        self.scattered_structs_var.set(randint(0, 1))
+        self.scattered_structs_var.set(choice(["No Scatter", "Low Scatter", "High Scatter"]))
         # Clanker's Cavern
         self.hard_rings_var.set(randint(0, 1))
         # Bubblegloop Swamp
@@ -1868,6 +1902,7 @@ class User_GUI_Class():
             ### World Specific ###
             # Gruntilda's Lair
             "Furnace_Fun_Skip": self.skip_furnace_fun_var.get(),
+            "Brentilda_Hints": self.brentilda_hints_var.get(),
             "Remove_Magic_Barriers": self.remove_magic_barriers_var.get(),
             "Final_Battle_Difficulty": self.gruntilda_difficulty_var.get(),
             "Monster_House": self.monster_house_var.get(),
@@ -2153,7 +2188,7 @@ class User_GUI_Class():
         self.flagged_object_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.flagged_object_ttp = self.CreateToolTip(self.flagged_object_ttp_canvas, self, tool_tips_dict["FLAGGED_OBJECTS"]["FRAME"])
         self.flagged_object_var = tk.StringVar(self.flagged_object_frame)
-        self.flagged_object_options = ["None", "Shuffle (World)", "Shuffle (Game)"]
+        self.flagged_object_options = ["No Shuffle", "Shuffle (World)", "Shuffle (Game)"]
         self.flagged_object_dropdown = ttk.Combobox(self.flagged_object_frame, textvariable=self.flagged_object_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.flagged_object_dropdown['values'] = self.flagged_object_options
         self.flagged_object_dropdown['state'] = 'readonly'
@@ -2203,7 +2238,7 @@ class User_GUI_Class():
         self.struct_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.struct_ttp = self.CreateToolTip(self.struct_ttp_canvas, self, tool_tips_dict["STRUCTS"]["FRAME"])
         self.struct_var = tk.StringVar(self.struct_frame)
-        self.struct_options = ["None", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]
+        self.struct_options = ["No Shuffle", "Shuffle (World)", "Shuffle (Game)", "Randomize", "All Notes"]
         self.struct_dropdown = ttk.Combobox(self.struct_frame, textvariable=self.struct_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.struct_dropdown['values'] = self.struct_options
         self.struct_dropdown['state'] = 'readonly'
@@ -2284,7 +2319,7 @@ class User_GUI_Class():
         self.non_flagged_object_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.non_flagged_object_ttp = self.CreateToolTip(self.non_flagged_object_ttp_canvas, self, tool_tips_dict["NON_FLAGGED_OBJECTS"]["FRAME"])
         self.non_flagged_object_var = tk.StringVar(self.non_flagged_object_frame)
-        self.non_flagged_object_options = ["None", "Shuffle (World)"]
+        self.non_flagged_object_options = ["No Shuffle", "Shuffle (World)"]
         self.non_flagged_object_dropdown = ttk.Combobox(self.non_flagged_object_frame, textvariable=self.non_flagged_object_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.non_flagged_object_dropdown['values'] = self.non_flagged_object_options
         self.non_flagged_object_dropdown['state'] = 'readonly'
@@ -2309,7 +2344,7 @@ class User_GUI_Class():
         self.world_entrance_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.world_entrance_ttp = self.CreateToolTip(self.world_entrance_ttp_canvas, self, tool_tips_dict["WORLD_ENTRANCES"]["FRAME"])
         self.world_entrance_var = tk.StringVar(self.world_entrance_frame)
-        self.world_entrance_options = ["None", "Basic Shuffle", "Bottles Shuffle"]
+        self.world_entrance_options = ["No Shuffle", "Basic Shuffle", "Bottles Shuffle"]
         self.world_entrance_dropdown = ttk.Combobox(self.world_entrance_frame, textvariable=self.world_entrance_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.world_entrance_dropdown['values'] = self.world_entrance_options
         self.world_entrance_dropdown['state'] = 'readonly'
@@ -2330,7 +2365,7 @@ class User_GUI_Class():
         self.within_world_warp_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.within_world_warp_ttp = self.CreateToolTip(self.within_world_warp_ttp_canvas, self, tool_tips_dict["WITHIN_WORLD_WARPS"]["FRAME"])
         self.within_world_warps_var = tk.StringVar(self.within_world_warp_frame)
-        self.within_world_warps_options = ["None", "Shuffle By World", "Shuffle By Game"]
+        self.within_world_warps_options = ["No Shuffle", "Shuffle By World", "Shuffle By Game"]
         self.within_world_warps_dropdown = ttk.Combobox(self.within_world_warp_frame, textvariable=self.within_world_warps_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.within_world_warps_dropdown['values'] = self.within_world_warps_options
         self.within_world_warps_dropdown['state'] = 'readonly'
@@ -2386,8 +2421,8 @@ class User_GUI_Class():
         self.enemies_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.enemies_ttp = self.CreateToolTip(self.enemies_ttp_canvas, self, tool_tips_dict["ENEMIES"]["FRAME"])
         self.enemies_var = tk.StringVar(self.enemies_frame)
-        self.enemies_options = ["None", "Shuffle", "Randomize"]
-        self.enemies_dropdown = ttk.Combobox(self.enemies_frame, textvariable=self.enemies_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.enemies_options = ["Default Enemies", "Shuffle", "Randomize"]
+        self.enemies_dropdown = ttk.Combobox(self.enemies_frame, textvariable=self.enemies_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=22)
         self.enemies_dropdown['values'] = self.enemies_options
         self.enemies_dropdown['state'] = 'readonly'
         self.enemies_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
@@ -2406,6 +2441,7 @@ class User_GUI_Class():
             self.enemy_checkbox_dict[enemy_name] = tk.IntVar()
             enemy_checkbutton = tk.Checkbutton(self.enemy_checklist_frame, text=enemy_name, variable=self.enemy_checkbox_dict[enemy_name], foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=13, anchor="w")
             enemy_checkbutton.grid(row=(enemy_count // 4) + 1, column=(enemy_count % 4), padx=self.padx, pady=self.pady, sticky='w')
+        self.enemies_var.trace('w', self._enemy_option_select)
         ####################
         ### BK MODEL TAB ###
         ####################
@@ -2671,34 +2707,42 @@ class User_GUI_Class():
         self.gruntildas_lair_frame["borderwidth"] = 0
         self.gruntildas_lair_frame["highlightthickness"] = 0
         self.skip_furnace_fun_ttp_canvas = tk.Label(self.gruntildas_lair_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color)
-        self.skip_furnace_fun_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
-        self.skip_furnace_fun_checkbox_ttp = self.CreateToolTip(self.skip_furnace_fun_ttp_canvas, self, tool_tips_dict["GRUNTILDAS_LAIR"]["SKIP_FURNACE_FUN_AND_BRENTILDA"])
+        self.skip_furnace_fun_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.skip_furnace_fun_checkbox_ttp = self.CreateToolTip(self.skip_furnace_fun_ttp_canvas, self, tool_tips_dict["GRUNTILDAS_LAIR"]["SKIP_FURNACE_FUN"])
         self.skip_furnace_fun_var = tk.IntVar()
-        self.skip_furnace_fun_checkbox = tk.Checkbutton(self.gruntildas_lair_frame, text="Skip Furnace Fun/Brentilda Rando Hints", variable=self.skip_furnace_fun_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.skip_furnace_fun_checkbox = tk.Checkbutton(self.gruntildas_lair_frame, text="Skip Furnace Fun", variable=self.skip_furnace_fun_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
         self.skip_furnace_fun_checkbox.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.brentilda_hints_var = tk.StringVar(self.gruntildas_lair_frame)
+        self.brentilda_hints_options = ["Base Game Brentilda Hints", "Vague Brentilda Rando Hints", "Detailed Brentilda Rando Hints"]
+        self.brentilda_hints_dropdown = ttk.Combobox(self.gruntildas_lair_frame, textvariable=self.brentilda_hints_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size), width=24)
+        self.brentilda_hints_dropdown['values'] = self.brentilda_hints_options
+        self.brentilda_hints_dropdown['state'] = 'readonly'
+        self.brentilda_hints_dropdown.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.remove_magic_barriers_ttp_canvas = tk.Label(self.gruntildas_lair_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.remove_magic_barriers_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.remove_magic_barriers_ttp_canvas.grid(row=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.remove_magic_barriers_checkbox_ttp = self.CreateToolTip(self.remove_magic_barriers_ttp_canvas, self, tool_tips_dict["GRUNTILDAS_LAIR"]["NO_DETRANSFORMATIONS"])
         self.remove_magic_barriers_var = tk.IntVar()
         self.remove_magic_barriers_checkbox = tk.Checkbutton(self.gruntildas_lair_frame, text="No Detransformations", variable=self.remove_magic_barriers_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.remove_magic_barriers_checkbox.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.remove_magic_barriers_checkbox.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.gruntilda_difficulty_ttp_canvas = tk.Label(self.gruntildas_lair_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.gruntilda_difficulty_ttp_canvas.grid(row=2, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.gruntilda_difficulty_ttp_canvas.grid(row=3, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.gruntilda_difficulty_checkbox_ttp = self.CreateToolTip(self.gruntilda_difficulty_ttp_canvas, self, tool_tips_dict["GRUNTILDAS_LAIR"]["HARDER_FINAL_BATTLE"])
         self.gruntilda_difficulty_text = tk.Label(self.gruntildas_lair_frame, text="Final Battle Difficulty?\n0 For Default; 3 For Hard", foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.gruntilda_difficulty_text.grid(row=2, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.gruntilda_difficulty_text.grid(row=3, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.gruntilda_difficulty_var = tk.IntVar()
         self.gruntilda_difficulty_scale = tk.Scale(self.gruntildas_lair_frame, from_=0, to=3, orient=tkinter.HORIZONTAL, variable=self.gruntilda_difficulty_var, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.gruntilda_difficulty_scale.grid(row=2, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='n')
+        self.gruntilda_difficulty_scale.grid(row=3, column=2, columnspan=2, padx=self.padx, pady=self.pady, sticky='n')
         self.monster_house_var = tk.IntVar()
         self.monster_house_checkbox = tk.Checkbutton(self.gruntildas_lair_frame, text="Monster House", variable=self.monster_house_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.monster_house_checkbox.grid(row=3, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.monster_house_checkbox.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.what_floor_var = tk.IntVar()
         self.what_floor_checkbox = tk.Checkbutton(self.gruntildas_lair_frame, text="What Floor?", variable=self.what_floor_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.what_floor_checkbox.grid(row=3, column=2, padx=self.padx, pady=self.pady, sticky='w')
+        self.what_floor_checkbox.grid(row=5, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.grunty_size_var = tk.IntVar()
         self.grunty_size_checkbox = tk.Checkbutton(self.gruntildas_lair_frame, text="Mini Me", variable=self.grunty_size_var, selectcolor=curr_background_color, foreground=self.white, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.grunty_size_checkbox.grid(row=4, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.grunty_size_checkbox.grid(row=6, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.skip_furnace_fun_var.trace('w', self._skip_furnace_fun_checkbox_trace)
+        self.gruntilda_difficulty_var.trace('w', self._gruntilda_difficulty_trace)
         # Mumbo's Mountain
         curr_background_color = "#009999"
         self._mumbos_mountain_tab = ttk.Frame(self._world_specific_tab_control)
@@ -2724,9 +2768,14 @@ class User_GUI_Class():
         self.scattered_structs_ttp_canvas = tk.Label(self.treasure_trove_cove_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.scattered_structs_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.scattered_structs_checkbox_ttp = self.CreateToolTip(self.scattered_structs_ttp_canvas, self, tool_tips_dict["TREASURE_TROVE_COVE"]["SCATTERED_STRUCTS"])
-        self.scattered_structs_var = tk.IntVar()
-        self.scattered_structs_checkbox = tk.Checkbutton(self.treasure_trove_cove_frame, text="Scattered Notes/Eggs/Feathers", variable=self.scattered_structs_var, selectcolor=curr_background_color, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.scattered_structs_checkbox.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.scattered_structs_text = tk.Label(self.treasure_trove_cove_frame, text="Scatter Notes/Eggs/Feathers:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
+        self.scattered_structs_text.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.scattered_structs_var = tk.StringVar(self.treasure_trove_cove_frame)
+        self.scattered_structs_options = ["No Scatter", "Low Scatter", "High Scatter"]
+        self.scattered_structs_dropdown = ttk.Combobox(self.treasure_trove_cove_frame, textvariable=self.scattered_structs_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size), width=15)
+        self.scattered_structs_dropdown['values'] = self.scattered_structs_options
+        self.scattered_structs_dropdown['state'] = 'readonly'
+        self.scattered_structs_dropdown.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='w')
         self.super_slippery_ttc_ttp_canvas = tk.Label(self.treasure_trove_cove_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.large_font_size))
         self.super_slippery_ttc_ttp_canvas.grid(row=1, column=0, padx=self.padx, pady=self.pady, sticky='w')
         self.super_slippery_ttc_checkbox_ttp = self.CreateToolTip(self.super_slippery_ttc_ttp_canvas, self, tool_tips_dict["TREASURE_TROVE_COVE"]["SUPER_SLIPPERY_SAND"])
