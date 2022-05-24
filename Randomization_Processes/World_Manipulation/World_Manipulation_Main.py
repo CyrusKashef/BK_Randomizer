@@ -1779,12 +1779,19 @@ class World_Manipulation_Class():
             self._bottles_world_order_shuffle_main()
             self._remove_learning_move_warps()
             self.world_order_list = self.world_order.world_order_list
+        else:
+            self.world_order_list = ["Mumbo's Mountain", "Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood"]
+            self.world_order = World_Order_Bottles(self.modified_bottles_world_warp_dict, {}, seed_val=self.seed,
+                                                   max_hp=self.grandmaster.health_val, final_puzzle_option=self.grandmaster.final_puzzle_var.get(),
+                                                   world_exit_option=self.grandmaster.world_exit_var.get(),
+                                                   removed_detransformations=self.grandmaster.remove_magic_barriers_var.get(), free_transformations=self.grandmaster.free_transformations_var.get())
+            self.world_order.world_order_list = ["Mumbo's Mountain", "Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood"]
         if(self.grandmaster.world_entrance_var.get() != "No Shuffle"):
             self._world_entrance_signs()
-            if(self.grandmaster.skip_furnace_fun_var.get() == 1):
-                self._brentilda_world_order_hints()
             if(self.grandmaster.world_exit_var.get() == "Exit From Entrance You Entered From"):
                 self._world_exits()
+        if(self.grandmaster.brentilda_hints_var.get() != "Base Game Brentilda Hints"):
+            self._brentilda_world_order_hints()
         if(self.grandmaster.free_transformations_var.get() == "World Order Scaled Costs"):
             print(f"World Order: {self.world_order.world_order_list}")
             print(f"World Transformation Cost Dict: {self.world_order.transform_cost_dict}")

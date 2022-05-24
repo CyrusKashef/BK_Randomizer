@@ -231,10 +231,10 @@ bottles_world_warp_dict = {
         "Clanker's Cavern": {
             "Possible_Bottles": {
                 "Wonderwing": [["Fly", "Eggs"]],
-                "Platform_1_Up": [["Eggs", "Talon Trot"]],
-                "Alcove_1_Up": [["Shock_Jump_Pad", "Eggs", "Talon Trot"]],
-                "Yellow_Jinjo": [["Eggs", "Talon Trot"]],
-                "Orange_Jinjo": [["Shock_Jump_Pad", "Eggs", "Talon Trot"]],
+                "Platform_1_Up": [["Eggs", "Talon_Trot"]],
+                "Alcove_1_Up": [["Shock_Jump_Pad", "Eggs", "Talon_Trot"]],
+                "Yellow_Jinjo": [["Eggs", "Talon_Trot"]],
+                "Orange_Jinjo": [["Shock_Jump_Pad", "Eggs", "Talon_Trot"]],
 #                 "Orange_Jinjo": [["Shock_Jump_Pad", "Beak_Buster"], ["Shock_Jump_Pad", "Eggs"]],
                 },
             "Flagged_Object_Flags": {
@@ -586,6 +586,7 @@ bottles_world_warp_dict = {
                 "Water_Pyramid_1_Up": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
                 "Yellow_Jinjo": [[]],
                 "Green_Jinjo": [["Talon_Trot"], ["Turbo_Talon_Trot"]],
+                # Only one camera in Jinxy? Interesting
 #                 "Orange_Jinjo": [["Eggs", "Turbo_Talon_Trot"], ["Eggs", "Talon_Trot"]],
                 },
             "Flagged_Object_Flags": {
@@ -1016,8 +1017,9 @@ click_clock_wood_closed_dict = {
         "Summer_Treehouse_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
         "Summer_Yellow_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
         "Summer_Whipcrack_Room_1_Up": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-        "Fall_Orange_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
-        "Fall_Acorn_Ledge": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad"]],
+        # Fall doesn't have camera for boots or beak bomb
+        "Fall_Orange_Jinjo": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Wading_Boots", "Beak_Bomb"]],
+        "Fall_Acorn_Ledge": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Wading_Boots", "Beak_Bomb"]],
         "Winter_Sir_Slush": [["Beak_Buster", "Talon_Trot", "Shock_Jump_Pad", "Fly", "Beak_Bomb"]],
         },
     "Flagged_Object_Flags": {
@@ -1251,12 +1253,14 @@ click_clock_wood_open_dict = {
     "Possible_Bottles": {
         "Spring_Branch_1_Up": [["Talon_Trot"]],
         "Spring_Whipcrack_Room_Floor_1_Up": [["Talon_Trot", "Shock_Jump_Pad"]],
-        "Summer_Grass_1_Up": [[]],
+        "Summer_Grass_1_Up": [["Shock_Jump_Pad"]],
         "Summer_Treehouse_1_Up": [["Talon_Trot", "Shock_Jump_Pad"]],
-        "Summer_Yellow_Jinjo": [[]],
+        # Summer doesn't have camera for shock jump
+        "Summer_Yellow_Jinjo": [["Shock_Jump_Pad"]],
         "Summer_Whipcrack_Room_1_Up": [["Talon_Trot", "Shock_Jump_Pad"]],
-        "Fall_Orange_Jinjo": [["Talon_Trot"]],
-        "Fall_Acorn_Ledge": [["Talon_Trot", "Shock_Jump_Pad"]],
+        # Fall doesn't have camera for boots or beak bomb
+        "Fall_Orange_Jinjo": [["Talon_Trot", "Wading_Boots", "Beak_Bomb"]],
+        "Fall_Acorn_Ledge": [["Talon_Trot", "Shock_Jump_Pad", "Wading_Boots", "Beak_Bomb"]],
         "Winter_Sir_Slush": [["Fly", "Beak_Bomb"]],
         },
     "Flagged_Object_Flags": {

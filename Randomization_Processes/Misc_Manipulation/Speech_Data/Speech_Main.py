@@ -27,6 +27,7 @@ class Speech_Manipulation_Class():
     '''Handles all of the text related changes'''
     def __init__(self, grandmaster, seed_val):
         self._grandmaster = grandmaster
+        self._detailed_brentilda_hints = (self._grandmaster.brentilda_hints_var.get() == "Detailed Brentilda Rando Hints")
         self._file_dir = grandmaster.cwd
         self._seed_val = seed_val
         self._spawned_count = {
@@ -247,15 +248,16 @@ class Speech_Manipulation_Class():
         elif(len(move_list) == 1):
             move_string = move_list[0]
         elif(len(move_list) == 2):
-            move_string = f"{move_list[0]} and {move_list[1]}"
+            move_string = f"{move_list[0]} AND {move_list[1]}"
         else:
             move_string = ""
             for move_name in move_list[:-1]:
                 move_string += f"{move_name}, "
             move_string += f"AND {move_list[-1]}"
+        return move_string
 
 
-    def _brentilda_1_1(self, world_object, detailed=False):
+    def _brentilda_1_1(self, world_object):
         '''Brentilda move hint for the first world'''
         # 0xE2B0 - 5CF130
         # GRUNTY BRUSHES HER ROTTEN TEETH WITH ~ FLAVORED TOOTHPASTE!
@@ -265,7 +267,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("4752554e5459", f"WORLD 1, {world_name}, HAS {move_string}! ~")
         else:
@@ -293,7 +295,7 @@ class Speech_Manipulation_Class():
         else:
             brentilda_text._replace_line("414e4420534845", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
-    def _brentilda_2_1(self, world_object, detailed=False):
+    def _brentilda_2_1(self, world_object):
         '''Brentilda move hint for the second world'''
         # 0xE2C8 - 5CF270
         # UGLY GRUNTY'S NICKNAME WAS ~ AT WITCH SCHOOL!
@@ -303,7 +305,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("55474c59204752554e5459", f"WORLD 2, {world_name}, HAS {move_string}! ~")
         else:
@@ -331,7 +333,7 @@ class Speech_Manipulation_Class():
         else:
             brentilda_text._replace_line("414e4420544845", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
-    def _brentilda_3_1(self, world_object, detailed=False):
+    def _brentilda_3_1(self, world_object):
         '''Brentilda move hint for the third world'''
         # 0xE388 - 5CFD48
         # GRUNTY WEARS ~ UNDER THAT REPULSIVE DRESS OF HERS!
@@ -341,7 +343,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("4752554e5459205745415253", f"WORLD 3, {world_name}, HAS {move_string}! ~")
         else:
@@ -369,7 +371,7 @@ class Speech_Manipulation_Class():
         else:
             brentilda_text._replace_line("4d5920534953544552", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
-    def _brentilda_4_1(self, world_object, detailed=False):
+    def _brentilda_4_1(self, world_object):
         '''Brentilda move hint for the fourth world'''
         # 0xE340 - 5CF910
         # MY LAZY SISTER OFTEN SLEEPS ~, THE DIRTY HAG!
@@ -379,7 +381,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("4d59204c415a59", f"WORLD 4, {world_name}, HAS {move_string}! ~")
         else:
@@ -407,7 +409,7 @@ class Speech_Manipulation_Class():
         else:
             brentilda_text._replace_line("534845204f4654454e20424f41535453", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
-    def _brentilda_5_1(self, world_object, detailed=False):
+    def _brentilda_5_1(self, world_object):
         '''Brentilda move hint for the fifth world'''
         # 0xE2E0 - 5CF3B0
         # MY FAT OLD SISTER'S FAVORITE SPORT IS ~!
@@ -417,7 +419,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("4d5920464154", f"WORLD 5, {world_name}, HAS {move_string}! ~")
         else:
@@ -445,7 +447,7 @@ class Speech_Manipulation_Class():
         else:
             brentilda_text._replace_line("594f5520574f4e2754", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
-    def _brentilda_6_1(self, world_object, detailed=False):
+    def _brentilda_6_1(self, world_object):
         '''Brentilda move hint for the sixth world'''
         # 0xE328 - 5CF7C8
         # GRUNTY'S BEST FRIEND AT WITCH SCHOOL WAS THE AWFUL ~!
@@ -455,7 +457,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("4752554e54592753", f"WORLD 6, {world_name}, HAS {move_string}! ~")
         else:
@@ -483,7 +485,7 @@ class Speech_Manipulation_Class():
         else:
             brentilda_text._replace_line("5748494c452053495050494e47", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
-    def _brentilda_7_1(self, world_object, detailed=False):
+    def _brentilda_7_1(self, world_object):
         '''Brentilda move hint for the seventh world'''
         # 0xE2F8 - 5CF520
         # THE DISGUSTING GRUNTILDA HAS ~ FOR BREAKFAST!
@@ -493,7 +495,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("5448452044495347555354494e47", f"WORLD 7, {world_name}, HAS {move_string}! ~")
         else:
@@ -521,7 +523,7 @@ class Speech_Manipulation_Class():
         else:
             brentilda_text._replace_line("5741525442414753", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
-    def _brentilda_8_1(self, world_object, detailed=False):
+    def _brentilda_8_1(self, world_object):
         '''Brentilda move hint for the eigth world'''
         # 0xE310 - 5CF670
         # REVOLTING GRUNTILDA'S BEDROOM HAS ~ HANGING FROM THE CEILING!
@@ -531,7 +533,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("5245564f4c54494e47", f"WORLD 8, {world_name}, HAS {move_string}! ~")
         else:
@@ -559,7 +561,7 @@ class Speech_Manipulation_Class():
         else:
             brentilda_text._replace_line("414e4420594f552744", f"{(world_object._world_name).upper()} HAS {jiggy_count} JIGGIES AND {honeycomb_count} EMPTY HONEYCOMBS! ~")
     
-    def _brentilda_9_1(self, world_object, detailed=False):
+    def _brentilda_9_1(self, world_object):
         '''Brentilda move hint for the ninth world'''
         # 0xE370 - 5CFBD8
         # DID YOU KNOW WARTBAGS KEEPS ~ IN HER POCKET FOR LUCK?
@@ -569,7 +571,7 @@ class Speech_Manipulation_Class():
             world_name = "CLICK CLOCK WOOD"
         else:
             world_name = (world_object._world_name).upper()
-        if(detailed):
+        if(self._detailed_brentilda_hints):
             move_string = self._generate_brentilda_move_string(move_list)
             brentilda_text._replace_line("44494420594f55", f"WORLD 9, {world_name}, HAS {move_string}! ~")
         else:

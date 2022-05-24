@@ -208,10 +208,9 @@ tool_tips_dict = {
                         "Jiggies that aren't spawned by an event.",
         "RANDOM_JIGGY_BUTTON": "Turns on the final puzzle door feature and\n" +
                                "randomly selects a jiggy value",
-        "SKIP_FURNACE_FUN": "Places a warp on the first square of Furnace Fun\n" +
-                            "that leads to the next area. Options appear for\n" +
-                            "Brentilda's texts to be replace with hints about\n" +
-                            "the randomizer.",
+        "SKIP_FURNACE_FUN": "Warps the player past Furnace Fun.\n" +
+                            "Options appear for Brentilda's texts to be\n" +
+                            "replaced with hints about the randomizer.",
         "NO_DETRANSFORMATIONS": "Removes all detransformation barriers in the lair.",
         "HARDER_FINAL_BATTLE": "Uses one of three variations of the final battle,\n" +
                                "each ranging in difficulty from easiest (1) to\n" +
@@ -593,8 +592,12 @@ class User_GUI_Class():
         self.logger.info("Enemy Option Select")
         if(self.enemies_var.get() == "Randomize"):
             self.enemy_checklist_frame.grid(row=1, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
+            self.non_softlock_enemies_button.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='e')
+            self.clear_enemies_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='e')
         else:
             self.enemy_checklist_frame.grid_remove()
+            self.non_softlock_enemies_button.grid_remove()
+            self.clear_enemies_button.grid_remove()
     
     def _select_non_softlock_enemies(self):
         '''Checks the boxes for all non-softlock enemies and unchecks all softlock enemies'''

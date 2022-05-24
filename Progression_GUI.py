@@ -429,14 +429,13 @@ class Progression_GUI_Class():
             except Exception:
                 self.pb_label.set_text(f"Error Moving Jinxy Heads...\n{self._mumbo_error_message}")
                 raise
-        if(self.master.world_entrance_var.get() != "No Shuffle"):
-            try:
-                self.pb_label.set_text("Mumbo Lost Way Back To Mountain...")
-                self.transform_cost_dict = world_manip._world_order_warps_main()
-            except Exception:
-                self.master.logger.info("World Order Warps Error")
-                self.pb_label.set_text(f"Error Shuffling World Order...\n{self._mumbo_error_message}")
-                raise
+        try:
+            self.pb_label.set_text("Mumbo Lost Way Back To Mountain...")
+            self.transform_cost_dict = world_manip._world_order_warps_main()
+        except Exception:
+            self.master.logger.info("World Order Warps Error")
+            self.pb_label.set_text(f"Error Shuffling World Order...\n{self._mumbo_error_message}")
+            raise
         if(self.master.within_world_warps_var.get() != "No Shuffle"):
             try:
                 self.pb_label.set_text("Mumbo Lost Way Back To Skull...")
