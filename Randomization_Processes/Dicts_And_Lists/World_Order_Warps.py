@@ -105,6 +105,205 @@ bottles_moves_camera_dict = {
         },
     }
 
+# TODO: Makes sure each of these cameras are long enough
+replace_camera_dict = {
+    # Mumbo's Mountain
+    "MM Main Area": [
+        "00", # Start Of Level
+        "08", # Behind Start Of Level
+        "28", # Around Mumbo's Skull
+        "03", # Around Conga
+        "06", # To Witch Switch
+        "04", # Around Egg Bottles
+        "05", # Near Conga
+        "0A", # Shooting Conga
+    ],
+    # Treasure Trove Cove
+    "TTC Main Area": [
+        "00", # Note Lockup
+        "01", # Red Feather Lockup
+        "02", # Token Lockup
+        "08", # Egg Lockup
+        "11", # Side Alcove Jiggy
+        "1D", # Salty Hippo Lower
+        "06", # Jiggy Lockup
+        "1E", # Jump Pad Alcove Jiggy
+    ],
+    # Clanker's Cavern
+    "CC Main Area": [
+        "0C", # Below Level Start
+        "08", # Mutie Snippet Area
+        "14", # Side Vent 1
+        "15", # Side Vent 2
+        "07", # Level Start
+        "12", # In Front Of Clanker Jiggy
+        "17", # Behind Clanker Jiggy
+        "19", # Alcove Extra Life
+        "06", # Mutie Snippet Jiggy
+    ],
+    "Inside Clanker Gold Feather Room": [
+        "01", # Wonderwing Bottles
+        "00", # Main Hallway
+    ],
+    # Bubblegloop Swamp
+    "BGS Main Area": [
+        "02", # Maze 1
+        "04", # Maze 2
+        "05", # Maze 3
+        "07", # Maze 4
+        "08", # Around Mumbo's Skull
+        "12", # Yellow Flibbits
+        "1C", # Croctus Jiggy
+        "1D", # Beehive Cam Behind Tanktup
+    ],
+    # Freezeezy Peak
+    "FP Main Area": [
+        "2D", # Behind Boggy 2
+        "0E", # Behind Boggy 2
+        "2A", # Behind Finish Line
+        "06", # Start Of Level
+        "10", # Snowman's Pipe
+        "28", # Snowman's Nose
+        "2B", # Near Mumbo's Skull
+    ],
+    "FP Mumbo's Skull": [
+        "01", # Top
+        "00", # Bottom
+    ],
+    "Inside The Tree": [
+        "05", # Top Middle
+        "07", # Lower Middle
+        "08", # Lower
+        "06", # Top
+    ],
+    # Gobi's Valley
+    "GV Main Area": [
+        "33", # SNS Door
+        "1A", # Water Pyramid 1
+        "1B", # Water Pyramid 2
+        "1C", # Water Pyramid 3
+        "1D", # Water Pyramid 4
+        "1E", # Water Pyramid 5
+        "1F", # Water Pyramid 6
+        "23", # Water Pyramid 7
+        "22", # Water Pyramid 8
+        "30", # Jinxy Entrance
+    ],
+    "King Sandybutt's Tomb": [
+        "02", # Maze 1
+        "03", # Maze 2
+        "0A", # Maze 3
+        "09", # Maze 4
+        "06", # Maze 5
+        "04", # Maze 6
+        "00", # Maze (Majority)
+        "01", # Tomb
+    ],
+    # Mad Monster Mansion
+    "MMM Main Area": [
+        "26", # Behind Start Of Level
+        "0E", # Pool Mumbo Token
+        "14", # Start Of Level
+        "16", # Wading Boots
+    ],
+    "Church": [
+        "01", # Keys
+        "02", # Sheet Music
+    ],
+    "Secret Church Room": [
+        "00", # Everything
+    ],
+    "Cellar": [
+        "05", # Barrels Left
+        "06", # Barrels Right
+        "01", # Note Rack
+        "02", # In Front Of Note Rack
+        "07", # Center
+    ],
+    "Bedroom": [
+        "02", # Shock Jump
+        "00", # Majority
+        "01", # Bed/Entrance
+    ],
+    # Rusty Bucket Bay
+    "RBB Main Area": [
+        "0E", # Between Containers
+        "0D", # Between Containers
+        "1D", # Behind Start Of Level
+        "10", # Start Of Level
+        "14", # Toxic Barrels
+    ],
+    "Engine Room": [
+        "03", # Control Button Pipe
+        "0A", # Honeycomb Pipe
+        "07", # Control Button
+        "06", # Main Ladder
+        "0B", # Center
+        "05", # Enter Area
+    ],
+    "Big Fish Warehouse": [
+        "01", # One Barrel
+        "03", # Back Of Room
+        "02", # Main
+        "00", # Water
+    ],
+    "Second Blue Container (Sea Grublins)": [
+        "02", # Bottles
+        "01", # Main
+        "00", # Entrance
+    ],
+    # Click Clock Wood
+    "Spring Main Area": [
+        "08", # Enter Mumbos
+        "09", # Onto Of Mumbos
+    ],
+    "Spring Whipcrack Room": [
+        "02", # Back Area
+        "03", # Lead Up Branches
+        "04", # High Branches
+        "00", # Main
+        "01", # Entrance
+    ],
+    "Summer Main Area": [
+        "0E", # Enter Mumbos
+        "0D", # Onto Of Mumbos
+        "07", # Back Of Treehouse
+        "04", # Enter Treehouse
+        "05", # Front Of Treehouse
+    ],
+    "Summer Whipcrack Room": [
+        "02", # Back Area
+        "03", # Lead Up Branches
+        "04", # High Branches
+        "00", # Main
+        "01", # Entrance
+    ],
+    "Fall Main Area": [
+        "11", # Enter Mumbos
+        "12", # Onto Of Mumbos
+        "06", # Enter Treehouse
+        "07", # In Front Of Treehouse
+    ],
+    "Fall Whipcrack Room": [
+        "02", # Back Area
+        "03", # Lead Up Branches
+        "04", # High Branches
+        "00", # Main
+        "01", # Entrance
+    ],
+    "Winter Main Area": [
+        "0A", # Enter Mumbos
+        "0B", # Onto Of Mumbos
+    ],
+    "Winter Whipcrack Room": [
+        "02", # Back Area
+        "03", # Lead Up Branches
+        "04", # High Branches
+        "00", # Main
+        "01", # Entrance
+    ],
+}
+
 possible_bottles_locations = {
         "Mumbo's Mountain": {
             "Beak_Buster": "0F67086BF2A2",
@@ -161,6 +360,7 @@ possible_bottles_locations = {
             "Blue_Jinjo": "170C012C041A",
             "Orange_Jinjo": "EF5700000A6C",
             "Yellow_Jinjo": "FF06021C012C",
+            "Pink_Jinjo": "01FF002600CB",
             },
         "Rusty Bucket Bay": {
             "Big_Fish_Warehouse_1_Up": "FC4A0415FFCE",

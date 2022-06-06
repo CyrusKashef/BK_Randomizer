@@ -341,8 +341,8 @@ class Compressor():
                (self.master.before_red_feather_carry_value.get() != 50) or (self.master.after_red_feather_carry_value.get() != 100) or
                (self.master.before_gold_feather_carry_value.get() != 10) or (self.master.after_gold_feather_carry_value.get() != 20)):
                 self._section_compression_main(speech_file_ids, 0xDBD8, 0xDBE8, furnace_fun_questions_pointer_list)
-        self.master.logger.debug("BK Models Through Note Doors")
-        self._section_compression_main(texture_setup_ids, 0x7900, 0x8320) # BK Model - Note Doors
+        self.master.logger.debug("BK Models Through Jinjonator")
+        self._section_compression_main(texture_setup_ids, 0x7900, 0x8920) # BK Model - Jinjonator
 #         self._section_compression_main(texture_setup_ids, 0x7900, 0x8468, ["8460"]) # BK Model - RBB Window, Skip Beta Jiggy Switch
         if(self.master.world_entrance_var.get() != "No Shuffle"):
             self.master.logger.debug("Level Sign")

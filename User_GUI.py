@@ -104,9 +104,9 @@ tool_tips_dict = {
             "    Recommended using FINAL NOTE DOOR feature. You can set whether\n" +
             "    extra notes will spawn to make it easier.\n" +
             "ALL NOTES:\n" +
-            "    All eggs and feathers become notes. Brentildas are replaced\n" +
-            "    with egg and feather refills. The refill at that Brentilda\n" +
-            "    location is random.\n"+
+            "    All eggs and feathers become notes. Extra lives are replaced\n" +
+            "    with egg and feather refills. The refill at that location\n" +
+            "    is random.\n"+
             "Allow Save & Quit/Reset\n" +
             "    Sets the limits of all world's notes to 127 to allow exiting\n" +
             "    the save file. Cannot be used for 'All Notes' feature.",
@@ -591,7 +591,7 @@ class User_GUI_Class():
         '''Shows enemy options if Randomize is selected'''
         self.logger.info("Enemy Option Select")
         if(self.enemies_var.get() == "Randomize"):
-            self.enemy_checklist_frame.grid(row=1, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
+            self.enemy_checklist_frame.grid(row=2, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
             self.non_softlock_enemies_button.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='e')
             self.clear_enemies_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='e')
         else:
@@ -800,8 +800,20 @@ class User_GUI_Class():
             del warning_gui
             if(confirmation):
                 del self.bk_model_json[self.bk_model_var.get()]
-                self.bk_model_var.set("Default")
                 dump_json(f"{self.cwd}Randomization_Processes/Misc_Manipulation/Model_Data/BK_Model_Presets.json", self.bk_model_json)
+                self.bk_model_options = ["Seed Determined Preset", "Seed Determined Colors"]
+                self.custom_color_count = 0
+                for item in sorted(self.bk_model_json):
+                    self.bk_model_options.append(item)
+                    if(item.startswith("Custom Preset")):
+                        self.custom_color_count += 1
+                self.bk_model_var.set(self.bk_model_options[0])
+                self.bk_model_dropdown = ttk.Combobox(self.bk_model_frame, textvariable=self.bk_model_var, foreground=self.black, background="#F3E5AB", font=(self.font_type, self.small_font_size), width=30)
+                self.bk_model_dropdown['values'] = self.bk_model_options
+                self.bk_model_dropdown['state'] = 'readonly'
+                self.bk_model_dropdown.grid(row=0, column=1, columnspan=2, padx=self.padx, pady=self.pady, sticky='w')
+                self.bk_model_var.set("Default")
+                self.custom_bk_model_name_var.set(f"Custom Preset {self.custom_color_count}")
     
     def _select_all_short_sounds(self):
         '''Selects all short sounds'''
@@ -910,6 +922,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.remove_floating_jiggies_var.get())
         # Non-Flagged Objects
         self._add_randomizer_settings_to_code(["No Shuffle", "Shuffle (World)"].index(self.non_flagged_object_var.get()))
+        self._add_randomizer_settings_to_code(["Default Jinjo Colors", "Random Jinjo Colors"].index(self.jinjo_color_var.get()))
         self._add_randomizer_settings_to_code(self.non_flagged_object_abnormalities_var.get())
         self._add_randomizer_settings_to_code(self.starting_lives_value.get(), 8)
         # Structs
@@ -958,6 +971,10 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.skip_intro_cutscenes_var.get())
         # Enemies
         self._add_randomizer_settings_to_code(["Default Enemies", "Shuffle", "Randomize"].index(self.enemies_var.get()), 2)
+        self._add_randomizer_settings_to_code(["Random Size Setting", "Random Setting Per World",
+                                               "Default Sizes", "Scale Factor", "Uniform Size Range",
+                                               "Generally Small", "Generally Large",
+                                               "Everything Small", "Everything Large"].index(self.enemy_size_var.get()), 4)
         for enemy_name in sorted(self.enemy_checkbox_dict):
             self._add_randomizer_settings_to_code(self.enemy_checkbox_dict[enemy_name].get())
         ### Aesthetic Settings ###
@@ -1042,6 +1059,7 @@ class User_GUI_Class():
             self.remove_floating_jiggies_var.set(self._get_randomizer_setting())
             # Non-Flagged Objects
             self.non_flagged_object_var.set(self._get_randomizer_setting(options_list=["No Shuffle", "Shuffle (World)"]))
+            self.jinjo_color_var.set(self._get_randomizer_setting(options_list=["Default Jinjo Colors", "Random Jinjo Colors"]))
             self.non_flagged_object_abnormalities_var.set(self._get_randomizer_setting())
             self.starting_lives_value.set(self._get_randomizer_setting(bit_count=8))
             # Structs
@@ -1098,6 +1116,11 @@ class User_GUI_Class():
             self.skip_intro_cutscenes_var.set(self._get_randomizer_setting())
             # Enemies
             self.enemies_var.set(self._get_randomizer_setting(bit_count=2, options_list=["Default Enemies", "Shuffle", "Randomize"]))
+            self.enemy_size_var.set(self._get_randomizer_setting(bit_count=4,
+                                                                 options_list=["Random Size Setting", "Random Setting Per World",
+                                                                               "Default Sizes", "Scale Factor", "Uniform Size Range",
+                                                                               "Generally Small", "Generally Large",
+                                                                               "Everything Small", "Everything Large"]))
             for enemy_name in sorted(self.enemy_checkbox_dict):
                 self.enemy_checkbox_dict[enemy_name].set(self._get_randomizer_setting())
             ### Aesthetic Settings ###
@@ -1164,6 +1187,7 @@ class User_GUI_Class():
         self.remove_floating_jiggies_var.set(0)
         # Non-Flagged Objects
         self.non_flagged_object_var.set("Shuffle (World)")
+        self.jinjo_color_var.set("Default Jinjo Colors")
         self.non_flagged_object_abnormalities_var.set(0)
         self.starting_lives_value.set(3)
         # Structs
@@ -1362,6 +1386,11 @@ class User_GUI_Class():
             setting_not_found.append("Non_Flagged_Objects_Option")
             self.non_flagged_object_var.set("Shuffle (World)")
         try:
+            self.jinjo_color_var.set(json_data["Jinjo_Colors"])
+        except KeyError:
+            setting_not_found.append("Jinjo_Colors")
+            self.jinjo_color_var.set("Default Jinjo Colors")
+        try:
             self.non_flagged_object_abnormalities_var.set(json_data["Non_Flagged_Objects_Abnormalities"])
         except KeyError:
             setting_not_found.append("Non_Flagged_Objects_Abnormalities")
@@ -1466,6 +1495,11 @@ class User_GUI_Class():
         except KeyError:
             setting_not_found.append("Enemies_Option")
             self.enemies_var.set("Randomize")
+        try:
+            self.enemy_size_var.set(json_data["Enemy_Size_Option"])
+        except KeyError:
+            setting_not_found.append("Enemy_Size_Option")
+            self.enemy_size_var.set("Default Sizes")
         for enemy_name in self.enemy_checkbox_dict:
             try:
                 self.enemy_checkbox_dict[enemy_name].set(json_data[f"Include {enemy_name}"])
@@ -1744,6 +1778,7 @@ class User_GUI_Class():
         self.remove_floating_jiggies_var.set(0),
         # Non-Flagged Objects
         self.non_flagged_object_var.set(choice(["No Shuffle", "Shuffle (World)"]))
+        self.jinjo_color_var.set(choice(["Default Jinjo Colors", "Random Jinjo Colors"]))
         self.non_flagged_object_abnormalities_var.set(randint(0, 1))
         self.starting_lives_value.set(randint(0, 69))
         # Structs
@@ -1775,6 +1810,7 @@ class User_GUI_Class():
             self.skip_intro_cutscenes_var.set(1)
         # Enemies
         self.enemies_var.set(choice(["Default Enemies", "Shuffle", "Randomize"]))
+        self.enemy_size_var.set("Random Size Setting")
         for enemy_name in self.enemy_checkbox_dict:
             self.enemy_checkbox_dict[enemy_name].set(randint(0, 1))
         ### Aesthetic Settings ###
@@ -1858,6 +1894,7 @@ class User_GUI_Class():
             "Remove_Floating_Jiggies": self.remove_floating_jiggies_var.get(),
             # Non-Flagged Objects
             "Non_Flagged_Objects_Option": self.non_flagged_object_var.get(),
+            "Jinjo_Colors": self.jinjo_color_var.get(),
             "Non_Flagged_Objects_Abnormalities": self.non_flagged_object_abnormalities_var.get(),
             "Starting_Lives": self.starting_lives_value.get(),
             # Structs
@@ -1883,6 +1920,7 @@ class User_GUI_Class():
             "Skip_Intro_Cutscenes": self.skip_intro_cutscenes_var.get(),
             # Enemies
             "Enemies_Option": self.enemies_var.get(),
+            "Enemy_Size_Option": self.enemy_size_var.get(),
             ### Aesthetic Settings ###
             # BK Model
             "BK_Model_Option": self.bk_model_var.get(),
@@ -2327,6 +2365,12 @@ class User_GUI_Class():
         self.non_flagged_object_dropdown['values'] = self.non_flagged_object_options
         self.non_flagged_object_dropdown['state'] = 'readonly'
         self.non_flagged_object_dropdown.grid(row=0, column=1, columnspan=3, padx=self.padx, pady=self.pady, sticky='w')
+        self.jinjo_color_var = tk.StringVar(self.non_flagged_object_frame)
+        self.jinjo_color_options = ["Default Jinjo Colors", "Random Jinjo Colors"]
+        self.jinjo_color_dropdown = ttk.Combobox(self.non_flagged_object_frame, textvariable=self.jinjo_color_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
+        self.jinjo_color_dropdown['values'] = self.jinjo_color_options
+        self.jinjo_color_dropdown['state'] = 'readonly'
+        self.jinjo_color_dropdown.grid(row=0, column=2, columnspan=3, padx=self.padx, pady=self.pady, sticky='w')
         self.non_flagged_object_abnormalities_var = tk.IntVar()
         self.non_flagged_object_abnormalities_checkbutton = tk.Checkbutton(self.non_flagged_object_frame, text="Include Abnormalities (May Include Eggs and Feathers)", variable=self.non_flagged_object_abnormalities_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
         self.non_flagged_object_abnormalities_checkbutton.grid(row=1, column=1, columnspan=3, padx=self.padx, pady=self.pady, sticky='sw')
@@ -2421,20 +2465,26 @@ class User_GUI_Class():
         self.enemies_frame["borderwidth"] = 0
         self.enemies_frame["highlightthickness"] = 0
         self.enemies_ttp_canvas = tk.Label(self.enemies_frame, image=self.ttp_image, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))
-        self.enemies_ttp_canvas.grid(row=0, column=0, padx=self.padx, pady=self.pady, sticky='w')
+        self.enemies_ttp_canvas.grid(row=0, column=0, rowspan=2, padx=self.padx, pady=self.pady, sticky='w')
         self.enemies_ttp = self.CreateToolTip(self.enemies_ttp_canvas, self, tool_tips_dict["ENEMIES"]["FRAME"])
         self.enemies_var = tk.StringVar(self.enemies_frame)
         self.enemies_options = ["Default Enemies", "Shuffle", "Randomize"]
-        self.enemies_dropdown = ttk.Combobox(self.enemies_frame, textvariable=self.enemies_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=22)
+        self.enemies_dropdown = ttk.Combobox(self.enemies_frame, textvariable=self.enemies_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=23)
         self.enemies_dropdown['values'] = self.enemies_options
         self.enemies_dropdown['state'] = 'readonly'
         self.enemies_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
+        self.enemy_size_var = tk.StringVar(self.enemies_frame)
+        self.enemy_size_options = ["Random Size Setting", "Random Setting Per World", "Default Sizes", "Scale Factor", "Uniform Size Range", "Generally Small", "Generally Large", "Everything Small", "Everything Large"]
+        self.enemy_size_dropdown = ttk.Combobox(self.enemies_frame, textvariable=self.enemy_size_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=23)
+        self.enemy_size_dropdown['values'] = self.enemy_size_options
+        self.enemy_size_dropdown['state'] = 'readonly'
+        self.enemy_size_dropdown.grid(row=1, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.non_softlock_enemies_button = tk.Button(self.enemies_frame, text='Select All\nNon-Softlock Enemies', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._select_non_softlock_enemies()))
-        self.non_softlock_enemies_button.grid(row=0, column=2, padx=self.padx, pady=self.pady, sticky='e')
+        self.non_softlock_enemies_button.grid(row=0, column=2, rowspan=2, padx=self.padx, pady=self.pady, sticky='e')
         self.clear_enemies_button = tk.Button(self.enemies_frame, text='Remove All\nEnemies', foreground=self.white, background=self.red, font=(self.font_type, self.small_font_size), command=(lambda: self._remove_all_enemies()))
-        self.clear_enemies_button.grid(row=0, column=3, padx=self.padx, pady=self.pady, sticky='e')
+        self.clear_enemies_button.grid(row=0, column=3, rowspan=2, padx=self.padx, pady=self.pady, sticky='e')
         self.enemy_checklist_frame = tk.LabelFrame(self.enemies_frame, text="Enemies To Include In Randomization:", foreground=self.black, background=curr_background_color, font=(self.font_type, self.medium_font_size))
-        self.enemy_checklist_frame.grid(row=1, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
+        self.enemy_checklist_frame.grid(row=2, column=0, columnspan=6, padx=self.padx, pady=self.pady, sticky='w')
         self.enemy_checklist_frame["borderwidth"] = 0
         self.enemy_checklist_frame["highlightthickness"] = 0
         self.softlock_enemies_text = tk.Label(self.enemy_checklist_frame, text="WARNING: Enemies with * may softlock/crash the game. Check the box at your own risk.", foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size))

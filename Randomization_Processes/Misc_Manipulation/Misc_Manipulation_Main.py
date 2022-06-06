@@ -19,6 +19,7 @@ import os
 ###################
 
 from Randomization_Processes.Misc_Manipulation.Model_Data.BK_Models import BK_Model_Class
+from Randomization_Processes.Misc_Manipulation.Model_Data.Jinjo_Models import Jinjo_Model_Class
 from Randomization_Processes.Misc_Manipulation.Music_Data.Music_Main import Music_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Game_Engine_Data.Game_Engine_Main import Game_Engine_Class
@@ -254,7 +255,7 @@ class Misc_Manipulation_Class():
             random_hex_val = random_hex_val + "FF"
         return random_hex_val
     
-    def _bk_model(self, seed_val):
+    def _bk_model(self):
         '''Runs the functions for editing the Banjo Kazooie models'''
         self.grandmaster.logger.info("BK Model")
         bk_model_obj = BK_Model_Class(self._file_dir, "7900", original_index_start=0xB138)
@@ -318,7 +319,17 @@ class Misc_Manipulation_Class():
             kazooie_primary, kazooie_secondary, kazooie_wing_primary, kazooie_wing_secondary,
             backpack, wading_boots, shorts_vertex, shorts_texture, tooth_necklace
             )
-        bk_model_obj._only_low_poly_bk_model(seed_val)
+        bk_model_obj._only_low_poly_bk_model(self._seed_val)
+    
+    def _jinjo_model(self):
+        '''Runs the functions for editing the Jinjo models'''
+        self.grandmaster.logger.info("Jinjo Models")
+        original_jinjo_colors = [("Blue", "7C98"), ("Green", "7CA8"), ("Yellow", "7C70"), ("Orange", "7C78"), ("Pink", "7CA0"), ("Jinjonator", "8920")]
+        for jinjo_count, (original_color, address) in enumerate(original_jinjo_colors):
+            jinjo_model_obj = Jinjo_Model_Class(self._file_dir, address, original_index_start=0x1140)
+            primary_color = self._random_hex(6, increment=(jinjo_count*2))
+            secondary_color = self._random_hex(6, increment=(jinjo_count*2+1))
+            jinjo_model_obj._main(original_color=original_color, primary_color=primary_color, secondary_color=secondary_color)
 
     ########################################
     ### MODELS, ANIMATIONS, & PROPERTIES ###

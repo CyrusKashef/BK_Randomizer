@@ -708,10 +708,12 @@ bottles_world_warp_dict = {
         "Mad Monster Mansion": {
             "Possible_Bottles": {
                 "Organ_1_up": [["Turbo_Talon_Trot", "Shock_Jump_Pad"]],
-                "Church_Secret_Room": [[]],
+                # Only One Camera
+                "Church_Secret_Room": [["Turbo_Talon_Trot", "Wading_Boots"]],
                 "Blue_Jinjo": [["Shock_Jump_Pad"]],
                 "Orange_Jinjo": [[]],
                 "Yellow_Jinjo": [["Turbo_Talon_Trot", "Shock_Jump_Pad"]],
+                "Pink_Jinjo": [["Beak_Buster"]]
                 },
             "Flagged_Object_Flags": {
                 ### JIGGIES ###

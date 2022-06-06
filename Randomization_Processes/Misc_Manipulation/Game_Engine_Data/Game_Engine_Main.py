@@ -35,20 +35,15 @@ class Game_Engine_Class():
         with open(f"{self._file_dir}Randomized_ROM/F37F90-Decompressed.bin", "r+b") as decomp_file:
             self.mm = mmap.mmap(decomp_file.fileno(), 0)
 
-#     def _patch_file(self):
-#         this_dir = f"{self._file_dir}Randomization_Processes/Misc_Manipulation/Game_Engine_Data/"
-#         if(os.path.isfile(f"{this_dir}F37F90-Decompressed.bin")):
-#             os.remove(f"{this_dir}F37F90-Decompressed.bin")
-#         apply_patch(f"{self._file_dir}xdelta/", f"{self._file_dir}Randomized_ROM/F37F90-Decompressed.bin", f"{this_dir}F37F90-Patch.xdelta", f"{this_dir}F37F90-Decompressed.bin")
-#         shutil.move(f"{this_dir}F37F90-Decompressed.bin", f"{self._file_dir}Randomized_ROM/F37F90-Decompressed.bin")
-
     def _starting_moves(self):
+        '''Starts the player with all of the moves, and hits some other flags'''
         # 0xE84E & 0xE84F
         # C3 A0 -> 0F 98
         self.mm[0xE84E] = 0x0F
         self.mm[0xE84F] = 0x98
     
     def _mumbo_transformations_costs(self, termite_cost=0, crocodile_cost=0, walrus_cost=0, pumpkin_cost=0, bee_cost=0):
+        '''Sets the cost of transformations'''
         # 0x4A7E7 (Termite)
         # 0x4A7EF (Crocodile)
         # 0x4A7F7 (Walrus)
@@ -61,19 +56,23 @@ class Game_Engine_Class():
         self.mm[0x4A807] = bee_cost
     
     def _jiggies_per_world(self, jiggy_count):
+        '''Unused'''
         # One single value for every world?
         # 0x8AC5F
         self.mm[0x8AC5F] = jiggy_count
     
     def _empty_honeycombs_per_world(self, e_honeycomb_count):
+        '''Unused'''
         # 0x8ACAB
         self.mm[0x8ACAB] = e_honeycomb_count
     
     def _empty_honeycombs_for_sm(self, e_honeycomb_count):
+        '''Unused'''
         # 0x8ACAF
         self.mm[0x8ACAF] = e_honeycomb_count
     
     def _blue_egg_limit(self, count_before_cheato, count_after_cheato=None):
+        '''Sets the blue egg capacity before and after Cheato'''
         # 0xBF21F Before Cheato
         # 0xBF217 After Cheato
         self.mm[0xBF21F] = count_before_cheato
@@ -84,6 +83,7 @@ class Game_Engine_Class():
             self.mm[0xBF217] = count_after_cheato
     
     def _red_feather_limit(self, count_before_cheato, count_after_cheato=None):
+        '''Sets the red feather capacity before and after Cheato'''
         # 0xBF23F Before Cheato
         # 0xBF237 After Cheato
         self.mm[0xBF23F] = count_before_cheato
@@ -94,6 +94,7 @@ class Game_Engine_Class():
             self.mm[0xBF237] = count_after_cheato
         
     def _gold_feather_limit(self, count_before_cheato, count_after_cheato=None):
+        '''Sets the gold feather capacity before and after Cheato'''
         # 0xBF25B Before Cheato
         # 0xBF257 After Cheato
         self.mm[0xBF25B] = count_before_cheato
@@ -104,6 +105,7 @@ class Game_Engine_Class():
             self.mm[0xBF257] = count_after_cheato
     
     def _new_game_start_level(self, new_start_level_name, skip_intro_cutscene=False):
+        '''Instead of the intro cutscene into Spiral Mountain, this is where the player will start the game'''
         # 0x3E17B - Intro Cutscene
         # 0x986FA - New Game Start
         # starting pointer = 0x9778
@@ -114,6 +116,7 @@ class Game_Engine_Class():
             self.mm[0x3E17B] = start_level_ids[new_start_level_name]
     
     def _load_game_start_level(self, load_game_start_level_name):
+        '''After watching the Gruntilda Lair cutscene, this is where the player will start on loading the game'''
         # 0x98BAE - Load Game Start
         # starting pointer = 0x9778
         # new_start_level_id = (level_pointer - starting pointer) // 8
@@ -121,6 +124,7 @@ class Game_Engine_Class():
         self.mm[0x98BAE] = start_level_ids[load_game_start_level_name]
     
     def _starting_lives(self, life_count):
+        '''Sets the starting life count'''
         # 0xBF51A & 0xBF51B
         # Default is 3 lives
         # 24 18 00 [03]
@@ -129,6 +133,7 @@ class Game_Engine_Class():
         self.mm[0xBF51B] = int(life_count_str[2:], 16)
     
     def _starting_health(self, health_val):
+        '''Sets how much health the player has to begin with; Unused'''
         # Starting Health
         # 24 0E 00 [05]
         life_count_str = leading_zeros(health_val, 4)
@@ -136,11 +141,13 @@ class Game_Engine_Class():
         self.mm[0xBF517] = int(life_count_str[2:], 16)
     
     def _start_double_health(self):
+        '''Doesn't Work'''
         ## Double Health (I Think?)
         # 24 03 00 02 24 03 00 [01]
         self.mm[0xBF14F] = 0x02
     
     def _max_health(self, health_val="Normal Health"):
+        '''Sets the maximum health to zero, one, two, four, or normal health'''
         ## Lower Health Total?
         # 00 03 20 [C0]
         # XX11 = 0x30/0x70/0xF0 = Crash

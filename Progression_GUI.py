@@ -237,12 +237,12 @@ class Progression_GUI_Class():
         else:
             self.master.before_blue_egg = int(self.master.before_blue_egg_carry_value.get())
         self.master.logger.debug(f"Before Cheato Blue Egg: {self.master.before_blue_egg}")
-        if(self.master.before_blue_egg_carry_value.get() == "?"):
+        if(self.master.after_blue_egg_carry_value.get() == "?"):
             seed(a=(self.seed_val + 6))
             self.master.after_blue_egg = randint(self.master.before_blue_egg, 255)
             cheat_sheet += f"After Cheato Blue Egg: {self.master.after_blue_egg}\n"
         else:
-            self.master.after_blue_egg = int(self.master.before_blue_egg_carry_value.get())
+            self.master.after_blue_egg = int(self.master.after_blue_egg_carry_value.get())
         self.master.logger.debug(f"After Cheato Blue Egg: {self.master.after_blue_egg}")
         # Red Feather Capacity
         if(self.master.before_red_feather_carry_value.get() == "?"):
@@ -541,10 +541,18 @@ class Progression_GUI_Class():
         if(self.master.bk_model_var.get() != "Default"):
             try:
                 self.pb_label.set_text("Stand On Skull And Press B To See Mighty Mumbo Magic...")
-                misc_manip._bk_model(seed_val=self.seed_val)
+                misc_manip._bk_model()
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
                 self.pb_label.set_text(f"Error Adjusting BK's Colors...\n{self._mumbo_error_message}")
+                raise
+        if(self.master.jinjo_color_var.get() != "Default Jinjo Colors"):
+            try:
+                self.pb_label.set_text("Is Mumbo A Jinjo? Mumbo Never Tell...")
+                misc_manip._jinjo_model()
+            except Exception:
+                self.warning_label.set_text("Uh-Oh...")
+                self.pb_label.set_text(f"Error Adjusting Jinjos' Colors...\n{self._mumbo_error_message}")
                 raise
         customization_option = False
         for custom_count, custom_name in enumerate(self.master.map_config_checkbox_dict):

@@ -12,7 +12,6 @@
         "0x108A8": "Normal|Wrong Choice",
         "0x10940": "Normal|Cauldron Charging",
         "0x10948": "Normal|Magic Carpet Lowering",
-        "0x10960": "Normal|Enter Level Sparkles",
         "0x109B8": "Normal|Exiting Warp",
         "0x109C0": "Normal|Entering Warp",
         "0x10A68": "Normal|World Opening",
@@ -77,8 +76,7 @@
         "0x10B98": "Turbo Talon Trot Short",
         "0x10BA8": "Jinjonator Rising",
         "0x10BC8": "Door Of Grunty Opening",
-        "0x10BF0": "Start Of Bottles Game 1",
-        "0x10C08": "Start Of Bottles Game 2",
+        "0x10BF0": "Start Of Bottles Game",
         "0x10CA8": "Finale Game Over"
     },
     "Music": {
@@ -177,6 +175,8 @@
         "0x10CA0": "Special|Rock Falls On Grunty"
     },
     "Do Not Randomize": {
-        "0x10AA8": "Special|New Game Cutscene"
+        "0x10960": "Jarring|Enter Level Sparkles",
+        "0x10AA8": "Special|New Game Cutscene",
+        "0x10C08": "Start Of Bottles Game 2"
     }
 }

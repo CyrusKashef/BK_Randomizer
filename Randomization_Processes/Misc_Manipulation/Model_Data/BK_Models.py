@@ -15,7 +15,6 @@ import shutil
 ### FILE IMPORT ###
 ###################
 
-# from .Generic_Models import Model
 from Randomization_Processes.Misc_Manipulation.Model_Data import Generic_Models
 
 ######################

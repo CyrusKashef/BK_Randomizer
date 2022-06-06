@@ -28,9 +28,9 @@ enemy_id_dict = {
             "190C028A", # Whiplash
 #             "190C03C1", # Purple Tee-Hee
             ],
-        "Misc_Enemies": [
-#             "190C000A", # Piranha Fish
-#             "190C0068", # Snacker
+        "Misc": [
+            "190C000A", # Piranha Fish
+            # "190C0068", # Snacker
             ],
         },
     "Gruntilda's Lair": {
@@ -162,7 +162,7 @@ additional_search_enemy_id_dict = {
     "Flying": [
         "078C034D", # Nibbly (Credits)
         ],
-    "Misc_Enemies": [
+    "Misc": [
         ]
     }
 
