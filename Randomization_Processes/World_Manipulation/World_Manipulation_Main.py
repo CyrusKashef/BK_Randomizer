@@ -844,6 +844,8 @@ class World_Manipulation_Class():
             new_size = leading_zeros(min(default_min, original_size), 4)
         elif(size_mode == "Everything Large"):
             new_size = leading_zeros(max(default_max, original_size), 4)
+        else:
+            new_size = leading_zeros(new_size, 4)
         replacement_dict = {8: int(new_size[:2], 16), 9: int(new_size[2:], 16)}
         setup_file._edit_object_index(enemy_index, replacement_dict)
 
@@ -1932,12 +1934,12 @@ class World_Manipulation_Class():
             self._world_entrance_signs()
             if(self.grandmaster.world_exit_var.get() == "Exit From Entrance You Entered From"):
                 self._world_exits()
+            if(self.grandmaster.free_transformations_var.get() == "World Order Scaled Costs"):
+                print(f"World Order: {self.world_order.world_order_list}")
+                print(f"World Transformation Cost Dict: {self.world_order.transform_cost_dict}")
+                self._transformation_cost_signs()
         if(self.grandmaster.brentilda_hints_var.get() != "Base Game Brentilda Hints"):
             self._brentilda_world_order_hints()
-        if(self.grandmaster.free_transformations_var.get() == "World Order Scaled Costs"):
-            print(f"World Order: {self.world_order.world_order_list}")
-            print(f"World Transformation Cost Dict: {self.world_order.transform_cost_dict}")
-            self._transformation_cost_signs()
         return self.world_order.transform_cost_dict
 
     def _transformation_cost_signs(self):
