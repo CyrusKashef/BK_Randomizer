@@ -971,7 +971,7 @@ class User_GUI_Class():
         self._add_randomizer_settings_to_code(self.skip_intro_cutscenes_var.get())
         # Enemies
         self._add_randomizer_settings_to_code(["Default Enemies", "Shuffle", "Randomize"].index(self.enemies_var.get()), 2)
-        self._add_randomizer_settings_to_code(["Random Size Setting", "Random Setting Per World",
+        self._add_randomizer_settings_to_code(["Random Size Setting", "Random Setting Per World", "Random Setting Per Area",
                                                "Default Sizes", "Scale Factor", "Uniform Size Range",
                                                "Generally Small", "Generally Large",
                                                "Everything Small", "Everything Large"].index(self.enemy_size_var.get()), 4)
@@ -1117,7 +1117,7 @@ class User_GUI_Class():
             # Enemies
             self.enemies_var.set(self._get_randomizer_setting(bit_count=2, options_list=["Default Enemies", "Shuffle", "Randomize"]))
             self.enemy_size_var.set(self._get_randomizer_setting(bit_count=4,
-                                                                 options_list=["Random Size Setting", "Random Setting Per World",
+                                                                 options_list=["Random Size Setting", "Random Setting Per World", "Random Setting Per Area",
                                                                                "Default Sizes", "Scale Factor", "Uniform Size Range",
                                                                                "Generally Small", "Generally Large",
                                                                                "Everything Small", "Everything Large"]))
@@ -1214,6 +1214,7 @@ class User_GUI_Class():
 #         self.load_area_var.set("GL - MM Puzzle/Entrance Room")
         # Enemies
         self.enemies_var.set("Randomize")
+        self.enemy_size_var.set("Default Sizes")
         for enemy_name in self.enemy_checkbox_dict:
             if("*" in enemy_name):
                 self.enemy_checkbox_dict[enemy_name].set(0)
@@ -2474,7 +2475,7 @@ class User_GUI_Class():
         self.enemies_dropdown['state'] = 'readonly'
         self.enemies_dropdown.grid(row=0, column=1, padx=self.padx, pady=self.pady, sticky='w')
         self.enemy_size_var = tk.StringVar(self.enemies_frame)
-        self.enemy_size_options = ["Random Size Setting", "Random Setting Per World", "Default Sizes", "Scale Factor", "Uniform Size Range", "Generally Small", "Generally Large", "Everything Small", "Everything Large"]
+        self.enemy_size_options = ["Random Size Setting", "Random Setting Per World", "Random Setting Per Area", "Default Sizes", "Scale Factor", "Uniform Size Range", "Generally Small", "Generally Large", "Everything Small", "Everything Large"]
         self.enemy_size_dropdown = ttk.Combobox(self.enemies_frame, textvariable=self.enemy_size_var, foreground=self.black, background=curr_background_color, font=(self.font_type, self.small_font_size), width=23)
         self.enemy_size_dropdown['values'] = self.enemy_size_options
         self.enemy_size_dropdown['state'] = 'readonly'

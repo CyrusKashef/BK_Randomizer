@@ -851,7 +851,7 @@ class World_Manipulation_Class():
         increment = 0
         size_setting = self.grandmaster.enemy_size_var.get()
         if(self.grandmaster.enemy_size_var.get() == "Random Size Setting"):
-            size_setting = self._choose_from_list(["Random Setting Per World", "Default Sizes",
+            size_setting = self._choose_from_list(["Random Setting Per World", "Random Setting Per Area", "Default Sizes",
                                                    "Scale Factor", "Uniform Size Range",
                                                    "Generally Small", "Generally Large",
                                                    "Everything Small", "Everything Large"],
@@ -872,8 +872,14 @@ class World_Manipulation_Class():
                 if(size_mode != "Default Sizes"):
                     self._gather_all_enemies(world_object)
                     for setup_file in world_object._setup_list:
+                        if(size_setting == "Random Setting Per Area"):
+                            size_mode = self._choose_from_list(["Default Sizes",
+                                                                "Scale Factor", "Uniform Size Range",
+                                                                "Generally Small", "Generally Large",
+                                                                "Everything Small", "Everything Large"],
+                                                                increment=increment)
                         default_max = 175
-                        if(setup_file.setup_name == "Ticker's Tower"):
+                        if(setup_file.setup_name in ["Ticker's Tower", "Nipper's Shell"]):
                             default_max = 125
                         for ground_enemy_index in setup_file.ground_enemy_index_list:
                             self._alter_enemy_size(setup_file, ground_enemy_index, size_mode=size_mode, increment=increment, default_max=default_max)
@@ -1743,18 +1749,16 @@ class World_Manipulation_Class():
             self.curr_setup_file._edit_object_index(bottles_index, replacement_dict)
             bottles_info_list.remove(chosen_move)
             progression_moves.remove(chosen_move)
-        shuffle_not_verified = True
         increment = 0
+        shuffle_not_verified = True
         while(shuffle_not_verified):
+            shuffle_not_verified = False
             self._shuffle_list(bottles_info_list, increment=increment)
             # Cannot have eggs in CC
             # With within world warps, the teeth mess this up
-            if(bottles_info_list[2] != {'Script1': 0x05, 'Script2': 0x0C, 'Obj_ID1': 0x03, 'Obj_ID2': 0x7A}):
-                shuffle_not_verified = False
-            # Cannot have running shoes in BGS
-            # It overwrites the central Jiggy camera
-            if(bottles_info_list[3] != {'Script1': 0x08, 'Script2': 0x8C, 'Obj_ID1': 0x03, 'Obj_ID2': 0x7A}):
-                shuffle_not_verified = False
+            if((self.grandmaster.within_world_warps_var.get() != "No Shuffle") and
+               (bottles_info_list[2] == {'Script1': 0x05, 'Script2': 0x0C, 'Obj_ID1': 0x03, 'Obj_ID2': 0x7A})):
+                shuffle_not_verified = True
             increment += 1
         for world_object in self.world_list[1:]:
             for setup_file in world_object._setup_list:
