@@ -23,7 +23,7 @@ World Manipulation Features
 ### PYTHON FUNCTIONS ###
 ########################
 
-from random import randint, seed, shuffle, choice
+from random import randint, seed, shuffle, choice, triangular, uniform
 import json
 import mmap
 from math import ceil, floor
@@ -80,6 +80,7 @@ class World_Manipulation_Class():
             self.modified_bottles_world_warp_dict["Click Clock Wood"] = deepcopy(click_clock_wood_closed_dict)
         self.extra_flagged_object_flags = deepcopy(extra_flagged_object_flags)
         self.extra_flagged_object_flags_adjusted = deepcopy(extra_flagged_object_flags_adjusted)
+        self.replace_camera_dict = deepcopy(World_Order_Warps.replace_camera_dict)
     
     def _shuffle_list(self, original_list, address=0, increment=0):
         '''Shuffles list based on the current address, if applicable'''
@@ -93,23 +94,36 @@ class World_Manipulation_Class():
         return random_choice
     
     def _choose_random_integer(self, int_start=0, int_end=1, address=0, increment=0):
+        '''Selects a random integer between the two given values based on the seed, address, and number of increments, when applicable'''
         seed(a=(self.seed + address + increment))
         random_int = randint(int_start, int_end)
         return random_int
+    
+    def _choose_random_triangular(self, int_start=0, int_end=1, mode=0.5, address=0, increment=0):
+        '''Selects a random integer between the two given values based on the seed, address, and number of increments, when applicable'''
+        seed(a=(self.seed + address + increment))
+        random_float = triangular(int_start, int_end, mode)
+        return random_float
+    
+    def _choose_random_uniform(self, int_start=0, int_end=1, address=0, increment=0):
+        '''Selects a random integer between the two given values based on the seed, address, and number of increments, when applicable'''
+        seed(a=(self.seed + address + increment))
+        random_float = uniform(int_start, int_end)
+        return random_float
     
     def _create_worlds(self):
         '''Creates every world using the generic world and generic setup file classes, including individual seasons for click clock wood, if applicable'''
         # MUMBOS MOUNTAIN
         self.grandmaster.logger.info("Creating Worlds: Mumbo's Mountain")
         self.mumbos_mountain = World("Mumbo's Mountain")
-        self.mumbos_mountain._add_setup_file(SetupFile("9788", self.grandmaster.cwd, "Main Area"))
+        self.mumbos_mountain._add_setup_file(SetupFile("9788", self.grandmaster.cwd, "MM Main Area"))
         self.mumbos_mountain._add_setup_file(SetupFile("97D8", self.grandmaster.cwd, "Ticker's Tower"))
-        self.mumbos_mountain._add_setup_file(SetupFile("97E8", self.grandmaster.cwd, "Mumbo's Skull"))
+        self.mumbos_mountain._add_setup_file(SetupFile("97E8", self.grandmaster.cwd, "MM Mumbo's Skull"))
         self.world_list.append(self.mumbos_mountain)
         # TREASURE TROVE COVE
         self.grandmaster.logger.info("Creating Worlds: Treasure Trove Cove")
         self.treasure_trove_cove = World("Treasure Trove Cove")
-        self.treasure_trove_cove._add_setup_file(SetupFile("97B0", self.grandmaster.cwd, "Main Area"))
+        self.treasure_trove_cove._add_setup_file(SetupFile("97B0", self.grandmaster.cwd, "TTC Main Area"))
         self.treasure_trove_cove._add_setup_file(SetupFile("97A0", self.grandmaster.cwd, "Blubber's Ship"))
         self.treasure_trove_cove._add_setup_file(SetupFile("97A8", self.grandmaster.cwd, "Nipper's Shell"))
         self.treasure_trove_cove._add_setup_file(SetupFile("97C8", self.grandmaster.cwd, "Sandcastle"))
@@ -117,7 +131,7 @@ class World_Manipulation_Class():
         # CLANKER'S CAVERN
         self.grandmaster.logger.info("Creating Worlds: Clanker's Cavern")
         self.clankers_cavern = World("Clanker's Cavern")
-        self.clankers_cavern._add_setup_file(SetupFile("97D0", self.grandmaster.cwd, "Main Area"))
+        self.clankers_cavern._add_setup_file(SetupFile("97D0", self.grandmaster.cwd, "CC Main Area"))
         self.clankers_cavern._add_setup_file(SetupFile("9888", self.grandmaster.cwd, "Inside Clanker Mouth And Belly"))
         self.clankers_cavern._add_setup_file(SetupFile("9880", self.grandmaster.cwd, "Inside Clanker Blowhole Entrance"))
         self.clankers_cavern._add_setup_file(SetupFile("9890", self.grandmaster.cwd, "Inside Clanker Gold Feather Room"))
@@ -125,24 +139,24 @@ class World_Manipulation_Class():
         # BUBBLEGLOOP SWAMP
         self.grandmaster.logger.info("Creating Worlds: Bubblegloop Swamp")
         self.bubblegloop_swamp = World("Bubblegloop Swamp")
-        self.bubblegloop_swamp._add_setup_file(SetupFile("97E0", self.grandmaster.cwd, "Main Area"))
+        self.bubblegloop_swamp._add_setup_file(SetupFile("97E0", self.grandmaster.cwd, "BGS Main Area"))
         self.bubblegloop_swamp._add_setup_file(SetupFile("97F8", self.grandmaster.cwd, "Mr Vile"))
         self.bubblegloop_swamp._add_setup_file(SetupFile("9800", self.grandmaster.cwd, "Tiptup Choir"))
-        self.bubblegloop_swamp._add_setup_file(SetupFile("99B0", self.grandmaster.cwd, "Mumbo's Skull"))
+        self.bubblegloop_swamp._add_setup_file(SetupFile("99B0", self.grandmaster.cwd, "BGS Mumbo's Skull"))
         self.world_list.append(self.bubblegloop_swamp)
         # FREEZEEZY PEAK
         self.grandmaster.logger.info("Creating Worlds: Freezeezy Peak")
         self.freezeezy_peak = World("Freezeezy Peak")
-        self.freezeezy_peak._add_setup_file(SetupFile("98B0", self.grandmaster.cwd, "Main Area"))
+        self.freezeezy_peak._add_setup_file(SetupFile("98B0", self.grandmaster.cwd, "FP Main Area"))
         self.freezeezy_peak._add_setup_file(SetupFile("9980", self.grandmaster.cwd, "Boggy's Igloo"))
-        self.freezeezy_peak._add_setup_file(SetupFile("99B8", self.grandmaster.cwd, "Mumbo's Skull"))
+        self.freezeezy_peak._add_setup_file(SetupFile("99B8", self.grandmaster.cwd, "FP Mumbo's Skull"))
         self.freezeezy_peak._add_setup_file(SetupFile("9A10", self.grandmaster.cwd, "Inside The Tree"))
         self.freezeezy_peak._add_setup_file(SetupFile("9B70", self.grandmaster.cwd, "Wozza's Cave"))
         self.world_list.append(self.freezeezy_peak)
         # GOBI'S VALLEY
         self.grandmaster.logger.info("Creating Worlds: Gobi's Valley")
         self.gobis_valley = World("Gobi's Valley")
-        self.gobis_valley._add_setup_file(SetupFile("9808", self.grandmaster.cwd, "Main Area"))
+        self.gobis_valley._add_setup_file(SetupFile("9808", self.grandmaster.cwd, "GV Main Area"))
         self.gobis_valley._add_setup_file(SetupFile("9810", self.grandmaster.cwd, "Puzzle Room"))
         self.gobis_valley._add_setup_file(SetupFile("9818", self.grandmaster.cwd, "King Sandybutt's Tomb"))
         self.gobis_valley._add_setup_file(SetupFile("9820", self.grandmaster.cwd, "Water Room"))
@@ -152,7 +166,7 @@ class World_Manipulation_Class():
         # MAD MONSTER MANSION
         self.grandmaster.logger.info("Creating Worlds: Mad Monster Mansion")
         self.mad_monster_mansion = World("Mad Monster Mansion")
-        self.mad_monster_mansion._add_setup_file(SetupFile("9850", self.grandmaster.cwd, "Main Area"))
+        self.mad_monster_mansion._add_setup_file(SetupFile("9850", self.grandmaster.cwd, "MMM Main Area"))
         self.mad_monster_mansion._add_setup_file(SetupFile("9BE0", self.grandmaster.cwd, "Septic Tank (Inside Loggo)"))
         self.mad_monster_mansion._add_setup_file(SetupFile("9858", self.grandmaster.cwd, "Church"))
         self.mad_monster_mansion._add_setup_file(SetupFile("9860", self.grandmaster.cwd, "Cellar"))
@@ -167,12 +181,12 @@ class World_Manipulation_Class():
         self.mad_monster_mansion._add_setup_file(SetupFile("98E0", self.grandmaster.cwd, "Bedroom"))
         self.mad_monster_mansion._add_setup_file(SetupFile("98E8", self.grandmaster.cwd, "Gold Feather Room"))
         self.mad_monster_mansion._add_setup_file(SetupFile("98F0", self.grandmaster.cwd, "Drain Pipe"))
-        self.mad_monster_mansion._add_setup_file(SetupFile("98F8", self.grandmaster.cwd, "Mumbo's Skull"))
+        self.mad_monster_mansion._add_setup_file(SetupFile("98F8", self.grandmaster.cwd, "MMM Mumbo's Skull"))
         self.world_list.append(self.mad_monster_mansion)
         # RUSTY BUCKET BAY
         self.grandmaster.logger.info("Creating Worlds: Rusty Bucket Bay")
         self.rusty_bucket_bay = World("Rusty Bucket Bay")
-        self.rusty_bucket_bay._add_setup_file(SetupFile("9900", self.grandmaster.cwd, "Main Area"))
+        self.rusty_bucket_bay._add_setup_file(SetupFile("9900", self.grandmaster.cwd, "RBB Main Area"))
         self.rusty_bucket_bay._add_setup_file(SetupFile("9BD0", self.grandmaster.cwd, "Anchor Room"))
         self.rusty_bucket_bay._add_setup_file(SetupFile("9918", self.grandmaster.cwd, "Engine Room"))
         self.rusty_bucket_bay._add_setup_file(SetupFile("9920", self.grandmaster.cwd, "Big Fish Warehouse"))
@@ -283,7 +297,7 @@ class World_Manipulation_Class():
         # SPIRAL MOUNTAIN
         self.grandmaster.logger.info("Creating Worlds: Spiral Mountain")
         self.spiral_mountain = World("Spiral Mountain")
-        self.spiral_mountain._add_setup_file(SetupFile("9780", self.grandmaster.cwd, "Main Area"))
+        self.spiral_mountain._add_setup_file(SetupFile("9780", self.grandmaster.cwd, "SM Main Area"))
         self.spiral_mountain._add_setup_file(SetupFile("9BD8", self.grandmaster.cwd, "Banjo's House"))
         self.world_list.append(self.spiral_mountain)
     
@@ -644,12 +658,6 @@ class World_Manipulation_Class():
             return False
         return True
     
-#     def _remove_yum_yums(self):
-#         self.grandmaster.logger.debug("Remove Yum-Yums")
-#         for setup_file in self.treasure_trove_cove._setup_list:
-#             replace_list = {2: 0x00, 3: 0x67}
-#             setup_file._replace_all_in_area("190C0069", replace_list)
-    
     def _gather_enemies(self, world_object, enemy_option):
         '''Collects the enemies per setup for the world'''
         self.grandmaster.logger.debug("Gather Enemies")
@@ -685,6 +693,39 @@ class World_Manipulation_Class():
                     if(self._skip_enemies(item_search_string, enemy_option, world_object._world_name)):
                         setup_file._locate_item_index(item_search_string, "Flying_Enemy")
     
+    def _gather_all_enemies(self, world_object):
+        '''Collects the enemies per setup for the world'''
+        self.grandmaster.logger.debug("Gather Enemies")
+        for setup_file in world_object._setup_list:
+            for item_search_string in Enemies.enemy_id_dict["Global"]["Ground"]:
+                setup_file._locate_item_index(item_search_string, "Ground_Enemy")
+            for item_search_string in Enemies.additional_search_enemy_id_dict["Ground"]:
+                setup_file._locate_item_index(item_search_string, "Ground_Enemy")
+            if("Ground" in Enemies.enemy_id_dict[world_object._world_name]):
+                for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Ground"]:
+                    setup_file._locate_item_index(item_search_string, "Ground_Enemy")
+            for item_search_string in Enemies.enemy_id_dict["Global"]["Wall"]:
+                setup_file._locate_item_index(item_search_string, "Wall_Enemy")
+            for item_search_string in Enemies.additional_search_enemy_id_dict["Wall"]:
+                setup_file._locate_item_index(item_search_string, "Wall_Enemy")
+            if("Wall" in Enemies.enemy_id_dict[world_object._world_name]):
+                for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Wall"]:
+                    setup_file._locate_item_index(item_search_string, "Wall_Enemy")
+            for item_search_string in Enemies.enemy_id_dict["Global"]["Flying"]:
+                setup_file._locate_item_index(item_search_string, "Flying_Enemy")
+            for item_search_string in Enemies.additional_search_enemy_id_dict["Flying"]:
+                setup_file._locate_item_index(item_search_string, "Flying_Enemy")
+            if("Flying" in Enemies.enemy_id_dict[world_object._world_name]):
+                for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Flying"]:
+                    setup_file._locate_item_index(item_search_string, "Flying_Enemy")
+            for item_search_string in Enemies.enemy_id_dict["Global"]["Misc"]:
+                setup_file._locate_item_index(item_search_string, "Misc_Enemy")
+            for item_search_string in Enemies.additional_search_enemy_id_dict["Misc"]:
+                setup_file._locate_item_index(item_search_string, "Misc_Enemy")
+            if("Misc" in Enemies.enemy_id_dict[world_object._world_name]):
+                for item_search_string in Enemies.enemy_id_dict[world_object._world_name]["Misc"]:
+                    setup_file._locate_item_index(item_search_string, "Misc_Enemy")
+
     def _shuffle_enemies_within_world(self, world_object):
         '''Shuffles the enemies found within the world'''
         self.grandmaster.logger.debug("Shuffle Enemies Within World")
@@ -781,11 +822,91 @@ class World_Manipulation_Class():
                 setup_file._set_object(setup_file.flying_enemy_index_list[list_index], self.flying_enemy_info_list[list_index_start + list_index])
             list_index_start += len(setup_file.flying_enemy_index_list)
 
+    def _alter_enemy_size(self, setup_file, enemy_index, size_mode="Default Sizes", default_min=25, default_max=175, increment=0):
+        original_size = setup_file._obtain_value_at_index(enemy_index + 8, 2)
+        new_size = original_size
+        if(size_mode == "Scale Factor"):
+            scale_factor = self._choose_random_uniform(int_start=0.7, int_end=1.3, address=setup_file.setup_address, increment=increment)
+            new_size = leading_zeros(round(original_size * scale_factor), 4)
+        elif(size_mode == "Uniform Size Range"):
+            min_size = min(default_min, original_size)
+            max_size = max(default_max, original_size)
+            new_size = leading_zeros(round(self._choose_random_uniform(int_start=min_size, int_end=max_size, address=setup_file.setup_address, increment=increment)), 4)
+        elif(size_mode == "Generally Small"):
+            min_size = min(default_min, original_size)
+            mode_size = (default_max + min_size) / 4
+            new_size = leading_zeros(round(self._choose_random_triangular(int_start=min_size, int_end=default_max, mode=mode_size, address=setup_file.setup_address, increment=increment)), 4)
+        elif(size_mode == "Generally Large"):
+            max_size = max(default_max, original_size)
+            mode_size = (default_min + max_size) * 3 / 4
+            new_size = leading_zeros(round(self._choose_random_triangular(int_start=default_min, int_end=max_size, mode=mode_size, address=setup_file.setup_address, increment=increment)), 4)
+        elif(size_mode == "Everything Small"):
+            new_size = leading_zeros(min(default_min, original_size), 4)
+        elif(size_mode == "Everything Large"):
+            new_size = leading_zeros(max(default_max, original_size), 4)
+        replacement_dict = {8: int(new_size[:2], 16), 9: int(new_size[2:], 16)}
+        setup_file._edit_object_index(enemy_index, replacement_dict)
+
+    def _enemy_size_main(self):
+        increment = 0
+        size_setting = self.grandmaster.enemy_size_var.get()
+        if(self.grandmaster.enemy_size_var.get() == "Random Size Setting"):
+            size_setting = self._choose_from_list(["Random Setting Per World", "Random Setting Per Area", "Default Sizes",
+                                                   "Scale Factor", "Uniform Size Range",
+                                                   "Generally Small", "Generally Large",
+                                                   "Everything Small", "Everything Large"],
+                                                increment=increment)
+            increment += 1
+            print(f"Random Enemy Size Setting: {size_setting}")
+        size_mode = size_setting
+        if(size_setting != "Default Sizes"):
+            for world_object in self.world_list:
+                if(size_setting == "Random Setting Per World"):
+                    size_mode = self._choose_from_list(["Default Sizes",
+                                                        "Scale Factor", "Uniform Size Range",
+                                                        "Generally Small", "Generally Large",
+                                                        "Everything Small", "Everything Large"],
+                                                        increment=increment)
+                    increment += 1
+                    print(f"{world_object._world_name}: {size_mode}")
+                if(size_mode != "Default Sizes"):
+                    self._gather_all_enemies(world_object)
+                    for setup_file in world_object._setup_list:
+                        if(size_setting == "Random Setting Per Area"):
+                            size_mode = self._choose_from_list(["Default Sizes",
+                                                                "Scale Factor", "Uniform Size Range",
+                                                                "Generally Small", "Generally Large",
+                                                                "Everything Small", "Everything Large"],
+                                                                increment=increment)
+                        default_max = 175
+                        if(setup_file.setup_name in ["Ticker's Tower", "Nipper's Shell"]):
+                            default_max = 125
+                        for ground_enemy_index in setup_file.ground_enemy_index_list:
+                            self._alter_enemy_size(setup_file, ground_enemy_index, size_mode=size_mode, increment=increment, default_max=default_max)
+                            increment += 1
+                        for wall_enemy_index in setup_file.wall_enemy_index_list:
+                            self._alter_enemy_size(setup_file, wall_enemy_index, size_mode=size_mode, increment=increment, default_max=default_max)
+                            increment += 1
+                        for flying_enemy_index in setup_file.flying_enemy_index_list:
+                            self._alter_enemy_size(setup_file, flying_enemy_index, size_mode=size_mode, increment=increment, default_max=default_max)
+                            increment += 1
+                        for misc_enemy_index in setup_file.misc_enemy_index_list:
+                            self._alter_enemy_size(setup_file, misc_enemy_index, size_mode=size_mode, increment=increment, default_max=default_max)
+                            increment += 1
+                        setup_file.ground_enemy_index_list = []
+                        setup_file.ground_enemy_info_list = []
+                        setup_file.wall_enemy_index_list = []
+                        setup_file.wall_enemy_info_list = []
+                        setup_file.flying_enemy_index_list = []
+                        setup_file.flying_enemy_info_list = []
+                        setup_file.misc_enemy_index_list = []
+                        setup_file.misc_enemy_info_list = []
+
     def _enemies_main(self):
         '''Runs the enemies options that are not NONE'''
         self.grandmaster.logger.info("Enemies Main")
-#         if(self.grandmaster.enemy_checkbox_dict["Yum-Yum*"]):
-#             self._remove_yum_yums()
+        if(self.grandmaster.enemy_size_var.get() != "Default Sizes"):
+            self._enemy_size_main()
         if(self.grandmaster.enemies_var.get() == "Shuffle"):
             for world_object in self.world_list:
                 self._gather_enemies(world_object, "Shuffle")
@@ -956,6 +1077,7 @@ class World_Manipulation_Class():
                 list_index_start += len(setup_file.flagged_object_index_list)
     
     def _remove_floating_jiggies(self):
+        '''Removes all non-spawn Jiggies'''
         replacement_dict = {
             2: 0x02,
             3: 0x68
@@ -1482,25 +1604,29 @@ class World_Manipulation_Class():
         primary_camera = World_Order_Warps.bottles_moves_camera_dict[new_move]["Primary_Camera"]
         secondary_camera = World_Order_Warps.bottles_moves_camera_dict[new_move]["Secondary_Camera"]
         if(not setup_file._does_string_exist(primary_camera)):
+            camera_id = self.replace_camera_dict[setup_file.setup_name][0]
             edit_dict = {
                 2: int(primary_camera[4:6], 16),
                 }
-            setup_file._edit_object("01000102", edit_dict)
+            setup_file._edit_object(f"0100{camera_id}02", edit_dict)
             replacement_dict = {
                 2: int(primary_camera[4:6], 16),
                 }
-            setup_file._replace_all_in_area("1200010000000000", replacement_dict)
-            setup_file._replace_all_in_area("9200010000000000", replacement_dict)
+            setup_file._replace_all_in_area(f"1200{camera_id}0000000000", replacement_dict)
+            setup_file._replace_all_in_area(f"9200{camera_id}0000000000", replacement_dict)
+            self.replace_camera_dict[setup_file.setup_name].pop(0)
         if(secondary_camera and (not setup_file._does_string_exist(secondary_camera))):
+            camera_id = self.replace_camera_dict[setup_file.setup_name][0]
             edit_dict = {
                 2: int(secondary_camera[4:6], 16),
                 }
-            setup_file._edit_object("01000002", edit_dict)
+            setup_file._edit_object(f"0100{camera_id}02", edit_dict)
             replacement_dict = {
                 2: int(primary_camera[4:6], 16),
                 }
-            setup_file._replace_all_in_area("1200000000000000", replacement_dict)
-            setup_file._replace_all_in_area("9200000000000000", replacement_dict)
+            setup_file._replace_all_in_area(f"1200{camera_id}0000000000", replacement_dict)
+            setup_file._replace_all_in_area(f"9200{camera_id}0000000000", replacement_dict)
+            self.replace_camera_dict[setup_file.setup_name].pop(0)
     
     def _add_clankers_cavern_jump_pad(self):
         '''Adds a Shock Jump Pad to the inside of Clanker in order to make the logic easier and help prevent backtracking'''
@@ -1623,7 +1749,17 @@ class World_Manipulation_Class():
             self.curr_setup_file._edit_object_index(bottles_index, replacement_dict)
             bottles_info_list.remove(chosen_move)
             progression_moves.remove(chosen_move)
-        self._shuffle_list(bottles_info_list)
+        increment = 0
+        shuffle_not_verified = True
+        while(shuffle_not_verified):
+            shuffle_not_verified = False
+            self._shuffle_list(bottles_info_list, increment=increment)
+            # Cannot have eggs in CC
+            # With within world warps, the teeth mess this up
+            if((self.grandmaster.within_world_warps_var.get() != "No Shuffle") and
+               (bottles_info_list[2] == {'Script1': 0x05, 'Script2': 0x0C, 'Obj_ID1': 0x03, 'Obj_ID2': 0x7A})):
+                shuffle_not_verified = True
+            increment += 1
         for world_object in self.world_list[1:]:
             for setup_file in world_object._setup_list:
                 for bottles_index in setup_file.bottles_index_list:
@@ -1785,12 +1921,19 @@ class World_Manipulation_Class():
             self._bottles_world_order_shuffle_main()
             self._remove_learning_move_warps()
             self.world_order_list = self.world_order.world_order_list
-        if(self.grandmaster.world_entrance_var.get() != "None"):
+        else:
+            self.world_order_list = ["Mumbo's Mountain", "Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood"]
+            self.world_order = World_Order_Bottles(self.modified_bottles_world_warp_dict, {}, seed_val=self.seed,
+                                                   max_hp=self.grandmaster.health_val, final_puzzle_option=self.grandmaster.final_puzzle_var.get(),
+                                                   world_exit_option=self.grandmaster.world_exit_var.get(),
+                                                   removed_detransformations=self.grandmaster.remove_magic_barriers_var.get(), free_transformations=self.grandmaster.free_transformations_var.get())
+            self.world_order.world_order_list = ["Mumbo's Mountain", "Treasure Trove Cove", "Clanker's Cavern", "Bubblegloop Swamp", "Freezeezy Peak", "Gobi's Valley", "Mad Monster Mansion", "Rusty Bucket Bay", "Click Clock Wood"]
+        if(self.grandmaster.world_entrance_var.get() != "No Shuffle"):
             self._world_entrance_signs()
-            if(self.grandmaster.skip_furnace_fun_var.get() == 1):
-                self._brentilda_world_order_hints()
             if(self.grandmaster.world_exit_var.get() == "Exit From Entrance You Entered From"):
                 self._world_exits()
+        if(self.grandmaster.brentilda_hints_var.get() != "Base Game Brentilda Hints"):
+            self._brentilda_world_order_hints()
         if(self.grandmaster.free_transformations_var.get() == "World Order Scaled Costs"):
             print(f"World Order: {self.world_order.world_order_list}")
             print(f"World Transformation Cost Dict: {self.world_order.transform_cost_dict}")
@@ -1798,6 +1941,7 @@ class World_Manipulation_Class():
         return self.world_order.transform_cost_dict
 
     def _transformation_cost_signs(self):
+        '''Moves the Mumbo Token cost signs based on selected options'''
         cost_to_sign_dict = {
                 5: "0x76A0",
                 10: "0x76A8",
@@ -1852,6 +1996,7 @@ class World_Manipulation_Class():
         swap_model_manip_obj._model_manip_main()
 
     def _world_exits(self):
+        '''Adjusts the world exists to match the entrance'''
         with open(f"{self._file_dir}Randomized_ROM/F9CAE0-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap.mmap(decomp_file.fileno(), 0)
             exit_indices_dict = {
@@ -1962,7 +2107,7 @@ class World_Manipulation_Class():
     ###################
     
     def _generate_cheat_sheet(self):
-        '''PyDoc'''
+        '''Creates a cheat sheet for the notes and flagged objects'''
         self.grandmaster.logger.info("Generate Object/Struct Cheat Sheet")
         totals_note_count = 0
         cheat_sheet_dict = {}
@@ -1971,19 +2116,19 @@ class World_Manipulation_Class():
             world_note_count = 0
             for setup_file in world_object._setup_list:
                 cheat_sheet_dict[world_object._world_name][setup_file.setup_name] = {}
-                if(self.grandmaster.struct_var.get() != "None"):
+                if(self.grandmaster.struct_var.get() != "No Shuffle"):
                     try:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Note_Count"] = setup_file.note_count
                     except AttributeError:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Note_Count"] = 0
                     world_note_count += setup_file.note_count
                     totals_note_count += setup_file.note_count
-                if(self.grandmaster.non_flagged_object_var.get() != "None"):
+                if(self.grandmaster.non_flagged_object_var.get() != "No Shuffle"):
                     try:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Non_Flagged_Object_Dict"] = setup_file.non_flagged_obj_dict
                     except AttributeError:
                         pass
-                if(self.grandmaster.flagged_object_var.get() != "None"):
+                if(self.grandmaster.flagged_object_var.get() != "No Shuffle"):
                     try:
                         cheat_sheet_dict[world_object._world_name][setup_file.setup_name]["Flagged_Object_Dict"] = setup_file.flagged_obj_dict
                     except AttributeError:
@@ -2001,6 +2146,7 @@ class World_Manipulation_Class():
     ### RETURN OF FURNACE FUN ###
     
     def _replace_model_files(self):
+        '''Unused #RIP'''
         self.grandmaster.logger.info("Replace Model Files")
         # Furnace Fun: 0x105D8 - A795B8
         # Final Battle A: 0x10678 - BEA360
@@ -2013,6 +2159,7 @@ class World_Manipulation_Class():
         shutil.copy(final_battle_b_bin, f"{self.grandmaster.cwd}Randomized_ROM/10740-Randomized_Compressed.bin")
     
     def _adjust_ff_setup_file(self):
+        '''Unused #RIP'''
         self.grandmaster.logger.debug("Adjust Furnace Fun Setup File")
         final_battle_list = [
             # GRUNTILDA ACTORS
@@ -2033,6 +2180,7 @@ class World_Manipulation_Class():
         self.gruntildas_lair._setup_list[19]._replace_each_object_parameters(final_battle_list, replacement_dict)
     
     def _return_of_furnace_fun(self):
+        '''Unused #RIP'''
         self.grandmaster.logger.info("Return Of Furnace Fun")
         self._replace_model_files()
         self._adjust_ff_setup_file()
@@ -2040,7 +2188,7 @@ class World_Manipulation_Class():
     ### ENEMIES ###
     
     def _final_battle_sir_slush(self):
-        '''PyDoc'''
+        '''Adds Sir Slush to block the Jinjo Statues'''
         self.grandmaster.logger.debug("Final Battle Sir Slush")
         search_string_list = [
             "07C6000407C6", # +X +Z
@@ -2093,7 +2241,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._replace_each_object_parameters(search_string_list, replacement_dict_list)
     
     def _final_battle_whipcrack(self):
-        '''PyDoc'''
+        '''Adds Whipcracks to block the Jinjo Statues'''
         self.grandmaster.logger.debug("Final Battle Whipcrack")
         search_string_list = [
             "080C0004044C", # +X +Z
@@ -2146,6 +2294,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._replace_each_object_parameters(search_string_list, replacement_dict_list)
     
     def _final_battle_ground_enemies(self):
+        '''Adds grounded enemies to the final battle'''
         self.grandmaster.logger.debug("Final Battle Ground Enemies")
         # Enemies
         ground_enemy_string_list = [
@@ -2215,7 +2364,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._replace_each_object_parameters(ground_enemy_string_list, ground_enemy_location_replacement_dict)
     
     def _final_battle_sky_enemies(self):
-        '''PyDoc'''
+        '''Adds flying enemies to the final battle'''
         self.grandmaster.logger.debug("Final Battle Sku Enemies")
         sky_enemy_string_list = [
             "011E0004065E", # +X +Z
@@ -2276,7 +2425,7 @@ class World_Manipulation_Class():
     ### ENVIRONMENT ###
     
     def _final_battle_floor_is_missing(self):
-        '''PyDoc'''
+        '''Removes the collision of the floor of the final battle'''
         self.grandmaster.logger.debug("Floor Is Missing")
         search_string_list = [
 #             "02AEF5C10FF5", # Lava
@@ -2380,6 +2529,7 @@ class World_Manipulation_Class():
         final_battle_area._change_floor_type_by_vert(vert_condition, new_bytes)
     
     def _final_battle_jinjo_pads(self):
+        '''Adds shock jump pads to the final battle near the jinjos'''
         self.grandmaster.logger.debug("Final Battle Jinjo Pads")
         search_string_list = [
             "07C6000407C6", # +X +Z
@@ -2432,7 +2582,7 @@ class World_Manipulation_Class():
         self.curr_setup_file._replace_each_object_parameters(search_string_list, replacement_dict_list)
     
     def _final_battle_jinjonator_floor(self):
-        '''PyDoc'''
+        '''Adds shock jump pads to the final battle near the jinjonator'''
         self.grandmaster.logger.debug("Final Battle Jinjonator Floor")
         search_string_list = [
             "080C0004044C", # +X +Z
@@ -2582,7 +2732,11 @@ class World_Manipulation_Class():
                     selectable_x_z_list.append((possible_x, possible_z))
         if(selectable_x_z_list):
             (new_x, new_z) = self._choose_from_list(selectable_x_z_list, address=self.curr_setup_file.setup_address, increment=item_index)
-            new_y = self._choose_random_integer(max(voxel_min_y, level_collision_dict[(new_x, new_z)]), voxel_max_y, address=self.curr_setup_file.setup_address, increment=item_index)
+            min_val = max(voxel_min_y, level_collision_dict[(new_x, new_z)])
+            max_val = voxel_max_y
+            if(self.grandmaster.scattered_structs_var.get() == "Low Scatter"):
+                max_val = min(voxel_max_y, min_val + 300)
+            new_y = self._choose_random_integer(min_val, max_val, address=self.curr_setup_file.setup_address, increment=item_index)
             self.curr_setup_file.mm[item_index + 4] = int(leading_zeros(new_x, 4)[:2], 16)
             self.curr_setup_file.mm[item_index + 5] = int(leading_zeros(new_x, 4)[2:], 16)
             self.curr_setup_file.mm[item_index + 6] = int(leading_zeros(new_y, 4)[:2], 16)
@@ -2702,7 +2856,7 @@ class World_Manipulation_Class():
                         break
 
     def _skip_lair_cutscene(self):
-        '''PyDoc'''
+        '''Replaces the warp to the lair cutscene to the warp that leads to the lair'''
         replacement_dict = {
             8: 0x1, 9: 0x1A
         }

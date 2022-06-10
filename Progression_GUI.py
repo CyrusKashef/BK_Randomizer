@@ -189,17 +189,28 @@ class Progression_GUI_Class():
             self.progressbar.pack(padx=5, pady=5)
     
     def _hidden_random_values(self):
+        '''Calculates hidden values'''
         self.master.logger.info("Hidden Random Values")
         cheat_sheet = ""
         # Final Note Door
         if(self.master.final_note_door_value.get() == "?"):
             seed(a=(self.master.seed_value.get()))
+            increment = 1
             if(self.master.struct_var.get() == "All Notes"):
-                seed(a=(self.seed_val + 1))
-                self.master.final_note_door_val = randint(0, 2000)
+                seed(a=(self.seed_val + increment))
+                final_note_door_str = str(randint(0, 1))
+                while(len(final_note_door_str) < 4):
+                    increment += 1
+                    seed(a=(self.seed_val + increment))
+                    final_note_door_str += str(randint(0, 8))
+                self.master.final_note_door_val = int(final_note_door_str)
             else:
-                seed(a=(self.seed_val + 2))
-                self.master.final_note_door_val = randint(0, 900)
+                final_note_door_str = ""
+                while(len(final_note_door_str) < 3):
+                    seed(a=(self.seed_val + increment))
+                    final_note_door_str += str(randint(0, 8))
+                    increment += 1
+                self.master.final_note_door_val = int(final_note_door_str)
             cheat_sheet += f"Final Note Door Val: {self.master.final_note_door_val}\n"
         else:
             self.master.final_note_door_val = int(self.master.final_note_door_value.get())
@@ -226,12 +237,12 @@ class Progression_GUI_Class():
         else:
             self.master.before_blue_egg = int(self.master.before_blue_egg_carry_value.get())
         self.master.logger.debug(f"Before Cheato Blue Egg: {self.master.before_blue_egg}")
-        if(self.master.before_blue_egg_carry_value.get() == "?"):
+        if(self.master.after_blue_egg_carry_value.get() == "?"):
             seed(a=(self.seed_val + 6))
             self.master.after_blue_egg = randint(self.master.before_blue_egg, 255)
             cheat_sheet += f"After Cheato Blue Egg: {self.master.after_blue_egg}\n"
         else:
-            self.master.after_blue_egg = int(self.master.before_blue_egg_carry_value.get())
+            self.master.after_blue_egg = int(self.master.after_blue_egg_carry_value.get())
         self.master.logger.debug(f"After Cheato Blue Egg: {self.master.after_blue_egg}")
         # Red Feather Capacity
         if(self.master.before_red_feather_carry_value.get() == "?"):
@@ -418,15 +429,14 @@ class Progression_GUI_Class():
             except Exception:
                 self.pb_label.set_text(f"Error Moving Jinxy Heads...\n{self._mumbo_error_message}")
                 raise
-        if(self.master.world_entrance_var.get() != "None"):
-            try:
-                self.pb_label.set_text("Mumbo Lost Way Back To Mountain...")
-                self.transform_cost_dict = world_manip._world_order_warps_main()
-            except Exception:
-                self.master.logger.info("World Order Warps Error")
-                self.pb_label.set_text(f"Error Shuffling World Order...\n{self._mumbo_error_message}")
-                raise
-        if(self.master.within_world_warps_var.get() != "None"):
+        try:
+            self.pb_label.set_text("Mumbo Lost Way Back To Mountain...")
+            self.transform_cost_dict = world_manip._world_order_warps_main()
+        except Exception:
+            self.master.logger.info("World Order Warps Error")
+            self.pb_label.set_text(f"Error Shuffling World Order...\n{self._mumbo_error_message}")
+            raise
+        if(self.master.within_world_warps_var.get() != "No Shuffle"):
             try:
                 self.pb_label.set_text("Mumbo Lost Way Back To Skull...")
                 world_manip._within_world_warps_main()
@@ -458,7 +468,7 @@ class Progression_GUI_Class():
                 self.master.logger.info("Final World Puzzle Error")
                 self.pb_label.set_text(f"Error Making Worlds Open...\n{self._mumbo_error_message}")
                 raise
-        if(self.master.scattered_structs_var.get() == 1):
+        if(self.master.scattered_structs_var.get() != "No Scatter"):
             try:
                 self.pb_label.set_text(f"Mumbo Better Shaman Than SM64 Modders...")
                 world_manip._scattered_structs_main()
@@ -531,10 +541,18 @@ class Progression_GUI_Class():
         if(self.master.bk_model_var.get() != "Default"):
             try:
                 self.pb_label.set_text("Stand On Skull And Press B To See Mighty Mumbo Magic...")
-                misc_manip._bk_model(seed_val=self.seed_val)
+                misc_manip._bk_model()
             except Exception:
                 self.warning_label.set_text("Uh-Oh...")
                 self.pb_label.set_text(f"Error Adjusting BK's Colors...\n{self._mumbo_error_message}")
+                raise
+        if(self.master.jinjo_color_var.get() != "Default Jinjo Colors"):
+            try:
+                self.pb_label.set_text("Is Mumbo A Jinjo? Mumbo Never Tell...")
+                misc_manip._jinjo_model()
+            except Exception:
+                self.warning_label.set_text("Uh-Oh...")
+                self.pb_label.set_text(f"Error Adjusting Jinjos' Colors...\n{self._mumbo_error_message}")
                 raise
         customization_option = False
         for custom_count, custom_name in enumerate(self.master.map_config_checkbox_dict):

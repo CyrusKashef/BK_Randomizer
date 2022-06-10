@@ -10,6 +10,7 @@ from math import ceil
 from Randomization_Processes.Common_Functions import leading_zeros
 
 class Level_Model_Class():
+    '''Level Model Class for modifying attributes of a level'''
     def __init__(self, file_dir, address, min_x=-8000, max_x=8000, min_z=-8000, max_z=8000):
         self._address = address
         self._file_dir = file_dir
@@ -45,6 +46,7 @@ class Level_Model_Class():
     ##############
 
     def _grab_geometry_layout_offset(self):
+        '''Grabs the Geometry Layout offsets'''
         self._geometry_layout_offset = int(self.leading_zeros(self.mm[4], 2) +
                                            self.leading_zeros(self.mm[5], 2) +
                                            self.leading_zeros(self.mm[6], 2) +
@@ -79,6 +81,7 @@ class Level_Model_Class():
                                          self.leading_zeros(self.mm[39], 2), 16)
         
     def _print_offsets(self):
+        '''Prints the Geometry Layout Offsets'''
         print(f"Geometry Layout Offset: {hex(self._geometry_layout_offset)}")
         print(f"Texture Setup Offset: {hex(self._texture_setup_offset)}")
         print(f"Display List Setup Offset: {hex(self._display_list_setup_offset)}")
@@ -88,6 +91,7 @@ class Level_Model_Class():
         print(f"Effects Setup Offset: {hex(self._effects_setup_offset)}")
     
     def _header_main(self):
+        '''Grabs the offsets at the beginning of the file'''
         self._grab_geometry_layout_offset()
 #         self._print_offsets()
     
@@ -108,6 +112,7 @@ class Level_Model_Class():
     ##########################
     
     def _vertex_header(self):
+        '''Grabs the vertext header info'''
         self._vertex_draw_distance_negative_coords_a = int(self.leading_zeros(self.mm[self._vertex_store_setup_offset], 2) +
                                                            self.leading_zeros(self.mm[self._vertex_store_setup_offset + 1], 2), 16)
         self._vertex_draw_distance_negative_coords_b = int(self.leading_zeros(self.mm[self._vertex_store_setup_offset + 2], 2) +
@@ -134,6 +139,7 @@ class Level_Model_Class():
 #         print(f"Collision Range Banjo: {hex(self._collision_range_banjo)}")
     
     def _vertices_info(self):
+        '''Grabs the info for each vertex'''
         self._vertex_dict = {}
         for count in range(self._vertex_count_times_two):
             vertex_offset = count * 16
@@ -167,11 +173,13 @@ class Level_Model_Class():
     ######################
     
     def _collision_header(self):
+        '''Grabs the info at the collision header'''
         self._collision_info_start = (int(self.leading_zeros(self.mm[self._collision_setup_offset + 16], 2) +
                                           self.leading_zeros(self.mm[self._collision_setup_offset + 17], 2), 16) * 4) + self._collision_setup_offset + 24
 #         print(f"Collision Info Start: {hex(self._collision_info_start)}")
     
     def _collision_info(self):
+        '''Grabs each collision info'''
         self._collision_dict = {}
         vertext_dict_len = len(self._vertex_dict)
 #         print(f"Vertex Dict Length: {hex(vertext_dict_len)}")
@@ -211,6 +219,7 @@ class Level_Model_Class():
     ##############################
     
     def _collision_height(self):
+        '''Locates the maximum height with collision, up to 6969'''
 #         print("Collision Height")
         self._collision_height_dict = {}
         for item in self._collision_dict:
@@ -226,7 +235,7 @@ class Level_Model_Class():
                 curr_z = self.possible_negative(self._vertex_dict[tri_index]["Z"])
                 min_x = min(curr_x, min_x)
                 max_x = max(curr_x, max_x)
-                if(curr_y < 6900):
+                if(curr_y < 6969):
                     max_y = max(curr_y, max_y)
                 min_z = min(curr_z, min_z)
                 max_z = max(curr_z, max_z)
@@ -239,6 +248,7 @@ class Level_Model_Class():
                             self._collision_height_dict[(curr_x, curr_z)] = max_y
     
     def _find_collision_height(self):
+        '''Finds the maximum collision height'''
         self._header_main()
         self._vertex_header()
         self._vertices_info()
@@ -247,6 +257,7 @@ class Level_Model_Class():
         self._collision_height()
     
     def _grab_floors(self):
+        '''Grabs the list of floor values'''
         self._header_main()
         self._vertex_header()
         self._vertices_info()
@@ -260,12 +271,9 @@ class Level_Model_Class():
                 floor_dict[floor_info] = 1
             else:
                 floor_dict[floor_info] += 1
-#         for item in sorted(floor_dict):
-#             if(floor_dict[item] > 1):
-#                 print(f"FLOOR BYTES: {self.leading_zeros(item[0], 2)} {self.leading_zeros(item[1], 2)} {self.leading_zeros(item[2], 2)} {self.leading_zeros(item[3], 2)} {self.leading_zeros(item[4], 2)} {self.leading_zeros(item[5], 2)} | COUNT: {floor_dict[item]}")
-#             print(f"FLOOR BYTES: {self.leading_zeros(item[0], 2)} {self.leading_zeros(item[1], 2)} {self.leading_zeros(item[2], 2)} {self.leading_zeros(item[3], 2)} {self.leading_zeros(item[4], 2)} {self.leading_zeros(item[5], 2)} | COUNT: {floor_dict[item]}")
 
     def _change_floor_type_by_type(self, orignal_bytes, new_bytes):
+        '''Changes all floor collisions of a certain type to another collision'''
         for curr_index in range(self._collision_info_start, self._geometry_layout_offset, 12):
             Byte1 = self.mm[curr_index + 6]
             Byte2 = self.mm[curr_index + 7]
@@ -282,6 +290,7 @@ class Level_Model_Class():
                 self.mm[curr_index + 11] = new_bytes[5]
 
     def _change_floor_type_by_vert(self, vert_condition, new_bytes):
+        '''Changes the collision type per vertex'''
         for curr_index in range(self._collision_info_start, self._geometry_layout_offset, 12):
             Vert1 = int(leading_zeros(self.mm[curr_index], 2) + leading_zeros(self.mm[curr_index + 1], 2), 16)
             Vert2 = int(leading_zeros(self.mm[curr_index + 2], 2) + leading_zeros(self.mm[curr_index + 3], 2), 16)
@@ -295,6 +304,7 @@ class Level_Model_Class():
                 self.mm[curr_index + 11] = new_bytes[5]
 
 def display_collisions(collision_height_list):
+    '''Displays collision list'''
     print("Display Collisions")
     import matplotlib.pyplot as plt
     from mpl_toolkits import mplot3d
@@ -313,8 +323,4 @@ def display_collisions(collision_height_list):
     plt.show()
 
 if __name__ == '__main__':
-    print("Treasure Trove Cove")
-    level_model_obj = Level_Model_Class("C:/Users/Cyrus/eclipse-workspace/BK_Rando_v2.0/", "101F0")
-    level_model_obj._find_collision_height()
-    print(sorted(level_model_obj._collision_height_dict))
-#     display_collisions([level_model_obj._collision_height_dict])
+    pass

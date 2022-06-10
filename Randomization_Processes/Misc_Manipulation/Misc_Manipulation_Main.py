@@ -19,6 +19,7 @@ import os
 ###################
 
 from Randomization_Processes.Misc_Manipulation.Model_Data.BK_Models import BK_Model_Class
+from Randomization_Processes.Misc_Manipulation.Model_Data.Jinjo_Models import Jinjo_Model_Class
 from Randomization_Processes.Misc_Manipulation.Music_Data.Music_Main import Music_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Speech_Data.Speech_Main import Speech_Manipulation_Class
 from Randomization_Processes.Misc_Manipulation.Game_Engine_Data.Game_Engine_Main import Game_Engine_Class
@@ -48,6 +49,7 @@ class Misc_Manipulation_Class():
     #########################
     
     def _bottles_requirements_text(self, final_note_option, final_note_score, final_puzzle_option, final_puzzle_score):
+        '''Sets the text for the Bottles unskippable intro text that states the game requirements'''
         self.grandmaster.logger.info("Bottles Requirements Text")
         self.speech_manip._modify_bottles_unskippable_text(final_note_option, final_note_score, final_puzzle_option, final_puzzle_score)
         self.speech_manip._shorten_bottles_secret_game_text()
@@ -56,15 +58,8 @@ class Misc_Manipulation_Class():
     ### TTC OPTION ###
     ##################
     
-    def _ttc_sandcastle_code(self):
-        # Code: FB1AEB - FB24A0
-        # 6B 6E 69 70 36 38 6E 33 36 36 34 6A
-        # B  A  N  J  O  K  A  Z  O  O  I  E
-        # Texture: 0x10220 - 60FC30
-        pass
-    
     def _ttc_main(self):
-        '''PyDoc'''
+        '''Unused'''
         # FA9150 - FB24A0
         pass
     
@@ -73,7 +68,7 @@ class Misc_Manipulation_Class():
     #################
     
     def _gv_matching_puzzle_combination(self):
-        '''PyDoc'''
+        '''Changes the matching values in the matching puzzle mini game'''
         self.grandmaster.logger.info("Gobi's Valley Matching Puzzle Combination")
         # FAE27E - FAE860
         # Every 8 bytes is one section of the matching puzzle
@@ -92,6 +87,7 @@ class Misc_Manipulation_Class():
         return selectable_values
     
     def _gv_matching_puzzle_textures(self, selectable_values):
+        '''Modifies the matching puzzle tile colors to display the randomized solution'''
         self.grandmaster.logger.info("Gobi's Valley Matching Puzzle Textures")
         with open(f"{self._file_dir}Randomized_ROM/10248-Decompressed.bin", "r+b") as decomp_file:
             mm_decomp = mmap(decomp_file.fileno(), 0)
@@ -129,7 +125,7 @@ class Misc_Manipulation_Class():
                     mm_decomp[color_index + 2] = new_color_blue
     
     def _gv_cheat_sheet(self, selectable_values):
-        '''PyDoc'''
+        '''Creates the cheat sheet for all GV randomized coded'''
         self.grandmaster.logger.info("Gobi's Valley Cheat Sheet")
         cheat_sheet_dict = {
             0: "___BLACK___", 1: "___BLUE____", 2: "___GREEN___", 3: "___CYAN____",
@@ -145,7 +141,7 @@ class Misc_Manipulation_Class():
             mp_cheat_sheet.write(cheat_sheet_str)
     
     def _gv_puzzle_main(self):
-        '''PyDoc'''
+        '''Runs through all portions of the GV matching puzzle randomization'''
         self.grandmaster.logger.info("Gobi's Valley Puzzle Main")
         # The count starts in the bottom right corner, bottom to top, then right to left, like so
         #  |--------|--------|--------|--------|
@@ -170,6 +166,7 @@ class Misc_Manipulation_Class():
     ##################
     
     def _motzand_keys_main(self):
+        '''Randomizes the key pattern motzand plays'''
         self.grandmaster.logger.info("Motzand Keys Main")
         seed(a=(self._seed_val))
         pattern_1 = sample(range(0, 23), 5)
@@ -258,7 +255,7 @@ class Misc_Manipulation_Class():
             random_hex_val = random_hex_val + "FF"
         return random_hex_val
     
-    def _bk_model(self, seed_val):
+    def _bk_model(self):
         '''Runs the functions for editing the Banjo Kazooie models'''
         self.grandmaster.logger.info("BK Model")
         bk_model_obj = BK_Model_Class(self._file_dir, "7900", original_index_start=0xB138)
@@ -322,14 +319,24 @@ class Misc_Manipulation_Class():
             kazooie_primary, kazooie_secondary, kazooie_wing_primary, kazooie_wing_secondary,
             backpack, wading_boots, shorts_vertex, shorts_texture, tooth_necklace
             )
-        bk_model_obj._only_low_poly_bk_model(seed_val)
+        bk_model_obj._only_low_poly_bk_model(self._seed_val)
+    
+    def _jinjo_model(self):
+        '''Runs the functions for editing the Jinjo models'''
+        self.grandmaster.logger.info("Jinjo Models")
+        original_jinjo_colors = [("Blue", "7C98"), ("Green", "7CA8"), ("Yellow", "7C70"), ("Orange", "7C78"), ("Pink", "7CA0"), ("Jinjonator", "8920")]
+        for jinjo_count, (original_color, address) in enumerate(original_jinjo_colors):
+            jinjo_model_obj = Jinjo_Model_Class(self._file_dir, address, original_index_start=0x1140)
+            primary_color = self._random_hex(6, increment=(jinjo_count*2))
+            secondary_color = self._random_hex(6, increment=(jinjo_count*2+1))
+            jinjo_model_obj._main(original_color=original_color, primary_color=primary_color, secondary_color=secondary_color)
 
     ########################################
     ### MODELS, ANIMATIONS, & PROPERTIES ###
     ########################################
     
     def _models_animations_properties(self, seed_val, file_dir, randomized_rom_path):
-        '''PyDoc'''
+        '''Runs through all of the models, animations, and property swaps'''
         self.grandmaster.logger.info("Models Animnations Properties")
         master_map_dict = {"Models": {}, "Animations": {}, "Properties": {}}
         for custom_json_name in self.grandmaster.map_config_checkbox_dict:
@@ -390,6 +397,7 @@ class Misc_Manipulation_Class():
     ###################
     
     def _setup_game_engine_manip(self, transformation_costs):
+        '''Runs through all of the game engine changes'''
         self.grandmaster.logger.info("Setup Game Engine Manipulation")
         game_engine_obj = Game_Engine_Class(self._file_dir)
         if(self.grandmaster.free_transformations_var.get() == "Free Transformations"):
@@ -398,7 +406,7 @@ class Misc_Manipulation_Class():
                                                          walrus_cost=0,
                                                          pumpkin_cost=0,
                                                          bee_cost=0)
-        elif((self.grandmaster.free_transformations_var.get() == "World Order Scaled Costs") and (self.grandmaster.world_entrance_var.get() != "None")):
+        elif((self.grandmaster.free_transformations_var.get() == "World Order Scaled Costs") and (self.grandmaster.world_entrance_var.get() != "No Shuffle")):
             game_engine_obj._mumbo_transformations_costs(termite_cost=transformation_costs["Termite"],
                                                          crocodile_cost=transformation_costs["Crocodile"],
                                                          walrus_cost=transformation_costs["Walrus"],
@@ -430,6 +438,7 @@ class Misc_Manipulation_Class():
     ########################
     
     def _edit_cutscenes_text_main(self):
+        '''Edits the text for the intro cutscene'''
         self.grandmaster.logger.info("Edit Intro Cutscene Text Main")
         self.speech_manip._bottles_introduction_text()
         self.speech_manip._intro_cutscene_1()
@@ -451,6 +460,7 @@ class Misc_Manipulation_Class():
         self.speech_manip._game_over_cutscene()
     
     def _edit_world_order_related_text_main(self):
+        '''Edits the Bottles text what would not make sense in the rando'''
         self.grandmaster.logger.info("Edit World Order Related Text Main")
         self.speech_manip._bottles_this_is_first_world()
         self.speech_manip._bottles_this_is_first_puzzle()
@@ -480,9 +490,10 @@ class Misc_Manipulation_Class():
         pass
     
     def _gruntildas_lair_speeches_main(self):
+        '''Replaces Gruntilda lair speeches with custom text, shout outs, and easter eggs'''
         self.grandmaster.logger.info("Gruntilda Lair Speeches Main")
         grunty_lair_speeches_list = [
-            #"TOOTY SAYS SHE'S FINE WITH ME,", "IF YOU GO HOME I'LL SET HER FREE!"
+            #"TOOTY SAYS SHE'S FINE WITH ME,", "IF YOU GO HOME I'LL SET HER FREE!" # This is just here to guage the length of the text
             # Inside Jokes
             ("PROUD OF YOURSELF? THINK YOU'RE A HERO?", "YOU'RE NOTHING BUT A LEADING ZERO!"),
             ("THERE'S A FEATURE YOU WANT TO SEE?", "REQUEST IT BEFORE VERSION 3!"),
@@ -502,6 +513,7 @@ class Misc_Manipulation_Class():
             ("WANNA SEE RUNNERS AT A FAST PACE?", "CHECK OUT THE TWITCH CHANNEL BANJO RACE!"), # GarageDoorOpener (Approved)
             ("LOVEABLE STREAMER, HIS NAME IS DEDE,", "FULL OF CHARM AND HIS SOCKS ARE STINKY!"), # Dedelux (Approved)
             ("NADE, CHILE, TREP, AND MORE,", "ARE TOO AFRAID OF LOSING THEIR NOTE SCORE!"), # XBOX Players
+            ("EVEN WITH ALL OF THEIR SWEARS,", "THIS SHOUTOUT IS FOR MY DROP BEARS!"), # Australian Players
             # Poking The Community
             ("WE GET IT, YOU CAN STOP, GOGO!", "THE GRUNTY'S REVENGE SCENE WILL NEVER GROW!"), # G0go (Approved)
             # References
@@ -556,9 +568,10 @@ class Misc_Manipulation_Class():
         self.speech_manip._gruntilda_lair_speech_29(grunty_lair_speeches_list[28][0], grunty_lair_speeches_list[28][1])
         self.speech_manip._gruntilda_lair_speech_30(grunty_lair_speeches_list[29][0], grunty_lair_speeches_list[29][1])
         self.speech_manip._gruntilda_lair_speech_31(grunty_lair_speeches_list[30][0], grunty_lair_speeches_list[30][1])
-        # self.speech_manip._bk_first_death_gruntilda()
+        self.speech_manip._bk_first_death_gruntilda()
     
     def _adjust_sandcastle_speeches(self):
+        '''Adjusts the sandcastle text to make sense and room'''
         self.grandmaster.logger.info("Adjust Sandcastle Speeches")
         self.speech_manip._raised_maximum_blue_eggs_speech()
         self.speech_manip._raised_maximum_red_feathers_speech()

@@ -86,8 +86,8 @@ Note: I am not providing anyone the ROM file, nor does the script create the ROM
 
 # Feature Details
 
-If you don't feel like reading all of this, I made a video a while back, though I need to update it:
-https://www.youtube.com/watch?v=eIVAZJl08N4
+If you don't feel like reading all of this, I made a video with most of the settings (last updated May 22nd 2022):
+https://www.youtube.com/watch?v=-4z20Zdf974
 
 ### Overall Buttons
 * Load Config: Reads a JSON file to configure the settings automatically. If settings are changed between versions, a warning will appear letting you know how much has changed.
@@ -107,7 +107,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 
 ### Collectables
 ##### All Items
-* None: Skips the setting.
+* None/No Shuffle: Skips the setting.
 * Shuffle (World): Takes all items of that set and swaps the Object IDs within the world (can be overriden for Click Clock Wood; see World Specific Features).
 * Shuffle (Game): Takes all items of that set and swaps the Object IDs within all worlds/lair. This will override the World Specific Feature for Click Clock Wood.
 ##### Jiggy, Empty Honeycomb, & Mumbo Token Specific
@@ -125,11 +125,13 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Allow Save & Quit/Resets: Allows the player to Save & Quit/Reset without affecting the note score totals by limiting the worlds to a possible 127 notes maximum. Read "Note Limit Warning" for more details.
 * Scaling Note Doors: Depending on how many notes you set the 810 Note Door Value to, the number of notes needed per proceeding door will be increased/decreased accordingly.
 * Final Note Door Only: Removes all note doors proceeding the 810 Note Door, and sets the value of the 810 Note Door to the desired value. A random value can be chosen by clicking the Note button.
+* Final Note Door Only Warning: The game does not have a symbol for the number 9 on the note doors. The 6 has been flipped twice in order to make a 9, but sometimes the game doesn't like it. Please try to avoid the number 9 when setting the value. 900 should work, though.
 * Item Carrying Capacity: Sets the number of each item the player can carry before and after visiting Cheato between 0 and 255, inclusively.
 * Note Door Warning: Before opening any Note Door, the player must talk to Bottles at the 50 Note door. In order to add to the Quality of Life, a bottles is added to the 810 Note Door Location for Final Note Door Only mode.
 * Item Capacity Warning: I'm not sure if the game will break if you set the After Cheato value to a value smaller than the Before Cheato value. Please be weary.
 * Note Limit Warning: The player can only collect 127 notes in a world while still being able to leave the game file with the game saving properly. If a player collects over 127 notes and either game overs, save and quits, or turns off the console, the note count will be the remainder of their total notes divided by 128. Save states are recommended for emulator.
 ##### Jinjos, 1-Ups, & Misc Objects
+* Random Jinjo Colors: Jinjos can have any random hex color combination.
 * Include Abnormalities: Some areas have Eggs and Feathers that aren't formatted like regular Eggs and Feathers, so they can be swapped with this category if checked.
 * Starting Life Count: Can be set anywhere from 0 to "technically 255", but I'm not sure what happens if you overflow the value, so please just make it max of 100.
 
@@ -157,7 +159,15 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Select All Non-Softlock Enemies: Checks all of the non-softlock enemy boxes.
 * Remove All Enemies: Unchecks all of the enemy boxes.
 * Checkboxes: Select the enemies you want to appear when using the Randomize option. Must select at least 1 generic Ground, Wall, and Flying enemy each. Enemies with an asterisks may softlock/crash the game. If no enemy is checked for a category, no enemy will appear.
-* Warning: A recent fix for Yum-Yums were put into the game. If your game crashes in TTC, please contact GiantJigglypuff3.
+* Random Enemy Sizes affect how large or small an enemy can be.
+  * Random Setting: Randomly selects one of the below settings.
+  * Random Setting Per World: For each world, randomly selects one of the below settings.
+  * Random Setting Per Area: For each area, randomly selects one of the below settings.
+  * Default Sizes: Will use the size of the ORIGINAL enemy in that location.
+  * Scale Factor: Enemies can be a bit smaller or a bit larger than the ORIGINAL enemy size.
+  * Uniform Size Range: Enemies have an equal chance of being really small to really large.
+  * Generally Small/Large: Enemies can be really small or really large, but favors really either small or large.
+  * Evreything Small/Large: Enemies will ALL be really small or really large.
 
 ### BK Model
 
@@ -168,7 +178,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Preset Preview: For most of the presets that come by default, a preview can be seen. If the preview is unavailable, a blue SnS egg will appear in its place.
 * Delete Preset: Removes the preset from the list. You cannot delete the default colors.
 * Save As Preset: Saves the combination of colors as a new preset. If you give the preset a name already used, it will ask if you're okay with overwriting the previous preset.
-* If you'd like to use your own 16bit color, you can use the following link to convert the colors: https://trolsoft.ru/en/articles/rgb565-color-picker. Note that the color must end in an odd number to be visible.
+* Transfer RGB32 To RGB16: Converts the corresponding RGB32 value for a body part to RGB16.
 * NOTE: This feature does not get transfered from applying the Randomizer Settings Code, as this feature is mostly preference.
 
 ### Sounds
@@ -176,7 +186,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 ##### Short Sounds, Fanfare/Jingles, & Looped Music
 * DISCLAIMER: The names of the sounds are not official names. These are names the community or I came up with to describe what it is. If you know a better name for the sound, please let me know.
 * Short Sounds: Sounds last about a second long. This includes things like Eggs, Feathers, Honeycombs, Mumbo Tokens, etc.
-* Jarring Sounds: Sounds that are a little harsh to hear. I recommend these off unless you feel like you can tolerate them.
+* Jarring Sounds: Sounds that are a little harsh to hear or loop indefinetly when swapped with specific sounds. I recommend these off unless you feel like you can tolerate them.
 * Jingles/Fanfare: Jingles last a few seconds. This includes the Jiggy Jig, successfully finishing a task, etc.
 * Music: Music is typically long and potentially loops. This includes level background music, mini games music, and ambient noises. Music is separated into tabs for easier search, but all shuffle together.
 * NOTE: This feature does not get transfered from applying the Randomizer Settings Code, as this feature is mostly preference.
@@ -188,7 +198,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Aesthetic changes mean model and animation swapping
 * Death properties change the user interacts with the object and how that object interacts when BK makes contact. Example: What an enemy is weak to, how many honeycombs the enemy drops upon dying, what the enemy is weak to, etc.
 
-##### How To Edit The JSON Files
+##### How To Edit The JSON Files (DEVELOPERS)
 * Go to the directory leading to "BK_Rando_v2.0\Randomization_Processes\Misc_Manipulation\Models_Animations_Properties\JSON_Files\".
 * The JSON is broken into 3 sections: Model, Animation, Properties.
 * Each section has subsections. The names of the subsections don't matter, but they must be distinct from the other subsections.
@@ -212,7 +222,7 @@ https://www.youtube.com/watch?v=eIVAZJl08N4
 * Include Flowers: If the notes/eggs/feathers feature is not set to 'none', the flowers in the level will be included in shuffling.
 
 ##### Treasure Trove Cove
-* Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear. (I think as of releasing this, sometimes notes and feathers don't get shuffled, but that's a problem for future me).
+* Scattered Notes/Eggs/Feathers: Notes, eggs, and feathers are scattered across the level, both in the water and in the air, based on the location they would normally appear. The low setting has everything within jumping distance. The high setting may require flight.
 * Super Slippery Sand: At some point, you'll trigger the anti-tampering and you won't be able to change direction unless you jump. Have fun!
 
 ##### Clanker's Cavern
@@ -310,6 +320,7 @@ If you go to virustotal.com and upload the BK Randomizer, it will tell you that 
 * In Click Clock Wood, there is an occasional glitch where the player can collect 11/10 Jiggies when items are only shuffled within the world. The reason is unknown, but may only occur with abnormal or potential softlock Jiggies/Tokens/Honeycombs.
 * Randomizing the warps within worlds by game may result in warps that crash the game.
 * Some of the Model/Animation/Properties features may crash the credits, and this feature was only barely tested on Everdrive.
+* For unknown reasons, when the final note door has the number 9 in it, it may cause the player to crash when entering Gruntilda's lair. Just change your final note door value to another value without a 9 and you should be fine.
 
 # FAQ
 

@@ -60,6 +60,7 @@ class World_Order_Bottles():
         self.restart_count = 0
 
     def _create_transformation_cost_dict(self):
+        '''Sets up the transformation cost dict for known values'''
         self.transform_cost_dict = {}
         if(self.free_transformations == "Base Game Costs"):
             self.transform_cost_dict["Termite"] = 5
@@ -84,6 +85,8 @@ class World_Order_Bottles():
             if(self.world_exit_option == "Exit From World You Were Just In"):
                 if(world_name == "Mumbo's Mountain"):
                     required_move_list = ["Talon_Trot"]
+                elif((world_name == "Freezeezy Peak") and (self.max_hp)):
+                    required_move_list = ["Talon_Trot", "Fly"]
             else:
                 required_move_list = ["Talon_Trot"]
         # Exiting TTC -> Going To CC
@@ -456,6 +459,7 @@ class World_Order_Bottles():
             self.world_order_dict[available_bottles[selected_bottles]]["Learned_Moves"][selected_bottles] = remaining_move
     
     def _restart(self, reason="Unknown"):
+        '''Resets the variables to recalculations'''
         print(f"### RESTARTING REASON: {reason} ###")
         self.restart_count += 1
         if(self.restart_count > 6.9):

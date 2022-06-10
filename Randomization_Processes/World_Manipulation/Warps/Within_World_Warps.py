@@ -399,7 +399,7 @@ Levels = {
         Warp(debug_name="MMM Cellar (Going Outside)", object_id=0x90, warps_to=0x700, warps_from=0x70C, warp_search_strings=[
             "FD2F01ACFAB33E860090000000000378",
             ]),
-        Warp(debug_name="MMM Cellar (Coming Inside)", object_id=0x81, warps_to=0x70C, warps_from=0x700, can_enter_warp_zone=Warp.Banjo, warp_search_strings=[
+        Warp(debug_name="MMM Cellar (Coming Inside)", object_id=0x81, warps_to=0x70C, warps_from=0x700, keep_in_same_world=True, can_enter_warp_zone=Warp.Banjo, warp_search_strings=[
             "FD2EFF1F00EF53860081000000000000",
             ]),
         Warp(debug_name="MMM Church Tower Lower To Upper", object_id=0x97, warps_to=0x700, warps_from=0x70D, warp_search_strings=[

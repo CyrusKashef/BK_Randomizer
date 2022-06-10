@@ -34,6 +34,8 @@ class SetupFile():
         self.wall_enemy_info_list = []
         self.flying_enemy_index_list = []
         self.flying_enemy_info_list = []
+        self.misc_enemy_index_list = []
+        self.misc_enemy_info_list = []
         self.warp_index_list = []
         self.warp_info_list = []
         self.bottles_index_list = []
@@ -71,6 +73,9 @@ class SetupFile():
             elif(item_type == "Flying_Enemy"):
                 self.flying_enemy_index_list += item_list
                 self._obtain_object_parameters(item_list, "Flying_Enemy")
+            elif(item_type == "Misc_Enemy"):
+                self.misc_enemy_index_list += item_list
+                self._obtain_object_parameters(item_list, "Misc_Enemy")
             elif(item_type == "Note_Door"):
                 self._remove_object(item_list)
             elif(item_type == "Magic_Barrier"):
@@ -140,6 +145,14 @@ class SetupFile():
         elif(item_type == "Flying_Enemy"):
             for object_index in item_list:
                 self.flying_enemy_info_list.append({
+                    "Script1": self.mm[object_index],
+                    "Script2": self.mm[object_index+1],
+                    "Obj_ID1": self.mm[object_index+2],
+                    "Obj_ID2": self.mm[object_index+3],
+                    })
+        elif(item_type == "Misc_Enemy"):
+            for object_index in item_list:
+                self.misc_enemy_info_list.append({
                     "Script1": self.mm[object_index],
                     "Script2": self.mm[object_index+1],
                     "Obj_ID1": self.mm[object_index+2],
@@ -400,13 +413,13 @@ class SetupFile():
             self.mm[item_index+3] = int(replace_choice[6:], 16)
     
     def _replace_each_object_parameters(self, search_string_list, replacement_list):
-        '''PyDoc'''
+        '''For each search string, replace some nearby contents with the new info'''
         for index_num in range(len(search_string_list)):
             self._edit_object(search_string_list[index_num],
                               replacement_list[index_num])
     
     def _replace_all_in_area(self, search_string, replace_list):
-        '''PyDoc'''
+        '''Replace all found search strings in the area'''
         item_index = self._locate_item_index(search_string)
         if(item_index):
             for item_index_start in item_index:
@@ -440,6 +453,7 @@ class SetupFile():
             self.mm[item_index_start + index_add] = replacement_dict[index_add]
     
     def _does_string_exist(self, item_search_string):
+        '''Checks if string exists'''
         item_index = self.mm.find(bytes.fromhex(item_search_string))
         if(item_index >= 0):
             return True
@@ -457,7 +471,7 @@ class SetupFile():
             print("Possibly Unbeatable Seed, Oh No...")
     
     def adjust_ttc_lighthouse_token(self):
-        '''PyDoc'''
+        '''Unused'''
         pass
     
     def _skip_non_ring(self, item_index):
@@ -468,7 +482,7 @@ class SetupFile():
         return True
     
     def _check_for_orange(self):
-        '''PyDoc'''
+        '''Makes sure orange is not at egg Bottles location'''
         orange_index = self.mm.find(bytes.fromhex("E8DA00C81845190C0029"))
         if(orange_index > -1):
             print("Moving Orange From Inaccessible Location")
@@ -477,8 +491,16 @@ class SetupFile():
             self._edit_object_index(one_up_index, {3: 0x29})
             
     def _obtain_object_id_at_location(self, location_string):
+        '''At a specific xyz location, check for the object id'''
         location_index = self.mm.find(bytes.fromhex(location_string))
         if(location_index > -1):
             return self.mm[location_index + 8] * 256 + self.mm[location_index + 9]
         else:
             return -1
+
+    def _obtain_value_at_index(self, index_start, index_length):
+        '''At a specific index, return the value'''
+        value = 0
+        for index_add in range(index_length):
+            value += (self.mm[index_start + index_add] << ((index_length - index_add - 1) * 8))
+        return value
